@@ -20,9 +20,11 @@ namespace DataOfScouts
         OAuthClient clientTest = new OAuthClient();
 
         public DataOfScouts()
-        {
+        { 
             InitializeComponent();
-          //  ClientAuthorize();
+            //  ClientAuthorize(); 
+
+            this.bnAreas2.Visible = false;
             this.bnAreas.Visible = false;
         }
 
@@ -30,11 +32,22 @@ namespace DataOfScouts
         {
             if (tabControl1.SelectedTab == tpAuthorization)
             {
+                this.bnAreas2.Visible = false;
                 this.bnAreas.Visible = false;
             }
             else if (tabControl1.SelectedTab == tpAreas)
             {
+                this.bnAreas2.Visible = true; 
                 this.bnAreas.Visible = true;
+              
+                tsbArea.Visible = true;
+                tsdArea.Visible = false;
+                tsdComp.Visible = false;
+                tsdSeason.Visible = false;
+                tsdStage.Visible = false;
+                tsdGroup.Visible = false;
+                tsdPartic.Visible = false;
+                tsdEvent.Visible = false;
                 //var responseValue = clientTest.GetAccessData(strToken, "areas");
                 //var strResponseValue = responseValue.Result;
                 DataSet ds = InsertData("areas");
@@ -59,13 +72,26 @@ namespace DataOfScouts
             }
             else if (tabControl1.SelectedTab == tpCompetitions)
             {
+                tsbArea.Visible = false;
+                tslArea.Visible = false;
+                tsdArea.Visible = true;
+                tsdComp.Visible = true;
+                tsdSeason.Visible = false;
+                tsdStage.Visible = false;
+                tsdGroup.Visible = false;
+                tsdPartic.Visible = false;
+                tsdEvent.Visible = false;
+
+
+                this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
+
                 DataSet ds = new DataSet();
 
                 //var responseValue = clientTest.GetAccessData(strToken, "competitions/");
                 //var strResponseValue = responseValue.Result;
                 ds = InsertData("competitions");
-               // this.dgvComp.DataSource = ds.Tables[0].DefaultView;
+                // this.dgvComp.DataSource = ds.Tables[0].DefaultView;
                 tbData = ds.Tables[0];
 
                 BindingSource bs = new BindingSource();
@@ -73,9 +99,22 @@ namespace DataOfScouts
                 bnAreas.BindingSource = bs;
                 this.dgvComp.DataSource = bs;
             }
-            else if (tabControl1.SelectedTab == tpSeasons )
+            else if (tabControl1.SelectedTab == tpSeasons)
             {
+                tsbArea.Visible = false;
+                tslArea.Visible = false;
+                tsdArea.Visible = true;
+                tsdComp.Visible = true;
+                tsdSeason.Visible = true;
+                tsdStage.Visible = false;
+                tsdGroup.Visible = false;
+                tsdPartic.Visible = false;
+                tsdEvent.Visible = false;
+
+
+                this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
+
                 DataSet ds = new DataSet();
 
                 //var responseValue = clientTest.GetAccessData(strToken, "seasons/");
@@ -100,8 +139,21 @@ namespace DataOfScouts
                 //DOSParticipants.apiDataParticipant[] participants = (apis.data.Length == 0) ? null : apis.data[0];
 
                 //TableGenerator.TableGenerators(typeof(DOSParticipants.apiDataParticipant));
-                  
+
+
+                tsbArea.Visible = false;
+                tslArea.Visible = false;
+                tsdArea.Visible = true;
+                tsdComp.Visible = true;
+                tsdSeason.Visible = true;
+                tsdStage.Visible = true;
+                tsdGroup.Visible = true;
+                tsdPartic.Visible = true;
+                tsdEvent.Visible = false;
+
+                this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
+
                 DataSet ds = new DataSet(); 
                 ds = InsertData("participants");
                 //  this.dgvPart.DataSource = ds.Tables[0].DefaultView;
@@ -114,6 +166,19 @@ namespace DataOfScouts
             }
             else if (tabControl1.SelectedTab == tpEvent )
             {
+                tsbArea.Visible = false;
+                tslArea.Visible = false;
+                tsdArea.Visible = true;
+                tsdComp.Visible = true;
+                tsdSeason.Visible = true;
+                tsdStage.Visible = true;
+                tsdGroup.Visible = true;
+                tsdPartic.Visible = true;
+                tsdEvent.Visible = true;
+
+                this.bnAreas2.Visible = true;
+                this.bnAreas.Visible = true;
+
                 var responseValue = clientTest.GetAccessData(strToken, "events/" + "1");
                 var strResponseValue = responseValue.Result;
 

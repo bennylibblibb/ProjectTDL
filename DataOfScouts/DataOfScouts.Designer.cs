@@ -67,6 +67,22 @@ namespace DataOfScouts
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.nbAreasTotal = new System.Windows.Forms.ToolStripLabel();
+            this.bnAreas2 = new System.Windows.Forms.BindingNavigator(this.components);
+            this.tslArea = new System.Windows.Forms.ToolStripLabel();
+            this.tsbArea = new System.Windows.Forms.ToolStripTextBox();
+            this.tsdArea = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsdComp = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsdSeason = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsdStage = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsdGroup = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsdPartic = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsdEvent = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbGet = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tpAuthorization.SuspendLayout();
             this.gbAuthorization.SuspendLayout();
@@ -83,6 +99,8 @@ namespace DataOfScouts
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bnAreas)).BeginInit();
             this.bnAreas.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnAreas2)).BeginInit();
+            this.bnAreas2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -300,7 +318,7 @@ namespace DataOfScouts
             this.bindingNavigatorAddNewItem,
             this.bindingNavigatorDeleteItem,
             this.nbAreasTotal});
-            this.bnAreas.Location = new System.Drawing.Point(0, 546);
+            this.bnAreas.Location = new System.Drawing.Point(0, 576);
             this.bnAreas.MoveFirstItem = this.bindingNavigatorMoveFirstItem;
             this.bnAreas.MoveLastItem = this.bindingNavigatorMoveLastItem;
             this.bnAreas.MoveNextItem = this.bindingNavigatorMoveNextItem;
@@ -437,11 +455,167 @@ namespace DataOfScouts
             this.nbAreasTotal.Name = "nbAreasTotal";
             this.nbAreasTotal.Size = new System.Drawing.Size(0, 27);
             // 
+            // bnAreas2
+            // 
+            this.bnAreas2.AddNewItem = this.bindingNavigatorAddNewItem;
+            this.bnAreas2.CountItem = null;
+            this.bnAreas2.DeleteItem = null;
+            this.bnAreas2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.bnAreas2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tslArea,
+            this.tsbArea,
+            this.tsdArea,
+            this.tsdComp,
+            this.tsdSeason,
+            this.tsdStage,
+            this.tsdGroup,
+            this.tsdPartic,
+            this.tsdEvent,
+            this.toolStripSeparator1,
+            this.tsbGet});
+            this.bnAreas2.Location = new System.Drawing.Point(0, 546);
+            this.bnAreas2.MoveFirstItem = null;
+            this.bnAreas2.MoveLastItem = null;
+            this.bnAreas2.MoveNextItem = null;
+            this.bnAreas2.MovePreviousItem = null;
+            this.bnAreas2.Name = "bnAreas2";
+            this.bnAreas2.PositionItem = null;
+            this.bnAreas2.Size = new System.Drawing.Size(865, 30);
+            this.bnAreas2.TabIndex = 8;
+            // 
+            // tslArea
+            // 
+            this.tslArea.Name = "tslArea";
+            this.tslArea.Size = new System.Drawing.Size(52, 27);
+            this.tslArea.Text = "area :";
+            // 
+            // tsbArea
+            // 
+            this.tsbArea.Name = "tsbArea";
+            this.tsbArea.Size = new System.Drawing.Size(50, 30);
+            // 
+            // tsdArea
+            // 
+            this.tsdArea.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.tsdArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.tsdArea.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsdArea.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2});
+            this.tsdArea.Image = ((System.Drawing.Image)(resources.GetObject("tsdArea.Image")));
+            this.tsdArea.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsdArea.Name = "tsdArea";
+            this.tsdArea.Size = new System.Drawing.Size(56, 27);
+            this.tsdArea.Text = "area";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(224, 28);
+            this.toolStripMenuItem1.Text = "aaaaaaaaaaaaaaaa";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(224, 28);
+            this.toolStripMenuItem2.Text = "bbbbbbbbbbbbb";
+            // 
+            // tsdComp
+            // 
+            this.tsdComp.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.tsdComp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsdComp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4});
+            this.tsdComp.Image = ((System.Drawing.Image)(resources.GetObject("tsdComp.Image")));
+            this.tsdComp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsdComp.Name = "tsdComp";
+            this.tsdComp.Size = new System.Drawing.Size(115, 27);
+            this.tsdComp.Text = "competition";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(216, 28);
+            this.toolStripMenuItem3.Text = "xxxxxxxxxxxxx";
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(216, 28);
+            this.toolStripMenuItem4.Text = "ccccccccccccccccc";
+            // 
+            // tsdSeason
+            // 
+            this.tsdSeason.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.tsdSeason.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsdSeason.Image = ((System.Drawing.Image)(resources.GetObject("tsdSeason.Image")));
+            this.tsdSeason.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsdSeason.Name = "tsdSeason";
+            this.tsdSeason.Size = new System.Drawing.Size(75, 27);
+            this.tsdSeason.Text = "season";
+            // 
+            // tsdStage
+            // 
+            this.tsdStage.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.tsdStage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsdStage.Image = ((System.Drawing.Image)(resources.GetObject("tsdStage.Image")));
+            this.tsdStage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsdStage.Name = "tsdStage";
+            this.tsdStage.Size = new System.Drawing.Size(66, 27);
+            this.tsdStage.Text = "Stage";
+            // 
+            // tsdGroup
+            // 
+            this.tsdGroup.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.tsdGroup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsdGroup.Image = ((System.Drawing.Image)(resources.GetObject("tsdGroup.Image")));
+            this.tsdGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsdGroup.Name = "tsdGroup";
+            this.tsdGroup.Size = new System.Drawing.Size(69, 27);
+            this.tsdGroup.Text = "group";
+            // 
+            // tsdPartic
+            // 
+            this.tsdPartic.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.tsdPartic.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsdPartic.Image = ((System.Drawing.Image)(resources.GetObject("tsdPartic.Image")));
+            this.tsdPartic.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsdPartic.Name = "tsdPartic";
+            this.tsdPartic.Size = new System.Drawing.Size(105, 27);
+            this.tsdPartic.Text = "participant";
+            // 
+            // tsdEvent
+            // 
+            this.tsdEvent.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.tsdEvent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsdEvent.Image = ((System.Drawing.Image)(resources.GetObject("tsdEvent.Image")));
+            this.tsdEvent.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsdEvent.Name = "tsdEvent";
+            this.tsdEvent.Size = new System.Drawing.Size(65, 27);
+            this.tsdEvent.Text = "event";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 30);
+            // 
+            // tsbGet
+            // 
+            this.tsbGet.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tsbGet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbGet.Image = ((System.Drawing.Image)(resources.GetObject("tsbGet.Image")));
+            this.tsbGet.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbGet.Name = "tsbGet";
+            this.tsbGet.Size = new System.Drawing.Size(41, 27);
+            this.tsbGet.Text = "Get";
+            // 
             // DataOfScouts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(865, 576);
+            this.ClientSize = new System.Drawing.Size(865, 606);
+            this.Controls.Add(this.bnAreas2);
             this.Controls.Add(this.bnAreas);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -466,6 +640,9 @@ namespace DataOfScouts
             ((System.ComponentModel.ISupportInitialize)(this.bnAreas)).EndInit();
             this.bnAreas.ResumeLayout(false);
             this.bnAreas.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnAreas2)).EndInit();
+            this.bnAreas2.ResumeLayout(false);
+            this.bnAreas2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -508,6 +685,22 @@ namespace DataOfScouts
         private System.Windows.Forms.DataGridView dgvEvent;
         private System.Windows.Forms.TabPage tpParticipants;
         private System.Windows.Forms.DataGridView dgvPart;
+        private System.Windows.Forms.BindingNavigator bnAreas2;
+        private System.Windows.Forms.ToolStripLabel tslArea;
+        private System.Windows.Forms.ToolStripTextBox tsbArea;
+        private System.Windows.Forms.ToolStripDropDownButton tsdArea;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripDropDownButton tsdComp;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripDropDownButton tsdSeason;
+        private System.Windows.Forms.ToolStripDropDownButton tsdStage;
+        private System.Windows.Forms.ToolStripDropDownButton tsdGroup;
+        private System.Windows.Forms.ToolStripDropDownButton tsdPartic;
+        private System.Windows.Forms.ToolStripDropDownButton tsdEvent;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton tsbGet;
     }
 }
 
