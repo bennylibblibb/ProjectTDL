@@ -14,9 +14,8 @@ namespace DataOfScouts
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new DataOfScouts());
-        }
-
-
+            string str = "Testing github";
+        } 
 
     }
 }
