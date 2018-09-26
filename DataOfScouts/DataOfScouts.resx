@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="bindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>180, 17</value>
-  </metadata>
-  <metadata name="bnAreas.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>425, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="bindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing">
+    <value>180, 17</value>
+  </data>
+  <data name="bnAreas.TrayLocation" type="System.Drawing.Point, System.Drawing">
+    <value>425, 17</value>
+  </data>
   <data name="bindingNavigatorAddNewItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -159,23 +159,6 @@
         lf8gBXgVDULAwAAA8HbAq6XlmnAAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="tsbPrevious.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJnSURBVDhPpZHdS1phHMdNksIwKXs5iiV2KtBeNKKyNyxD
-        sRIjkyAjqSQsCuxi5HTL2nZrF7FaL1SWx9JezbIatMGuut3dYH/Ndzu/cu0ytg8cePh9n+fz/M7vEeA/
-        +SMQzAsgfCNEztsciENiSJYkkC3KUBooBfOagWJBQV/JqxJIfdKnU08CgU+ArNUsiCIiSGISFMeKoeSU
-        YPdYaLY1qP1Ui/q1eug+6qBd1UIVVqHgQ8GzQBgQIjuSDfG5GLIrGZQpJSqTlbSB+8Gh9aAVHZEOdEY6
-        0bLTQkL5ipxyEohCIuRyuchP5YO5ZaC+UVOYwXRkgvnQDGvMip5oDww7BlSsVlBGgrzlPEg5KYqSRVBc
-        KyjI0HXSBUvcAlvchoH4AGyHNpj2TdQFDwkK3xeCiTKQnz22lcFwYkB3ohu98V7YE3YMHQ/BkXCg/7Af
-        TdtNtIcEzDsGqj0VFV4CLzJGjLQmQdlSGaq2q6jwElxnLpijZlqTQB1SQ7uhRfVWNRUzNO80003WqBWD
-        R4MYOR3BRHICnpSH5sFDAjbEom69DjWbNdBsaCjIYIqYYONscCaccJ+7MZ2extztHP0Gz6NgkYVuTQf9
-        ph76LT0atxopzOA4csB16oLn0oP5z/MIfg3CnXRTRoLyYDn063q07bah++D31GO99Fw86Z9pjF+Mw3vl
-        he/Oh+Vvy1h5WMHszSzlJJD75dQBf9get2P4dBhjF2OYvJzE1NUUZtIzdHPgSwDhhzB2v+/Cf+9/FvCw
-        YRYNmw1o32uHcd8IC2eh9+6L9dHAnMdOjJ6PwnvtxcL9wtOpvwT/BvALG+jayv/I1ngAAAAASUVORK5C
-        YII=
-</value>
-  </data>
   <data name="bindingNavigatorMovePreviousItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -183,22 +166,6 @@
         5sxZ//97lZ4gzYDQ1ntgza3rgLZ3/v3vkn+AeAOCW+7+X7T3//8OoOaMOT//29X9/G+fsZ00F9gV3/6f
         Puf3f/+ub/91Ct/9t0hYT3oY6Kec/29S9OK/Stan/8aRy0g3AAQMkk78l037+l83eB55BoCAfurl/xq+
         08g3AARUPCZQZsBgBQwMANAUYJgEulBVAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="tsbNext.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJVSURBVDhPrZHdS1pxHIctksIwKXs5iiVmBdqLRlT2hmUo
-        WmJkEmQklYRFgV4MnW6Z227tIlYro7Q8mpaZaVaDNthVt7sb7K/5rHN0nLabjbEHfne/z/N9Y/033A9u
-        OG4cmE/Pw3JuwVRiChOxCUzGJ6EjdVCfqDEUHkL3QTekQSmKsQKeBw+Ovx4j+BiE95MXro8urOXXsJJb
-        wfL1MhauFjCbmoUpYcLY6RgUuwoIPAJGsn67ju3HbQS+BOC8d8KRc2DxahH573lQGONGGGIGOjx4PAjl
-        nhJNviZGYMvY4Pvsoyvbr+2wpqwwn5np8E96Qj1QhpRQHijpDqSbz8aYOZ/Bxt0GVvOrsKVtsCQtMJJG
-        aCKaYryAbF+G9oN2dO51Qup/JqAWZs/asZRZwlxqDtNn09BH9VBH1Og76ivGC7SF2iDfl0PilzACbVQL
-        66W1+OXPtB62onGrkRFQlagx/hZxWAziDcEIeg976Xubk2ZaZEqaYEg8bT05BtWFqhgrILgUgIgSqHlb
-        wwg6PnRAc6Khz0Xtw5gwQpfQYfRitBgrILwRojZTCx7JQ2WgkhE07zRDdaTCeHQc+pge2rgWmrNfLyC5
-        lYC4I1CVrUIFWQG2n80IBNsCUF30H/VjJDKC4cgwBk4HQH4j6XBLpgWirAj8HB+cNAdlkTKUeksZQfW7
-        aoiDYsh35FC8V6Brt4sWyg5lkIalEJEi1MXqwI1xwY6wUbJTApaTxQgoeE4e6l/UQ+gW0o94SaDB2wD+
-        Jh/cLS44fg7KX5ej9NVTZddv4X+HxfoBuRLbux0U12QAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="bindingNavigatorMoveNextItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -382,5 +349,12 @@
         AAAADwAA8AAAAAAfAAD4AAAAAB8AAPwAAAAAPwAA/gAAAAB/AAD/AAAAAP8AAP+AAAAB/wAA/8AAAAP/
         AAD/4AAAB/8AAP/4AAAf/wAA//4AAH//AAD//+AB//8AAA==
 </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tsbNext.Image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>D:\Users\Administrator\Desktop\tsbNext.Image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tsbPrevious.Image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>D:\Users\Administrator\Desktop\tsbPrevious.Image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
