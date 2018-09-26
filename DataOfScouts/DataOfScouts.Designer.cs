@@ -609,6 +609,7 @@ namespace DataOfScouts
             this.tsbGet.Name = "tsbGet";
             this.tsbGet.Size = new System.Drawing.Size(41, 27);
             this.tsbGet.Text = "Get";
+            this.tsbGet.Click += new System.EventHandler(this.tsbGet_Click);
             // 
             // DataOfScouts
             // 

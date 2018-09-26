@@ -20,7 +20,7 @@ namespace DataOfScouts
         OAuthClient clientTest = new OAuthClient();
 
         public DataOfScouts()
-        { 
+        {
             InitializeComponent();
             //  ClientAuthorize(); 
 
@@ -37,9 +37,9 @@ namespace DataOfScouts
             }
             else if (tabControl1.SelectedTab == tpAreas)
             {
-                this.bnAreas2.Visible = true; 
+                this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
-              
+
                 tsbArea.Visible = true;
                 tsdArea.Visible = false;
                 tsdComp.Visible = false;
@@ -50,15 +50,15 @@ namespace DataOfScouts
                 tsdEvent.Visible = false;
                 //var responseValue = clientTest.GetAccessData(strToken, "areas");
                 //var strResponseValue = responseValue.Result;
-                DataSet ds = InsertData("areas");
-                //this.dgvAreas.DataSource = ds.Tables[0].DefaultView;
-                tbData = ds.Tables[0];
+                /*   DataSet ds = InsertData("areas");
+                   //this.dgvAreas.DataSource = ds.Tables[0].DefaultView;
+                   tbData = ds.Tables[0];
 
-                BindingSource bs = new BindingSource();
-                bs.DataSource = tbData.DefaultView;
-                bnAreas.BindingSource = bs;
-                this.dgvAreas.DataSource = bs;
-
+                   BindingSource bs = new BindingSource();
+                   bs.DataSource = tbData.DefaultView;
+                   bnAreas.BindingSource = bs;
+                   this.dgvAreas.DataSource = bs;
+                   */
                 //total = ds.Tables[0].Rows.Count;
                 //pageCount = (total / AppFlag.iPageSize);
                 //if ((total % AppFlag.iPageSize > 0))
@@ -69,6 +69,8 @@ namespace DataOfScouts
                 //currentRow = 0;
 
                 //this.LoadData();
+
+                this.tsbGet_Click(sender, e);
             }
             else if (tabControl1.SelectedTab == tpCompetitions)
             {
@@ -86,18 +88,20 @@ namespace DataOfScouts
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
 
-                DataSet ds = new DataSet();
+                /* DataSet ds = new DataSet();
 
-                //var responseValue = clientTest.GetAccessData(strToken, "competitions/");
-                //var strResponseValue = responseValue.Result;
-                ds = InsertData("competitions");
-                // this.dgvComp.DataSource = ds.Tables[0].DefaultView;
-                tbData = ds.Tables[0];
+                 //var responseValue = clientTest.GetAccessData(strToken, "competitions/");
+                 //var strResponseValue = responseValue.Result;
+                 ds = InsertData("competitions");
+                 // this.dgvComp.DataSource = ds.Tables[0].DefaultView;
+                 tbData = ds.Tables[0];
 
-                BindingSource bs = new BindingSource();
-                bs.DataSource = tbData.DefaultView;
-                bnAreas.BindingSource = bs;
-                this.dgvComp.DataSource = bs;
+                 BindingSource bs = new BindingSource();
+                 bs.DataSource = tbData.DefaultView;
+                 bnAreas.BindingSource = bs;
+                 this.dgvComp.DataSource = bs; */
+
+                this.tsbGet_Click(sender, e);
             }
             else if (tabControl1.SelectedTab == tpSeasons)
             {
@@ -120,15 +124,15 @@ namespace DataOfScouts
                 //var responseValue = clientTest.GetAccessData(strToken, "seasons/");
                 //var strResponseValue = responseValue.Result;
                 ds = InsertData("seasons");
-              //  this.dgvComp.DataSource = ds.Tables[0].DefaultView;
+                //  this.dgvComp.DataSource = ds.Tables[0].DefaultView;
                 tbData = ds.Tables[0];
 
                 BindingSource bs = new BindingSource();
                 bs.DataSource = tbData.DefaultView;
                 bnAreas.BindingSource = bs;
-                this.dgvSeasons .DataSource = bs;
+                this.dgvSeasons.DataSource = bs;
             }
-            else if (tabControl1.SelectedTab == tpParticipants )
+            else if (tabControl1.SelectedTab == tpParticipants)
             {
                 //var responseValue = clientTest.GetAccessData(strToken, "participants/" + "1");
                 //var strResponseValue = responseValue.Result; 
@@ -154,7 +158,7 @@ namespace DataOfScouts
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
 
-                DataSet ds = new DataSet(); 
+                DataSet ds = new DataSet();
                 ds = InsertData("participants");
                 //  this.dgvPart.DataSource = ds.Tables[0].DefaultView;
                 tbData = ds.Tables[0];
@@ -164,7 +168,7 @@ namespace DataOfScouts
                 bnAreas.BindingSource = bs;
                 this.dgvPart.DataSource = bs;
             }
-            else if (tabControl1.SelectedTab == tpEvent )
+            else if (tabControl1.SelectedTab == tpEvent)
             {
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
@@ -182,16 +186,16 @@ namespace DataOfScouts
                 var responseValue = clientTest.GetAccessData(strToken, "events/" + "1");
                 var strResponseValue = responseValue.Result;
 
-                     TableGenerator.TableGenerators(typeof(DOSEvents.apiDataCompetitionSeasonStageGroupEvent ));
+                TableGenerator.TableGenerators(typeof(DOSEvents.apiDataCompetitionSeasonStageGroupEvent));
                 return;
 
-                string strName = "events" + "-" +"1" + " " + DateTime.Now.ToString("HHmmss");
+                string strName = "events" + "-" + "1" + " " + DateTime.Now.ToString("HHmmss");
                 Files.WriteXml(strName, strResponseValue);
                 this.bnAreas.Visible = true;
-                DataSet ds = new DataSet(); 
+                DataSet ds = new DataSet();
 
                 ds = InsertData("events");
-              //  this.dgvEvent.DataSource = ds.Tables[0].DefaultView;
+                //  this.dgvEvent.DataSource = ds.Tables[0].DefaultView;
                 tbData = ds.Tables[0];
 
                 BindingSource bs = new BindingSource();
@@ -199,7 +203,7 @@ namespace DataOfScouts
                 bnAreas.BindingSource = bs;
                 this.dgvEvent.DataSource = bs;
             }
-
+            /*
             total = tbData.Rows.Count;
             pageCount = (total / AppFlag.iPageSize);
             if ((total % AppFlag.iPageSize > 0))
@@ -209,7 +213,7 @@ namespace DataOfScouts
             pageCurrent = 1;
             currentRow = 0;
 
-            this.LoadData(tabControl1.SelectedTab.Text);
+            this.LoadData(tabControl1.SelectedTab.Text);*/
         }
 
         int total = 0;
@@ -253,7 +257,7 @@ namespace DataOfScouts
                 {
                     dtTemp.ImportRow(tbData.Rows[i]);
                     currentRow++;
-                } 
+                }
             }
 
             bindingSource1.DataSource = dtTemp;
@@ -278,7 +282,7 @@ namespace DataOfScouts
             {
                 dgvPart.DataSource = bindingSource1;
             }
-             
+
         }
 
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
@@ -450,7 +454,7 @@ namespace DataOfScouts
                                     break;
                                 }
                             }
-                            connection.Close(); 
+                            connection.Close();
                         }
                         break;
                     }
@@ -474,7 +478,7 @@ namespace DataOfScouts
                             DataSet seasonsDs = new DataSet();
                             adapter.Fill(seasonsDs);
 
-                            if (seasonsDs.Tables[0].Rows.Count == 0) 
+                            if (seasonsDs.Tables[0].Rows.Count == 0)
                             {
                                 for (int i = 1; i < 4; i++)
                                 {
@@ -488,7 +492,7 @@ namespace DataOfScouts
                                     if (competitions == null) return ds;
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
-                                    
+
                                     foreach (DOSSeasons.apiDataCompetitionsCompetition competition in competitions)
                                     {
                                         string strCompetition_id = competition.id;
@@ -531,14 +535,14 @@ namespace DataOfScouts
                                 queryString = "select   * from " + type;
                                 adapter.SelectCommand = new FbCommand(queryString, connection);
                                 adapter.Fill(seasonsDs);
-                                ds = seasonsDs; 
+                                ds = seasonsDs;
                             }
-                            connection.Close(); 
+                            connection.Close();
                         }
                         break;
-                    } 
+                    }
                 case "events":
-                    { 
+                    {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             FbDataAdapter adapter = new FbDataAdapter();
@@ -627,7 +631,7 @@ namespace DataOfScouts
                                         using (DataSet data = new DataSet())
                                         {
                                             data.Tables.Add(new DataTable("teams"));
-                                           // fda.TableMappings.Add("teams", "teams");
+                                            // fda.TableMappings.Add("teams", "teams");
                                             fda.Fill(data.Tables["teams"]);
 
                                             data.Tables.Add(new DataTable("players"));
@@ -636,7 +640,7 @@ namespace DataOfScouts
                                             FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
                                             adapter1.Fill(data.Tables["players"]);
 
-                                            if (data.Tables["teams"].Rows.Count == 0  && data.Tables["players"].Rows.Count == 0)
+                                            if (data.Tables["teams"].Rows.Count == 0 && data.Tables["players"].Rows.Count == 0)
                                             {
                                                 for (int i = 1; i < 2869; i++)
                                                 {
@@ -689,7 +693,7 @@ namespace DataOfScouts
                                                     {
                                                         count = fda.Update(data.Tables["teams"]);
                                                         Files.WriteLog("[Success] Insert teams[" + count + "  " + "] " + " " + strName + ".xml");
-                                                         }
+                                                    }
                                                     if (data.Tables["players"].Rows.Count > 0)
                                                     {
                                                         count = adapter1.Update(data.Tables["players"]);
@@ -717,7 +721,7 @@ namespace DataOfScouts
                                     }
                                 }
                             }
-                        
+
                             //    DataSet participantsDs = new DataSet();
                             //queryString = " SELECT FIRST 1 *  FROM seasons;";
                             //FbDataAdapter adapter = new FbDataAdapter();
@@ -885,6 +889,49 @@ namespace DataOfScouts
                 this.dgvAreas.DataSource = bindingSource1;
 
             }
+        }
+
+        private void tsbGet_Click(object sender, EventArgs e)
+        {
+            bool done = false;
+            if (tabControl1.SelectedTab == tpAreas && tsbArea.Text.Trim().ToLower() == "all" && tsbArea.Text.Trim().ToLower() != "")
+            {
+                done = true;
+                DataSet ds = InsertData("areas");
+                //this.dgvAreas.DataSource = ds.Tables[0].DefaultView;
+                tbData = ds.Tables[0];
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvAreas.DataSource = bs;
+            }
+            else if (tabControl1.SelectedTab == tpAreas && tsbArea.Text.Trim().ToLower() != "all" && tsbArea.Text.Trim().ToLower() != "")
+            {
+                done = true;
+            }
+            else if (tabControl1.SelectedTab == tpCompetitions )
+            {
+                done = true;
+                DataSet ds = new DataSet(); 
+                ds = InsertData("competitions"); 
+                tbData = ds.Tables[0]; 
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvComp.DataSource = bs;
+            }
+            if (!done) return;
+            total = tbData.Rows.Count;
+            pageCount = (total / AppFlag.iPageSize);
+            if ((total % AppFlag.iPageSize > 0))
+            {
+                pageCount++;
+            }
+            pageCurrent = 1;
+            currentRow = 0;
+
+            this.LoadData(tabControl1.SelectedTab.Text);
         }
     }
 
