@@ -40,6 +40,8 @@ namespace DataOfScouts
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
 
+                tsdAreaParentId.Visible = false;
+                tslArea.Visible = true;
                 tsbArea.Visible = true;
                 tsdArea.Visible = false;
                 tsdComp.Visible = false;
@@ -74,10 +76,11 @@ namespace DataOfScouts
             }
             else if (tabControl1.SelectedTab == tpCompetitions)
             {
+                tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
                 tsdArea.Visible = true;
-                tsdComp.Visible = true;
+                tsdComp.Visible = false;
                 tsdSeason.Visible = false;
                 tsdStage.Visible = false;
                 tsdGroup.Visible = false;
@@ -105,11 +108,12 @@ namespace DataOfScouts
             }
             else if (tabControl1.SelectedTab == tpSeasons)
             {
+                tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
                 tsdArea.Visible = true;
                 tsdComp.Visible = true;
-                tsdSeason.Visible = true;
+                tsdSeason.Visible = false;
                 tsdStage.Visible = false;
                 tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
@@ -144,7 +148,7 @@ namespace DataOfScouts
 
                 //TableGenerator.TableGenerators(typeof(DOSParticipants.apiDataParticipant));
 
-
+                tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
                 tsdArea.Visible = true;
@@ -152,7 +156,7 @@ namespace DataOfScouts
                 tsdSeason.Visible = true;
                 tsdStage.Visible = true;
                 tsdGroup.Visible = true;
-                tsdPartic.Visible = true;
+                tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
 
                 this.bnAreas2.Visible = true;
@@ -170,6 +174,7 @@ namespace DataOfScouts
             }
             else if (tabControl1.SelectedTab == tpEvent)
             {
+                tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
                 tsdArea.Visible = true;
@@ -178,7 +183,7 @@ namespace DataOfScouts
                 tsdStage.Visible = true;
                 tsdGroup.Visible = true;
                 tsdPartic.Visible = true;
-                tsdEvent.Visible = true;
+                tsdEvent.Visible = false;
 
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
