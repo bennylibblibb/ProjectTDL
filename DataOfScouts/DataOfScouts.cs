@@ -26,6 +26,13 @@ namespace DataOfScouts
 
             this.bnAreas2.Visible = false;
             this.bnAreas.Visible = false;
+            this.tsdAreaParentId.DropDownItems.Clear();
+            DataSet ds1 = InsertData("areas", "all");
+            DataTable dtnew = ds1.Tables[0].DefaultView.ToTable("PARENTID", true, new string[] { "PARENT_AREA_ID" });
+            foreach (DataRow dr in dtnew.Rows)
+            {
+                this.tsdAreaParentId.DropDownItems.Add(dr[0].ToString());
+            }
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -71,6 +78,14 @@ namespace DataOfScouts
                 //currentRow = 0;
 
                 //this.LoadData();
+
+                //this.tsdAreaParentId.DropDownItems.Clear();
+                //DataSet ds1 = InsertData("areas", "all");
+                //DataTable dtnew = ds1.Tables[0].DefaultView.ToTable("PARENTID", true, new string[] { "PARENT_AREA_ID" });
+                //foreach (DataRow dr in dtnew.Rows)
+                //{
+                //    this.tsdAreaParentId.DropDownItems.Add(dr[0].ToString());
+                //} 
 
                 this.tsbGet_Click(sender, e);
             }
@@ -418,7 +433,7 @@ namespace DataOfScouts
                                 {
                                     //if (competitionDs.Tables[0].Rows.Count == 0)// && iPage == 1)
                                     //{
-                                    var responseValue = clientTest.GetAccessData(strToken, "competitions/" + i);
+                                    var responseValue = clientTest.GetAccessData(strToken, "competitions/" + i, arr);
                                     var strResponseValue = responseValue.Result;
                                     DOSCompetitions.api apis = XmlUtil.Deserialize(typeof(DOSCompetitions.api), strResponseValue) as DOSCompetitions.api;
                                     if (apis == null) return ds;  
@@ -929,7 +944,7 @@ namespace DataOfScouts
         private void tsbGet_Click(object sender, EventArgs e)
         {
             bool done = false;
-            if (tabControl1.SelectedTab == tpAreas&& tsdArea.Tag == null)
+            if (tabControl1.SelectedTab == tpAreas&& tsdArea.Tag == null&& tsbArea.Text.Trim()=="")
             {
                 DataSet ds = InsertData("areas", "all");
                 //foreach (DataRow dr in ds.Tables[0].Rows)
@@ -946,13 +961,11 @@ namespace DataOfScouts
                 this.dgvAreas.DataSource = bs;
                 done = true;
             }
-            else if ((tabControl1.SelectedTab == tpAreas && tsdArea.Tag != null ))
+            else if ((tabControl1.SelectedTab == tpAreas && tsbArea.Text.Trim()!="")||(tabControl1.SelectedTab == tpAreas && tsdArea.Tag != null ))
             {
-                DataSet ds = InsertData("areas", (tsbArea.Text.Trim()));
-                //this.dgvAreas.DataSource = ds.Tables[0].DefaultView;
-                if (ds.Tables.Count == 0) return;
+                DataSet ds = InsertData("areas", (tsdArea.Tag != null ? this.tsdAreaParentId.Text : tsbArea.Text.Trim()));
 
-                 //tsbArea.Text = this.tsdAreaParentId.Text ;  
+                if (ds.Tables.Count == 0) return; 
 
                 tbData = ds.Tables[0];
 
@@ -961,26 +974,27 @@ namespace DataOfScouts
                 bnAreas.BindingSource = bs;
                 this.dgvAreas.DataSource = bs;
 
+              //  this.tsdAreaParentId.Text = tsbArea.Text.Trim();
                 done = true;
             }
             else if (tabControl1.SelectedTab == tpCompetitions)
             {
                 if (tsdArea.Tag == null)
                 {
-                    this.tsdAreaParentId.DropDownItems.Clear();
-                    DataSet ds1 = InsertData("areas", "all");
-                    DataTable dtnew = ds1.Tables[0].DefaultView.ToTable("PARENTID", true, new string[] { "PARENT_AREA_ID" });
-                    foreach (DataRow dr in dtnew.Rows)
-                    {
-                        this.tsdAreaParentId.DropDownItems.Add(dr[0].ToString());
-                    }
+                    //this.tsdAreaParentId.DropDownItems.Clear();
+                    //DataSet ds1 = InsertData("areas", "all");
+                    //DataTable dtnew = ds1.Tables[0].DefaultView.ToTable("PARENTID", true, new string[] { "PARENT_AREA_ID" });
+                    //foreach (DataRow dr in dtnew.Rows)
+                    //{
+                    //    this.tsdAreaParentId.DropDownItems.Add(dr[0].ToString());
+                    //}
 
                     return;
                 }
 
                 DataSet ds = new DataSet();
                 ds = InsertData("competitions", tsdArea.Tag.ToString());
-                if (ds.Tables.Count == 0) return;
+                if (ds.Tables.Count == 0) { this.dgvComp.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
                 BindingSource bs = new BindingSource();
@@ -988,8 +1002,7 @@ namespace DataOfScouts
                 bnAreas.BindingSource = bs;
                 this.dgvComp.DataSource = bs;
 
-                tsbArea.Text = this.tsdAreaParentId.Text;
-
+            //    tsbArea.Text = this.tsdAreaParentId.Text;
                 done = true;
             }
             else if (tabControl1.SelectedTab == tpSeasons)
@@ -1039,12 +1052,15 @@ namespace DataOfScouts
                 this.tsdArea.DropDownItems.Add(item);
             }
             this.tsdArea.Text = "areas";
+
+            tsbArea.Text = this.tsdAreaParentId.Text;
         }
 
         private void tsdArea_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             this.tsdArea.Text = e.ClickedItem.Text;
             this.tsdArea.Tag = e.ClickedItem.Tag;
+          
         }
 
     }
@@ -1089,7 +1105,7 @@ namespace DataOfScouts
             }
             else if (type.IndexOf("competitions") > -1)
             {
-                strUrl = $"/v2/competitions.xml?token=" + token + "&sport_id=5&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                strUrl = $"/v2/competitions.xml?token=" + token + "&sport_id=5&area_id=" + arr [0]+"&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
               // Console.WriteLine("GET competitions " + strUrl);
                 Files.WriteLog("GET competitions " + strUrl);
             }
