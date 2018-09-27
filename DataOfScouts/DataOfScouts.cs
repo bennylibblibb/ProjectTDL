@@ -107,7 +107,10 @@ namespace DataOfScouts
                 this.tsbGet_Click(sender, e);
             }
             else if (tabControl1.SelectedTab == tpSeasons)
-            {
+            { 
+                this.bnAreas2.Visible = true;
+                this.bnAreas.Visible = true;
+
                 tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
@@ -117,24 +120,24 @@ namespace DataOfScouts
                 tsdStage.Visible = false;
                 tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
-                tsdEvent.Visible = false;
+                tsdEvent.Visible = false; 
 
+                this.tsbGet_Click(sender, e);
 
-                this.bnAreas2.Visible = true;
-                this.bnAreas.Visible = true;
+                /*
+                                DataSet ds = new DataSet();
 
-                DataSet ds = new DataSet();
+                                //var responseValue = clientTest.GetAccessData(strToken, "seasons/");
+                                //var strResponseValue = responseValue.Result;
+                                ds = InsertData("seasons");
+                                //  this.dgvComp.DataSource = ds.Tables[0].DefaultView;
+                                tbData = ds.Tables[0];
 
-                //var responseValue = clientTest.GetAccessData(strToken, "seasons/");
-                //var strResponseValue = responseValue.Result;
-                ds = InsertData("seasons");
-                //  this.dgvComp.DataSource = ds.Tables[0].DefaultView;
-                tbData = ds.Tables[0];
-
-                BindingSource bs = new BindingSource();
-                bs.DataSource = tbData.DefaultView;
-                bnAreas.BindingSource = bs;
-                this.dgvSeasons.DataSource = bs;
+                                BindingSource bs = new BindingSource();
+                                bs.DataSource = tbData.DefaultView;
+                                bnAreas.BindingSource = bs;
+                                this.dgvSeasons.DataSource = bs;
+                                */
             }
             else if (tabControl1.SelectedTab == tpParticipants)
             {
@@ -308,12 +311,13 @@ namespace DataOfScouts
             Files.WriteLog("[Success] Authorized: " + strToken);
         }
         // private DataSet InsertData(int iPage, string responsValue, string type)
-        private DataSet InsertData(string type)
+        //private DataSet InsertData(string type)
+        private DataSet InsertData(string type,params string[] arr)
         {
             //string strName = type + "-" + iPage + " " + DateTime.Now.ToString("HHmmss");
             //Files.WriteXml(strName, responsValue);
-
-            string queryString = "select FIRST 1 * from " + type;
+            //string queryString = "select FIRST 1 * from " + type;
+            string queryString = "";
             DateTime cTimestamp = DateTime.Now;
             DataSet ds = new DataSet();
             int count = 0;
@@ -324,17 +328,20 @@ namespace DataOfScouts
                     {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
+                            queryString = "select * from " + type+ (arr[0]=="all" ? "": " where PARENT_AREA_ID="+arr[0]);
                             FbDataAdapter adapter = new FbDataAdapter();
                             adapter.SelectCommand = new FbCommand(queryString, connection);
                             FbCommandBuilder builder = new FbCommandBuilder(adapter);
                             connection.Open();
                             DataSet areasDs = new DataSet();
                             adapter.Fill(areasDs);
+
                             if (areasDs.Tables[0].Rows.Count == 0)
                             {
-                                var responseValue = clientTest.GetAccessData(strToken, "areas");
+                                var responseValue = clientTest.GetAccessData(strToken, "areas",arr[0]);
                                 var strResponseValue = responseValue.Result;
                                 DOSAreas.api apis = XmlUtil.Deserialize(typeof(DOSAreas.api), strResponseValue) as DOSAreas.api;
+                                if (apis.data.Length == 0) return ds;
                                 DOSAreas.apiDataAreasArea[] areas = apis.data[0];
                                 if (areas == null) return ds;
 
@@ -368,13 +375,13 @@ namespace DataOfScouts
                             }
                             else
                             {
-                                count = -1;
-                                areasDs.Clear();
-                                queryString = "select   * from " + type;
-                                adapter.SelectCommand = new FbCommand(queryString, connection);
-                                adapter.Fill(areasDs);
-                            }
-
+                                //count = 0;
+                                //areasDs.Clear();
+                                //queryString = "select   * from " + type;
+                                //adapter.SelectCommand = new FbCommand(queryString, connection);
+                                //adapter.Fill(areasDs); 
+                                //ds = areasDs;
+                            } 
                             ds = areasDs;
                             connection.Close();
                         }
@@ -390,16 +397,21 @@ namespace DataOfScouts
                         //if (competitions == null) return ds;
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
+                            queryString = "select * from " + type + " where AREA_ID=" + arr[0];
+
                             FbDataAdapter adapter = new FbDataAdapter();
                             adapter.SelectCommand = new FbCommand(queryString, connection);
                             FbCommandBuilder builder = new FbCommandBuilder(adapter);
                             connection.Open();
                             DataSet competitionDs = new DataSet();
                             adapter.Fill(competitionDs);
-                            for (int i = 1; i < 4; i++)
+
+                            if (competitionDs.Tables[0].Rows.Count == 0)// && iPage == 1)
                             {
-                                if (competitionDs.Tables[0].Rows.Count == 0)// && iPage == 1)
+                                for (int i = 1; i < 4; i++)
                                 {
+                                    //if (competitionDs.Tables[0].Rows.Count == 0)// && iPage == 1)
+                                    //{
                                     var responseValue = clientTest.GetAccessData(strToken, "competitions/" + i);
                                     var strResponseValue = responseValue.Result;
                                     DOSCompetitions.api apis = XmlUtil.Deserialize(typeof(DOSCompetitions.api), strResponseValue) as DOSCompetitions.api;
@@ -448,17 +460,26 @@ namespace DataOfScouts
                                         Console.WriteLine("[Failure] Insert competitions [" + competitions.Length + "]");
                                         Files.WriteLog("[Failure] Insert competitions [" + competitions.Length + "] " + strName + ".xml");
                                     }
-                                }
-                                else
-                                {
-                                    count = -1;
-                                    queryString = "select   * from " + type;
-                                    adapter.SelectCommand = new FbCommand(queryString, connection);
-                                    adapter.Fill(competitionDs);
-                                    ds = competitionDs;
-                                    break;
+                                    //}
+                                    //else
+                                    //{
+                                    //    count = -1;
+                                    //    queryString = "select   * from " + type;
+                                    //    adapter.SelectCommand = new FbCommand(queryString, connection);
+                                    //    adapter.Fill(competitionDs);
+                                    //    ds = competitionDs;
+                                    //    break;
+                                    //}
                                 }
                             }
+                            else
+                            {
+                                //count = -1;
+                                //queryString = "select   * from " + type;
+                                //adapter.SelectCommand = new FbCommand(queryString, connection);
+                                //adapter.Fill(competitionDs);
+                                ds = competitionDs; 
+                            } 
                             connection.Close();
                         }
                         break;
@@ -476,6 +497,8 @@ namespace DataOfScouts
 
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
+                            queryString = "select * from " + type + " where COMPETITION_ID=" + arr[0];
+
                             FbDataAdapter adapter = new FbDataAdapter();
                             adapter.SelectCommand = new FbCommand(queryString, connection);
                             FbCommandBuilder builder = new FbCommandBuilder(adapter);
@@ -536,10 +559,10 @@ namespace DataOfScouts
                             }
                             else
                             {
-                                count = -1;
-                                queryString = "select   * from " + type;
-                                adapter.SelectCommand = new FbCommand(queryString, connection);
-                                adapter.Fill(seasonsDs);
+                                //count = -1;
+                                //queryString = "select   * from " + type;
+                                //adapter.SelectCommand = new FbCommand(queryString, connection);
+                                //adapter.Fill(seasonsDs);
                                 ds = seasonsDs;
                             }
                             connection.Close();
@@ -899,11 +922,12 @@ namespace DataOfScouts
         private void tsbGet_Click(object sender, EventArgs e)
         {
             bool done = false;
-            if (tabControl1.SelectedTab == tpAreas && tsbArea.Text.Trim().ToLower() == "all" && tsbArea.Text.Trim().ToLower() != "")
+            if (tabControl1.SelectedTab == tpAreas && (tsbArea.Text.Trim().ToLower() == "all"|| tsbArea.Text.Trim().ToLower()==""))
             {
                 done = true;
-                DataSet ds = InsertData("areas");
+                DataSet ds = InsertData("areas","all");
                 //this.dgvAreas.DataSource = ds.Tables[0].DefaultView;
+                if (tsbArea.Text.Trim().ToLower() == "") return;
                 tbData = ds.Tables[0];
 
                 BindingSource bs = new BindingSource();
@@ -914,18 +938,43 @@ namespace DataOfScouts
             else if (tabControl1.SelectedTab == tpAreas && tsbArea.Text.Trim().ToLower() != "all" && tsbArea.Text.Trim().ToLower() != "")
             {
                 done = true;
+                DataSet ds = InsertData("areas", tsbArea.Text.Trim());
+                //this.dgvAreas.DataSource = ds.Tables[0].DefaultView;
+                if (ds.Tables.Count == 0) return;
+                tbData = ds.Tables[0];
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvAreas.DataSource = bs;
             }
             else if (tabControl1.SelectedTab == tpCompetitions )
             {
                 done = true;
                 DataSet ds = new DataSet(); 
-                ds = InsertData("competitions"); 
+                ds = InsertData("competitions","208");
+                if (ds.Tables.Count == 0) return;
                 tbData = ds.Tables[0]; 
+
                 BindingSource bs = new BindingSource();
                 bs.DataSource = tbData.DefaultView;
                 bnAreas.BindingSource = bs;
                 this.dgvComp.DataSource = bs;
             }
+            else if (tabControl1.SelectedTab == tpSeasons)
+            {
+                done = true;
+                DataSet ds = new DataSet();
+                ds = InsertData("seasons", "1733");
+                if (ds.Tables.Count == 0) return;
+                tbData = ds.Tables[0];
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvComp.DataSource = bs;
+            }
+
             if (!done) return;
             total = tbData.Rows.Count;
             pageCount = (total / AppFlag.iPageSize);
@@ -967,20 +1016,21 @@ namespace DataOfScouts
             }
         }
 
-        public async Task<string> GetAccessData(string token, string type)
+        public async Task<string> GetAccessData(string token, string type, params string[] arr)
         {
             string strUrl = "";
             if (type.IndexOf("areas") > -1)
             {
-                strUrl = $"/v2/" + ((type.IndexOf("/") > -1) ? "areas.xml?parent_area_id=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1) : type + ".xml");
-                Console.WriteLine("GET areas " + strUrl);
+                //(arr[0] == "all" ? "" : " where PARENT_AREA_ID=" + arr[0])
+                //strUrl = $"/v2/" + ((type.IndexOf("/") > -1) ? "areas.xml?parent_area_id=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1) : type + ".xml");
+                 strUrl = $"/v2/" +((arr[0]!="all") ? "areas.xml?parent_area_id=" + arr[0] : type + ".xml");
+                //Console.WriteLine("GET areas " + strUrl);
                 Files.WriteLog("GET areas " + strUrl);
             }
             else if (type.IndexOf("competitions") > -1)
             {
                 strUrl = $"/v2/competitions.xml?token=" + token + "&sport_id=5&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
-
-                Console.WriteLine("GET competitions " + strUrl);
+              // Console.WriteLine("GET competitions " + strUrl);
                 Files.WriteLog("GET competitions " + strUrl);
             }
             else if (type.IndexOf("seasons") > -1)
