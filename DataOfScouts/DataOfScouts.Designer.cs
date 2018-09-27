@@ -72,8 +72,6 @@ namespace DataOfScouts
             this.tsbArea = new System.Windows.Forms.ToolStripTextBox();
             this.tsdAreaParentId = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsdArea = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsdComp = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
@@ -505,6 +503,8 @@ namespace DataOfScouts
             this.tsdAreaParentId.Name = "tsdAreaParentId";
             this.tsdAreaParentId.Size = new System.Drawing.Size(50, 27);
             this.tsdAreaParentId.Text = "id";
+            this.tsdAreaParentId.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsdAreaParentId_DropDownItemClicked);
+            this.tsdAreaParentId.Click += new System.EventHandler(this.tsdAreaParentId_Click);
             // 
             // tsdArea
             // 
@@ -512,26 +512,12 @@ namespace DataOfScouts
             this.tsdArea.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.tsdArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.tsdArea.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsdArea.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.toolStripMenuItem2});
             this.tsdArea.Image = ((System.Drawing.Image)(resources.GetObject("tsdArea.Image")));
             this.tsdArea.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsdArea.Name = "tsdArea";
             this.tsdArea.Size = new System.Drawing.Size(150, 27);
             this.tsdArea.Text = "area";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(224, 28);
-            this.toolStripMenuItem1.Text = "aaaaaaaaaaaaaaaa";
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(224, 28);
-            this.toolStripMenuItem2.Text = "bbbbbbbbbbbbb";
+            this.tsdArea.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsdArea_DropDownItemClicked);
             // 
             // tsdComp
             // 
@@ -709,8 +695,6 @@ namespace DataOfScouts
         private System.Windows.Forms.ToolStripLabel tslArea;
         private System.Windows.Forms.ToolStripTextBox tsbArea;
         private System.Windows.Forms.ToolStripDropDownButton tsdArea;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripDropDownButton tsdComp;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
