@@ -44,9 +44,13 @@ namespace DataOfScouts
             this.tpSeasons = new System.Windows.Forms.TabPage();
             this.dgvSeasons = new System.Windows.Forms.DataGridView();
             this.tpStages = new System.Windows.Forms.TabPage();
+            this.dgvStages = new System.Windows.Forms.DataGridView();
             this.tpGroups = new System.Windows.Forms.TabPage();
-            this.tpParticipants = new System.Windows.Forms.TabPage();
-            this.dgvPart = new System.Windows.Forms.DataGridView();
+            this.dgvGroups = new System.Windows.Forms.DataGridView();
+            this.tpTeam = new System.Windows.Forms.TabPage();
+            this.dgvTeam = new System.Windows.Forms.DataGridView();
+            this.tpPlayer = new System.Windows.Forms.TabPage();
+            this.dgvPlayer = new System.Windows.Forms.DataGridView();
             this.tpEvent = new System.Windows.Forms.TabPage();
             this.dgvEvent = new System.Windows.Forms.DataGridView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
@@ -89,8 +93,14 @@ namespace DataOfScouts
             ((System.ComponentModel.ISupportInitialize)(this.dgvComp)).BeginInit();
             this.tpSeasons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSeasons)).BeginInit();
-            this.tpParticipants.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPart)).BeginInit();
+            this.tpStages.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStages)).BeginInit();
+            this.tpGroups.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvGroups)).BeginInit();
+            this.tpTeam.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTeam)).BeginInit();
+            this.tpPlayer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPlayer)).BeginInit();
             this.tpEvent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEvent)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -111,7 +121,8 @@ namespace DataOfScouts
             this.tabControl1.Controls.Add(this.tpSeasons);
             this.tabControl1.Controls.Add(this.tpStages);
             this.tabControl1.Controls.Add(this.tpGroups);
-            this.tabControl1.Controls.Add(this.tpParticipants);
+            this.tabControl1.Controls.Add(this.tpTeam);
+            this.tabControl1.Controls.Add(this.tpPlayer);
             this.tabControl1.Controls.Add(this.tpEvent);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tabControl1.Location = new System.Drawing.Point(0, 4);
@@ -228,6 +239,7 @@ namespace DataOfScouts
             // 
             // tpStages
             // 
+            this.tpStages.Controls.Add(this.dgvStages);
             this.tpStages.Location = new System.Drawing.Point(4, 29);
             this.tpStages.Name = "tpStages";
             this.tpStages.Padding = new System.Windows.Forms.Padding(3);
@@ -236,8 +248,22 @@ namespace DataOfScouts
             this.tpStages.Text = "stages";
             this.tpStages.UseVisualStyleBackColor = true;
             // 
+            // dgvStages
+            // 
+            this.dgvStages.AllowUserToOrderColumns = true;
+            this.dgvStages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvStages.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvStages.Location = new System.Drawing.Point(3, 3);
+            this.dgvStages.Name = "dgvStages";
+            this.dgvStages.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader;
+            this.dgvStages.Size = new System.Drawing.Size(958, 500);
+            this.dgvStages.TabIndex = 2;
+            // 
             // tpGroups
             // 
+            this.tpGroups.Controls.Add(this.dgvGroups);
             this.tpGroups.Location = new System.Drawing.Point(4, 29);
             this.tpGroups.Name = "tpGroups";
             this.tpGroups.Padding = new System.Windows.Forms.Padding(3);
@@ -246,27 +272,64 @@ namespace DataOfScouts
             this.tpGroups.Text = "groups";
             this.tpGroups.UseVisualStyleBackColor = true;
             // 
-            // tpParticipants
+            // dgvGroups
             // 
-            this.tpParticipants.Controls.Add(this.dgvPart);
-            this.tpParticipants.Location = new System.Drawing.Point(4, 29);
-            this.tpParticipants.Name = "tpParticipants";
-            this.tpParticipants.Size = new System.Drawing.Size(964, 506);
-            this.tpParticipants.TabIndex = 6;
-            this.tpParticipants.Text = "participants";
-            this.tpParticipants.UseVisualStyleBackColor = true;
-            // 
-            // dgvPart
-            // 
-            this.dgvPart.AllowUserToOrderColumns = true;
-            this.dgvPart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dgvGroups.AllowUserToOrderColumns = true;
+            this.dgvGroups.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvPart.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dgvPart.Location = new System.Drawing.Point(3, 3);
-            this.dgvPart.Name = "dgvPart";
-            this.dgvPart.Size = new System.Drawing.Size(958, 500);
-            this.dgvPart.TabIndex = 3;
+            this.dgvGroups.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvGroups.Location = new System.Drawing.Point(3, 3);
+            this.dgvGroups.Name = "dgvGroups";
+            this.dgvGroups.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader;
+            this.dgvGroups.Size = new System.Drawing.Size(958, 500);
+            this.dgvGroups.TabIndex = 2;
+            // 
+            // tpTeam
+            // 
+            this.tpTeam.Controls.Add(this.dgvTeam);
+            this.tpTeam.Location = new System.Drawing.Point(4, 29);
+            this.tpTeam.Name = "tpTeam";
+            this.tpTeam.Size = new System.Drawing.Size(964, 506);
+            this.tpTeam.TabIndex = 7;
+            this.tpTeam.Text = "team";
+            this.tpTeam.UseVisualStyleBackColor = true;
+            // 
+            // dgvTeam
+            // 
+            this.dgvTeam.AllowUserToOrderColumns = true;
+            this.dgvTeam.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvTeam.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvTeam.Location = new System.Drawing.Point(3, 3);
+            this.dgvTeam.Name = "dgvTeam";
+            this.dgvTeam.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader;
+            this.dgvTeam.Size = new System.Drawing.Size(958, 500);
+            this.dgvTeam.TabIndex = 3;
+            // 
+            // tpPlayer
+            // 
+            this.tpPlayer.Controls.Add(this.dgvPlayer);
+            this.tpPlayer.Location = new System.Drawing.Point(4, 29);
+            this.tpPlayer.Name = "tpPlayer";
+            this.tpPlayer.Size = new System.Drawing.Size(964, 506);
+            this.tpPlayer.TabIndex = 8;
+            this.tpPlayer.Text = "player";
+            this.tpPlayer.UseVisualStyleBackColor = true;
+            // 
+            // dgvPlayer
+            // 
+            this.dgvPlayer.AllowUserToOrderColumns = true;
+            this.dgvPlayer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvPlayer.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvPlayer.Location = new System.Drawing.Point(3, 3);
+            this.dgvPlayer.Name = "dgvPlayer";
+            this.dgvPlayer.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader;
+            this.dgvPlayer.Size = new System.Drawing.Size(958, 500);
+            this.dgvPlayer.TabIndex = 3;
             // 
             // tpEvent
             // 
@@ -551,6 +614,7 @@ namespace DataOfScouts
             this.tsdStage.Name = "tsdStage";
             this.tsdStage.Size = new System.Drawing.Size(120, 27);
             this.tsdStage.Text = "stage";
+            this.tsdStage.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsdStage_DropDownItemClicked);
             // 
             // tsdGroup
             // 
@@ -623,8 +687,14 @@ namespace DataOfScouts
             ((System.ComponentModel.ISupportInitialize)(this.dgvComp)).EndInit();
             this.tpSeasons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSeasons)).EndInit();
-            this.tpParticipants.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPart)).EndInit();
+            this.tpStages.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStages)).EndInit();
+            this.tpGroups.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvGroups)).EndInit();
+            this.tpTeam.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTeam)).EndInit();
+            this.tpPlayer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPlayer)).EndInit();
             this.tpEvent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvEvent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
@@ -674,8 +744,6 @@ namespace DataOfScouts
         private System.Windows.Forms.DataGridView dgvComp;
         private System.Windows.Forms.DataGridView dgvSeasons;
         private System.Windows.Forms.DataGridView dgvEvent;
-        private System.Windows.Forms.TabPage tpParticipants;
-        private System.Windows.Forms.DataGridView dgvPart;
         private System.Windows.Forms.BindingNavigator bnAreas2;
         private System.Windows.Forms.ToolStripLabel tslArea;
         private System.Windows.Forms.ToolStripTextBox tsbArea;
@@ -689,6 +757,12 @@ namespace DataOfScouts
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tsbGet;
         private System.Windows.Forms.ToolStripDropDownButton tsdAreaParentId;
+        private System.Windows.Forms.DataGridView dgvStages;
+        private System.Windows.Forms.DataGridView dgvGroups;
+        private System.Windows.Forms.TabPage tpTeam;
+        private System.Windows.Forms.DataGridView dgvTeam;
+        private System.Windows.Forms.TabPage tpPlayer;
+        private System.Windows.Forms.DataGridView dgvPlayer;
     }
 }
 

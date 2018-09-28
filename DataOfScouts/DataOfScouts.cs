@@ -160,17 +160,10 @@ namespace DataOfScouts
                                 this.dgvSeasons.DataSource = bs;
                                 */
             }
-            else if (tabControl1.SelectedTab == tpParticipants)
+            else if (tabControl1.SelectedTab == tpStages)
             {
-                //var responseValue = clientTest.GetAccessData(strToken, "participants/" + "1");
-                //var strResponseValue = responseValue.Result; 
-                //string strName = "participants" + "-" + "1" + " " + DateTime.Now.ToString("HHmmss"); 
-                //Files.WriteXml(strName, strResponseValue);
-                ////   TableGenerator.TableGenerators(typeof(DOSEvents.apiDataCompetitionSeasonStageGroupEvent ));
-                //DOSParticipants.api apis = XmlUtil.Deserialize(typeof(DOSParticipants.api), strResponseValue) as DOSParticipants.api;
-                //DOSParticipants.apiDataParticipant[] participants = (apis.data.Length == 0) ? null : apis.data[0];
-
-                //TableGenerator.TableGenerators(typeof(DOSParticipants.apiDataParticipant));
+                this.bnAreas2.Visible = true;
+                this.bnAreas.Visible = true;
 
                 tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
@@ -178,26 +171,31 @@ namespace DataOfScouts
                 tsdArea.Visible = true;
                 tsdComp.Visible = true;
                 tsdSeason.Visible = true;
-                tsdStage.Visible = true;
-                tsdGroup.Visible = true;
+                tsdStage.Visible = false;
+                tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
 
+                //var responseValue = clientTest.GetAccessData(strToken, "stages/" + "1", "29543");
+                //var strResponseValue = responseValue.Result;
+
+                //TableGenerator.TableGenerators(typeof(DOSStages.apiDataCompetitionSeasonStage));
+
+                //  responseValue = clientTest.GetAccessData(strToken, "groups/" + "1", "86215");
+                //  strResponseValue = responseValue.Result;
+
+                //TableGenerator.TableGenerators(typeof(DOSGroups.apiDataCompetitionSeasonStageGroup));
+
+                //return;
+
+
+                this.tsbGet_Click(sender, e);
+            }
+            else if (tabControl1.SelectedTab == tpGroups)
+            {
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
 
-                DataSet ds = new DataSet();
-                ds = InsertData("participants");
-                //  this.dgvPart.DataSource = ds.Tables[0].DefaultView;
-                tbData = ds.Tables[0];
-
-                BindingSource bs = new BindingSource();
-                bs.DataSource = tbData.DefaultView;
-                bnAreas.BindingSource = bs;
-                this.dgvPart.DataSource = bs;
-            }
-            else if (tabControl1.SelectedTab == tpEvent)
-            {
                 tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
@@ -205,32 +203,94 @@ namespace DataOfScouts
                 tsdComp.Visible = true;
                 tsdSeason.Visible = true;
                 tsdStage.Visible = true;
-                tsdGroup.Visible = true;
-                tsdPartic.Visible = true;
+                tsdGroup.Visible = false;
+                tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
 
+                this.tsbGet_Click(sender, e);
+            }
+            else if (tabControl1.SelectedTab == tpPlayer || tabControl1.SelectedTab == tpTeam)
+            {
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
 
-                var responseValue = clientTest.GetAccessData(strToken, "events/" + "1");
-                var strResponseValue = responseValue.Result;
+                tsdAreaParentId.Visible = true;
+                tsbArea.Visible = false;
+                tslArea.Visible = false;
+                tsdArea.Visible = true;
+                tsdComp.Visible = true;
+                tsdSeason.Visible = true;
+                tsdStage.Visible = false;
+                tsdGroup.Visible = false;
+                tsdPartic.Visible = false;
+                tsdEvent.Visible = false;
+ 
+                this.tsbGet_Click(sender, e);
+            }
 
-                TableGenerator.TableGenerators(typeof(DOSEvents.apiDataCompetitionSeasonStageGroupEvent));
-                return;
+            //else if (tabControl1.SelectedTab == tpParticipants)
+            //{ 
+            //    tsdAreaParentId.Visible = true;
+            //    tsbArea.Visible = false;
+            //    tslArea.Visible = false;
+            //    tsdArea.Visible = true;
+            //    tsdComp.Visible = true;
+            //    tsdSeason.Visible = true;
+            //    tsdStage.Visible = true;
+            //    tsdGroup.Visible = true;
+            //    tsdPartic.Visible = false;
+            //    tsdEvent.Visible = false;
 
-                string strName = "events" + "-" + "1" + " " + DateTime.Now.ToString("HHmmss");
-                Files.WriteXml(strName, strResponseValue);
+            //    this.bnAreas2.Visible = true;
+            //    this.bnAreas.Visible = true;
+
+            //    DataSet ds = new DataSet();
+            //    ds = InsertData("participants");
+            //    //  this.dgvPart.DataSource = ds.Tables[0].DefaultView;
+            //    tbData = ds.Tables[0];
+
+            //    BindingSource bs = new BindingSource();
+            //    bs.DataSource = tbData.DefaultView;
+            //    bnAreas.BindingSource = bs;
+            //    this.dgvPart.DataSource = bs;
+            //}
+            else if (tabControl1.SelectedTab == tpEvent)
+            {
+                this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
-                DataSet ds = new DataSet();
 
-                ds = InsertData("events");
-                //  this.dgvEvent.DataSource = ds.Tables[0].DefaultView;
-                tbData = ds.Tables[0];
+                tsdAreaParentId.Visible = true;
+                tsbArea.Visible = false;
+                tslArea.Visible = false;
+                tsdArea.Visible = true;
+                tsdComp.Visible = true;
+                tsdSeason.Visible = false;
+                tsdStage.Visible = false;
+                tsdGroup.Visible = false;
+                tsdPartic.Visible = false;
+                tsdEvent.Visible = false;
 
-                BindingSource bs = new BindingSource();
-                bs.DataSource = tbData.DefaultView;
-                bnAreas.BindingSource = bs;
-                this.dgvEvent.DataSource = bs;
+                this.tsbGet_Click(sender, e);
+
+              //  //var responseValue = clientTest.GetAccessData(strToken, "events/" + "1");
+              //  //var strResponseValue = responseValue.Result;
+
+              //  //TableGenerator.TableGenerators(typeof(DOSEvents.apiDataCompetitionSeasonStageGroupEvent));
+              //// return;
+
+              //  //string strName = "events" + "-" + "1" + " " + DateTime.Now.ToString("HHmmss");
+              //  //Files.WriteXml(strName, strResponseValue);
+              //  //this.bnAreas.Visible = true;
+              //  DataSet ds = new DataSet();
+
+              //  ds = InsertData("events");
+              //  //  this.dgvEvent.DataSource = ds.Tables[0].DefaultView;
+              //  tbData = ds.Tables[0];
+
+              //  BindingSource bs = new BindingSource();
+              //  bs.DataSource = tbData.DefaultView;
+              //  bnAreas.BindingSource = bs;
+              //  this.dgvEvent.DataSource = bs;
             }
             /*
             total = tbData.Rows.Count;
@@ -307,11 +367,18 @@ namespace DataOfScouts
             {
                 dgvEvent.DataSource = bindingSource1;
             }
-            else if (type == "participants")
+            //else if (type == "participants")
+            //{
+            //    dgvPart.DataSource = bindingSource1;
+            //}
+            else if (type == "team")
             {
-                dgvPart.DataSource = bindingSource1;
+                dgvTeam.DataSource = bindingSource1;
             }
-
+            else if (type == "player")
+            {
+                dgvPlayer.DataSource = bindingSource1;
+            }
         }
 
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
@@ -591,8 +658,184 @@ namespace DataOfScouts
                         }
                         break;
                     }
+
+                case "stages":
+                    { 
+                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                        {
+                            queryString = "select * from " + type + " where season_id=" + arr[0];
+
+                            FbDataAdapter adapter = new FbDataAdapter();
+                            adapter.SelectCommand = new FbCommand(queryString, connection);
+                            FbCommandBuilder builder = new FbCommandBuilder(adapter);
+                            connection.Open();
+                            DataSet stagesDs = new DataSet();
+                            adapter.Fill(stagesDs);
+
+                            if (stagesDs.Tables[0].Rows.Count == 0)
+                            {
+                                for (int i = 1; i < 4; i++)
+                                {
+                                    var responseValue = clientTest.GetAccessData(strToken, "stages/" + i, arr);
+                                    var strResponseValue = responseValue.Result;
+                                    
+                                    DOSStages.api apis = XmlUtil.Deserialize(typeof(DOSStages.api), strResponseValue) as DOSStages.api;
+                                      if (apis == null) return ds;  
+                                    DOSStages.apiDataCompetition [] competitions = (apis.data.Length == 0) ? null : apis.data;
+                                    if (competitions == null) return ds;
+                                    string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
+                                    Files.WriteXml(strName, strResponseValue);
+
+                                    foreach (DOSStages.apiDataCompetition  competition in competitions)
+                                    {
+                                        string strCompetition_id = competition.id;
+                                        string strArea_id = competition.area_id;
+                                        DOSStages.apiDataCompetitionSeason [] seasons = competition.season ;
+                                        if (seasons == null) continue;
+                                        foreach (DOSStages.apiDataCompetitionSeason season in seasons)
+                                        {
+                                            string strSeasons_id = season.id;
+                                            DOSStages.apiDataCompetitionSeasonStage  [] stages = season.stages  ;
+                                            if (stages == null) continue;
+                                            foreach (DOSStages.apiDataCompetitionSeasonStage  stage in stages)
+                                            {
+                                                DataRow dr = stagesDs.Tables[0].NewRow();
+                                                dr[0] = stage.id;
+                                                dr[1] = stage.stage_name_id ; 
+                                                dr[2] = stage.name;
+                                                dr[3] = stage.start_date;
+                                                dr[4] = stage.end_date ;
+                                                dr[5] = stage.show_standings =="yes" ? true:false;
+                                                dr[6] = stage.groups_nr ;
+                                                dr[7] = stage.sort ;
+                                                dr[8] = stage.is_current  == "yes" ? true : false;
+                                                dr[9] = stage.ut;
+                                                dr[10] = (stage.old_stage_id == "") ? "-1" : stage.old_stage_id;
+                                                dr[11] = strSeasons_id;
+                                                dr[12] = strCompetition_id;
+                                                dr[13] = strArea_id; 
+                                                dr[14] = cTimestamp;
+                                                stagesDs.Tables[0].Rows.Add(dr);
+                                            }
+                                        }
+                                    }
+                                    count = adapter.Update(stagesDs);
+                                    ds.Merge(stagesDs, true, MissingSchemaAction.AddWithKey);
+                                    stagesDs.Clear();
+
+                                    if (count > -1)
+                                    {
+                                        Console.WriteLine("[Success] Insert stages [" + count + " " + "]");
+                                        Files.WriteLog("[Success] Insert stages[" + count + "  " + "] " + " " + strName + ".xml");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("[Failure] Insert stages [  ]");
+                                        Files.WriteLog("[Failure] Insert stages [  ]" + " " + strName + ".xml");
+                                    }
+                                }
+                            }
+                            else
+                            { 
+                                ds = stagesDs;
+                            }
+                            connection.Close();
+                        }
+                        break;
+                    }
+
+                case "groups":
+                    {
+                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                        {
+                            queryString = "select * from " + type + " where stage_id=" + arr[0];
+
+                            FbDataAdapter adapter = new FbDataAdapter();
+                            adapter.SelectCommand = new FbCommand(queryString, connection);
+                            FbCommandBuilder builder = new FbCommandBuilder(adapter);
+                            connection.Open();
+                            DataSet stagesDs = new DataSet();
+                            adapter.Fill(stagesDs);
+
+                            if (stagesDs.Tables[0].Rows.Count == 0)
+                            {
+                                for (int i = 1; i < 4; i++)
+                                {
+                                    var responseValue = clientTest.GetAccessData(strToken, "groups/" + i, arr);
+                                    var strResponseValue = responseValue.Result;
+
+                                    string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
+                                    Files.WriteXml(strName, strResponseValue);
+
+                                    DOSGroups.api apis = XmlUtil.Deserialize(typeof(DOSGroups.api), strResponseValue) as DOSGroups.api;
+                                    if (apis == null) return ds;
+                                    DOSGroups.apiDataCompetition [] competitions = (apis.data.Length == 0) ? null : apis.data;
+                                    if (competitions == null) return ds;
+                                    //string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
+                                    //Files.WriteXml(strName, strResponseValue);
+
+                                    foreach (DOSGroups.apiDataCompetition competition in competitions)
+                                    {
+                                        string strCompetition_id = competition.id;
+                                        string strArea_id = competition.area_id;
+                                        DOSGroups.apiDataCompetitionSeason[] seasons = competition.season;
+                                        if (seasons == null) continue;
+                                        foreach (DOSGroups.apiDataCompetitionSeason season in seasons)
+                                        {
+                                            string strSeasons_id = season.id;
+                                            DOSGroups.apiDataCompetitionSeasonStage[] stages = season.stage ;
+                                            if (stages == null) continue;
+                                            foreach (DOSGroups.apiDataCompetitionSeasonStage stage in stages)
+                                            {
+                                                string strStage_id = stage.id;
+                                                DOSGroups.apiDataCompetitionSeasonStageGroup[] groups = stage.groups ;
+                                                if (groups == null) continue;
+                                                foreach (DOSGroups.apiDataCompetitionSeasonStageGroup group in groups)
+                                                {
+                                                    DataRow dr = stagesDs.Tables[0].NewRow();
+                                                    dr[0] = group.id; 
+                                                    dr[1] = group.name; 
+                                                    dr[2] = group.ut;
+                                                    dr[3] = strStage_id;
+                                                    dr[4] = strSeasons_id;
+                                                    dr[5] = strCompetition_id;
+                                                    dr[6] = strArea_id;
+                                                    dr[7] = cTimestamp;
+                                                    stagesDs.Tables[0].Rows.Add(dr);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    count = adapter.Update(stagesDs);
+                                    ds.Merge(stagesDs, true, MissingSchemaAction.AddWithKey);
+                                    stagesDs.Clear();
+
+                                    if (count > -1)
+                                    {
+                                        Console.WriteLine("[Success] Insert groups [" + count + " " + "]");
+                                        Files.WriteLog("[Success] Insert groups[" + count + "  " + "] " + " " + strName + ".xml");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("[Failure] Insert groups [  ]");
+                                        Files.WriteLog("[Failure] Insert groups [  ]" + " " + strName + ".xml");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ds = stagesDs;
+                            }
+                            connection.Close();
+                        }
+                        break;
+                    }
+
+                    //https://api.statscore.com/v2/events.xml?token=c48ad02061e4610726188d8df4b7eea0&sport_id=5&area_id=149&lang=zh&page=1&competition_id=2183 today
                 case "events":
                     {
+                       TableGenerator.TableGenerators(typeof(DOSEvents.apiDataCompetitionSeasonStageGroupEvent));
+
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             FbDataAdapter adapter = new FbDataAdapter();
@@ -606,7 +849,7 @@ namespace DataOfScouts
                             {
                                 for (int i = 1; i < 4; i++)
                                 {
-                                    var responseValue = clientTest.GetAccessData(strToken, "events/" + i);
+                                    var responseValue = clientTest.GetAccessData(strToken, "events/" + i,arr[0]);
                                     var strResponseValue = responseValue.Result;
 
                                     DOSSeasons.api apis = XmlUtil.Deserialize(typeof(DOSSeasons.api), strResponseValue) as DOSSeasons.api;
@@ -668,8 +911,9 @@ namespace DataOfScouts
                     {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
-                            string query = "SELECT FIRST 1 *  FROM teams";
-                            using (FbCommand cmd = new FbCommand(query))
+                           queryString = "select * from  teams where season_id=" + arr[0];
+
+                            using (FbCommand cmd = new FbCommand(queryString))
                             {
                                 using (FbCommandBuilder fcb = new FbCommandBuilder())
                                 {
@@ -686,7 +930,7 @@ namespace DataOfScouts
 
                                             data.Tables.Add(new DataTable("players"));
                                             FbDataAdapter adapter1 = new FbDataAdapter();
-                                            adapter1.SelectCommand = new FbCommand(" SELECT FIRST 1 * FROM players", connection);
+                                            adapter1.SelectCommand = new FbCommand(" SELECT   * FROM players" + " where season_id=" + arr[0], connection);
                                             FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
                                             adapter1.Fill(data.Tables["players"]);
 
@@ -694,11 +938,12 @@ namespace DataOfScouts
                                             {
                                                 for (int i = 1; i < 2869; i++)
                                                 {
-                                                    var responseValue = clientTest.GetAccessData(strToken, "participants/" + i);
+                                                    var responseValue = clientTest.GetAccessData(strToken, "participants/" + i, arr[0]);
                                                     var strResponseValue = responseValue.Result;
                                                     DOSParticipants.api apis = XmlUtil.Deserialize(typeof(DOSParticipants.api), strResponseValue) as DOSParticipants.api;
                                                     DOSParticipants.apiDataParticipant[] participants = (apis.data.Length == 0) ? null : apis.data[0];
-                                                    if (participants == null) return ds;
+                                                    //  if (participants == null) return ds;
+                                                    if (participants == null) break;
                                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                                     Files.WriteXml(strName, strResponseValue);
 
@@ -713,11 +958,12 @@ namespace DataOfScouts
                                                             dr[3] = participant.acronym;
                                                             dr[4] = (participant.gender.ToLower() == "male") ? true : false;
                                                             dr[5] = participant.area_id;
-                                                            dr[6] = (participant.national.ToLower() == "yes") ? true : false;
-                                                            dr[7] = participant.ut;
-                                                            dr[8] = (participant.old_participant_id == "") ? "-1" : participant.old_participant_id;
-                                                            dr[9] = participant.slug;
-                                                            dr[10] = cTimestamp;
+                                                            dr[6] = arr[0];
+                                                            dr[7] = (participant.national.ToLower() == "yes") ? true : false;
+                                                            dr[8] = participant.ut;
+                                                            dr[9] = (participant.old_participant_id == "") ? "-1" : participant.old_participant_id;
+                                                            dr[10] = participant.slug;
+                                                            dr[11] = cTimestamp;
                                                             data.Tables["teams"].Rows.Add(dr);
                                                         }
                                                         else if (participant.type == "person")
@@ -731,14 +977,16 @@ namespace DataOfScouts
                                                             dr2[5] = participant.details[0].birthdate;
                                                             dr2[6] = participant.details[0].position_name;
                                                             dr2[7] = participant.area_id;
-                                                            dr2[8] = (participant.national.ToLower() == "yes") ? true : false;
-                                                            dr2[9] = participant.ut;
-                                                            dr2[10] = (participant.old_participant_id == "") ? "-1" : participant.old_participant_id;
-                                                            dr2[11] = participant.slug;
-                                                            dr2[12] = cTimestamp;
+                                                            dr2[8] = arr[0];
+                                                            dr2[9] = (participant.national.ToLower() == "yes") ? true : false;
+                                                            dr2[10] = participant.ut;
+                                                            dr2[11] = (participant.old_participant_id == "") ? "-1" : participant.old_participant_id;
+                                                            dr2[12] = participant.slug;
+                                                            dr2[13] = cTimestamp;
                                                             data.Tables["players"].Rows.Add(dr2);
                                                         }
-                                                    }
+                                                    }   
+
                                                     if (data.Tables["teams"].Rows.Count > 0)
                                                     {
                                                         count = fda.Update(data.Tables["teams"]);
@@ -749,12 +997,9 @@ namespace DataOfScouts
                                                         count = adapter1.Update(data.Tables["players"]);
                                                         Files.WriteLog("[Success] Insert players[" + count + "  " + "] " + " " + strName + ".xml");
                                                     }
-                                                    if (i < 2)
-                                                    {
-                                                        ds.Merge(data, true, MissingSchemaAction.AddWithKey);
-                                                    }
-                                                    data.Clear();
 
+                                                    ds.Merge(data, true, MissingSchemaAction.AddWithKey);
+                                                    data.Clear();
                                                     //if (count > -1)
                                                     //{
                                                     //    Files.WriteLog("[Success] Insert seasons[" + count + "  " + "] " + " " + strName + ".xml");
@@ -767,6 +1012,11 @@ namespace DataOfScouts
                                                 }
 
                                             }
+                                            else
+                                            {
+                                                ds = data;
+                                            }
+                                            connection.Close();
                                         }
                                     }
                                 }
@@ -1007,21 +1257,22 @@ namespace DataOfScouts
             }
             else if (tabControl1.SelectedTab == tpSeasons)
             {
-                if (tsdArea.Tag != null && tsdComp.Tag == null)
-                {
-                    this.tsdComp.DropDownItems.Clear();
-                    DataSet ds1 = InsertData("competitions", tsdArea.Tag.ToString());
-                    if (ds1.Tables.Count != 0)
-                    {
-                        foreach (DataRow dr in ds1.Tables[0].Rows)
-                        {
-                            ToolStripMenuItem item = new ToolStripMenuItem();
-                            item.Tag = dr["ID"].ToString();
-                            item.Text = dr["NAME"].ToString();
-                            this.tsdComp.DropDownItems.Add(item);
-                        }
-                    }
-                }
+                //if (tsdArea.Tag != null && tsdComp.Tag == null)
+                //{
+                //    this.tsdComp.DropDownItems.Clear();
+                //    DataSet ds1 = InsertData("competitions", tsdArea.Tag.ToString());
+                //    if (ds1.Tables.Count != 0)
+                //    {
+                //        foreach (DataRow dr in ds1.Tables[0].Rows)
+                //        {
+                //            ToolStripMenuItem item = new ToolStripMenuItem();
+                //            item.Tag = dr["ID"].ToString();
+                //            item.Text = dr["NAME"].ToString();
+                //            this.tsdComp.DropDownItems.Add(item);
+                //        }
+                //    }
+                //}
+
                 if (tsdComp.Tag == null) { this.dgvSeasons.DataSource = null; return; }
 
                 DataSet ds = new DataSet();
@@ -1033,6 +1284,123 @@ namespace DataOfScouts
                 bs.DataSource = tbData.DefaultView;
                 bnAreas.BindingSource = bs;
                 this.dgvSeasons.DataSource = bs;
+
+                done = true;
+            }
+            else if (tabControl1.SelectedTab == tpStages)
+            {
+                //if (tsdArea.Tag != null && tsdComp.Tag == null && tsdSeason.Tag == null)
+                //{ 
+                //    this.tsdComp.DropDownItems.Clear();
+                //    DataSet ds1 = InsertData("competitions", tsdArea.Tag.ToString());
+                //    if (ds1.Tables.Count != 0)
+                //    {
+                //        foreach (DataRow dr in ds1.Tables[0].Rows)
+                //        {
+                //            ToolStripMenuItem item = new ToolStripMenuItem();
+                //            item.Tag = dr["ID"].ToString();
+                //            item.Text = dr["NAME"].ToString();
+                //            this.tsdComp.DropDownItems.Add(item);
+                //        }
+                //    }
+                //}
+  
+                //if ( tsdComp.Tag != null && tsdSeason.Tag == null)
+                //{  
+                //    this.tsdSeason.DropDownItems.Clear();
+                //    DataSet ds2 = InsertData("seasons", tsdComp.Tag.ToString());
+                //    if (ds2.Tables.Count != 0)
+                //    {
+                //        foreach (DataRow dr in ds2.Tables[0].Rows)
+                //        {
+                //            ToolStripMenuItem item = new ToolStripMenuItem();
+                //            item.Tag = dr["ID"].ToString();
+                //            item.Text = dr["NAME"].ToString();
+                //            this.tsdSeason.DropDownItems.Add(item);
+                //        }
+                //    }
+                //}
+
+                if (tsdSeason.Tag == null) { this.dgvStages.DataSource = null; return; }
+
+                DataSet ds = new DataSet();
+                ds = InsertData("stages", tsdSeason .Tag.ToString());
+                if (ds.Tables.Count == 0) { this.dgvStages.DataSource = null; return; }
+                tbData = ds.Tables[0];
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvStages.DataSource = bs;
+
+                done = true;
+
+            }
+            else if (tabControl1.SelectedTab == tpGroups)
+            {
+
+                if (tsdStage.Tag == null) { this.dgvGroups.DataSource = null; return; }
+
+                DataSet ds = new DataSet();
+                ds = InsertData("groups", tsdStage.Tag.ToString());
+                if (ds.Tables.Count == 0) { this.dgvGroups.DataSource = null; return; }
+                tbData = ds.Tables[0];
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvGroups.DataSource = bs;
+
+                done = true;
+
+            }
+            else if (tabControl1.SelectedTab == tpPlayer )
+            {
+                if (tsdSeason.Tag == null) { this.dgvPlayer.DataSource = null; return; }
+
+                DataSet ds = new DataSet();
+                ds = InsertData("participants", tsdSeason.Tag.ToString());
+                if (ds.Tables.Count == 0) { this.dgvPlayer.DataSource = null; return; }
+                tbData = ds.Tables[1];
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvPlayer.DataSource = bs;
+
+                done = true;
+
+            }
+            else if (tabControl1.SelectedTab == tpTeam )
+            {
+                if (tsdSeason.Tag == null) { this.dgvTeam.DataSource = null; return; }
+
+                DataSet ds = new DataSet();
+                ds = InsertData("participants", tsdSeason.Tag.ToString());
+                if (ds.Tables.Count == 0) { this.dgvTeam.DataSource = null; return; }
+                tbData = ds.Tables[0];
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvTeam.DataSource = bs;
+
+                done = true;
+
+            }
+            else if (tabControl1.SelectedTab == tpEvent )
+            { 
+                if (tsdComp.Tag == null) { this.dgvEvent.DataSource = null; return; }
+
+                DataSet ds = new DataSet();
+                ds = InsertData("events", tsdComp.Tag.ToString());
+                if (ds.Tables.Count == 0) { this.dgvEvent.DataSource = null; return; }
+                tbData = ds.Tables[0];
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = tbData.DefaultView;
+                bnAreas.BindingSource = bs;
+                this.dgvEvent.DataSource = bs;
 
                 done = true;
             }
@@ -1078,22 +1446,21 @@ namespace DataOfScouts
             this.tsdArea.Text = e.ClickedItem.Text;
             this.tsdArea.Tag = e.ClickedItem.Tag;
 
-            //if (tabControl1.SelectedTab != tpCompetitions)
-            //{
-            //this.tsdComp.DropDownItems.Clear();
-            //DataSet ds1 = InsertData("competitions", e.ClickedItem.Tag.ToString());
-            //foreach (DataRow dr in ds1.Tables[0].Rows)
-            //{
-            //    ToolStripMenuItem item = new ToolStripMenuItem();
-            //    item.Tag = dr["ID"].ToString();
-            //    item.Text = dr["NAME"].ToString();
-            //    this.tsdComp.DropDownItems.Add(item);
-            //}
-            //}
-            //  this.dgvSeasons.DataSource = null;
-            // this.tsdComp.DropDownItems.Clear();
+             this.tsdComp.DropDownItems.Clear();
+            DataSet ds1 = InsertData("competitions", e.ClickedItem.Tag .ToString());
+            if (ds1.Tables.Count != 0)
+            {
+                foreach (DataRow dr in ds1.Tables[0].Rows)
+                {
+                    ToolStripMenuItem item = new ToolStripMenuItem();
+                    item.Tag = dr["ID"].ToString();
+                    item.Text = dr["NAME"].ToString();
+                    this.tsdComp.DropDownItems.Add(item);
+                }
+            }
             this.tsdComp.Text = "competitions";
             this.tsdComp.Tag  = null;
+
             this.tsbGet_Click(sender, e);
         }
 
@@ -1101,12 +1468,71 @@ namespace DataOfScouts
         {
             this.tsdSeason.Text = e.ClickedItem.Text;
             this.tsdSeason.Tag = e.ClickedItem.Tag;
+
+            this.tsdStage.DropDownItems.Clear();
+            DataSet ds2 = InsertData("stages", tsdSeason.Tag.ToString());
+            if (ds2.Tables.Count != 0)
+            {
+                foreach (DataRow dr in ds2.Tables[0].Rows)
+                {
+                    ToolStripMenuItem item = new ToolStripMenuItem();
+                    item.Tag = dr["ID"].ToString();
+                    item.Text = dr["NAME"].ToString();
+                    this.tsdStage.DropDownItems.Add(item);
+                }
+            } 
+
+            this.tsdStage.Text = "stages";
+            this.tsdStage.Tag = null;
+
+            this.tsbGet_Click(sender, e);
         }
 
         private void tsdComp_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             this.tsdComp.Text = e.ClickedItem.Text;
             this.tsdComp.Tag = e.ClickedItem.Tag;
+
+            this.tsdSeason.DropDownItems.Clear();
+            DataSet ds2 = InsertData("seasons", tsdComp.Tag.ToString());
+            if (ds2.Tables.Count != 0)
+            {
+                foreach (DataRow dr in ds2.Tables[0].Rows)
+                {
+                    ToolStripMenuItem item = new ToolStripMenuItem();
+                    item.Tag = dr["ID"].ToString();
+                    item.Text = dr["NAME"].ToString();
+                    this.tsdSeason.DropDownItems.Add(item);
+                }
+            }
+
+            this.tsdSeason.Text = "seasons";
+            this.tsdSeason.Tag = null;
+
+            this.tsbGet_Click(sender, e);
+        }
+
+        private void tsdStage_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            this.tsdStage.Text = e.ClickedItem.Text;
+            this.tsdStage.Tag = e.ClickedItem.Tag;
+
+            this.tsdGroup.DropDownItems.Clear();
+            DataSet ds2 = InsertData("seasons", tsdStage .Tag.ToString());
+            if (ds2.Tables.Count != 0)
+            {
+                foreach (DataRow dr in ds2.Tables[0].Rows)
+                {
+                    ToolStripMenuItem item = new ToolStripMenuItem();
+                    item.Tag = dr["ID"].ToString();
+                    item.Text = dr["NAME"].ToString();
+                    this.tsdGroup.DropDownItems.Add(item);
+                }
+            }
+
+            this.tsdGroup.Text = "groups";
+            this.tsdGroup.Tag = null;
+
             this.tsbGet_Click(sender, e);
         }
     }
@@ -1161,6 +1587,18 @@ namespace DataOfScouts
                 Console.WriteLine("GET seasons " + strUrl);
                 Files.WriteLog("GET seasons " + strUrl);
             }
+
+            else if (type.IndexOf("stages") > -1)
+            {
+                strUrl = $"/v2/stages.xml?token=" + token + "&sport_id=5&season_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                 Files.WriteLog("GET stages " + strUrl);
+            }
+            else if (type.IndexOf("groups") > -1)
+            {
+                strUrl = $"/v2/groups.xml?token=" + token + "&sport_id=5&stage_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                 Files.WriteLog("GET groups " + strUrl);
+            }
+
             else if (type.IndexOf("events") > -1)
             {
                 strUrl = $"/v2/events.xml?token=" + token + "&sport_id=5&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
@@ -1169,7 +1607,7 @@ namespace DataOfScouts
             }
             else if (type.IndexOf("participants") > -1)
             {
-                strUrl = $"/v2/participants.xml?token=" + token + "&sport_id=5&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                strUrl = $"/v2/participants.xml?token=" + token + "&sport_id=5&season_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
                 Console.WriteLine("GET participants " + strUrl);
                 Files.WriteLog("GET participants " + strUrl);
             }
