@@ -73,8 +73,6 @@ namespace DataOfScouts
             this.tsdAreaParentId = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsdArea = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsdComp = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsdSeason = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsdStage = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsdGroup = new System.Windows.Forms.ToolStripDropDownButton();
@@ -524,26 +522,12 @@ namespace DataOfScouts
             this.tsdComp.AutoSize = false;
             this.tsdComp.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.tsdComp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsdComp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem4});
             this.tsdComp.Image = ((System.Drawing.Image)(resources.GetObject("tsdComp.Image")));
             this.tsdComp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsdComp.Name = "tsdComp";
             this.tsdComp.Size = new System.Drawing.Size(150, 27);
             this.tsdComp.Text = "competition";
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(216, 28);
-            this.toolStripMenuItem3.Text = "xxxxxxxxxxxxx";
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(216, 28);
-            this.toolStripMenuItem4.Text = "ccccccccccccccccc";
+            this.tsdComp.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsdComp_DropDownItemClicked);
             // 
             // tsdSeason
             // 
@@ -555,6 +539,7 @@ namespace DataOfScouts
             this.tsdSeason.Name = "tsdSeason";
             this.tsdSeason.Size = new System.Drawing.Size(150, 27);
             this.tsdSeason.Text = "season";
+            this.tsdSeason.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsdSeason_DropDownItemClicked);
             // 
             // tsdStage
             // 
@@ -696,8 +681,6 @@ namespace DataOfScouts
         private System.Windows.Forms.ToolStripTextBox tsbArea;
         private System.Windows.Forms.ToolStripDropDownButton tsdArea;
         private System.Windows.Forms.ToolStripDropDownButton tsdComp;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripDropDownButton tsdSeason;
         private System.Windows.Forms.ToolStripDropDownButton tsdStage;
         private System.Windows.Forms.ToolStripDropDownButton tsdGroup;

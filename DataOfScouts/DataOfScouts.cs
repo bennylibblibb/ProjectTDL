@@ -22,7 +22,7 @@ namespace DataOfScouts
         public DataOfScouts()
         {
             InitializeComponent();
-            //  ClientAuthorize(); 
+            ClientAuthorize(); 
 
             this.bnAreas2.Visible = false;
             this.bnAreas.Visible = false;
@@ -532,7 +532,7 @@ namespace DataOfScouts
                             {
                                 for (int i = 1; i < 4; i++)
                                 {
-                                    var responseValue = clientTest.GetAccessData(strToken, "seasons/" + i);
+                                    var responseValue = clientTest.GetAccessData(strToken, "seasons/" + i, arr);
                                     var strResponseValue = responseValue.Result;
                                     //DOSSeasons.api apis = XmlUtil.Deserialize(typeof(DOSSeasons.api), strResponseValue) as DOSSeasons.api;
                                     //DOSSeasons.apiDataCompetitionsCompetition[] competitions = (apis.data.Length == 0) ? null : apis.data[0];
@@ -944,7 +944,7 @@ namespace DataOfScouts
         private void tsbGet_Click(object sender, EventArgs e)
         {
             bool done = false;
-            if (tabControl1.SelectedTab == tpAreas&& tsdArea.Tag == null&& tsbArea.Text.Trim()=="")
+            if (tabControl1.SelectedTab == tpAreas && tsdArea.Tag == null && tsbArea.Text.Trim() == "")
             {
                 DataSet ds = InsertData("areas", "all");
                 //foreach (DataRow dr in ds.Tables[0].Rows)
@@ -961,11 +961,11 @@ namespace DataOfScouts
                 this.dgvAreas.DataSource = bs;
                 done = true;
             }
-            else if ((tabControl1.SelectedTab == tpAreas && tsbArea.Text.Trim()!="")||(tabControl1.SelectedTab == tpAreas && tsdArea.Tag != null ))
+            else if ((tabControl1.SelectedTab == tpAreas && tsbArea.Text.Trim() != "") || (tabControl1.SelectedTab == tpAreas && tsdArea.Tag != null))
             {
                 DataSet ds = InsertData("areas", (tsdArea.Tag != null ? this.tsdAreaParentId.Text : tsbArea.Text.Trim()));
 
-                if (ds.Tables.Count == 0) return; 
+                if (ds.Tables.Count == 0) return;
 
                 tbData = ds.Tables[0];
 
@@ -974,7 +974,7 @@ namespace DataOfScouts
                 bnAreas.BindingSource = bs;
                 this.dgvAreas.DataSource = bs;
 
-              //  this.tsdAreaParentId.Text = tsbArea.Text.Trim();
+                //  this.tsdAreaParentId.Text = tsbArea.Text.Trim();
                 done = true;
             }
             else if (tabControl1.SelectedTab == tpCompetitions)
@@ -1002,20 +1002,37 @@ namespace DataOfScouts
                 bnAreas.BindingSource = bs;
                 this.dgvComp.DataSource = bs;
 
-            //    tsbArea.Text = this.tsdAreaParentId.Text;
+                //    tsbArea.Text = this.tsdAreaParentId.Text;
                 done = true;
             }
             else if (tabControl1.SelectedTab == tpSeasons)
             {
+                if (tsdArea.Tag != null && tsdComp.Tag == null)
+                {
+                    this.tsdComp.DropDownItems.Clear();
+                    DataSet ds1 = InsertData("competitions", tsdArea.Tag.ToString());
+                    if (ds1.Tables.Count != 0)
+                    {
+                        foreach (DataRow dr in ds1.Tables[0].Rows)
+                        {
+                            ToolStripMenuItem item = new ToolStripMenuItem();
+                            item.Tag = dr["ID"].ToString();
+                            item.Text = dr["NAME"].ToString();
+                            this.tsdComp.DropDownItems.Add(item);
+                        }
+                    }
+                }
+                if (tsdComp.Tag == null) { this.dgvSeasons.DataSource = null; return; }
+
                 DataSet ds = new DataSet();
-                ds = InsertData("seasons", "1733");
-                if (ds.Tables.Count == 0) return;
+                ds = InsertData("seasons", tsdComp.Tag.ToString());
+                if (ds.Tables.Count == 0) { this.dgvSeasons.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
                 BindingSource bs = new BindingSource();
                 bs.DataSource = tbData.DefaultView;
                 bnAreas.BindingSource = bs;
-                this.dgvComp.DataSource = bs;
+                this.dgvSeasons.DataSource = bs;
 
                 done = true;
             }
@@ -1060,9 +1077,38 @@ namespace DataOfScouts
         {
             this.tsdArea.Text = e.ClickedItem.Text;
             this.tsdArea.Tag = e.ClickedItem.Tag;
-          
+
+            //if (tabControl1.SelectedTab != tpCompetitions)
+            //{
+            //this.tsdComp.DropDownItems.Clear();
+            //DataSet ds1 = InsertData("competitions", e.ClickedItem.Tag.ToString());
+            //foreach (DataRow dr in ds1.Tables[0].Rows)
+            //{
+            //    ToolStripMenuItem item = new ToolStripMenuItem();
+            //    item.Tag = dr["ID"].ToString();
+            //    item.Text = dr["NAME"].ToString();
+            //    this.tsdComp.DropDownItems.Add(item);
+            //}
+            //}
+            //  this.dgvSeasons.DataSource = null;
+            // this.tsdComp.DropDownItems.Clear();
+            this.tsdComp.Text = "competitions";
+            this.tsdComp.Tag  = null;
+            this.tsbGet_Click(sender, e);
         }
 
+        private void tsdSeason_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            this.tsdSeason.Text = e.ClickedItem.Text;
+            this.tsdSeason.Tag = e.ClickedItem.Tag;
+        }
+
+        private void tsdComp_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            this.tsdComp.Text = e.ClickedItem.Text;
+            this.tsdComp.Tag = e.ClickedItem.Tag;
+            this.tsbGet_Click(sender, e);
+        }
     }
 
     class OAuthClient
@@ -1111,7 +1157,7 @@ namespace DataOfScouts
             }
             else if (type.IndexOf("seasons") > -1)
             {
-                strUrl = $"/v2/seasons.xml?token=" + token + "&sport_id=5&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                strUrl = $"/v2/seasons.xml?token=" + token + "&sport_id=5&competition_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
                 Console.WriteLine("GET seasons " + strUrl);
                 Files.WriteLog("GET seasons " + strUrl);
             }
