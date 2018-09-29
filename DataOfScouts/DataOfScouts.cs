@@ -503,9 +503,9 @@ namespace DataOfScouts
                                     var responseValue = clientTest.GetAccessData(strToken, "competitions/" + i, arr);
                                     var strResponseValue = responseValue.Result;
                                     DOSCompetitions.api apis = XmlUtil.Deserialize(typeof(DOSCompetitions.api), strResponseValue) as DOSCompetitions.api;
-                                    if (apis == null) return ds;  
+                                    if (apis == null) break;  
                                     DOSCompetitions.apiDataCompetitionsCompetition[] competitions = (apis.data.Length == 0) ? null : apis.data[0];
-                                    if (competitions == null) return ds;
+                                    if (competitions == null) break;
 
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
@@ -606,7 +606,7 @@ namespace DataOfScouts
                                     // if (competitions == null) return ds;
                                     DOSSeasons.api apis = XmlUtil.Deserialize(typeof(DOSSeasons.api), strResponseValue) as DOSSeasons.api;
                                     DOSSeasons.apiDataCompetitionsCompetition[] competitions = (apis.data.Length == 0) ? null : apis.data[0];
-                                    if (competitions == null) return ds;
+                                    if (competitions == null) break;
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
 
@@ -680,9 +680,9 @@ namespace DataOfScouts
                                     var strResponseValue = responseValue.Result;
                                     
                                     DOSStages.api apis = XmlUtil.Deserialize(typeof(DOSStages.api), strResponseValue) as DOSStages.api;
-                                      if (apis == null) return ds;  
+                                      if (apis == null) break;  
                                     DOSStages.apiDataCompetition [] competitions = (apis.data.Length == 0) ? null : apis.data;
-                                    if (competitions == null) return ds;
+                                    if (competitions == null) break;
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
 
@@ -768,9 +768,10 @@ namespace DataOfScouts
                                     Files.WriteXml(strName, strResponseValue);
 
                                     DOSGroups.api apis = XmlUtil.Deserialize(typeof(DOSGroups.api), strResponseValue) as DOSGroups.api;
-                                    if (apis == null) return ds;
+                                    // if (apis == null) return ds;
+                                    if (apis == null) break;
                                     DOSGroups.apiDataCompetition [] competitions = (apis.data.Length == 0) ? null : apis.data;
-                                    if (competitions == null) return ds;
+                                    if (competitions == null) break;
                                     //string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     //Files.WriteXml(strName, strResponseValue);
 
@@ -834,53 +835,79 @@ namespace DataOfScouts
                     //https://api.statscore.com/v2/events.xml?token=c48ad02061e4610726188d8df4b7eea0&sport_id=5&area_id=149&lang=zh&page=1&competition_id=2183 today
                 case "events":
                     {
-                       TableGenerator.TableGenerators(typeof(DOSEvents.apiDataCompetitionSeasonStageGroupEvent));
-
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
+                            queryString = "select * from " + type + " where  COMPETITION_ID=" + arr[0];
+
                             FbDataAdapter adapter = new FbDataAdapter();
                             adapter.SelectCommand = new FbCommand(queryString, connection);
                             FbCommandBuilder builder = new FbCommandBuilder(adapter);
                             connection.Open();
-                            DataSet seasonsDs = new DataSet();
-                            adapter.Fill(seasonsDs);
+                            DataSet eventsDs = new DataSet();
+                            adapter.Fill(eventsDs);
 
-                            if (seasonsDs.Tables[0].Rows.Count == 0)
+                            if (eventsDs.Tables[0].Rows.Count == 0)
                             {
                                 for (int i = 1; i < 4; i++)
                                 {
-                                    var responseValue = clientTest.GetAccessData(strToken, "events/" + i,arr[0]);
-                                    var strResponseValue = responseValue.Result;
-
-                                    DOSSeasons.api apis = XmlUtil.Deserialize(typeof(DOSSeasons.api), strResponseValue) as DOSSeasons.api;
-                                    DOSSeasons.apiDataCompetitionsCompetition[] competitions = (apis.data.Length == 0) ? null : apis.data[0];
-                                    if (competitions == null) return ds;
+                                    var  responseValue = clientTest.GetAccessData(strToken, "events/" + i,arr[0]);
+                                    var  strResponseValue = responseValue.Result; 
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
 
-                                    foreach (DOSSeasons.apiDataCompetitionsCompetition competition in competitions)
+                                    DOSEvents.api apis = XmlUtil.Deserialize(typeof(DOSEvents.api), strResponseValue) as DOSEvents.api;
+                                    DOSEvents.apiDataCompetition[] competitions = (apis.data.Length == 0) ? null : apis.data[0];
+                                    if (competitions == null) break;
+
+                                    foreach (DOSEvents.apiDataCompetition competition in competitions)
                                     {
                                         string strCompetition_id = competition.id;
-                                        DOSSeasons.apiDataCompetitionSeason[] seasons = competition.seasons;
+                                        string strArea_id = competition.area_id;
+                                        DOSEvents.apiDataCompetitionSeason[] seasons = competition.seasons;
                                         if (seasons == null) continue;
-                                        foreach (DOSSeasons.apiDataCompetitionSeason season in seasons)
+                                        foreach (DOSEvents.apiDataCompetitionSeason season in seasons)
                                         {
-                                            DataRow dr = seasonsDs.Tables[0].NewRow();
-                                            dr[0] = season.id;
-                                            dr[1] = season.name;
-                                            dr[2] = strCompetition_id;
-                                            dr[3] = season.year;
-                                            dr[4] = season.actual;
-                                            dr[5] = season.ut;
-                                            dr[6] = (season.old_season_id == "") ? "-1" : season.old_season_id;
-                                            dr[7] = season.range;
-                                            dr[8] = cTimestamp;
-                                            seasonsDs.Tables[0].Rows.Add(dr);
+                                            string strSeasons_id = season.id;
+                                            DOSEvents.apiDataCompetitionSeasonStage[] stages = season.stages;
+                                            if (stages == null) continue;
+                                            foreach (DOSEvents.apiDataCompetitionSeasonStage stage in stages)
+                                            {
+                                                string strStage_id = stage.id;
+                                                DOSEvents.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
+                                                if (groups == null) continue;
+                                                foreach (DOSEvents.apiDataCompetitionSeasonStageGroup group in groups)
+                                                {
+                                                    foreach (DOSEvents.apiDataCompetitionSeasonStageGroupEvent sevent in group.events)
+                                                    {
+                                                        if (sevent == null) continue;
+                                                        if (eventsDs.Tables[0].Select("id="+sevent.id).Length == 0)
+                                                        {
+                                                            DataRow dr = eventsDs.Tables[0].NewRow();
+                                                            dr[0] = sevent.id;
+                                                            dr[1] = sevent.name ;
+                                                            dr[2] = sevent.id;
+                                                            dr[3] = sevent.name;
+                                                            dr[2] = strStage_id;
+                                                            dr[3] = strSeasons_id;
+                                                            dr[5] = strCompetition_id;
+                                                            dr[6] = strArea_id;
+                                                            dr[7] = cTimestamp;
+                                                            dr[8] = cTimestamp;
+                                                            eventsDs.Tables[0].Rows.Add(dr);
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
-                                    count = adapter.Update(seasonsDs);
-                                    ds.Merge(seasonsDs, true, MissingSchemaAction.AddWithKey);
-                                    seasonsDs.Clear();
+                                       
+                                    count = adapter.Update(eventsDs);
+                                    ds.Merge(eventsDs, true, MissingSchemaAction.AddWithKey);
+                                    eventsDs.Clear();
 
                                     if (count > -1)
                                     {
@@ -899,8 +926,8 @@ namespace DataOfScouts
                                 count = -1;
                                 queryString = "select   * from " + type;
                                 adapter.SelectCommand = new FbCommand(queryString, connection);
-                                adapter.Fill(seasonsDs);
-                                ds = seasonsDs;
+                                adapter.Fill(eventsDs);
+                                ds = eventsDs;
                             }
                             connection.Close();
                         }

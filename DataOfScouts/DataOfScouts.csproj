@@ -95,7 +95,7 @@
     <Compile Include="XmlType\DOSCompetitions.cs" />
     <Compile Include="XmlType\DOSGroups.cs" />
     <Compile Include="XmlType\DOSSeasons.cs" />
-    <Compile Include="XmlType\DOSEvents.cs" />
+    <Compile Include="XmlType\DOSEvents1.cs" />
     <Compile Include="XmlType\DOSStages .cs" />
     <Compile Include="XmlType\Participants.cs" />
     <Compile Include="XmlUtil.cs" />
