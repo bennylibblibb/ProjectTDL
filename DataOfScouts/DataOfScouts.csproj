@@ -93,9 +93,11 @@
     <Compile Include="TableGenerator.cs" />
     <Compile Include="XmlType\DOSAreas.cs" />
     <Compile Include="XmlType\DOSCompetitions.cs" />
+    <Compile Include="XmlType\DOSEvents.cs">
+      <SubType>code</SubType>
+    </Compile>
     <Compile Include="XmlType\DOSGroups.cs" />
     <Compile Include="XmlType\DOSSeasons.cs" />
-    <Compile Include="XmlType\DOSEvents1.cs" />
     <Compile Include="XmlType\DOSStages .cs" />
     <Compile Include="XmlType\Participants.cs" />
     <Compile Include="XmlUtil.cs" />

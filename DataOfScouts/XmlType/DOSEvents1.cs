@@ -329,7 +329,7 @@ namespace DOSEvents {
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
         [System.Xml.Serialization.XmlArrayItemAttribute("participant", typeof(apiDataCompetitionSeasonStageGroupEventParticipant), Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public apiDataCompetitionSeasonStageGroupEventParticipant[][] participants;
+        public apiDataCompetitionSeasonStageGroupEventParticipant[]  participants;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -479,6 +479,10 @@ namespace DOSEvents {
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string booked_by;
         
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string inverted_participants;
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string venue_id;
