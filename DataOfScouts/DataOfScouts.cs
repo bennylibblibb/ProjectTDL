@@ -33,6 +33,7 @@ namespace DataOfScouts
             {
                 this.tsdAreaParentId.DropDownItems.Add(dr[0].ToString());
             }
+
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -395,8 +396,12 @@ namespace DataOfScouts
             strToken = JObject.Parse(data.ToString())["token"].Value<string>();
             this.lbAuthorization.Text = "Authorized";
             this.lbToken.Text = strToken;
+            clientTest.token = strToken;
 
             Files.WriteLog("[Success] Authorized: " + strToken);
+
+              responseValue = clientTest.PostAccessData ();
+              strResponseValue = responseValue.Result;
         }
         // private DataSet InsertData(int iPage, string responsValue, string type)
         //private DataSet InsertData(string type)
@@ -1606,7 +1611,7 @@ namespace DataOfScouts
     class OAuthClient
     {
         private static  HttpClient _httpClient;
-       // private string token;
+        public string token;
 
         public OAuthClient()
         {
@@ -1619,6 +1624,30 @@ namespace DataOfScouts
             var client_id = AppFlag.Client_id;
             var secret_key = AppFlag.Secret_key;
             var response = await _httpClient.GetAsync($"/v2/oauth?client_id={client_id}&secret_key={secret_key}").ConfigureAwait(false);
+            var responseValue = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return responseValue;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public async Task<string> PostAccessData()
+        {
+            var client_id = AppFlag.Client_id;
+            var secret_key = AppFlag.Secret_key;
+
+            var parameters = new Dictionary<string, string>();
+          //  parameters.Add("event_id", "2451715");
+            parameters.Add("product", "scoutsfeed");
+            parameters.Add("token", token);
+
+
+            //   var response = await _httpClient.PostAsync($"/v2/booked-events/", new FormUrlEncodedContent(parameters)).ConfigureAwait (false);
+            var response = await _httpClient.PostAsync($"/v2/booked-events/2451715", new FormUrlEncodedContent(parameters)).ConfigureAwait(false);
             var responseValue = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
