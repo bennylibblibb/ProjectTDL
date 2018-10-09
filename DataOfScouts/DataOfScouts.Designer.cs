@@ -34,6 +34,9 @@ namespace DataOfScouts
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataOfScouts));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpAuthorization = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.gbAuthorization = new System.Windows.Forms.GroupBox();
             this.lbToken = new System.Windows.Forms.Label();
             this.lbAuthorization = new System.Windows.Forms.Label();
@@ -53,6 +56,8 @@ namespace DataOfScouts
             this.dgvPlayer = new System.Windows.Forms.DataGridView();
             this.tpEvent = new System.Windows.Forms.TabPage();
             this.dgvEvent = new System.Windows.Forms.DataGridView();
+            this.tpBook = new System.Windows.Forms.TabPage();
+            this.dgvBookedEvent = new System.Windows.Forms.DataGridView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.bnAreas = new System.Windows.Forms.BindingNavigator(this.components);
             this.bindingNavigatorAddNewItem = new System.Windows.Forms.ToolStripButton();
@@ -103,6 +108,8 @@ namespace DataOfScouts
             ((System.ComponentModel.ISupportInitialize)(this.dgvPlayer)).BeginInit();
             this.tpEvent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEvent)).BeginInit();
+            this.tpBook.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBookedEvent)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bnAreas)).BeginInit();
             this.bnAreas.SuspendLayout();
@@ -124,6 +131,7 @@ namespace DataOfScouts
             this.tabControl1.Controls.Add(this.tpTeam);
             this.tabControl1.Controls.Add(this.tpPlayer);
             this.tabControl1.Controls.Add(this.tpEvent);
+            this.tabControl1.Controls.Add(this.tpBook);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.tabControl1.Location = new System.Drawing.Point(0, 4);
             this.tabControl1.Name = "tabControl1";
@@ -135,6 +143,9 @@ namespace DataOfScouts
             // 
             // tpAuthorization
             // 
+            this.tpAuthorization.Controls.Add(this.label1);
+            this.tpAuthorization.Controls.Add(this.textBox1);
+            this.tpAuthorization.Controls.Add(this.button1);
             this.tpAuthorization.Controls.Add(this.gbAuthorization);
             this.tpAuthorization.Location = new System.Drawing.Point(4, 29);
             this.tpAuthorization.Name = "tpAuthorization";
@@ -142,6 +153,33 @@ namespace DataOfScouts
             this.tpAuthorization.TabIndex = 5;
             this.tpAuthorization.Text = "Authorization";
             this.tpAuthorization.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(29, 232);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(479, 248);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "label1";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(125, 175);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 26);
+            this.textBox1.TabIndex = 2;
+            this.textBox1.Visible = false;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(4, 173);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(80, 28);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // gbAuthorization
             // 
@@ -354,6 +392,28 @@ namespace DataOfScouts
             this.dgvEvent.Size = new System.Drawing.Size(958, 500);
             this.dgvEvent.TabIndex = 2;
             // 
+            // tpBook
+            // 
+            this.tpBook.Controls.Add(this.dgvBookedEvent);
+            this.tpBook.Location = new System.Drawing.Point(4, 29);
+            this.tpBook.Name = "tpBook";
+            this.tpBook.Size = new System.Drawing.Size(964, 506);
+            this.tpBook.TabIndex = 9;
+            this.tpBook.Text = "booked-events";
+            this.tpBook.UseVisualStyleBackColor = true;
+            // 
+            // dgvBookedEvent
+            // 
+            this.dgvBookedEvent.AllowUserToOrderColumns = true;
+            this.dgvBookedEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvBookedEvent.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvBookedEvent.Location = new System.Drawing.Point(3, 3);
+            this.dgvBookedEvent.Name = "dgvBookedEvent";
+            this.dgvBookedEvent.Size = new System.Drawing.Size(958, 500);
+            this.dgvBookedEvent.TabIndex = 3;
+            // 
             // bnAreas
             // 
             this.bnAreas.AddNewItem = this.bindingNavigatorAddNewItem;
@@ -553,6 +613,7 @@ namespace DataOfScouts
             // 
             this.tsbArea.Name = "tsbArea";
             this.tsbArea.Size = new System.Drawing.Size(50, 30);
+            this.tsbArea.Text = "All";
             // 
             // tsdAreaParentId
             // 
@@ -679,6 +740,7 @@ namespace DataOfScouts
     "OfScouts";
             this.tabControl1.ResumeLayout(false);
             this.tpAuthorization.ResumeLayout(false);
+            this.tpAuthorization.PerformLayout();
             this.gbAuthorization.ResumeLayout(false);
             this.gbAuthorization.PerformLayout();
             this.tpAreas.ResumeLayout(false);
@@ -697,6 +759,8 @@ namespace DataOfScouts
             ((System.ComponentModel.ISupportInitialize)(this.dgvPlayer)).EndInit();
             this.tpEvent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvEvent)).EndInit();
+            this.tpBook.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBookedEvent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bnAreas)).EndInit();
             this.bnAreas.ResumeLayout(false);
@@ -763,6 +827,11 @@ namespace DataOfScouts
         private System.Windows.Forms.DataGridView dgvTeam;
         private System.Windows.Forms.TabPage tpPlayer;
         private System.Windows.Forms.DataGridView dgvPlayer;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TabPage tpBook;
+        private System.Windows.Forms.DataGridView dgvBookedEvent;
     }
 }
 

@@ -91,6 +91,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableGenerator.cs" />
+    <Compile Include="XmlType\DOSBookedEvents.cs" />
+    <Compile Include="XmlType\DOSBookedEvents1.cs" />
     <Compile Include="XmlType\DOSAreas.cs" />
     <Compile Include="XmlType\DOSCompetitions.cs" />
     <Compile Include="XmlType\DOSEvents.cs">

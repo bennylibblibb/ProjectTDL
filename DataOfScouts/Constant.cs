@@ -14,6 +14,7 @@ namespace DataOfScouts
         public static string Secret_key = ConfigurationSettings.AppSettings["Secret_key"];
         public static string ScoutsUrl = ConfigurationSettings.AppSettings["ScoutsUrl"];
         public static int iPageSize =Convert .ToInt32(ConfigurationSettings.AppSettings["PageSize"]);
+        public static int iQueryDays = Convert.ToInt32(ConfigurationSettings.AppSettings["QueryDays"]);
     }
 
     public enum InformationType
