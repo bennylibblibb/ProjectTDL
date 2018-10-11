@@ -11,6 +11,8 @@ using FileLog;
 using System.Net.Http.Headers;
 using System.Data;
 using FirebirdSql.Data.FirebirdClient;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace DataOfScouts
 {
@@ -29,7 +31,7 @@ namespace DataOfScouts
             var picker = new DateTimePicker();
             picker.Name = "dtpStartTime";
             picker.Format = DateTimePickerFormat.Custom;
-            picker.CustomFormat = "yyyy/MM/dd";
+         //   picker.CustomFormat = "yyyy/MM/dd";
             picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays);
             picker.Width = 80;
             var host = new ToolStripControlHost(picker);
@@ -43,7 +45,7 @@ namespace DataOfScouts
             picker = new DateTimePicker();
             picker.Name = "dtpEndTime";
             picker.Format = DateTimePickerFormat.Custom;
-            picker.CustomFormat = "yyyy/MM/dd";
+           // picker.CustomFormat = "yyyy/MM/dd";
             picker.Width = 80;
             host = new ToolStripControlHost(picker);
             bnAreas2.Items.Insert(14, host);
@@ -1168,139 +1170,149 @@ namespace DataOfScouts
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             //  queryString = "select * from " + type + " where  COMPETITION_ID=" + arr[0] +" and booked=false";
-                            queryString = "select * from " + type;// + " where booked = false";
+                            //queryString = "select * from " + type;// + " where booked = false";
+                            queryString = "select * from " + type + " where '" + arr[0] + "'<= start_date and start_date <='" + arr[1] + "'";
                             FbDataAdapter adapter = new FbDataAdapter();
                             adapter.SelectCommand = new FbCommand(queryString, connection);
                             FbCommandBuilder builder = new FbCommandBuilder(adapter);
                             connection.Open();
                             DataSet eventsDs = new DataSet();
                             adapter.Fill(eventsDs);
-
-                            //if (eventsDs.Tables[0].Rows.Count == 0)
-                            //{
-                            //DataSet newEventsDs= eventsDs.Clone ();
-                            for (int i = 1; i < 4; i++)
+                            if (Convert.ToBoolean(arr[2]) && DateTime.Now <= Convert .ToDateTime ( arr[1]))
                             {
-                                if (Convert.ToBoolean(arr[2]) == false) break;
-
-                                var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[0]);
-                                var strResponseValue = responseValue.Result;
-                                if (strResponseValue == "") { break; }
-                                string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
-                                Files.WriteXml(strName, strResponseValue);
-
-                                DOSEvents.api apis = XmlUtil.Deserialize(typeof(DOSEvents.api), strResponseValue) as DOSEvents.api;
-                                if (apis == null) break;
-                                DOSEvents.apiDataCompetition[] competitions = (apis.data.Length == 0) ? null : apis.data[0];
-                                if (competitions == null) break;
-
-                                foreach (DOSEvents.apiDataCompetition competition in competitions)
+                                //if (eventsDs.Tables[0].Rows.Count == 0)
+                                //{
+                                //DataSet newEventsDs= eventsDs.Clone ();
+                                for (int i = 1; i < 2; i++)
                                 {
-                                    string strCompetition_id = competition.id;
-                                    string strArea_id = competition.area_id;
-                                    DOSEvents.apiDataCompetitionSeason[] seasons = competition.seasons;
-                                    if (seasons == null) continue;
-                                    foreach (DOSEvents.apiDataCompetitionSeason season in seasons)
-                                    {
-                                        string strSeasons_id = season.id;
-                                        DOSEvents.apiDataCompetitionSeasonStage[] stages = season.stages;
-                                        if (stages == null) continue;
-                                        foreach (DOSEvents.apiDataCompetitionSeasonStage stage in stages)
-                                        {
-                                            string strStage_id = stage.id;
-                                            DOSEvents.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
-                                            if (groups == null) continue;
-                                            foreach (DOSEvents.apiDataCompetitionSeasonStageGroup group in groups)
-                                            {
-                                                foreach (DOSEvents.apiDataCompetitionSeasonStageGroupEvent sevent in group.events)
-                                                {
-                                                    if (sevent == null) continue;
-                                                    DataRow[] drs = eventsDs.Tables[0].Select("id=" + sevent.id);
-                                                    if (eventsDs.Tables[0].Select("id=" + sevent.id).Length == 0)
-                                                    {
-                                                        DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant[] participants = sevent.participants;
+                                    //    if (Convert.ToBoolean(arr[2]) == false) { ds = eventsDs; break; }
 
-                                                        DataRow dr = eventsDs.Tables[0].NewRow();
-                                                        dr[0] = sevent.id;
-                                                        dr[1] = sevent.name;
-                                                        dr[2] = (participants[0].counter == "1") ? participants[0].id : participants[1].id;
-                                                        dr[3] = (participants[1].counter == "2") ? participants[1].id : participants[0].id;
-                                                        dr[4] = sevent.source;
-                                                        dr[5] = sevent.source_dc == "yes" ? true : false;
-                                                        dr[6] = sevent.source_super;
-                                                        dr[7] = sevent.relation_status;
-                                                        dr[8] = sevent.start_date;
-                                                        dr[9] = sevent.ft_only == "yes" ? true : false;
-                                                        dr[10] = sevent.coverage_type;
-                                                        dr[11] = sevent.channel_id;
-                                                        dr[12] = sevent.channel_name;
-                                                        dr[13] = sevent.scoutsfeed == "yes" ? true : false;
-                                                        dr[14] = sevent.status_id;
-                                                        dr[15] = sevent.status_name;
-                                                        dr[16] = sevent.status_type;
-                                                        dr[17] = sevent.day;
-                                                        dr[18] = sevent.clock_time;
-                                                        dr[19] = sevent.clock_status;
-                                                        dr[20] = sevent.winner_id;
-                                                        dr[21] = sevent.progress_id;
-                                                        dr[22] = sevent.bet_status;
-                                                        dr[23] = sevent.neutral_venue == "yes" ? true : false;
-                                                        dr[24] = sevent.item_status;
-                                                        dr[25] = sevent.ut;
-                                                        dr[26] = sevent.old_event_id == "" ? "-1" : sevent.old_event_id;
-                                                        dr[27] = sevent.slug;
-                                                        dr[28] = sevent.verified_result == "yes" ? true : false;
-                                                        dr[29] = sevent.is_protocol_verified == "yes" ? true : false;
-                                                        dr[30] = sevent.protocol_verified_by;
-                                                        dr[31] = sevent.protocol_verified_at;
-                                                        dr[32] = sevent.round_id;
-                                                        dr[33] = sevent.round_name;
-                                                        dr[34] = sevent.client_event_id == "" ? "-1" : sevent.client_event_id;
-                                                        dr[35] = sevent.booked == "yes" ? true : false;
-                                                        dr[36] = sevent.booked_by;
-                                                        dr[37] = sevent.inverted_participants == "yes" ? true : false;
-                                                        dr[38] = sevent.venue_id;
-                                                        dr[39] = group.id == "" ? "-1" : group.id;
-                                                        dr[40] = strStage_id;
-                                                        dr[41] = strSeasons_id;
-                                                        dr[42] = strCompetition_id;
-                                                        dr[43] = strArea_id;
-                                                        dr[44] = cTimestamp;
-                                                        eventsDs.Tables[0].Rows.Add(dr);
-                                                    }
-                                                    else
+                                    var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[0], arr[1]);
+                                    var strResponseValue = responseValue.Result;
+                                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1101914.xml");
+                                    //var strResponseValue = document.ToString();
+
+                                    if (strResponseValue == "") { break; }
+                                    string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
+                                    Files.WriteXml(strName, strResponseValue);
+
+                                    DOSEvents.api apis = XmlUtil.Deserialize(typeof(DOSEvents.api), strResponseValue) as DOSEvents.api;
+                                    if (apis == null) break;
+                                    DOSEvents.apiDataCompetition[] competitions = (apis.data.Length == 0) ? null : apis.data[0];
+                                    if (competitions == null) break;
+
+                                    foreach (DOSEvents.apiDataCompetition competition in competitions)
+                                    {
+                                        string strCompetition_id = competition.id;
+                                        string strArea_id = competition.area_id;
+                                        DOSEvents.apiDataCompetitionSeason[] seasons = competition.seasons;
+                                        if (seasons == null) continue;
+                                        foreach (DOSEvents.apiDataCompetitionSeason season in seasons)
+                                        {
+                                            string strSeasons_id = season.id;
+                                            DOSEvents.apiDataCompetitionSeasonStage[] stages = season.stages;
+                                            if (stages == null) continue;
+                                            foreach (DOSEvents.apiDataCompetitionSeasonStage stage in stages)
+                                            {
+                                                string strStage_id = stage.id == "" ? "-1" : stage.id; ;// stage.id;
+                                                DOSEvents.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
+                                                if (groups == null) continue;
+                                                foreach (DOSEvents.apiDataCompetitionSeasonStageGroup group in groups)
+                                                {
+                                                    foreach (DOSEvents.apiDataCompetitionSeasonStageGroupEvent sevent in group.events)
                                                     {
-                                                        Files.WriteLog("[" + drs[0]["id"] + "]   events existed.");
+                                                        if (sevent == null) continue;
+                                                        DataRow[] drs = eventsDs.Tables[0].Select("id=" + sevent.id);
+                                                        if (eventsDs.Tables[0].Select("id=" + sevent.id).Length == 0)
+                                                        {
+                                                            DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant[] participants = sevent.participants;
+
+                                                            DataRow dr = eventsDs.Tables[0].NewRow();
+                                                            dr[0] = sevent.id;
+                                                            dr[1] = sevent.name;
+                                                            dr[2] = (participants[0].counter == "1") ? participants[0].id : participants[1].id;
+                                                            dr[3] = (participants[1].counter == "2") ? participants[1].id : participants[0].id;
+                                                            dr[4] = sevent.source;
+                                                            dr[5] = sevent.source_dc == "yes" ? true : false;
+                                                            dr[6] = sevent.source_super;
+                                                            dr[7] = sevent.relation_status;
+                                                            dr[8] = Convert.ToDateTime(sevent.start_date);
+                                                            dr[9] = sevent.ft_only == "yes" ? true : false;
+                                                            dr[10] = sevent.coverage_type;
+                                                            dr[11] = sevent.channel_id;
+                                                            dr[12] = sevent.channel_name;
+                                                            dr[13] = sevent.scoutsfeed == "yes" ? true : false;
+                                                            dr[14] = sevent.status_id;
+                                                            dr[15] = sevent.status_name;
+                                                            dr[16] = sevent.status_type;
+                                                            dr[17] = sevent.day;
+                                                            dr[18] = sevent.clock_time;
+                                                            dr[19] = sevent.clock_status;
+                                                            dr[20] = sevent.winner_id;
+                                                            dr[21] = sevent.progress_id;
+                                                            dr[22] = sevent.bet_status;
+                                                            dr[23] = sevent.neutral_venue == "yes" ? true : false;
+                                                            dr[24] = sevent.item_status;
+                                                            dr[25] = sevent.ut;
+                                                            dr[26] = sevent.old_event_id == "" ? "-1" : sevent.old_event_id;
+                                                            dr[27] = sevent.slug;
+                                                            dr[28] = sevent.verified_result == "yes" ? true : false;
+                                                            dr[29] = sevent.is_protocol_verified == "yes" ? true : false;
+                                                            dr[30] = sevent.protocol_verified_by;
+                                                            dr[31] = sevent.protocol_verified_at;
+                                                            dr[32] = sevent.round_id;
+                                                            dr[33] = sevent.round_name;
+                                                            dr[34] = sevent.client_event_id == "" ? "-1" : sevent.client_event_id;
+                                                            dr[35] = sevent.booked == "yes" ? true : false;
+                                                            dr[36] = sevent.booked_by;
+                                                            dr[37] = sevent.inverted_participants == "yes" ? true : false;
+                                                            dr[38] = sevent.venue_id;
+                                                            dr[39] = group.id == "" ? "-1" : group.id;
+                                                            dr[40] = strStage_id;
+                                                            dr[41] = strSeasons_id;
+                                                            dr[42] = strCompetition_id;
+                                                            dr[43] = strArea_id;
+                                                            dr[44] = cTimestamp;
+                                                            eventsDs.Tables[0].Rows.Add(dr);
+                                                        }
+                                                        else
+                                                        {
+                                                            Files.WriteLog("[" + drs[0]["id"] + "]   events existed.");
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                }
 
-                               /// count = adapter.Update(eventsDs);
-                               /// ds.Merge(eventsDs, true, MissingSchemaAction.AddWithKey);
-                                // eventsDs.Clear();
+                                    count = adapter.Update(eventsDs);
+                                    ds.Merge(eventsDs, true, MissingSchemaAction.AddWithKey);
+                                    eventsDs.Clear();
 
-                                if (count > -1)
-                                {
-                                    Files.WriteLog("[Success] Insert events[" + count + "  " + "] " + " " + strName + ".xml");
+                                    if (count > -1)
+                                    {
+                                        Files.WriteLog("[Success] Insert events[" + count + "  " + "] " + " " + strName + ".xml");
+                                    }
+                                    else
+                                    {
+                                        Files.WriteLog("[Failure] Insert events [  ]" + " " + strName + ".xml");
+                                    }
                                 }
-                                else
-                                {
-                                    Files.WriteLog("[Failure] Insert events [  ]" + " " + strName + ".xml");
-                                }
+                                //}
+                                //else
+                                //{
+                                //    //count = -1;
+                                //    //queryString = "select   * from " + type;
+                                //    //adapter.SelectCommand = new FbCommand(queryString, connection);
+                                //    //adapter.Fill(eventsDs);
+                                //count = adapter.Update(eventsDs);
+                                //ds = eventsDs;
+                                //}
                             }
-                            //}
-                            //else
-                            //{
-                            //    //count = -1;
-                            //    //queryString = "select   * from " + type;
-                            //    //adapter.SelectCommand = new FbCommand(queryString, connection);
-                            //    //adapter.Fill(eventsDs);
-                            count = adapter.Update(eventsDs);
-                            ds = eventsDs;
-                            //}
+                            else
+                            {
+                                ds = eventsDs;
+                            }
                             connection.Close();
                         }
                         break;
@@ -1326,6 +1338,7 @@ namespace DataOfScouts
 
                                 var responseValue = clientTest.GetAccessData(strToken, "booked-events/" + i);
                                 var strResponseValue = responseValue.Result;
+
                                 if (strResponseValue == "") { break; }
                                 string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                 Files.WriteXml(strName, strResponseValue);
@@ -1845,9 +1858,13 @@ namespace DataOfScouts
             {
                 //if (tsdComp.Tag == null) { this.dgvEvent.DataSource = null; return; }
 
+                if (Convert.ToDateTime(this.bnAreas2.Items[14].Text).Subtract(Convert.ToDateTime(this.bnAreas2.Items[12].Text)).Days > 30 &&  DateTime.Now <= Convert.ToDateTime(this.bnAreas2.Items[14].Text+ " 23:59:59"))
+                {
+                    MessageBox.Show("Maximum period is 30 days!"); return;
+                }
                 DataSet ds = new DataSet();
                 // ds = InsertData("events", tsdComp.Tag.ToString());
-                ds = InsertData("events", this.bnAreas2.Items[12].Text, this.bnAreas2.Items[14].Text, ((sender == null) ? false : true));
+                ds = InsertData("events", this.bnAreas2.Items[12].Text+ " 00:00:00", this.bnAreas2.Items[14].Text+ " 23:59:59", ((sender == null) ? false : true));
                 if (ds.Tables.Count == 0) { this.dgvEvent.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
@@ -1863,7 +1880,7 @@ namespace DataOfScouts
 
                 DataSet ds = new DataSet();
                 //  ds = InsertData("booked-events");
-                ds = InsertData("booked-events",this.bnAreas2.Items[12].Text, this.bnAreas2.Items[14].Text, ((sender == null) ? false : true));
+                ds = InsertData("booked-events",this.bnAreas2.Items[12].Text + " 00:00:00", this.bnAreas2.Items[14].Text+ " 23:59:59", ((sender == null) ? false : true));
                 if (ds.Tables.Count == 0) { this.dgvBookedEvent.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
@@ -2014,7 +2031,42 @@ namespace DataOfScouts
         }
     }
 
-    class OAuthClient
+    class utc
+
+    {
+
+        public static int ConvertDateTimeInt(System.DateTime time)
+
+        {
+
+            double intResult = 0;
+
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+
+            intResult = (time - startTime).TotalSeconds;
+
+            return (int)intResult;
+
+        }
+
+
+
+        public static DateTime ConvertIntDatetime(double utc)
+
+        {
+
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+
+            startTime = startTime.AddSeconds(utc);
+
+            startTime = startTime.AddHours(8);//转化为北京时间(北京时间=UTC时间+8小时 )            
+
+            return startTime;
+
+        }
+    }
+
+        class OAuthClient
     {
         private static  HttpClient _httpClient;
         public string token;
@@ -2119,7 +2171,9 @@ namespace DataOfScouts
             }
             else if (type.IndexOf("events") > -1)
             {
-                strUrl = $"/v2/events.xml?token=" + token + "&sport_id=5&tz=Asia/Hong_Kong&competition_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                // strUrl = $"/v2/events.xml?token=" + token + "&sport_id=5&tz=Asia/Hong_Kong&competition_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+               // "/v2/events.xml?token=&sport_id=5&tz=Asia/Hong_Kong&date_from=9/19/2018 00:00:00&date_to=10/11/2018 23:59:59&page=1"
+                strUrl = $"/v2/events.xml?token=" + token + "&sport_id=5&tz=Asia/Hong_Kong&date_from=" + Convert.ToDateTime(arr[0]).ToString("yyyy-MM-dd HH:mm:ss") + "&date_to=" + Convert.ToDateTime(arr[1]).ToString("yyyy-MM-dd HH:mm:ss") + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
                 Console.WriteLine("GET events " + strUrl);
                 Files.WriteLog("GET events " + strUrl);
             }
