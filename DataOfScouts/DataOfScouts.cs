@@ -25,8 +25,8 @@ namespace DataOfScouts
         {
             InitializeComponent();
             var label = new ToolStripLabel();
-            label.Text = "From ";
-            bnAreas2.Items.Insert(11, label);
+            label.Text = "                        From ";
+            bnAreas.Items.Insert(16, label);
 
             var picker = new DateTimePicker();
             picker.Name = "dtpStartTime";
@@ -36,11 +36,11 @@ namespace DataOfScouts
             picker.Width = 80;
             var host = new ToolStripControlHost(picker);
             host.Name = "dtpTime";
-            bnAreas2.Items.Insert(12, host);
+            bnAreas.Items.Insert(17, host);
 
             label = new ToolStripLabel();
             label.Text = " To ";
-            bnAreas2.Items.Insert(13, label);
+            bnAreas.Items.Insert(18, label);
 
             picker = new DateTimePicker();
             picker.Name = "dtpEndTime";
@@ -48,11 +48,11 @@ namespace DataOfScouts
            // picker.CustomFormat = "yyyy/MM/dd";
             picker.Width = 80;
             host = new ToolStripControlHost(picker);
-            bnAreas2.Items.Insert(14, host);
+            bnAreas.Items.Insert(19, host);
 
             label = new ToolStripLabel();
             label.Text = "  ";
-            bnAreas2.Items.Insert(15, label);
+            bnAreas.Items.Insert(20, label);
 
             var dplStatus = new ToolStripDropDownButton();
             string[] status = { "Not started", "Cancelled", "Abandoned", "Halftime", "Finished", "Extratime", "Interrupted" };
@@ -63,11 +63,11 @@ namespace DataOfScouts
             dplStatus.Text = "All";
             dplStatus.AutoSize  = false;
             dplStatus.Width = 100; 
-            bnAreas2.Items.Insert(16, dplStatus);
+            bnAreas.Items.Insert(21, dplStatus);
 
             label = new ToolStripLabel();
             label.Text = "  ";
-            bnAreas2.Items.Insert(17, label);
+            bnAreas.Items.Insert(22, label);
 
             ClientAuthorize();
 
@@ -109,12 +109,12 @@ namespace DataOfScouts
 
                 //ToolStripItem [] s=  bnAreas2.Items.Find("dtpTime", false);
                 //s[0].Visible =false;
-                bnAreas2.Items[11].Visible = false;
-                bnAreas2.Items[12].Visible = false;
-                bnAreas2.Items[13].Visible = false;
-                bnAreas2.Items[14].Visible = false;
-                bnAreas2.Items[16].Visible = false;
-                bnAreas2.Items[17].Visible = false;
+                ////bnAreas2.Items[11].Visible = false;
+                ////bnAreas2.Items[12].Visible = false;
+                ////bnAreas2.Items[13].Visible = false;
+                ////bnAreas2.Items[14].Visible = false;
+                ////bnAreas2.Items[16].Visible = false;
+                ////bnAreas2.Items[17].Visible = false;
                 //var responseValue = clientTest.GetAccessData(strToken, "areas");
                 //var strResponseValue = responseValue.Result;
                 /*   DataSet ds = InsertData("areas");
@@ -160,12 +160,12 @@ namespace DataOfScouts
                 tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
-                bnAreas2.Items[11].Visible = false;
-                bnAreas2.Items[12].Visible = false;
-                bnAreas2.Items[13].Visible = false;
-                bnAreas2.Items[14].Visible = false;
-                bnAreas2.Items[16].Visible = false;
-                bnAreas2.Items[17].Visible = false;
+                ////bnAreas2.Items[11].Visible = false;
+                ////bnAreas2.Items[12].Visible = false;
+                ////bnAreas2.Items[13].Visible = false;
+                ////bnAreas2.Items[14].Visible = false;
+                ////bnAreas2.Items[16].Visible = false;
+                ////bnAreas2.Items[17].Visible = false;
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
 
@@ -206,12 +206,12 @@ namespace DataOfScouts
                 tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
-                bnAreas2.Items[11].Visible = false;
-                bnAreas2.Items[12].Visible = false;
-                bnAreas2.Items[13].Visible = false;
-                bnAreas2.Items[14].Visible = false;
-                bnAreas2.Items[16].Visible = false;
-                bnAreas2.Items[17].Visible = false;
+                ////bnAreas2.Items[11].Visible = false;
+                ////bnAreas2.Items[12].Visible = false;
+                ////bnAreas2.Items[13].Visible = false;
+                ////bnAreas2.Items[14].Visible = false;
+                ////bnAreas2.Items[16].Visible = false;
+                ////bnAreas2.Items[17].Visible = false;
                 this.tsbGet_Click(sender, e);
 
                 /*
@@ -244,12 +244,12 @@ namespace DataOfScouts
                 tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
-                bnAreas2.Items[11].Visible = false;
-                bnAreas2.Items[12].Visible = false;
-                bnAreas2.Items[13].Visible = false;
-                bnAreas2.Items[14].Visible = false;
-                bnAreas2.Items[16].Visible = false;
-                bnAreas2.Items[17].Visible = false;
+                ////bnAreas2.Items[11].Visible = false;
+                ////bnAreas2.Items[12].Visible = false;
+                ////bnAreas2.Items[13].Visible = false;
+                ////bnAreas2.Items[14].Visible = false;
+                ////bnAreas2.Items[16].Visible = false;
+                ////bnAreas2.Items[17].Visible = false;
                 //var responseValue = clientTest.GetAccessData(strToken, "stages/" + "1", "29543");
                 //var strResponseValue = responseValue.Result;
 
@@ -280,12 +280,12 @@ namespace DataOfScouts
                 tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
-                bnAreas2.Items[11].Visible = false;
-                bnAreas2.Items[12].Visible = false;
-                bnAreas2.Items[13].Visible = false;
-                bnAreas2.Items[14].Visible = false;
-                bnAreas2.Items[16].Visible = false;
-                bnAreas2.Items[17].Visible = false;
+                ////bnAreas2.Items[11].Visible = false;
+                ////bnAreas2.Items[12].Visible = false;
+                ////bnAreas2.Items[13].Visible = false;
+                ////bnAreas2.Items[14].Visible = false;
+                ////bnAreas2.Items[16].Visible = false;
+                ////bnAreas2.Items[17].Visible = false;
                 this.tsbGet_Click(sender, e);
             }
             else if (tabControl1.SelectedTab == tpPlayer || tabControl1.SelectedTab == tpTeam)
@@ -304,12 +304,12 @@ namespace DataOfScouts
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
 
-                bnAreas2.Items[11].Visible = false;
-                bnAreas2.Items[12].Visible = false;
-                bnAreas2.Items[13].Visible = false;
-                bnAreas2.Items[14].Visible = false;
-                bnAreas2.Items[16].Visible = false;
-                bnAreas2.Items[17].Visible = false;
+                ////bnAreas2.Items[11].Visible = false;
+                ////bnAreas2.Items[12].Visible = false;
+                ////bnAreas2.Items[13].Visible = false;
+                ////bnAreas2.Items[14].Visible = false;
+                ////bnAreas2.Items[16].Visible = false;
+                ////bnAreas2.Items[17].Visible = false;
 
                 this.tsbGet_Click(sender, e);
             }
@@ -344,23 +344,23 @@ namespace DataOfScouts
             {
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
-                tsbGet.Visible = true;
-                tsdAreaParentId.Visible = false;
+                tsbGet.Visible = false;
+                tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
-                tsdArea.Visible = false;
-                tsdComp.Visible = false;
-                tsdSeason.Visible = false;
+                tsdArea.Visible = true;
+                tsdComp.Visible = true;
+                tsdSeason.Visible = true;
                 tsdStage.Visible = false;
                 tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
-                bnAreas2.Items[11].Visible = true;
-                bnAreas2.Items[12].Visible = true;
-                bnAreas2.Items[13].Visible = true;
-                bnAreas2.Items[14].Visible = true;
-                bnAreas2.Items[16].Visible = true;
-                bnAreas2.Items[17].Visible = true;
+                ////bnAreas2.Items[11].Visible = true;
+                ////bnAreas2.Items[12].Visible = true;
+                ////bnAreas2.Items[13].Visible = true;
+                ////bnAreas2.Items[14].Visible = true;
+                ////bnAreas2.Items[16].Visible = true;
+                ////bnAreas2.Items[17].Visible = true;
                 //tsbGet.Visible = false;
                 //tsdArea.Visible = true;
                 //tsdComp.Visible = true;
@@ -392,23 +392,23 @@ namespace DataOfScouts
             {
                 this.bnAreas2.Visible = true;
                 this.bnAreas.Visible = true;
-                tsbGet.Visible = true;
-                tsdAreaParentId.Visible = false;
+                tsbGet.Visible = false;
+                tsdAreaParentId.Visible = true;
                 tsbArea.Visible = false;
                 tslArea.Visible = false;
-                tsdArea.Visible = false;
-                tsdComp.Visible = false;
-                tsdSeason.Visible = false;
+                tsdArea.Visible = true;
+                tsdComp.Visible = true;
+                tsdSeason.Visible = true;
                 tsdStage.Visible = false;
                 tsdGroup.Visible = false;
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
-                bnAreas2.Items[11].Visible = true;
-                bnAreas2.Items[12].Visible = true;
-                bnAreas2.Items[13].Visible = true;
-                bnAreas2.Items[14].Visible = true;
-                bnAreas2.Items[16].Visible = true;
-                bnAreas2.Items[17].Visible = true;
+                ////bnAreas2.Items[11].Visible = true;
+                ////bnAreas2.Items[12].Visible = true;
+                ////bnAreas2.Items[13].Visible = true;
+                ////bnAreas2.Items[14].Visible = true;
+                ////bnAreas2.Items[16].Visible = true;
+                ////bnAreas2.Items[17].Visible = true;
 
                 this.tsbGet_Click(null, null);
             }
@@ -1171,6 +1171,7 @@ namespace DataOfScouts
                         {
                             //  queryString = "select * from " + type + " where  COMPETITION_ID=" + arr[0] +" and booked=false";
                             //queryString = "select * from " + type;// + " where booked = false";
+                            //start_date  BETWEEN  '9/19/2018 00:00:00' and'9/20/2018  10:59:59'
                             queryString = "select * from " + type + " where '" + arr[0] + "'<= start_date and start_date <='" + arr[1] + "'";
                             FbDataAdapter adapter = new FbDataAdapter();
                             adapter.SelectCommand = new FbCommand(queryString, connection);
@@ -1321,7 +1322,8 @@ namespace DataOfScouts
                     {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
-                            queryString = "select * from " + "events where  booked = true";
+                            //queryString = "select * from " + "events where  booked = true";
+                            queryString = "select * from " + "events" + " where  booked = true and '" + arr[0] + "'<= start_date and start_date <='" + arr[1] + "'";
 
                             FbDataAdapter adapter = new FbDataAdapter();
                             adapter.SelectCommand = new FbCommand(queryString, connection);
@@ -1858,13 +1860,13 @@ namespace DataOfScouts
             {
                 //if (tsdComp.Tag == null) { this.dgvEvent.DataSource = null; return; }
 
-                if (Convert.ToDateTime(this.bnAreas2.Items[14].Text).Subtract(Convert.ToDateTime(this.bnAreas2.Items[12].Text)).Days > 30 &&  DateTime.Now <= Convert.ToDateTime(this.bnAreas2.Items[14].Text+ " 23:59:59"))
+                if (Convert.ToDateTime(this.bnAreas.Items[19].Text).Subtract(Convert.ToDateTime(this.bnAreas.Items[17].Text)).Days > 30 &&  DateTime.Now <= Convert.ToDateTime(this.bnAreas.Items[19].Text+ " 23:59:59"))
                 {
                     MessageBox.Show("Maximum period is 30 days!"); return;
                 }
                 DataSet ds = new DataSet();
                 // ds = InsertData("events", tsdComp.Tag.ToString());
-                ds = InsertData("events", this.bnAreas2.Items[12].Text+ " 00:00:00", this.bnAreas2.Items[14].Text+ " 23:59:59", ((sender == null) ? false : true));
+                ds = InsertData("events", this.bnAreas.Items[17].Text+ " 00:00:00", this.bnAreas.Items[19].Text+ " 23:59:59", ((sender == null) ? false : true));
                 if (ds.Tables.Count == 0) { this.dgvEvent.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
@@ -1880,7 +1882,7 @@ namespace DataOfScouts
 
                 DataSet ds = new DataSet();
                 //  ds = InsertData("booked-events");
-                ds = InsertData("booked-events",this.bnAreas2.Items[12].Text + " 00:00:00", this.bnAreas2.Items[14].Text+ " 23:59:59", ((sender == null) ? false : true));
+                ds = InsertData("booked-events",this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text+ " 23:59:59", ((sender == null) ? false : true));
                 if (ds.Tables.Count == 0) { this.dgvBookedEvent.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
@@ -2028,6 +2030,11 @@ namespace DataOfScouts
           //var  responseValue = clientTest.PostAccessData( this.textBox1 .Text ,"");
           //var  strResponseValue = responseValue.Result;
           //  this.label1.Text = strResponseValue.ToString();
+        }
+
+        private void tsbGet2_Click(object sender, EventArgs e)
+        {
+            this.tsbGet_Click(sender, e);
         }
     }
 

@@ -76,6 +76,7 @@ namespace DataOfScouts
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.nbAreasTotal = new System.Windows.Forms.ToolStripLabel();
+            this.tsbGet2 = new System.Windows.Forms.ToolStripButton();
             this.bnAreas2 = new System.Windows.Forms.BindingNavigator(this.components);
             this.tslArea = new System.Windows.Forms.ToolStripLabel();
             this.tsbArea = new System.Windows.Forms.ToolStripTextBox();
@@ -436,7 +437,8 @@ namespace DataOfScouts
             this.bindingNavigatorSeparator2,
             this.bindingNavigatorAddNewItem,
             this.bindingNavigatorDeleteItem,
-            this.nbAreasTotal});
+            this.nbAreasTotal,
+            this.tsbGet2});
             this.bnAreas.Location = new System.Drawing.Point(0, 576);
             this.bnAreas.MoveFirstItem = this.bindingNavigatorMoveFirstItem;
             this.bnAreas.MoveLastItem = this.bindingNavigatorMoveLastItem;
@@ -573,6 +575,17 @@ namespace DataOfScouts
             // 
             this.nbAreasTotal.Name = "nbAreasTotal";
             this.nbAreasTotal.Size = new System.Drawing.Size(0, 27);
+            // 
+            // tsbGet2
+            // 
+            this.tsbGet2.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.tsbGet2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbGet2.Image = ((System.Drawing.Image)(resources.GetObject("tsbGet2.Image")));
+            this.tsbGet2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbGet2.Name = "tsbGet2";
+            this.tsbGet2.Size = new System.Drawing.Size(41, 27);
+            this.tsbGet2.Text = "Get";
+            this.tsbGet2.Click += new System.EventHandler(this.tsbGet2_Click);
             // 
             // bnAreas2
             // 
@@ -832,6 +845,7 @@ namespace DataOfScouts
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tpBook;
         private System.Windows.Forms.DataGridView dgvBookedEvent;
+        private System.Windows.Forms.ToolStripButton tsbGet2;
     }
 }
 
