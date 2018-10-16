@@ -13,6 +13,8 @@ using System.Data;
 using FirebirdSql.Data.FirebirdClient;
 using System.Xml;
 using System.Xml.Linq;
+using System.Drawing;
+using System.Collections;
 
 namespace DataOfScouts
 {
@@ -351,8 +353,8 @@ namespace DataOfScouts
                 tsdArea.Visible = true;
                 tsdComp.Visible = true;
                 tsdSeason.Visible = true;
-                tsdStage.Visible = false;
-                tsdGroup.Visible = false;
+                tsdStage.Visible = true;
+                tsdGroup.Visible = true;
                 tsdPartic.Visible = false;
                 tsdEvent.Visible = false;
                 ////bnAreas2.Items[11].Visible = true;
@@ -518,7 +520,7 @@ namespace DataOfScouts
             var data = JObject.Parse(api.ToString())["data"];
             if (data == null)
             {
-                this.lbAuthorization.Text = "UnAuthorized";
+                this.lbAuthorization.Text = "Unauthorized";
                 this.label1.Text = strResponseValue;
                 return;
             }
@@ -545,7 +547,7 @@ namespace DataOfScouts
             switch (type)
             {
                 case "areas":
-                    {
+                    {  
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             queryString = "select * from " + type + (arr[0].ToString().ToLower() == "all" ? "" : " where PARENT_AREA_ID=" + arr[0]);
@@ -555,6 +557,20 @@ namespace DataOfScouts
                             connection.Open();
                             DataSet areasDs = new DataSet();
                             adapter.Fill(areasDs);
+
+                            //using (FbCommand cmd = new FbCommand())
+                            //{
+                            //    cmd.CommandText = "ADD_AREA7";
+                            //    cmd.CommandType = CommandType.StoredProcedure;
+                            //    cmd.Connection = connection;
+                            //    cmd.Parameters.Add("@ID", "904");
+                            //    cmd.Parameters.Add("@AREA_CODE", "CODE1");
+                            //    cmd.Parameters.Add("@NAME", "NAME1");
+                            //    cmd.Parameters.Add("@PARENT_AREA_ID", "905");
+                            //    cmd.Parameters.Add("@UT", "1537427316");
+                            //    cmd.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                            //    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                            //}
 
                             if (areasDs.Tables[0].Rows.Count == 0)
                             {
@@ -1172,28 +1188,43 @@ namespace DataOfScouts
                             //  queryString = "select * from " + type + " where  COMPETITION_ID=" + arr[0] +" and booked=false";
                             //queryString = "select * from " + type;// + " where booked = false";
                             //start_date  BETWEEN  '9/19/2018 00:00:00' and'9/20/2018  10:59:59'
-                            queryString = "select * from " + type + " where '" + arr[0] + "'<= start_date and start_date <='" + arr[1] + "'";
+                            if (Convert.ToBoolean(arr[0]))
+                            {
+                                queryString = "select * from " + type + " where '" + arr[1] + "'<= start_date and start_date <='" + arr[2] + "'";
+                            }
+                            else
+                            {
+                                if (arr[1].ToString().Length < 12)
+                                {
+                                    queryString = "select * from " + type + " where " + (arr[1].ToString() == "Group" ? "GROUP_ID" : (arr[1].ToString() == "Stage") ? "STAGE_ID" : (arr[1].ToString() == "Season") ? "SEASON_ID" : (arr[1].ToString() == "Comp") ? "COMPETITION_ID" : "") + "='" + arr[2] + "'";
+                                }
+                                else
+                                {
+                                    queryString = "select * from " + type + " where '" + arr[1] + "'<= start_date and start_date <='" + arr[2] + "'";
+                                }
+                            }
                             FbDataAdapter adapter = new FbDataAdapter();
                             adapter.SelectCommand = new FbCommand(queryString, connection);
                             FbCommandBuilder builder = new FbCommandBuilder(adapter);
                             connection.Open();
                             DataSet eventsDs = new DataSet();
                             adapter.Fill(eventsDs);
-                            if (Convert.ToBoolean(arr[2]) && DateTime.Now <= Convert .ToDateTime ( arr[1]))
+                            if (Convert.ToBoolean(arr[0]) && DateTime.Now <= Convert .ToDateTime ( arr[2]))
+                            //if (DateTime.Now <= Convert.ToDateTime(arr[2]))
                             {
                                 //if (eventsDs.Tables[0].Rows.Count == 0)
                                 //{
                                 //DataSet newEventsDs= eventsDs.Clone ();
-                                for (int i = 1; i < 2; i++)
+                                for (int i = 1; i < 10; i++)
                                 {
-                                    //    if (Convert.ToBoolean(arr[2]) == false) { ds = eventsDs; break; }
+                                    //if (Convert.ToBoolean(arr[0]) == false) { ds = eventsDs; break; }
 
-                                    var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[0], arr[1]);
+                                    var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[1], arr[2]);
                                     var strResponseValue = responseValue.Result;
                                     //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1101914.xml");
                                     //var strResponseValue = document.ToString();
 
-                                    if (strResponseValue == "") { break; }
+                                    if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
 
@@ -1206,20 +1237,117 @@ namespace DataOfScouts
                                     {
                                         string strCompetition_id = competition.id;
                                         string strArea_id = competition.area_id;
+
+                                        using (FbCommand cmd = new FbCommand())
+                                        {
+    //                                        'ID', 'NAME', 'SHORT_NAME', 'MINI_NAME', 'GENDER',
+    //'CTYPE', 'AREA_ID', 'AREA_TYPE', 'AREA_SORT', 'OVERALL_SORT', 'SPORT_ID',
+    //'SPORT_NAME', 'TOUR_ID', 'TOUR_NAME', 'UT', 'OLD_COMPETITION_ID', 'SLUG', 'CTIMESTAMP'
+                                            cmd.CommandText = "ADD_COMPETITION";
+                                            cmd.CommandType = CommandType.StoredProcedure;
+                                            cmd.Connection = connection;
+                                            cmd.Parameters.Add("@ID", strCompetition_id);
+                                            cmd.Parameters.Add("@NAME", competition.name  );
+                                            cmd.Parameters.Add("@SHORT_NAME", competition.short_name  );
+                                            cmd.Parameters.Add("@MINI_NAME", competition.mini_name );
+                                            cmd.Parameters.Add("@GENDER", (competition.gender.ToLower() == "male") ? true : false);
+                                            cmd.Parameters.Add("@CTYPE", competition.type );
+                                            cmd.Parameters.Add("@AREA_ID", competition.area_id );
+                                            cmd.Parameters.Add("@AREA_TYPE", competition.type );
+                                            cmd.Parameters.Add("@AREA_SORT", competition.area_sort );
+                                            cmd.Parameters.Add("@OVERALL_SORT", competition.overall_sort );
+                                            cmd.Parameters.Add("@TOUR_ID", competition.tour_id ==""?"-1": competition.tour_id);
+                                            cmd.Parameters.Add("@TOUR_NAME", competition.tour_name);
+                                            cmd.Parameters.Add("@UT", competition.ut );
+                                            cmd.Parameters.Add("@OLD_COMPETITION_ID", competition.old_competition_id == "" ? "-1" : competition.old_competition_id );
+                                            cmd.Parameters.Add("@SLUG", competition.slug );
+                                            cmd.Parameters.Add("@CTIMESTAMP", cTimestamp); 
+                                            int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                        }
+
+
                                         DOSEvents.apiDataCompetitionSeason[] seasons = competition.seasons;
                                         if (seasons == null) continue;
                                         foreach (DOSEvents.apiDataCompetitionSeason season in seasons)
                                         {
-                                            string strSeasons_id = season.id;
+                                            string strSeasons_id = season.id; 
+                                            using (FbCommand cmd = new FbCommand())
+                                            {
+                                                //r.ID, r.NAME, r.COMPETITION_ID, r.SYEAR, r.ACTUAL, r.UT, r.OLD_SEASON_ID,
+                                                //r.RANGE, r.CTIMESTAMP
+                                                cmd.CommandText = "ADD_SEASON";
+                                                cmd.CommandType = CommandType.StoredProcedure;
+                                                cmd.Connection = connection;
+                                                cmd.Parameters.Add("@ID", season.id);
+                                                cmd.Parameters.Add("@NAME", season.name);
+                                                cmd.Parameters.Add("@COMPETITION_ID", strCompetition_id);
+                                                cmd.Parameters.Add("@SYEAR", season.year);
+                                                cmd.Parameters.Add("@ACTUAL", season.actual);
+                                                cmd.Parameters.Add("@UT", season.ut);
+                                                cmd.Parameters.Add("@OLD_SEASON_ID", season.old_season_id == "" ? "-1" : season.old_season_id);
+                                                cmd.Parameters.Add("@RANGE", season.range);
+                                                cmd.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                                int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                            }
+
                                             DOSEvents.apiDataCompetitionSeasonStage[] stages = season.stages;
                                             if (stages == null) continue;
+                                            
                                             foreach (DOSEvents.apiDataCompetitionSeasonStage stage in stages)
                                             {
-                                                string strStage_id = stage.id == "" ? "-1" : stage.id; ;// stage.id;
+                                                string strStage_id = stage.id == "" ? "-1" : stage.id;
+                                                if (strStage_id != "-1")
+                                                {
+                                                    using (FbCommand cmd = new FbCommand())
+                                                    {
+                                                        //r.ID, r.STAGE_NAME_ID, r.NAME, r.START_DATE, r.END_DATE,
+                                                        //r.SHOW_STANDINGS, r.GROUPS_NR, r.ISORT, r.IS_CURRENT, r.UT, r.OLD_STAGE_ID,    r.SEASON_ID, r.COMPETITION_ID, r.AREA_ID, r.CTIMESTAMP
+                                                          cmd.CommandText = "ADD_STAGE";
+                                                        cmd.CommandType = CommandType.StoredProcedure;
+                                                        cmd.Connection = connection;
+                                                        cmd.Parameters.Add("@ID", stage.id);
+                                                        cmd.Parameters.Add("@STAGE_NAME_ID", stage.stage_name_id);
+                                                        cmd.Parameters.Add("@NAME", stage.name);
+                                                        cmd.Parameters.Add("@START_DATE", stage.start_date);
+                                                        cmd.Parameters.Add("@END_DATE", stage.end_date);
+                                                        cmd.Parameters.Add("@SHOW_STANDINGS", stage.show_standings.ToLower() == "yes" ? true : false);
+                                                        cmd.Parameters.Add("@GROUPS_NR", stage.groups_nr == "" ? "-1" : stage.groups_nr);
+                                                        cmd.Parameters.Add("@ISORT", stage.sort == "" ? "-1" : stage.sort);
+                                                        cmd.Parameters.Add("@IS_CURRENT", stage.is_current.ToLower() == "yes" ? true : false);
+                                                        cmd.Parameters.Add("@UT", stage.ut);
+                                                        cmd.Parameters.Add("@OLD_STAGE_ID", stage.old_stage_id == "" ? "-1" : stage.old_stage_id);
+                                                        cmd.Parameters.Add("@SEASON_ID", strSeasons_id);
+                                                        cmd.Parameters.Add("@COMPETITION_ID", strCompetition_id);
+                                                        cmd.Parameters.Add("@AREA_ID", strArea_id);
+                                                        cmd.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                                        int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                                    }
+                                                }
                                                 DOSEvents.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
                                                 if (groups == null) continue;
                                                 foreach (DOSEvents.apiDataCompetitionSeasonStageGroup group in groups)
                                                 {
+                                                    string strGroup_id = group.id == "" ? "-1" : group.id;
+                                                    if (strGroup_id != "-1")
+                                                    {
+                                                        using (FbCommand cmd = new FbCommand())
+                                                        {
+                                                            // r.ID, r.NAME, r.UT, r.STAGE_ID, r.SEASON_ID, r.COMPETITION_ID, r.AREA_ID,     r.CTIMESTAMP
+                                                            cmd.CommandText = "ADD_GROUP";
+                                                            cmd.CommandType = CommandType.StoredProcedure;
+                                                            cmd.Connection = connection;
+                                                            cmd.Parameters.Add("@ID", group.id);
+                                                            cmd.Parameters.Add("@NAME", group.name);
+                                                            cmd.Parameters.Add("@UT", group.ut );
+                                                            cmd.Parameters.Add("@STAGE_ID", strStage_id);
+                                                            cmd.Parameters.Add("@SEASON_ID", strSeasons_id);
+                                                            cmd.Parameters.Add("@COMPETITION_ID", strCompetition_id);
+                                                            cmd.Parameters.Add("@AREA_ID", strArea_id); 
+                                                            cmd.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                                            int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                                        }
+                                                    }
+
                                                     foreach (DOSEvents.apiDataCompetitionSeasonStageGroupEvent sevent in group.events)
                                                     {
                                                         if (sevent == null) continue;
@@ -1858,15 +1986,53 @@ namespace DataOfScouts
             }
             else if (tabControl1.SelectedTab == tpEvent)
             {
-                //if (tsdComp.Tag == null) { this.dgvEvent.DataSource = null; return; }
+                ////if (tsdComp.Tag == null) { this.dgvEvent.DataSource = null; return; }
 
-                if (Convert.ToDateTime(this.bnAreas.Items[19].Text).Subtract(Convert.ToDateTime(this.bnAreas.Items[17].Text)).Days > 30 &&  DateTime.Now <= Convert.ToDateTime(this.bnAreas.Items[19].Text+ " 23:59:59"))
-                {
-                    MessageBox.Show("Maximum period is 30 days!"); return;
-                }
+                //if (Convert.ToDateTime(this.bnAreas.Items[19].Text).Subtract(Convert.ToDateTime(this.bnAreas.Items[17].Text)).Days > 30 &&  DateTime.Now <= Convert.ToDateTime(this.bnAreas.Items[19].Text+ " 23:59:59"))
+                //{
+                //    MessageBox.Show("Maximum period is 30 days!"); return;
+                //}
+                //DataSet ds = new DataSet();
+                //// ds = InsertData("events", tsdComp.Tag.ToString());
+                //ds = InsertData("events", this.bnAreas.Items[17].Text+ " 00:00:00", this.bnAreas.Items[19].Text+ " 23:59:59", ((sender == null) ? false : true));
                 DataSet ds = new DataSet();
-                // ds = InsertData("events", tsdComp.Tag.ToString());
-                ds = InsertData("events", this.bnAreas.Items[17].Text+ " 00:00:00", this.bnAreas.Items[19].Text+ " 23:59:59", ((sender == null) ? false : true));
+                //if (sender != null && ((ToolStripButton)sender)!=null&&((ToolStripButton)sender).Name == "tsbGet2")
+                //{
+                if (sender != null && sender.GetType() != typeof(ToolStripButton))
+                {
+                    if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdGroup")
+                    {
+                        ds = InsertData("events", false, "Group", tsdGroup.Tag.ToString());
+                    }
+                    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdStage")
+                    {
+                        ds = InsertData("events", false, "Stage", tsdStage.Tag.ToString());
+                    }
+                    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdSeason")
+                    {
+                        ds = InsertData("events", false, "Season", tsdSeason.Tag.ToString());
+                    }
+                    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdComp")
+                    {
+                        ds = InsertData("events", false, "Comp", tsdComp.Tag.ToString());
+                    }
+                    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdArea")
+                    { }
+                }
+                else if (sender != null && ((ToolStripButton)sender) != null && ((ToolStripButton)sender).Name == "tsbGet2")
+                {
+
+                    if (Convert.ToDateTime(this.bnAreas.Items[19].Text).Subtract(Convert.ToDateTime(this.bnAreas.Items[17].Text)).Days > 30 && DateTime.Now <= Convert.ToDateTime(this.bnAreas.Items[19].Text + " 23:59:59"))
+                    {
+                        MessageBox.Show("Maximum period is 30 days!"); return;
+                    }
+                    //    ds = InsertData("events", this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59", ((sender == null) ? false : true));
+                    ds = InsertData("events", true, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
+                }
+                else if (sender == null)
+                {
+                    ds = InsertData("events", false, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
+                }
                 if (ds.Tables.Count == 0) { this.dgvEvent.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
@@ -1882,7 +2048,7 @@ namespace DataOfScouts
 
                 DataSet ds = new DataSet();
                 //  ds = InsertData("booked-events");
-                ds = InsertData("booked-events",this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text+ " 23:59:59", ((sender == null) ? false : true));
+                ds = InsertData("booked-events", this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59", ((sender == null) ? false : true));
                 if (ds.Tables.Count == 0) { this.dgvBookedEvent.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
@@ -2007,7 +2173,7 @@ namespace DataOfScouts
             this.tsdStage.Tag = e.ClickedItem.Tag;
 
             this.tsdGroup.DropDownItems.Clear();
-            DataSet ds2 = InsertData("seasons", tsdStage .Tag.ToString());
+            DataSet ds2 = InsertData("groups", tsdStage .Tag.ToString());
             if (ds2.Tables.Count != 0)
             {
                 foreach (DataRow dr in ds2.Tables[0].Rows)
@@ -2035,6 +2201,23 @@ namespace DataOfScouts
         private void tsbGet2_Click(object sender, EventArgs e)
         {
             this.tsbGet_Click(sender, e);
+        }
+        Hashtable ht;
+        private void dgvEvent_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            ////  this.dgvEvent.Rows[e.RowIndex].HeaderCell.Value = "+  ";
+            //if (dgvEvent.Rows[e.RowIndex]!=null&& dgvEvent.Rows[e.RowIndex].Cells[1]!= null && dgvEvent.Rows[e.RowIndex].Cells[1].Value!=null && (int)dgvEvent.Rows[e.RowIndex].Cells[1].Value == 0) 
+            //{
+            //    Rectangle rectangle = new Rectangle(e.RowBounds.Location.X + dgvEvent.RowHeadersWidth - 20,
+            //    e.RowBounds.Location.Y + 4, 14, 14);
+            //    Image img = (bool)ht[(int)dgvEvent.Rows[e.RowIndex].Cells[0].Value]
+            //    ? Properties.Resources.minus : Properties.Resources.plus;
+            //    e.Graphics.DrawImage(img, rectangle);
+            //}
+            //else
+            //{
+            ////    dgvEvent.Rows[e.RowIndex].Visible = (bool)ht[(int)dgvEvent.Rows[e.RowIndex].Cells[1].Value];
+            //} 
         }
     }
 
@@ -2199,8 +2382,9 @@ namespace DataOfScouts
             }
             else
             {
-                Console.WriteLine("Empty: " + responseValue);
-                return string.Empty;
+                //  Console.WriteLine("Empty: " + responseValue);
+                // return string.Empty;
+                return response.StatusCode.ToString ();
             }
 
 

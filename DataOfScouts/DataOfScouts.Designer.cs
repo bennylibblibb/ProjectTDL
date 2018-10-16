@@ -392,6 +392,7 @@ namespace DataOfScouts
             this.dgvEvent.Name = "dgvEvent";
             this.dgvEvent.Size = new System.Drawing.Size(958, 500);
             this.dgvEvent.TabIndex = 2;
+            this.dgvEvent.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvEvent_RowPostPaint);
             // 
             // tpBook
             // 
