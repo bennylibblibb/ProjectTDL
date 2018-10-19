@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Text;
-using System.IO;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using FileLog;
-using System.Net.Http.Headers;
 using System.Data;
 using FirebirdSql.Data.FirebirdClient;
-using System.Xml;
-using System.Xml.Linq;
 using System.Drawing;
 using System.Collections;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace DataOfScouts
 {
@@ -34,7 +30,7 @@ namespace DataOfScouts
             picker.Name = "dtpStartTime";
             picker.Format = DateTimePickerFormat.Custom;
          //   picker.CustomFormat = "yyyy/MM/dd";
-            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays);
+            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays-30);
             picker.Width = 80;
             var host = new ToolStripControlHost(picker);
             host.Name = "dtpTime";
@@ -47,7 +43,8 @@ namespace DataOfScouts
             picker = new DateTimePicker();
             picker.Name = "dtpEndTime";
             picker.Format = DateTimePickerFormat.Custom;
-           // picker.CustomFormat = "yyyy/MM/dd";
+            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays);
+            // picker.CustomFormat = "yyyy/MM/dd";
             picker.Width = 80;
             host = new ToolStripControlHost(picker);
             bnAreas.Items.Insert(19, host);
@@ -509,7 +506,7 @@ namespace DataOfScouts
 
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
         {
-            string str = "";
+         //   string str = "";
         }
 
         private void ClientAuthorize()
@@ -1714,10 +1711,12 @@ namespace DataOfScouts
                 if (pageCurrent >= 0)
                 {
                     pageCurrent--;
+                    this.dgvEvent.currentPage--;
                 }
                 if (pageCurrent <= 0)
                 {
                     pageCurrent++;
+                    this.dgvEvent.currentPage++ ;
                     // MessageBox.Show("已经是第一页");
                     return;
                 }
@@ -1735,10 +1734,12 @@ namespace DataOfScouts
                 if (pageCurrent <= pageCount)
                 {
                     pageCurrent++;
+                    this.dgvEvent.currentPage++;
                 }
                 if (pageCurrent > pageCount)
                 {
                     pageCurrent--;
+                    this.dgvEvent.currentPage--;
                     // MessageBox.Show("已经是最后一页");
                     return;
                 }
@@ -2039,8 +2040,11 @@ namespace DataOfScouts
                 BindingSource bs = new BindingSource();
                 bs.DataSource = tbData.DefaultView;
                 bnAreas.BindingSource = bs;
-                this.dgvEvent.DataSource = bs;
-
+                // this.dgvEvent.DataSource = bs;
+                this.dgvEvent.MasterControls(ref ds);
+                this.dgvEvent.setParentSource(ds.Tables[0].TableName, "ID");
+                //  dgvEvent.childView.Add(ds.Tables[1].TableName, "TEAMS");
+                //dgvEvent.childView.Add("", "TEAMS");
                 done = true;
             }
             else if (tabControl1.SelectedTab == tpBook)
@@ -2068,6 +2072,7 @@ namespace DataOfScouts
                 pageCount++;
             }
             pageCurrent = 1;
+            this.dgvEvent.currentPage = 1;
             currentRow = 0;
 
             this.LoadData(tabControl1.SelectedTab.Text);
@@ -2202,7 +2207,7 @@ namespace DataOfScouts
         {
             this.tsbGet_Click(sender, e);
         }
-        Hashtable ht;
+      //  Hashtable ht;
         private void dgvEvent_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             ////  this.dgvEvent.Rows[e.RowIndex].HeaderCell.Value = "+  ";
@@ -2219,7 +2224,81 @@ namespace DataOfScouts
             ////    dgvEvent.Rows[e.RowIndex].Visible = (bool)ht[(int)dgvEvent.Rows[e.RowIndex].Cells[1].Value];
             //} 
         }
+
+        private void MasterControl_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            Rectangle rectangle = new Rectangle(Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvEvent .rowDefaultHeight, 0x10), 2)), Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvEvent .rowDefaultHeight, 0x10), 2)), 0x10, 0x10);
+            if (rectangle.Contains(e.Location))
+            {
+                if ( this.dgvEvent.rowCurrent.Contains(e.RowIndex))
+                {
+                    this.dgvEvent.rowCurrent.Clear();
+                    this.dgvEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvEvent.rowDefaultHeight);
+                    this.dgvEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowDefaultDivider);
+                }
+                else
+                {
+                    
+                    //ADD TEAM INFO 
+                    using (FbConnection connection = new FbConnection("User=SYSDBA;Password=masterkey;Database=E:\\Project\\Database\\SCOUTS_DB.FDB;DataSource=127.0.0.1;Port=3050;Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0"))
+                    {
+                        connection.Open();
+                        using (FbCommand cmd = new FbCommand("SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='"+this.dgvEvent.Rows[e.RowIndex].Cells[0].Value +"' order by id asc"))
+                        {
+                            using (FbCommandBuilder fcb = new FbCommandBuilder())
+                            {
+                                using (FbDataAdapter fda = new FbDataAdapter())
+                                {
+                                    cmd.Connection = connection;
+                                    fda.SelectCommand = cmd;
+                                    using (DataSet data = new DataSet())
+                                    {
+                                        data.Tables.Add(new DataTable("events"));
+                                        fda.Fill(data.Tables["events"]);
+                                        // if (dgvEvent.childView.TabPages.Count >0 && dgvEvent.childView.TabPages[0].Text == "Teams")
+                                        if (dgvEvent.childView.TabPages.Count == 0)
+                                        {
+                                            dgvEvent.childView.AddData(data, "Teams");
+                                        }
+                                       else if (dgvEvent.childView.TabPages.Count > 0 && dgvEvent.childView.TabPages[0].Text == "Teams")
+                                        {
+                                            dgvEvent.childView.BindData(data, "Teams");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        connection.Close();
+                    }
+
+                   
+                    if (this.dgvEvent.rowCurrent.Count > 0)
+                    {
+                        int num = this.dgvEvent.rowCurrent[0];
+                        this.dgvEvent.rowCurrent.Clear();
+                        this.dgvEvent.Rows[num].Height = Conversions.ToInteger(this.dgvEvent.rowDefaultHeight);
+                        this.dgvEvent.Rows[num].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowDefaultDivider);
+                        this.dgvEvent.ClearSelection();
+                        this.dgvEvent.collapseRow = true;
+                        this.dgvEvent.Rows[num].Selected = true;
+                    }
+                    this.dgvEvent.rowCurrent.Add(e.RowIndex);
+                    this.dgvEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvEvent.rowExpandedHeight);
+                    this.dgvEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowExpandedDivider);
+                }
+                this.dgvEvent.ClearSelection();
+                this.dgvEvent.collapseRow = true;
+                this.dgvEvent.Rows[e.RowIndex].Selected = true;
+            }
+            else
+            {
+                this.dgvEvent.collapseRow = false;
+            }
+        }
+
     }
+     
+
 
     class utc
 

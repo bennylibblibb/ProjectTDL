@@ -34,7 +34,7 @@ namespace DataOfScouts
             catch (Exception e)
             {
                 //Files.WriteLog(LogType.SerializerLog, "Xml Deserialize Error: " + strName+".xml");
-               // Files.WriteError( strName + ".xml, " + e.Message.ToString());
+                Files.WriteError(type + ": " + e.Message.ToString());
                 return null;
             }
         }

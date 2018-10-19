@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace DataOfScouts
+﻿namespace DataOfScouts
 {
     partial class DataOfScouts
     {
@@ -55,7 +53,8 @@ namespace DataOfScouts
             this.tpPlayer = new System.Windows.Forms.TabPage();
             this.dgvPlayer = new System.Windows.Forms.DataGridView();
             this.tpEvent = new System.Windows.Forms.TabPage();
-            this.dgvEvent = new System.Windows.Forms.DataGridView();
+            // this.dgvEvent = new System.Windows.Forms.DataGridView();
+            this.dgvEvent = new MasterDetailSample .MasterControl ();
             this.tpBook = new System.Windows.Forms.TabPage();
             this.dgvBookedEvent = new System.Windows.Forms.DataGridView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
@@ -141,6 +140,7 @@ namespace DataOfScouts
             this.tabControl1.TabIndex = 0;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
+            this.dgvEvent.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MasterControl_RowHeaderMouseClick);
             // 
             // tpAuthorization
             // 
@@ -821,7 +821,8 @@ namespace DataOfScouts
         private System.Windows.Forms.ToolStripLabel nbAreasTotal;
         private System.Windows.Forms.DataGridView dgvComp;
         private System.Windows.Forms.DataGridView dgvSeasons;
-        private System.Windows.Forms.DataGridView dgvEvent;
+        //private System.Windows.Forms.DataGridView dgvEvent;
+        private MasterDetailSample .MasterControl  dgvEvent;
         private System.Windows.Forms.BindingNavigator bnAreas2;
         private System.Windows.Forms.ToolStripLabel tslArea;
         private System.Windows.Forms.ToolStripTextBox tsbArea;

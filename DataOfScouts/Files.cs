@@ -12,8 +12,8 @@ namespace FileLog
     public class Files
     {
         private static Encoding _CodePage = Encoding.GetEncoding(65001);
-        private static FileStream _FS;
-        private static StreamWriter _SW;
+        //private static FileStream _FS;
+        //private static StreamWriter _SW;
         private Encoding m_CodePage;
         private const string m_CR = "\r\n";
         private const string m_Delimiter = ".";
