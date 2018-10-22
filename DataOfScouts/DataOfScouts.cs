@@ -1177,6 +1177,118 @@ namespace DataOfScouts
                         }
                         break;
                     }
+                case "events.participants":
+                    {
+                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                        {
+                           // connection.Open();
+
+                            for (int i = 1; i < 10&& Convert .ToBoolean ( arr[0])==true; i++)
+                            {
+                                var responseValue = clientTest.GetAccessData(strToken, "participants/" + i, arr[0], arr[1]);
+                                var strResponseValue = responseValue.Result;
+
+                                if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
+                                // if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!");   ds = data;break; }
+
+                                DOSParticipants.api apis = XmlUtil.Deserialize(typeof(DOSParticipants.api), strResponseValue) as DOSParticipants.api;
+                                DOSParticipants.apiDataParticipant[] participants = (apis.data.Length == 0) ? null : apis.data[0];
+                                //  if (participants == null) return ds;
+                                if (participants == null) break;
+                                string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
+                                Files.WriteXml(strName, strResponseValue);
+
+                                foreach (DOSParticipants.apiDataParticipant participant in participants)
+                                {
+                                    if (participant.type == "team")
+                                    {
+                                        using (FbCommand cmd2 = new FbCommand())
+                                        {
+                                            cmd2.CommandText = "ADD_TEAM";
+                                            cmd2.CommandType = CommandType.StoredProcedure;
+                                            cmd2.Connection = connection;
+                                            cmd2.Parameters.Add("@ID", participant.id);
+                                            cmd2.Parameters.Add("@NAME", participant.name);
+                                            cmd2.Parameters.Add("@SHORT_NAME", participant.short_name);
+                                            cmd2.Parameters.Add("@ACRONYM", participant.acronym);
+                                            cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
+                                            cmd2.Parameters.Add("@AREA_ID", participant.area_id);
+                                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                            cmd2.Parameters.Add("@UT", participant.ut);
+                                            cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
+                                            cmd2.Parameters.Add("@SLUG", participant.slug);
+                                            cmd2.Parameters.Add("@SEASON_ID", "-1");
+                                            cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                            Files.WriteLog(id > 0 ? " [Success] Insert teams[" + count + "  " + "] " + " " + strName + ".xml" : " team exist.");
+                                        }
+                                    }
+                                    else if (participant.type == "person")
+                                    {
+                                        using (FbCommand cmd2 = new FbCommand())
+                                        {
+                                            cmd2.CommandText = "ADD_Player";
+                                            cmd2.CommandType = CommandType.StoredProcedure;
+                                            cmd2.Connection = connection;
+                                            cmd2.Parameters.Add("@ID", participant.id);
+                                            cmd2.Parameters.Add("@NAME", participant.name);
+                                            cmd2.Parameters.Add("@SHORT_NAME", participant.short_name);
+                                            cmd2.Parameters.Add("@ACRONYM", participant.acronym);
+                                            cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
+                                            cmd2.Parameters.Add("@BIRTHDATE", participant.area_id);
+                                            cmd2.Parameters.Add("@POSITION_NAME", participant.area_id);
+                                            cmd2.Parameters.Add("@AREA_ID", participant.area_id);
+                                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                            cmd2.Parameters.Add("@UT", participant.ut);
+                                            cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
+                                            cmd2.Parameters.Add("@SLUG", participant.slug);
+                                            cmd2.Parameters.Add("@TEAM_ID", arr[0]);
+                                            cmd2.Parameters.Add("@SEASON_ID", "-1");
+                                            cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                            Files.WriteLog(id > 0 ? " [Success] Insert players[" + count + "  " + "] " + " " + strName + ".xml" : " player exist.");
+                                        }
+                                    }
+                                }
+                            }
+
+                            queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
+                            using (FbCommand cmd = new FbCommand(queryString))
+                            {
+                                using (FbCommandBuilder fcb = new FbCommandBuilder())
+                                {
+                                    using (FbDataAdapter fda = new FbDataAdapter())
+                                    {
+                                        cmd.Connection = connection;
+                                        fda.SelectCommand = cmd;
+                                        fcb.DataAdapter = fda;
+                                        using (DataSet data = new DataSet())
+                                        {
+                                            data.Tables.Add(new DataTable("teams"));
+                                            fda.Fill(data.Tables["teams"]);
+
+                                            queryString = "SELECT p.* FROM teams t  inner join  events e on t.id = e.HOME_ID or t.id = e.GUEST_ID    inner join players p on t.id = p.SEASON_ID   where e.id = '" + arr[1] + "' order by p.id asc";
+                                            data.Tables.Add(new DataTable("players"));
+                                            FbDataAdapter adapter1 = new FbDataAdapter();
+                                            adapter1.SelectCommand = new FbCommand(queryString, connection);
+                                            FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
+                                            adapter1.Fill(data.Tables["players"]);
+                                            //if (data.Tables["teams"].Rows.Count == 0 && data.Tables["players"].Rows.Count == 0)
+                                            //{ 
+                                            //}
+                                            //else
+                                            //{
+                                            ds = data;
+                                            //}
+                                            connection.Close();
+                                        }
+                                    }
+                                }
+                            }
+                            connection.Close();
+                        }
+                        break;
+                    }
                 //https://api.statscore.com/v2/events.xml?token=c48ad02061e4610726188d8df4b7eea0&sport_id=5&area_id=149&lang=zh&page=1&competition_id=2183 today
                 case "events":
                     {
@@ -1956,7 +2068,7 @@ namespace DataOfScouts
                 if (tsdSeason.Tag == null) { this.dgvPlayer.DataSource = null; return; }
 
                 DataSet ds = new DataSet();
-                ds = InsertData("participants", tsdSeason.Tag.ToString());
+                ds = InsertData("participants", true, tsdSeason.Tag.ToString());
                 if (ds.Tables.Count == 0) { this.dgvPlayer.DataSource = null; return; }
                 tbData = ds.Tables[1];
 
@@ -1973,7 +2085,7 @@ namespace DataOfScouts
                 if (tsdSeason.Tag == null) { this.dgvTeam.DataSource = null; return; }
 
                 DataSet ds = new DataSet();
-                ds = InsertData("participants", tsdSeason.Tag.ToString());
+                ds = InsertData("participants", true, tsdSeason.Tag.ToString());
                 if (ds.Tables.Count == 0) { this.dgvTeam.DataSource = null; return; }
                 tbData = ds.Tables[0];
 
@@ -2238,40 +2350,86 @@ namespace DataOfScouts
                 }
                 else
                 {
-                    
-                    //ADD TEAM INFO 
-                    using (FbConnection connection = new FbConnection("User=SYSDBA;Password=masterkey;Database=E:\\Project\\Database\\SCOUTS_DB.FDB;DataSource=127.0.0.1;Port=3050;Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0"))
+
+                    //ADD TEAM INFO  
+                    string team_id = this.dgvEvent.Rows[e.RowIndex].Cells[0].Value.ToString(); 
+                    DataSet data = new DataSet();
+                    data = InsertData("events.participants", false, team_id);
+
+                    //using (FbConnection connection = new FbConnection("User=SYSDBA;Password=masterkey;Database=E:\\Project\\Database\\SCOUTS_DB.FDB;DataSource=127.0.0.1;Port=3050;Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0"))
+                    //{
+                    //    connection.Open();
+                    //    string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + team_id + "' order by id asc";
+                    //    using (FbCommand cmd = new FbCommand(queryString))
+                    //    {
+                    //        using (FbCommandBuilder fcb = new FbCommandBuilder())
+                    //        {
+                    //            using (FbDataAdapter fda = new FbDataAdapter())
+                    //            {
+                    //                cmd.Connection = connection;
+                    //                fda.SelectCommand = cmd;
+                    //                //using (DataSet data = new DataSet())
+                    //                //{
+                    //                DataSet data = new DataSet();
+                    //                data.Tables.Add(new DataTable("teams"));
+                    //                fda.Fill(data.Tables["teams"]);
+
+                    //                queryString = "select   * from  players2 where team_id=" + team_id;// 174516 ";
+                    //                data.Tables.Add(new DataTable("players"));
+                    //                FbDataAdapter adapter1 = new FbDataAdapter();
+                    //                adapter1.SelectCommand = new FbCommand(queryString, connection);
+                    //                // FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
+                    //                adapter1.Fill(data.Tables["players"]);
+
+                    //                if (data.Tables[0].Rows.Count == 0)
+                    //                {
+                    //                    data = InsertData("participants", false, team_id);
+                    //                }
+
+                    //                if (dgvEvent.childView.TabPages.Count == 0)
+                    //                {
+                    //                    dgvEvent.childView.AddData(data.Tables[0], "Teams");
+                    //                    dgvEvent.childView.AddData(data.Tables[1], "Players");
+                    //                }
+                    //                else if (dgvEvent.childView.TabPages.Count > 0 && dgvEvent.childView.TabPages[0].Text == "Teams")
+                    //                {
+                    //                    dgvEvent.childView.BindData(data.Tables[0], "Teams");
+                    //                    dgvEvent.childView.BindData(data.Tables[1], "Players");
+                    //                }
+                    //                //}
+                    //            }
+                    //        }
+                    //    }
+                    //    connection.Close();
+                    //}
+
+                    if (data.Tables[0].Rows.Count == 0)
                     {
-                        connection.Open();
-                        using (FbCommand cmd = new FbCommand("SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='"+this.dgvEvent.Rows[e.RowIndex].Cells[0].Value +"' order by id asc"))
-                        {
-                            using (FbCommandBuilder fcb = new FbCommandBuilder())
-                            {
-                                using (FbDataAdapter fda = new FbDataAdapter())
-                                {
-                                    cmd.Connection = connection;
-                                    fda.SelectCommand = cmd;
-                                    using (DataSet data = new DataSet())
-                                    {
-                                        data.Tables.Add(new DataTable("events"));
-                                        fda.Fill(data.Tables["events"]);
-                                        // if (dgvEvent.childView.TabPages.Count >0 && dgvEvent.childView.TabPages[0].Text == "Teams")
-                                        if (dgvEvent.childView.TabPages.Count == 0)
-                                        {
-                                            dgvEvent.childView.AddData(data, "Teams");
-                                        }
-                                       else if (dgvEvent.childView.TabPages.Count > 0 && dgvEvent.childView.TabPages[0].Text == "Teams")
-                                        {
-                                            dgvEvent.childView.BindData(data, "Teams");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        connection.Close();
+                        data = InsertData("events.participants", true, team_id);
                     }
 
-                   
+                    if (dgvEvent.childView.TabPages.Count == 0)
+                    {
+                        dgvEvent.childView.AddData(data.Tables[0], "Teams");
+                        dgvEvent.childView.AddData(data.Tables[1], "Players");
+                    }
+                    else if (dgvEvent.childView.TabPages.Count > 0 && dgvEvent.childView.TabPages[0].Text == "Teams")
+                    {
+                        //dgvEvent.childView.TabPages[0].Select();
+                        dgvEvent.childView.BindData(data.Tables[0], "Teams");
+                        // dgvEvent.childView.BindData(data.Tables[1], "Players");
+                        if (dgvEvent.childView.TabPages.Count > 1 && dgvEvent.childView.TabPages[1].Text == "Players")
+                        {
+                            //DataGridView dgv = ((DataGridView)dgvEvent.childView.TabPages[1].Controls[0]);
+                            //while (dgv.Rows.Count != 0)
+                            //{
+                            //    dgv.Rows.RemoveAt(0);
+                            //} 
+                            dgvEvent.childView.BindData(data.Tables[1], "Players");
+                        }
+                    }
+                    
+
                     if (this.dgvEvent.rowCurrent.Count > 0)
                     {
                         int num = this.dgvEvent.rowCurrent[0];
@@ -2406,14 +2564,14 @@ namespace DataOfScouts
             {
                 //(arr[0] == "all" ? "" : " where PARENT_AREA_ID=" + arr[0])
                 //strUrl = $"/v2/" + ((type.IndexOf("/") > -1) ? "areas.xml?parent_area_id=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1) : type + ".xml");
-                 strUrl = $"/v2/" +((arr[0].ToString ().ToLower ()!="all") ? "areas.xml?parent_area_id=" + arr[0] : type + ".xml");
+                strUrl = $"/v2/" + ((arr[0].ToString().ToLower() != "all") ? "areas.xml?parent_area_id=" + arr[0] : type + ".xml");
                 //Console.WriteLine("GET areas " + strUrl);
                 Files.WriteLog("GET areas " + strUrl);
             }
             else if (type.IndexOf("competitions") > -1)
             {
-                strUrl = $"/v2/competitions.xml?token=" + token + "&sport_id=5&area_id=" + arr [0]+"&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
-              // Console.WriteLine("GET competitions " + strUrl);
+                strUrl = $"/v2/competitions.xml?token=" + token + "&sport_id=5&area_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                // Console.WriteLine("GET competitions " + strUrl);
                 Files.WriteLog("GET competitions " + strUrl);
             }
             else if (type.IndexOf("seasons") > -1)
@@ -2426,34 +2584,40 @@ namespace DataOfScouts
             else if (type.IndexOf("stages") > -1)
             {
                 strUrl = $"/v2/stages.xml?token=" + token + "&sport_id=5&season_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
-                 Files.WriteLog("GET stages " + strUrl);
+                Files.WriteLog("GET stages " + strUrl);
             }
             else if (type.IndexOf("groups") > -1)
             {
                 strUrl = $"/v2/groups.xml?token=" + token + "&sport_id=5&stage_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
-                 Files.WriteLog("GET groups " + strUrl);
+                Files.WriteLog("GET groups " + strUrl);
             }
             else if (type.IndexOf("booked-events") > -1)
             {
-                strUrl = $"/v2/booked-events.xml?product=scoutsfeed&client_id=" + AppFlag .Client_id  + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                strUrl = $"/v2/booked-events.xml?product=scoutsfeed&client_id=" + AppFlag.Client_id + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
                 Files.WriteLog("GET booked-events " + strUrl);
             }
             else if (type.IndexOf("events") > -1)
             {
                 // strUrl = $"/v2/events.xml?token=" + token + "&sport_id=5&tz=Asia/Hong_Kong&competition_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
-               // "/v2/events.xml?token=&sport_id=5&tz=Asia/Hong_Kong&date_from=9/19/2018 00:00:00&date_to=10/11/2018 23:59:59&page=1"
+                // "/v2/events.xml?token=&sport_id=5&tz=Asia/Hong_Kong&date_from=9/19/2018 00:00:00&date_to=10/11/2018 23:59:59&page=1"
                 strUrl = $"/v2/events.xml?token=" + token + "&sport_id=5&tz=Asia/Hong_Kong&date_from=" + Convert.ToDateTime(arr[0]).ToString("yyyy-MM-dd HH:mm:ss") + "&date_to=" + Convert.ToDateTime(arr[1]).ToString("yyyy-MM-dd HH:mm:ss") + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
                 Console.WriteLine("GET events " + strUrl);
                 Files.WriteLog("GET events " + strUrl);
             }
             else if (type.IndexOf("participants") > -1)
             {
-                strUrl = $"/v2/participants.xml?token=" + token + "&sport_id=5&season_id=" + arr[0] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
-                Console.WriteLine("GET participants " + strUrl);
+                if (Convert.ToBoolean(arr[0]) == false)
+                {
+                    strUrl = $"/v2/events/" + arr[1] + "/participants.xml?token=" + token + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                }
+                else
+                {
+                    strUrl = $"/v2/participants.xml?token=" + token + "&sport_id=5&season_id=" + arr[1] + "&page=" + type.Substring(type.IndexOf("/") + 1, type.Length - type.IndexOf("/") - 1);
+                }
                 Files.WriteLog("GET participants " + strUrl);
             }
-           
-                var response = await _httpClient.GetAsync(strUrl).ConfigureAwait(false);
+
+            var response = await _httpClient.GetAsync(strUrl).ConfigureAwait(false);
             var responseValue = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -2463,7 +2627,7 @@ namespace DataOfScouts
             {
                 //  Console.WriteLine("Empty: " + responseValue);
                 // return string.Empty;
-                return response.StatusCode.ToString ();
+                return response.StatusCode.ToString();
             }
 
 
