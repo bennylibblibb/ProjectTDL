@@ -53,10 +53,9 @@
             this.tpPlayer = new System.Windows.Forms.TabPage();
             this.dgvPlayer = new System.Windows.Forms.DataGridView();
             this.tpEvent = new System.Windows.Forms.TabPage();
-            // this.dgvEvent = new System.Windows.Forms.DataGridView();
-            this.dgvEvent = new MasterDetailSample .MasterControl ();
+            this.dgvEvent = new MasterDetailSample.MasterControl();
             this.tpBook = new System.Windows.Forms.TabPage();
-            this.dgvBookedEvent = new System.Windows.Forms.DataGridView();
+            this.dgvBookedEvent = new MasterDetailSample.MasterControl();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.bnAreas = new System.Windows.Forms.BindingNavigator(this.components);
             this.bindingNavigatorAddNewItem = new System.Windows.Forms.ToolStripButton();
@@ -140,7 +139,6 @@
             this.tabControl1.TabIndex = 0;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
-            this.dgvEvent.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MasterControl_RowHeaderMouseClick);
             // 
             // tpAuthorization
             // 
@@ -392,6 +390,7 @@
             this.dgvEvent.Name = "dgvEvent";
             this.dgvEvent.Size = new System.Drawing.Size(958, 500);
             this.dgvEvent.TabIndex = 2;
+            this.dgvEvent.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MasterControl_RowHeaderMouseClick);
             this.dgvEvent.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvEvent_RowPostPaint);
             // 
             // tpBook
@@ -415,6 +414,7 @@
             this.dgvBookedEvent.Name = "dgvBookedEvent";
             this.dgvBookedEvent.Size = new System.Drawing.Size(958, 500);
             this.dgvBookedEvent.TabIndex = 3;
+            this.dgvBookedEvent.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MasterControl_RowHeaderMouseClick2);
             // 
             // bnAreas
             // 
@@ -701,6 +701,7 @@
             this.tsdGroup.Name = "tsdGroup";
             this.tsdGroup.Size = new System.Drawing.Size(120, 27);
             this.tsdGroup.Text = "group";
+            this.tsdGroup.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsdGroup_DropDownItemClicked);
             // 
             // tsdPartic
             // 
@@ -846,7 +847,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tpBook;
-        private System.Windows.Forms.DataGridView dgvBookedEvent;
+        //private System.Windows.Forms.DataGridView dgvBookedEvent;
+        private MasterDetailSample.MasterControl dgvBookedEvent;
         private System.Windows.Forms.ToolStripButton tsbGet2;
     }
 }
