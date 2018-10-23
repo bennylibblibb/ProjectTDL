@@ -398,6 +398,7 @@
             this.tpBook.Controls.Add(this.dgvBookedEvent);
             this.tpBook.Location = new System.Drawing.Point(4, 29);
             this.tpBook.Name = "tpBook";
+            this.tpBook.Padding = new System.Windows.Forms.Padding(3);
             this.tpBook.Size = new System.Drawing.Size(964, 506);
             this.tpBook.TabIndex = 9;
             this.tpBook.Text = "booked-events";
