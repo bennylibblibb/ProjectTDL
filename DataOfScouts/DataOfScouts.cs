@@ -31,7 +31,7 @@ namespace DataOfScouts
             picker.Name = "dtpStartTime";
             picker.Format = DateTimePickerFormat.Custom;
          //   picker.CustomFormat = "yyyy/MM/dd";
-            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays-9);
+            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays-10);
             picker.Width = 80;
             var host = new ToolStripControlHost(picker);
             host.Name = "dtpTime";
@@ -44,7 +44,7 @@ namespace DataOfScouts
             picker = new DateTimePicker();
             picker.Name = "dtpEndTime";
             picker.Format = DateTimePickerFormat.Custom;
-            picker.Value = DateTime.Now.AddDays(0 -9);
+            picker.Value = DateTime.Now.AddDays(0 -10);
             // picker.CustomFormat = "yyyy/MM/dd";
             picker.Width = 80;
             host = new ToolStripControlHost(picker);
