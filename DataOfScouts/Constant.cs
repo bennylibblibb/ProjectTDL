@@ -10,7 +10,8 @@ namespace DataOfScouts
     internal struct AppFlag
     { 
         public static string ScoutsDBConn = ConfigurationSettings.AppSettings["ScoutsDBConn"];
-         public static string Client_id = ConfigurationSettings.AppSettings["Client_id"];
+        public static string HkjcDBConn = ConfigurationSettings.AppSettings["HkjcDBConn"];
+        public static string Client_id = ConfigurationSettings.AppSettings["Client_id"];
         public static string Secret_key = ConfigurationSettings.AppSettings["Secret_key"];
         public static string ScoutsUrl = ConfigurationSettings.AppSettings["ScoutsUrl"];
         public static int iPageSize =Convert .ToInt32(ConfigurationSettings.AppSettings["PageSize"]);

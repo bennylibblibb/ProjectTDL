@@ -11,6 +11,7 @@ using FirebirdSql.Data.FirebirdClient;
 using System.Drawing;
 using System.Collections;
 using Microsoft.VisualBasic.CompilerServices;
+using System.Xml.Linq;
 
 namespace DataOfScouts
 {
@@ -30,7 +31,7 @@ namespace DataOfScouts
             picker.Name = "dtpStartTime";
             picker.Format = DateTimePickerFormat.Custom;
          //   picker.CustomFormat = "yyyy/MM/dd";
-            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays-30);
+            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays-9);
             picker.Width = 80;
             var host = new ToolStripControlHost(picker);
             host.Name = "dtpTime";
@@ -43,7 +44,7 @@ namespace DataOfScouts
             picker = new DateTimePicker();
             picker.Name = "dtpEndTime";
             picker.Format = DateTimePickerFormat.Custom;
-            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays);
+            picker.Value = DateTime.Now.AddDays(0 -9);
             // picker.CustomFormat = "yyyy/MM/dd";
             picker.Width = 80;
             host = new ToolStripControlHost(picker);
@@ -567,7 +568,7 @@ namespace DataOfScouts
                             {
                                 var responseValue = clientTest.GetAccessData(strToken, "areas", arr[0]);
                                 var strResponseValue = responseValue.Result;
-                                if (strResponseValue == "") { break; }
+                                if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
 
                                 string strName = type + "-" + DateTime.Now.ToString("HHmmss");
                                 Files.WriteXml(strName, strResponseValue);
@@ -645,7 +646,7 @@ namespace DataOfScouts
                                     //{
                                     var responseValue = clientTest.GetAccessData(strToken, "competitions/" + i, arr);
                                     var strResponseValue = responseValue.Result;
-                                    if (strResponseValue == "") { break; }
+                                    if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
 
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
@@ -749,7 +750,7 @@ namespace DataOfScouts
                                     //DOSSeasons.api apis = XmlUtil.Deserialize(typeof(DOSSeasons.api), strResponseValue) as DOSSeasons.api;
                                     //DOSSeasons.apiDataCompetitionsCompetition[] competitions = (apis.data.Length == 0) ? null : apis.data[0];
                                     // if (competitions == null) return ds;
-                                    if (strResponseValue == "") { break; }
+                                    if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
 
@@ -825,7 +826,7 @@ namespace DataOfScouts
                                 {
                                     var responseValue = clientTest.GetAccessData(strToken, "stages/" + i, arr);
                                     var strResponseValue = responseValue.Result;
-                                    if (strResponseValue == "") { break; }
+                                    if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
 
@@ -911,7 +912,8 @@ namespace DataOfScouts
                                 {
                                     var responseValue = clientTest.GetAccessData(strToken, "groups/" + i, arr);
                                     var strResponseValue = responseValue.Result;
-                                    if (strResponseValue == "") { break; }
+                                    if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
+
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
                                     Files.WriteXml(strName, strResponseValue);
 
@@ -1286,8 +1288,7 @@ namespace DataOfScouts
                         }
                         break;
                     }
-                //https://api.statscore.com/v2/events.xml?token=c48ad02061e4610726188d8df4b7eea0&sport_id=5&area_id=149&lang=zh&page=1&competition_id=2183 today
-                case "events":
+                 case "events":
                     {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
@@ -1315,7 +1316,8 @@ namespace DataOfScouts
                             connection.Open();
                             DataSet eventsDs = new DataSet();
                             adapter.Fill(eventsDs);
-                            if (Convert.ToBoolean(arr[0]) && DateTime.Now <= Convert .ToDateTime ( arr[2]))
+                             if (Convert.ToBoolean(arr[0]) && DateTime.Now <= Convert .ToDateTime ( arr[2]))
+                           // if (Convert.ToBoolean(arr[0]))
                             //if (DateTime.Now <= Convert.ToDateTime(arr[2]))
                             {
                                 //if (eventsDs.Tables[0].Rows.Count == 0)
@@ -1325,10 +1327,10 @@ namespace DataOfScouts
                                 {
                                     //if (Convert.ToBoolean(arr[0]) == false) { ds = eventsDs; break; }
 
-                                    var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[1], arr[2]);
-                                    var strResponseValue = responseValue.Result;
-                                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1101914.xml");
-                                    //var strResponseValue = document.ToString();
+                                    //var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[1], arr[2]);
+                                    //var strResponseValue = responseValue.Result;
+                                    XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1153436.xml");
+                                    var strResponseValue = document.ToString();
 
                                     if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
