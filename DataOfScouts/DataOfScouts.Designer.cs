@@ -392,6 +392,7 @@
             this.dgvEvent.TabIndex = 2;
             this.dgvEvent.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MasterControl_RowHeaderMouseClick);
             this.dgvEvent.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvEvent_RowPostPaint);
+            this.dgvEvent.Leave += new System.EventHandler(this.dgvEvent_Leave);
             // 
             // tpBook
             // 
@@ -416,6 +417,7 @@
             this.dgvBookedEvent.Size = new System.Drawing.Size(958, 500);
             this.dgvBookedEvent.TabIndex = 3;
             this.dgvBookedEvent.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MasterControl_RowHeaderMouseClick2);
+            this.dgvBookedEvent.Leave += new System.EventHandler(this.dgvBookedEvent_Leave);
             // 
             // bnAreas
             // 

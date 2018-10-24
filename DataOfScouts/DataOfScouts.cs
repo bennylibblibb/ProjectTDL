@@ -367,7 +367,7 @@ namespace DataOfScouts
                 //tsdAreaParentId.Visible = true;
                 //  this.tsbGet_Click(sender, e);
                 this.tsbGet_Click(null , null);
-
+              //  MasterControl_RowHeaderMouseClick(null, null);
                 //  //var responseValue = clientTest.GetAccessData(strToken, "events/" + "1");
                 //  //var strResponseValue = responseValue.Result;
 
@@ -405,6 +405,14 @@ namespace DataOfScouts
                 tsdEvent.Visible = false;
 
                 this.tsbGet_Click(null, null);
+                // MasterControl_RowHeaderMouseClick2(null, null);
+                if (iExpand != -1)
+                {
+                    //this.dgvBookedEvent.childView.Visible = false;
+                    //this.dgvBookedEvent.rowCurrent.Clear();
+                    //this.dgvBookedEvent.Rows[iExpand].Height = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultHeight);
+                    //this.dgvBookedEvent.Rows[iExpand].DividerHeight = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultDivider);
+                }
             }
             /*
             total = tbData.Rows.Count;
@@ -419,6 +427,7 @@ namespace DataOfScouts
             this.LoadData(tabControl1.SelectedTab.Text);*/
         }
 
+        int iExpand = -1;
         int total = 0;
         int pageCount = 0;//总页数 
         int pageCurrent = 0;
@@ -1010,11 +1019,14 @@ namespace DataOfScouts
 
                                             if (data.Tables["teams"].Rows.Count == 0 && data.Tables["players"].Rows.Count == 0)
                                             {
-                                                for (int i = 1; i < 2869; i++)
+                                                for (int i = 1; i < 2; i++)
                                                 {
+                                                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\participantst-1164510.xml");
+                                                    //var strResponseValue = document.ToString();
+
                                                     var responseValue = clientTest.GetAccessData(strToken, "participants/" + i, arr[0], arr[1]);
                                                     var strResponseValue = responseValue.Result;
-                                                    // if (strResponseValue == "") { break; }
+
                                                     if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
 
                                                     DOSParticipants.api apis = XmlUtil.Deserialize(typeof(DOSParticipants.api), strResponseValue) as DOSParticipants.api;
@@ -1060,8 +1072,9 @@ namespace DataOfScouts
                                                             dr2[9] = participant.ut;
                                                             dr2[10] = (participant.old_participant_id == "") ? "-1" : participant.old_participant_id;
                                                             dr2[11] = participant.slug;
-                                                            dr2[12] = arr[0];
-                                                            dr2[13] = cTimestamp;
+                                                            dr2[12] = "-1";
+                                                            dr2[13] = arr[0];
+                                                            dr2[14] = cTimestamp;
                                                             data.Tables["players"].Rows.Add(dr2);
                                                         }
                                                     }
@@ -1266,12 +1279,20 @@ namespace DataOfScouts
                                             fda.Fill(data.Tables["teams"]);
 
                                             // queryString = "SELECT p.* FROM teams t  inner join  events e on t.id = e.HOME_ID or t.id = e.GUEST_ID    inner join players p on t.id = p.TEAM_ID   where e.id = '" + arr[1] + "' order by p.id asc";
-                                            queryString = "SELECT p.*FROM players p inner join  events e on p.TEAM_ID = e.HOME_ID or p.TEAM_ID = e.GUEST_ID where e.id='" + arr[1] + "' order by p.id asc";
-                                            data.Tables.Add(new DataTable("players"));
+                                            //queryString = "SELECT p.*FROM players p inner join  events e on p.TEAM_ID = e.HOME_ID or p.TEAM_ID = e.GUEST_ID where e.id='" + arr[1] + "' order by p.id asc";
+                                            queryString = "SELECT p.*FROM players p inner join  events e on p.TEAM_ID = e.HOME_ID where e.id='" + arr[1] + "' order by p.id asc";
+                                            data.Tables.Add(new DataTable("hplayers"));
                                             FbDataAdapter adapter1 = new FbDataAdapter();
                                             adapter1.SelectCommand = new FbCommand(queryString, connection);
+                                            FbCommandBuilder builder2 = new FbCommandBuilder(adapter1);
+                                            adapter1.Fill(data.Tables["hplayers"]);
+
+                                            queryString = "SELECT p.*FROM players p inner join  events e on  p.TEAM_ID = e.GUEST_ID where e.id='" + arr[1] + "' order by p.id asc";
+                                            data.Tables.Add(new DataTable("gplayers"));
+                                            FbDataAdapter adapter2 = new FbDataAdapter();
+                                            adapter2.SelectCommand = new FbCommand(queryString, connection);
                                             FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
-                                            adapter1.Fill(data.Tables["players"]);
+                                            adapter2.Fill(data.Tables["gplayers"]);
                                             //if (data.Tables["teams"].Rows.Count == 0 && data.Tables["players"].Rows.Count == 0)
                                             //{ 
                                             //}
@@ -1327,10 +1348,10 @@ namespace DataOfScouts
                                 {
                                     //if (Convert.ToBoolean(arr[0]) == false) { ds = eventsDs; break; }
 
-                                    //var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[1], arr[2]);
-                                    //var strResponseValue = responseValue.Result;
-                                    XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1153436.xml");
-                                    var strResponseValue = document.ToString();
+                                    var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[1], arr[2]);
+                                    var strResponseValue = responseValue.Result;
+                                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1153436.xml");
+                                    //var strResponseValue = document.ToString();
 
                                     if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
                                     string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
@@ -2471,6 +2492,7 @@ namespace DataOfScouts
                 bs.DataSource = tbData.DefaultView;
                 bnAreas.BindingSource = bs;
                 //  this.dgvBookedEvent .DataSource = bs;
+                
                 this.dgvBookedEvent.MasterControls(ref ds);
                 this.dgvBookedEvent.setParentSource(ds.Tables[0].TableName, "ID");
 
@@ -2672,8 +2694,7 @@ namespace DataOfScouts
                 }
                 else
                 {
-
-                    //ADD TEAM INFO  
+                    //ADD TEAM INFO   
                     string team_id = this.dgvEvent.Rows[e.RowIndex].Cells[0].Value.ToString(); 
                     DataSet data = new DataSet();
                     data = InsertData("events.participants", false, team_id);
@@ -2787,8 +2808,9 @@ namespace DataOfScouts
                     this.dgvBookedEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultDivider);
                 }
                 else
-                { 
+                {
                     //ADD TEAM INFO  
+                    iExpand = e.RowIndex;
                     string team_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
                     DataSet data = new DataSet();
                     data = InsertData("events.participants", false, team_id);
@@ -2801,15 +2823,17 @@ namespace DataOfScouts
                     if (dgvBookedEvent.childView.TabPages.Count == 0)
                     {
                         dgvBookedEvent.childView.AddData(data.Tables[0], "Teams");
-                        dgvBookedEvent.childView.AddData(data.Tables[1], "Players");
+                        dgvBookedEvent.childView.AddData(data.Tables[1], "HPlayers");
+                        dgvBookedEvent.childView.AddData(data.Tables[1], "GPlayers");
                     }
                     else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
                     {
-                          dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
-                         if (dgvBookedEvent.childView.TabPages.Count > 1 && dgvBookedEvent.childView.TabPages[1].Text == "Players")
-                        { 
-                            dgvBookedEvent.childView.BindData(data.Tables[1], "Players");
-                        }
+                        dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
+                        // if (dgvBookedEvent.childView.TabPages.Count > 1 && dgvBookedEvent.childView.TabPages[1].Text == "Players")
+                        //{ 
+                        dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
+                        dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
+                        //}
                     }
 
 
@@ -2837,6 +2861,29 @@ namespace DataOfScouts
             }
         }
 
+        private void dgvBookedEvent_Leave(object sender, EventArgs e)
+        {
+            dgvBookedEvent.childView.Dispose();
+            //    dgvBookedEvent.MasterControlsDispose();
+            // Rectangle rect = new Rectangle(Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.AddObject(e.RowBounds.X, Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.rowDefaultHeight, 0x10), 2))), Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.AddObject(e.RowBounds.Y, Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.rowDefaultHeight, 0x10), 2))), 0x10, 0x10);
+            //if (dgvBookedEvent.collapseRow)
+            //{
+            //    if (dgvBookedEvent.rowCurrent.Contains(iExpand))
+            //    {
+            //    }
+            //    else
+            //    {
+            //        dgvBookedEvent.childView.Visible = false;
+            //     //   e.Graphics.DrawImage(dgvBookedEvent.RowHeaderIconList.Images[0], rect);
+            //    }
+            //    dgvBookedEvent.collapseRow = false;
+            //}
+        }
+
+        private void dgvEvent_Leave(object sender, EventArgs e)
+        {
+            dgvEvent.childView.Dispose();
+        }
     }
 
 
