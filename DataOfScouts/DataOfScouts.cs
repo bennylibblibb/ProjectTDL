@@ -994,7 +994,7 @@ namespace DataOfScouts
                     {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
-                            queryString = "select * from  teams where season_id=" + arr[1];
+                            queryString = "select t.ID ,t.NAME ,t.SHORT_NAME ,t.season_id ,t.AREA_ID ,t.ctimestamp   from  teams t where season_id=" + arr[1];
 
                             using (FbCommand cmd = new FbCommand(queryString))
                             {
@@ -1013,7 +1013,7 @@ namespace DataOfScouts
 
                                             data.Tables.Add(new DataTable("players"));
                                             FbDataAdapter adapter1 = new FbDataAdapter();
-                                            adapter1.SelectCommand = new FbCommand(" SELECT   * FROM players" + " where season_id=" + arr[1], connection);
+                                            adapter1.SelectCommand = new FbCommand(" SELECT   p.ID ,p.NAME ,p.SHORT_NAME ,p.position_name ,p.season_id ,p.AREA_ID ,p.ctimestamp   FROM players p" + " where p.season_id=" + arr[1], connection);
                                             FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
                                             adapter1.Fill(data.Tables["players"]);
 
@@ -1262,8 +1262,9 @@ namespace DataOfScouts
                                     }
                                 }
                             }
-
-                            queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
+                            
+                            //  queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
+                            queryString = "SELECT t.ID ,t.NAME ,t.SHORT_NAME ,t.ACRONYM,t.season_id ,t.AREA_ID ,t.ctimestamp FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
                             using (FbCommand cmd = new FbCommand(queryString))
                             {
                                 using (FbCommandBuilder fcb = new FbCommandBuilder())
@@ -1280,14 +1281,14 @@ namespace DataOfScouts
 
                                             // queryString = "SELECT p.* FROM teams t  inner join  events e on t.id = e.HOME_ID or t.id = e.GUEST_ID    inner join players p on t.id = p.TEAM_ID   where e.id = '" + arr[1] + "' order by p.id asc";
                                             //queryString = "SELECT p.*FROM players p inner join  events e on p.TEAM_ID = e.HOME_ID or p.TEAM_ID = e.GUEST_ID where e.id='" + arr[1] + "' order by p.id asc";
-                                            queryString = "SELECT p.*FROM players p inner join  events e on p.TEAM_ID = e.HOME_ID where e.id='" + arr[1] + "' order by p.id asc";
+                                            queryString = "SELECT  p.ID ,p.NAME ,p.SHORT_NAME,p.ACRONYM,p.position_name ,p.team_ID ,p.ctimestamp   FROM players p inner join  events e on p.TEAM_ID = e.HOME_ID where e.id='" + arr[1] + "' order by p.id asc";
                                             data.Tables.Add(new DataTable("hplayers"));
                                             FbDataAdapter adapter1 = new FbDataAdapter();
                                             adapter1.SelectCommand = new FbCommand(queryString, connection);
                                             FbCommandBuilder builder2 = new FbCommandBuilder(adapter1);
                                             adapter1.Fill(data.Tables["hplayers"]);
 
-                                            queryString = "SELECT p.*FROM players p inner join  events e on  p.TEAM_ID = e.GUEST_ID where e.id='" + arr[1] + "' order by p.id asc";
+                                            queryString = "SELECT p.ID ,p.NAME ,p.SHORT_NAME ,p.ACRONYM,p.position_name ,p.team_ID ,p.ctimestamp   FROM players p inner join  events e on  p.TEAM_ID = e.GUEST_ID where e.id='" + arr[1] + "' order by p.id asc";
                                             data.Tables.Add(new DataTable("gplayers"));
                                             FbDataAdapter adapter2 = new FbDataAdapter();
                                             adapter2.SelectCommand = new FbCommand(queryString, connection);
@@ -1318,17 +1319,17 @@ namespace DataOfScouts
                             //start_date  BETWEEN  '9/19/2018 00:00:00' and'9/20/2018  10:59:59'
                             if (Convert.ToBoolean(arr[0]))
                             {
-                                queryString = "select * from " + type + " where '" + arr[1] + "'<= start_date and start_date <='" + arr[2] + "'";
+                                queryString = "select e.ID, e.NAME, e.HOME_ID, e.GUEST_ID, e.START_DATE,  e.STATUS_NAME,    e.STATUS_TYPE,    e.ROUND_NAME,     e.BOOKED,  e.GROUP_ID, e.STAGE_ID, e.SEASON_ID, e.COMPETITION_ID,    e.AREA_ID, e.CTIMESTAMP from events e where '" + arr[1] + "'<=  e.start_date and  e.start_date <='" + arr[2] + "'";
                             }
                             else
                             {
                                 if (arr[1].ToString().Length < 12)
                                 {
-                                    queryString = "select * from " + type + " where " + (arr[1].ToString() == "Group" ? "GROUP_ID" : (arr[1].ToString() == "Stage") ? "STAGE_ID" : (arr[1].ToString() == "Season") ? "SEASON_ID" : (arr[1].ToString() == "Comp") ? "COMPETITION_ID" : "") + "='" + arr[2] + "'";
+                                    queryString = "select e.ID, e.NAME, e.HOME_ID, e.GUEST_ID, e.START_DATE,  e.STATUS_NAME,    e.STATUS_TYPE,    e.ROUND_NAME,     e.BOOKED,  e.GROUP_ID, e.STAGE_ID, e.SEASON_ID, e.COMPETITION_ID,    e.AREA_ID, e.CTIMESTAMP from events e where " + (arr[1].ToString() == "Group" ? " e.GROUP_ID" : (arr[1].ToString() == "Stage") ? " e.STAGE_ID" : (arr[1].ToString() == "Season") ? " e.SEASON_ID" : (arr[1].ToString() == "Comp") ? " e.COMPETITION_ID" : "") + "='" + arr[2] + "'";
                                 }
                                 else
                                 {
-                                    queryString = "select * from " + type + " where '" + arr[1] + "'<= start_date and start_date <='" + arr[2] + "'";
+                                    queryString = "select e.ID, e.NAME, e.HOME_ID, e.GUEST_ID, e.START_DATE,  e.STATUS_NAME,    e.STATUS_TYPE,    e.ROUND_NAME,     e.BOOKED,  e.GROUP_ID, e.STAGE_ID, e.SEASON_ID, e.COMPETITION_ID,    e.AREA_ID, e.CTIMESTAMP from events e where '" + arr[1] + "'<= e.start_date and  e.start_date <='" + arr[2] + "'";
                                 }
                             }
                             FbDataAdapter adapter = new FbDataAdapter();
@@ -1584,17 +1585,17 @@ namespace DataOfScouts
                             //start_date  BETWEEN  '9/19/2018 00:00:00' and'9/20/2018  10:59:59'
                             if (Convert.ToBoolean(arr[0]))
                             {
-                                queryString = "select * from " + "events" + " where '" + arr[1] + "'<= start_date and start_date <='" + arr[2] + "' and booked =true";
+                                queryString = "select e.ID, e.NAME, e.HOME_ID, e.GUEST_ID, e.START_DATE,  e.STATUS_NAME,    e.STATUS_TYPE,    e.ROUND_NAME,     e.BOOKED,  e.GROUP_ID, e.STAGE_ID, e.SEASON_ID, e.COMPETITION_ID,    e.AREA_ID, e.CTIMESTAMP from " + "events e" + " where '" + arr[1] + "'<= e.start_date and e.start_date <='" + arr[2] + "' and e.booked =true";
                             }
                             else
                             {
                                 if (arr[1].ToString().Length < 12)
                                 {
-                                    queryString = "select * from " + "events" + " where " + (arr[1].ToString() == "Group" ? "GROUP_ID" : (arr[1].ToString() == "Stage") ? "STAGE_ID" : (arr[1].ToString() == "Season") ? "SEASON_ID" : (arr[1].ToString() == "Comp") ? "COMPETITION_ID" : "") + "='" + arr[2] + "' and booked =true";
+                                    queryString = "select e.ID, e.NAME, e.HOME_ID, e.GUEST_ID, e.START_DATE,  e.STATUS_NAME,    e.STATUS_TYPE,    e.ROUND_NAME,     e.BOOKED,  e.GROUP_ID, e.STAGE_ID, e.SEASON_ID, e.COMPETITION_ID,    e.AREA_ID, e.CTIMESTAMP from " + "events e" + " where " + (arr[1].ToString() == "Group" ? "e.GROUP_ID" : (arr[1].ToString() == "Stage") ? "e.STAGE_ID" : (arr[1].ToString() == "Season") ? "e.SEASON_ID" : (arr[1].ToString() == "Comp") ? "e.COMPETITION_ID" : "") + "='" + arr[2] + "' and e.booked =true";
                                 }
                                 else
                                 {
-                                    queryString = "select * from " + "events" + " where '" + arr[1] + "'<= start_date and start_date <='" + arr[2] + "' and booked =true";
+                                    queryString = "select e.ID, e.NAME, e.HOME_ID, e.GUEST_ID, e.START_DATE,  e.STATUS_NAME,    e.STATUS_TYPE,    e.ROUND_NAME,     e.BOOKED,  e.GROUP_ID, e.STAGE_ID, e.SEASON_ID, e.COMPETITION_ID,    e.AREA_ID, e.CTIMESTAMP from " + "events e" + " where '" + arr[1] + "'<= e.start_date and e.start_date <='" + arr[2] + "' and e.booked =true";
                                 }
                             }
                             FbDataAdapter adapter = new FbDataAdapter();
