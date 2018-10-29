@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataOfScouts", "DataOfScouts\DataOfScouts.csproj", "{D3BF4736-D33A-4698-8227-D771064CF19A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterDetailSample", "D:\Users\Administrator\Documents\Reflector\Disassembler\MasterDetailSample4\MasterDetailSample.csproj", "{B45B3193-7147-43FB-AB5C-6CA5DDACACD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterDetails", "MasterDetails\MasterDetails.csproj", "{B45B3193-7147-43FB-AB5C-6CA5DDACACD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

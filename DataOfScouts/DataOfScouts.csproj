@@ -92,6 +92,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableGenerator.cs" />
+    <Compile Include="XmlType\DOSEvents2.cs" />
+    <Compile Include="XmlType\DOSBookedResults.cs" />
     <Compile Include="XmlType\DOSBookedEvents.cs" />
     <Compile Include="XmlType\DOSBookedEvents1.cs" />
     <Compile Include="XmlType\DOSAreas.cs" />
@@ -143,9 +145,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Users\Administrator\Documents\Reflector\Disassembler\MasterDetailSample4\MasterDetailSample.csproj">
+    <ProjectReference Include="..\MasterDetails\MasterDetails.csproj">
       <Project>{b45b3193-7147-43fb-ab5c-6ca5ddacacd6}</Project>
-      <Name>MasterDetailSample</Name>
+      <Name>MasterDetails</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

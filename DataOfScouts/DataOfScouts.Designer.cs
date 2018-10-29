@@ -88,6 +88,8 @@
             this.tsdEvent = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbGet = new System.Windows.Forms.ToolStripButton();
+            this.cmsBook = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miBook = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tpAuthorization.SuspendLayout();
             this.gbAuthorization.SuspendLayout();
@@ -114,6 +116,7 @@
             this.bnAreas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bnAreas2)).BeginInit();
             this.bnAreas2.SuspendLayout();
+            this.cmsBook.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -390,6 +393,7 @@
             this.dgvEvent.Name = "dgvEvent";
             this.dgvEvent.Size = new System.Drawing.Size(958, 500);
             this.dgvEvent.TabIndex = 2;
+            this.dgvEvent.RowContextMenuStripNeeded += new System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventHandler(this.dgvEvent_RowContextMenuStripNeeded);
             this.dgvEvent.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MasterControl_RowHeaderMouseClick);
             this.dgvEvent.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvEvent_RowPostPaint);
             this.dgvEvent.Leave += new System.EventHandler(this.dgvEvent_Leave);
@@ -744,6 +748,20 @@
             this.tsbGet.Text = "Get";
             this.tsbGet.Click += new System.EventHandler(this.tsbGet_Click);
             // 
+            // cmsBook
+            // 
+            this.cmsBook.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miBook});
+            this.cmsBook.Name = "cmsBook";
+            this.cmsBook.Size = new System.Drawing.Size(181, 54);
+            this.cmsBook.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsBook_ItemClicked);
+            // 
+            // miBook
+            // 
+            this.miBook.Name = "miBook";
+            this.miBook.Size = new System.Drawing.Size(180, 28);
+            this.miBook.Text = "Book";
+            // 
             // DataOfScouts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -786,6 +804,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.bnAreas2)).EndInit();
             this.bnAreas2.ResumeLayout(false);
             this.bnAreas2.PerformLayout();
+            this.cmsBook.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -826,7 +845,7 @@
         private System.Windows.Forms.DataGridView dgvComp;
         private System.Windows.Forms.DataGridView dgvSeasons;
         //private System.Windows.Forms.DataGridView dgvEvent;
-        private MasterDetailSample .MasterControl  dgvEvent;
+        private MasterDetailSample.MasterControl  dgvEvent;
         private System.Windows.Forms.BindingNavigator bnAreas2;
         private System.Windows.Forms.ToolStripLabel tslArea;
         private System.Windows.Forms.ToolStripTextBox tsbArea;
@@ -853,6 +872,8 @@
         //private System.Windows.Forms.DataGridView dgvBookedEvent;
         private MasterDetailSample.MasterControl dgvBookedEvent;
         private System.Windows.Forms.ToolStripButton tsbGet2;
+        private System.Windows.Forms.ContextMenuStrip cmsBook;
+        private System.Windows.Forms.ToolStripMenuItem miBook;
     }
 }
 
