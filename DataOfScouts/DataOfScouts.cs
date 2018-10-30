@@ -31,7 +31,7 @@ namespace DataOfScouts
             picker.Name = "dtpStartTime";
             picker.Format = DateTimePickerFormat.Custom;
             //   picker.CustomFormat = "yyyy/MM/dd";
-            picker.Value = DateTime.Now.AddDays(0 - AppFlag.iQueryDays);
+            picker.Value = DateTime.Now.AddDays(0);
             picker.Width = 80;
             var host = new ToolStripControlHost(picker);
             host.Name = "dtpTime";
@@ -44,7 +44,7 @@ namespace DataOfScouts
             picker = new DateTimePicker();
             picker.Name = "dtpEndTime";
             picker.Format = DateTimePickerFormat.Custom;
-            //  picker.Value = DateTime.Now.AddDays(0 - 10);
+             picker.Value = DateTime.Now.AddDays(AppFlag.iQueryDays);
             // picker.CustomFormat = "yyyy/MM/dd";
             picker.Width = 80;
             host = new ToolStripControlHost(picker);
@@ -1318,7 +1318,7 @@ namespace DataOfScouts
                     {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
-                            //connection.Open(); 
+                             connection.Open(); 
                             //for (int i = 1; i < 10 && Convert.ToBoolean(arr[0]) == true; i++)
                             //{
                             //    var responseValue = clientTest.GetAccessData(strToken, "participants/" + i, arr[0], arr[1]);
@@ -1392,20 +1392,19 @@ namespace DataOfScouts
                             for (int i = 1; i < 2 && Convert.ToBoolean(arr[0]) == true; i++)
                             {
                                 //if (Convert.ToBoolean(arr[0]) == false) { ds = eventsDs; break; }
-
-                                // var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[0], arr[1]);
-                                //var responseValue = clientTest.GetAccessData(strToken, type + i, arr[0], arr[1]);
                                 var responseValue = clientTest.GetAccessData(strToken, type, arr[1]);
                                 var strResponseValue = responseValue.Result;
                                 //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1153436.xml");
-                                //var strResponseValue = document.ToString();
-
+                                //var strResponseValue = document.ToString(); 
                                 if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
-                                string strName = arr[1].ToString() + type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
-                                Files.WriteXml(strName, strResponseValue);
+                                string strName = arr[1].ToString() + type + "-" + i + " " + DateTime.Now.ToString("HHmmss"); 
 
                                 DOSEvents2.api apis = XmlUtil.Deserialize(typeof(DOSEvents2.api), strResponseValue) as DOSEvents2.api;
                                 if (apis == null) break;
+
+                                Files.WriteXml(strName, strResponseValue);
+                                Files.WriteLog("Get " + strName + ".xml.");
+
                                 DOSEvents2.apiDataCompetition competition = (apis.data.Length == 0) ? null : apis.data[0];
                                 if (competition == null) break;
 
@@ -1413,35 +1412,34 @@ namespace DataOfScouts
                                 //{
                                 string strCompetition_id = competition.id;
                                 string strArea_id = competition.area_id;
-                                connection.Open();
-                                using (FbCommand cmd = new FbCommand())
-                                {
-                                    //                                        'ID', 'NAME', 'SHORT_NAME', 'MINI_NAME', 'GENDER',
-                                    //'CTYPE', 'AREA_ID', 'AREA_TYPE', 'AREA_SORT', 'OVERALL_SORT', 'SPORT_ID',
-                                    //'SPORT_NAME', 'TOUR_ID', 'TOUR_NAME', 'UT', 'OLD_COMPETITION_ID', 'SLUG', 'CTIMESTAMP'
-                                    cmd.CommandText = "ADD_COMPETITION";
-                                    cmd.CommandType = CommandType.StoredProcedure;
-                                    cmd.Connection = connection;
-                                    cmd.Parameters.Add("@ID", strCompetition_id);
-                                    cmd.Parameters.Add("@NAME", competition.name);
-                                    cmd.Parameters.Add("@SHORT_NAME", competition.short_name);
-                                    cmd.Parameters.Add("@MINI_NAME", competition.mini_name);
-                                    cmd.Parameters.Add("@GENDER", (competition.gender.ToLower() == "male") ? true : false);
-                                    cmd.Parameters.Add("@CTYPE", competition.type);
-                                    cmd.Parameters.Add("@AREA_ID", competition.area_id);
-                                    cmd.Parameters.Add("@AREA_TYPE", competition.type);
-                                    cmd.Parameters.Add("@AREA_SORT", competition.area_sort);
-                                    cmd.Parameters.Add("@OVERALL_SORT", competition.overall_sort);
-                                    cmd.Parameters.Add("@TOUR_ID", competition.tour_id == "" ? "-1" : competition.tour_id);
-                                    cmd.Parameters.Add("@TOUR_NAME", competition.tour_name);
-                                    cmd.Parameters.Add("@UT", competition.ut);
-                                    cmd.Parameters.Add("@OLD_COMPETITION_ID", competition.old_competition_id == "" ? "-1" : competition.old_competition_id);
-                                    cmd.Parameters.Add("@SLUG", competition.slug);
-                                    cmd.Parameters.Add("@CTIMESTAMP", cTimestamp);
-                                    int id = Convert.ToInt32(cmd.ExecuteScalar());
-                                }
-
-
+                                //connection.Open();
+                                //using (FbCommand cmd = new FbCommand())
+                                //{
+                                //    //                                        'ID', 'NAME', 'SHORT_NAME', 'MINI_NAME', 'GENDER',
+                                //    //'CTYPE', 'AREA_ID', 'AREA_TYPE', 'AREA_SORT', 'OVERALL_SORT', 'SPORT_ID',
+                                //    //'SPORT_NAME', 'TOUR_ID', 'TOUR_NAME', 'UT', 'OLD_COMPETITION_ID', 'SLUG', 'CTIMESTAMP'
+                                //    cmd.CommandText = "ADD_COMPETITION";
+                                //    cmd.CommandType = CommandType.StoredProcedure;
+                                //    cmd.Connection = connection;
+                                //    cmd.Parameters.Add("@ID", strCompetition_id);
+                                //    cmd.Parameters.Add("@NAME", competition.name);
+                                //    cmd.Parameters.Add("@SHORT_NAME", competition.short_name);
+                                //    cmd.Parameters.Add("@MINI_NAME", competition.mini_name);
+                                //    cmd.Parameters.Add("@GENDER", (competition.gender.ToLower() == "male") ? true : false);
+                                //    cmd.Parameters.Add("@CTYPE", competition.type);
+                                //    cmd.Parameters.Add("@AREA_ID", competition.area_id);
+                                //    cmd.Parameters.Add("@AREA_TYPE", competition.type);
+                                //    cmd.Parameters.Add("@AREA_SORT", competition.area_sort);
+                                //    cmd.Parameters.Add("@OVERALL_SORT", competition.overall_sort);
+                                //    cmd.Parameters.Add("@TOUR_ID", competition.tour_id == "" ? "-1" : competition.tour_id);
+                                //    cmd.Parameters.Add("@TOUR_NAME", competition.tour_name);
+                                //    cmd.Parameters.Add("@UT", competition.ut);
+                                //    cmd.Parameters.Add("@OLD_COMPETITION_ID", competition.old_competition_id == "" ? "-1" : competition.old_competition_id);
+                                //    cmd.Parameters.Add("@SLUG", competition.slug);
+                                //    cmd.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                //    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                //    Files.WriteLog(id > 0 ? " [Success] Insert competition[" + competition.id + "] " + competition.name : "[" + competition.id + "] " + competition.name + " competition exist.");
+                                //} 
                                 DOSEvents2.apiDataCompetitionSeason[] seasons = competition.seasons;
                                 if (seasons == null) continue;
                                 foreach (DOSEvents2.apiDataCompetitionSeason season in seasons)
@@ -1464,7 +1462,7 @@ namespace DataOfScouts
                                                 foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant participant in sevent.participants)
                                                 {
                                                     if (participant == null) continue;
-                                                    using (FbCommand cmd2 = new FbCommand())
+                                                     using (FbCommand cmd2 = new FbCommand())
                                                     {
                                                         cmd2.CommandText = "ADD_TEAM";
                                                         cmd2.CommandType = CommandType.StoredProcedure;
@@ -1482,7 +1480,8 @@ namespace DataOfScouts
                                                         cmd2.Parameters.Add("@SEASON_ID", "-1");
                                                         cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
                                                         int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                        Files.WriteLog(id > 0 ? " [Success] Insert teams[" + count + "  " + "] " + " " + strName + ".xml" : " team exist.");
+                                                        //  Files.WriteLog(id > 0 ? " [Success] Insert teams[" + participant.id + "] " + participant.name + " " + strName + ".xml" : " team exist.");
+                                                        Files.WriteLog(id > 0 ? " [Success] Insert teams[" + participant.id + "] " + participant.name  :"[" + participant.id + "] " + participant.name+ " team exist.");
                                                     }
                                                     foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup lineup in participant.lineups)
                                                     {
@@ -1503,7 +1502,8 @@ namespace DataOfScouts
                                                             cmd2.Parameters.Add("@SEASON_ID", season.id);
                                                             cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
                                                             int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog(id > 0 ? " [Success] Insert players2 [" + count + "  " + "] " + " " + strName + ".xml" : " player exist.");
+                                                            // Files.WriteLog(id > 0 ? " [Success] Insert players2 [" + lineup.participant_id+ "] " + lineup.participant_name + " " + strName + ".xml" : " player exist.");
+                                                            Files.WriteLog(id > 0 ? " [Success] Insert players [" + lineup.participant_id + "] " + lineup.participant_name  :  "[" + lineup.participant_id + "] " + lineup.participant_name+" player exist.");
                                                         }
                                                     }
                                                 }
@@ -1518,6 +1518,7 @@ namespace DataOfScouts
                                         }
                                     }
                                 }
+
                             }
 
                             queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
@@ -2030,7 +2031,7 @@ namespace DataOfScouts
                                 //if (eventsDs.Tables[0].Rows.Count == 0)
                                 //{
                                 //DataSet newEventsDs= eventsDs.Clone ();
-                                for (int i = 1; i < 10; i++)
+                                for (int i = 1; i < 50; i++)
                                 {
                                     //if (Convert.ToBoolean(arr[0]) == false) { ds = eventsDs; break; }
 
