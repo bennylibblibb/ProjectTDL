@@ -7,6 +7,7 @@ namespace FileLog
     using System.Data;
     using System.IO;
     using System.Text;
+    using System.Windows.Forms;
     using System.Xml;
 
     public class Files
@@ -215,6 +216,27 @@ namespace FileLog
                 files.Close();
             }
         }
+
+        public static void UpdateConfig(string AppKey, string AppValue)
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load(Application.ExecutablePath + ".config");
+            XmlNode node = document.SelectSingleNode("//appSettings");
+            XmlElement element = (XmlElement)node.SelectSingleNode("//add[@key=\"" + AppKey + "\"]");
+            if (element != null)
+            {
+                element.SetAttribute("value", AppValue);
+            }
+            else
+            {
+                XmlElement newChild = document.CreateElement("add");
+                newChild.SetAttribute("key", AppKey);
+                newChild.SetAttribute("value", AppValue);
+                node.AppendChild(newChild);
+            }
+            document.Save(Application.ExecutablePath + ".config");
+        }
+
         public string AbsoluteFilePath
         {
             get

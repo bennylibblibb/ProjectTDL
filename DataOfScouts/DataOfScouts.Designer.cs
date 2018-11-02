@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataOfScouts));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpAuthorization = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbResults = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.gbAuthorization = new System.Windows.Forms.GroupBox();
@@ -145,7 +145,7 @@
             // 
             // tpAuthorization
             // 
-            this.tpAuthorization.Controls.Add(this.label1);
+            this.tpAuthorization.Controls.Add(this.lbResults);
             this.tpAuthorization.Controls.Add(this.textBox1);
             this.tpAuthorization.Controls.Add(this.button1);
             this.tpAuthorization.Controls.Add(this.gbAuthorization);
@@ -156,13 +156,12 @@
             this.tpAuthorization.Text = "Authorization";
             this.tpAuthorization.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // lbResults
             // 
-            this.label1.Location = new System.Drawing.Point(29, 232);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(479, 248);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "label1";
+            this.lbResults.Location = new System.Drawing.Point(29, 232);
+            this.lbResults.Name = "lbResults";
+            this.lbResults.Size = new System.Drawing.Size(479, 248);
+            this.lbResults.TabIndex = 3;
             // 
             // textBox1
             // 
@@ -753,13 +752,13 @@
             this.cmsBook.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miBook});
             this.cmsBook.Name = "cmsBook";
-            this.cmsBook.Size = new System.Drawing.Size(181, 54);
+            this.cmsBook.Size = new System.Drawing.Size(119, 32);
             this.cmsBook.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsBook_ItemClicked);
             // 
             // miBook
             // 
             this.miBook.Name = "miBook";
-            this.miBook.Size = new System.Drawing.Size(180, 28);
+            this.miBook.Size = new System.Drawing.Size(118, 28);
             this.miBook.Text = "Book";
             // 
             // DataOfScouts
@@ -867,7 +866,7 @@
         private System.Windows.Forms.DataGridView dgvPlayer;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbResults;
         private System.Windows.Forms.TabPage tpBook;
         //private System.Windows.Forms.DataGridView dgvBookedEvent;
         private MasterDetailSample.MasterControl dgvBookedEvent;

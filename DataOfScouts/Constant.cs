@@ -16,6 +16,8 @@ namespace DataOfScouts
         public static string ScoutsUrl = ConfigurationSettings.AppSettings["ScoutsUrl"];
         public static int iPageSize =Convert .ToInt32(ConfigurationSettings.AppSettings["PageSize"]);
         public static int iQueryDays = Convert.ToInt32(ConfigurationSettings.AppSettings["QueryDays"]);
+        public static string SyncHkjcDateTime = ConfigurationSettings.AppSettings["SyncHkjcDateTime"];
+         
     }
 
     public enum InformationType
@@ -31,4 +33,6 @@ namespace DataOfScouts
         ActiveTournament,
         ActivePariMutuelWagering
     }
+
+
 }

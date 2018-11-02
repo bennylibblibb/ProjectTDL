@@ -83,7 +83,7 @@
         public static void rowPostPaint_HeaderCount(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridView view = (DataGridView)sender;
-            string s = ((e.RowIndex + 1) + (view.Name == "dgvEvent" ? 30 * (pageIndex-1):0)).ToString();
+            string s = ((e.RowIndex + 1) + (view.Name == "dgvEvent"|| view.Name == "dgvBookedEvent" ? 30 * (pageIndex-1):0)).ToString();
             StringFormat format = new StringFormat
             {
                 Alignment = StringAlignment.Center,
