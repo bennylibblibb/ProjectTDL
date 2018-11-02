@@ -1,4 +1,6 @@
-﻿namespace DataOfScouts
+﻿using System.IO;
+
+namespace DataOfScouts
 {
     partial class DataOfScouts
     {
@@ -771,8 +773,7 @@
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DataOfScouts";
-            this.Text = "D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\Data" +
-    "OfScouts";
+            this.Text = Directory.GetCurrentDirectory() + @"\DataOfScouts";
             this.tabControl1.ResumeLayout(false);
             this.tpAuthorization.ResumeLayout(false);
             this.tpAuthorization.PerformLayout();
