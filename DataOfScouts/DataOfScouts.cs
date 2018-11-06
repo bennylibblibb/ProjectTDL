@@ -14,6 +14,9 @@ using Microsoft.VisualBasic.CompilerServices;
 using System.Xml.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
+using System.ComponentModel;
+using RabbitMQ.Client.Events;
+using System.Text;
 
 namespace DataOfScouts
 {
@@ -87,15 +90,16 @@ namespace DataOfScouts
                 }
 
                 //  RunAMQPService();
-                RunAMQPService2();
+                //  RunAMQPService2();
+                bgwAMQPService.DoWork +=new DoWorkEventHandler(bgwAMQPService_DoWork);
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
-                Files.WriteError("DataOfScouts(),error: "+exp.Message);
+                Files.WriteError("DataOfScouts(),error: " + exp.Message);
             }
-            
-        }
 
+        }
+        /*
         // private bool RunAMQPService()
         private bool RunAMQPService()
         {
@@ -122,7 +126,7 @@ namespace DataOfScouts
                         //直到调用channel.basicAck(deliveryTag, false);   
                         //queue上的消息才会被清除 而且，在当前连接断开以前，其它客户端将不能收到此queue上的消息  
 
-                        BasicGetResult res = ch.BasicGet("telecom-digital-data-limited", true/*noAck*/);
+                        BasicGetResult res = ch.BasicGet("telecom-digital-data-limited", truenoAck);
                         if (res != null)
                         {
                             string strName = "amqp" + DateTime.Now.ToString("HHmmssfff");
@@ -152,7 +156,7 @@ namespace DataOfScouts
 
             // Console.ReadLine();
 
-            /* Uri uri = new Uri("amqp://queue.statscore.com:5672/");
+              Uri uri = new Uri("amqp://queue.statscore.com:5672/");
              string exchange = "routing";//路由  
              string exchangeType = "direct";//交换模式  
              string routingKey = "rk";//路由关键字  
@@ -194,7 +198,7 @@ namespace DataOfScouts
                      Console.WriteLine("写入成功");
                  }
 
-             }*/
+             } 
         }
         private Task<string> AMQPService2()
         {
@@ -217,7 +221,7 @@ namespace DataOfScouts
                     {
                         using (IModel ch = conn.CreateModel())
                         {
-                            BasicGetResult res = ch.BasicGet("telecom-digital-data-limited", true/*noAck*/);
+                            BasicGetResult res = ch.BasicGet("telecom-digital-data-limited", truenoAck);
                             if (res != null)
                             {
                                 string strName = "amqp" + DateTime.Now.ToString("HHmmssfff");
@@ -249,9 +253,9 @@ namespace DataOfScouts
         private async void RunAMQPService2()
         {
             string results = await AMQPService2();
-            this.lbResults.Text = "AMQP:"+results;
+            this.lbResults.Text = "AMQP:" + results;
         }
-
+        */
         private Task<bool> SyncHkjcAndBook(DataSet ds)
         {
             return Task.Run(() =>
@@ -266,7 +270,7 @@ namespace DataOfScouts
                             foreach (DataRow dr1 in ds.Tables[0].Rows)
                             {
                                 string strHkjcHostName = dr1["CHOME_TEAM_ENG_NAME"].ToString();
-                                string strHkjcGeustName = dr1["CAWAY_TEAM_ENG_NAME"].ToString(); 
+                                string strHkjcGeustName = dr1["CAWAY_TEAM_ENG_NAME"].ToString();
 
                                 connection.Open();
                                 DataSet evtTeams = new DataSet();
@@ -283,21 +287,23 @@ namespace DataOfScouts
                                             evtTeams = data;
                                         }
                                     }
-                                }
-
+                                } 
                                 if (evtTeams.Tables[0].Rows.Count >= 2)
                                 {
+                                    string id1 = evtTeams.Tables[0].Select("NAME='" + strHkjcHostName + "'")[0]["ID"].ToString();
+                                    string id2 = evtTeams.Tables[0].Select("NAME='" + strHkjcGeustName + "'")[0]["ID"].ToString();
+
                                     using (FbCommand cmd2 = new FbCommand())
                                     {
-                                        cmd2.CommandText = "SYNC_HKJCDATA_BOOK";
+                                        cmd2.CommandText = "Sync_HkjcData";
                                         cmd2.CommandType = CommandType.StoredProcedure;
                                         cmd2.Connection = connection;
-                                        cmd2.Parameters.Add("@HOME_ID", evtTeams.Tables[0].Rows[0]["id"]);
-                                        cmd2.Parameters.Add("@GUEST_ID", evtTeams.Tables[0].Rows[1]["id"]);
+                                        cmd2.Parameters.Add("@HOME_ID", id1);
+                                        cmd2.Parameters.Add("@GUEST_ID", id2);
                                         cmd2.Parameters.Add("@HKJCHOSTNAME", strHkjcHostName);
                                         cmd2.Parameters.Add("@HKJCGUESTNAME", strHkjcGeustName);
                                         int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                        Files.WriteLog((id > 0 ? " [Success] " : (id==-2)? " [Failure] event not exist " : " [Failure] ") + "Sync ["+ id + "] EMATCHES[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
+                                        Files.WriteLog((id > 0 ? " [Success] " : (id == -2) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
                                     }
                                 }
                                 connection.Close();
@@ -318,10 +324,10 @@ namespace DataOfScouts
         private async void RunSyncHkjcAndBook(DataSet ds)
         {
             bool results = await SyncHkjcAndBook(ds);
-           this.lbResults.Text = "AMQP:" + results;
+            //this.lbResults.Text = "AMQP:" + results;
         }
 
-        private   bool RunSyncHkjcAndBook2(DataSet ds)
+        private bool RunSyncHkjcAndBook2(DataSet ds)
         {
             bool result = true;
             try
@@ -354,13 +360,16 @@ namespace DataOfScouts
 
                             if (evtTeams.Tables[0].Rows.Count >= 2)
                             {
+                                string id1 = evtTeams.Tables[0].Select("NAME='" + strHkjcHostName + "'")[0]["ID"].ToString();
+                                string id2 = evtTeams.Tables[0].Select("NAME='" + strHkjcGeustName + "'")[0]["ID"].ToString();
+
                                 using (FbCommand cmd2 = new FbCommand())
                                 {
-                                    cmd2.CommandText = "SYNC_HKJCDATA_BOOK";
+                                    cmd2.CommandText = "Sync_HkjcData";
                                     cmd2.CommandType = CommandType.StoredProcedure;
                                     cmd2.Connection = connection;
-                                    cmd2.Parameters.Add("@HOME_ID", evtTeams.Tables[0].Rows[0]["id"]);
-                                    cmd2.Parameters.Add("@GUEST_ID", evtTeams.Tables[0].Rows[1]["id"]);
+                                    cmd2.Parameters.Add("@HOME_ID", id1);
+                                    cmd2.Parameters.Add("@GUEST_ID", id2);
                                     cmd2.Parameters.Add("@HKJCHOSTNAME", strHkjcHostName);
                                     cmd2.Parameters.Add("@HKJCGUESTNAME", strHkjcGeustName);
                                     int id = Convert.ToInt32(cmd2.ExecuteScalar());
@@ -384,7 +393,7 @@ namespace DataOfScouts
         {
             return Task.Run(() =>
             {
-                DataSet result = InsertData (type, arr);
+                DataSet result = InsertData(type, arr);
                 return result;
             }
                 );
@@ -393,7 +402,7 @@ namespace DataOfScouts
         private async void RunAyncHandleData(string type, params object[] arr)
         {
             DataSet results = await AyncHandleData(type, arr);
-           
+
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -851,7 +860,7 @@ namespace DataOfScouts
         {
             string queryString = "";
             DateTime cTimestamp = DateTime.Now;
-            DataSet ds = new DataSet(); 
+            DataSet ds = new DataSet();
             switch (type)
             {
                 case "events.show2":
@@ -1164,7 +1173,7 @@ namespace DataOfScouts
                                                             cmd2.CommandText = "ADD_Player2";
                                                             cmd2.CommandType = CommandType.StoredProcedure;
                                                             cmd2.Connection = connection;
-                                                            cmd2.Parameters.Add("@ID", lineup.participant_id==""?"-1": lineup.participant_id);
+                                                            cmd2.Parameters.Add("@ID", lineup.participant_id == "" ? "-1" : lineup.participant_id);
                                                             cmd2.Parameters.Add("@NAME", lineup.participant_name);
                                                             cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
                                                             cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
@@ -2534,8 +2543,8 @@ namespace DataOfScouts
                                     }
                                 }
                             }
-                            queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
-                             using (FbCommand cmdA = new FbCommand(queryString))
+                            queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' ";// order by id asc";
+                            using (FbCommand cmdA = new FbCommand(queryString))
                             {
                                 using (FbCommandBuilder fcb = new FbCommandBuilder())
                                 {
@@ -2548,6 +2557,7 @@ namespace DataOfScouts
                                         {
                                             data.Tables.Add(new DataTable("teams"));
                                             fda.Fill(data.Tables["teams"]);
+
                                             queryString = "SELECT  p.*   FROM players p inner join  events e on p.TEAM_ID = e.HOME_ID where e.id='" + arr[1] + "' order by p.id asc";
                                             data.Tables.Add(new DataTable("hplayers"));
                                             FbDataAdapter adapter1 = new FbDataAdapter();
@@ -3288,7 +3298,7 @@ namespace DataOfScouts
                                 //if (eventsDs.Tables[0].Rows.Count == 0)
                                 //{
                                 //DataSet newEventsDs= eventsDs.Clone ();
-                                for (int i = 1; i <100; i++)
+                                for (int i = 1; i < 100; i++)
                                 {
                                     //if (Convert.ToBoolean(arr[0]) == false) { ds = eventsDs; break; }
 
@@ -3497,7 +3507,7 @@ namespace DataOfScouts
                                                                     cmd2.Parameters.Add("@SEASON_ID", "-1");
                                                                     cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
                                                                     int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                     Files.WriteLog(id > 0 ? " [Success] Insert teams[" + participant.id + "] " + participant.name : "[" + participant.id + "] " + participant.name + " team exist.");
+                                                                    Files.WriteLog(id > 0 ? " [Success] Insert teams[" + participant.id + "] " + participant.name : "[" + participant.id + "] " + participant.name + " team exist.");
                                                                 }
                                                             }
                                                             //    InsertData2("events.show", true, sevent.id);
@@ -4400,9 +4410,9 @@ namespace DataOfScouts
                     //    ds = InsertData("events", this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59", ((sender == null) ? false : true));
                     ///   ds = InsertData("events", true, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
                     this.dgvEvent.DataSource = null;
-                    this.tsbGet2.Enabled =false;
+                    this.tsbGet2.Enabled = false;
                     this.tsbGet2.Text = "Doing";
-                    ds =await AyncHandleData("events", true, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
+                    ds = await AyncHandleData("events", true, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
                     this.tsbGet2.Enabled = true;
                     this.tsbGet2.Text = "Get";
                 }
@@ -4430,9 +4440,9 @@ namespace DataOfScouts
                 DataSet ds2 = new DataSet();
                 using (FbConnection connection = new FbConnection(AppFlag.HkjcDBConn))
                 {
-                  //   string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
-                   //  string queryString = "SELECT e.* FROM matchlist e " + (AppFlag.SyncHkjcDateTime ==""?"": "where e.CTIMESTAMP > '"+ AppFlag.SyncHkjcDateTime+"'") + " order by e.CTIMESTAMP desc";
-                   string queryString = "SELECT e.* FROM matchlist e   order by e.CMATCHDATETIME desc";
+                    //   string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
+                    //  string queryString = "SELECT e.* FROM matchlist e " + (AppFlag.SyncHkjcDateTime ==""?"": "where e.CTIMESTAMP > '"+ AppFlag.SyncHkjcDateTime+"'") + " order by e.CTIMESTAMP desc";
+                    string queryString = "SELECT e.* FROM matchlist e   order by e.CMATCHDATETIME desc";
 
                     using (FbCommand cmd = new FbCommand(queryString, connection))
                     {
@@ -4455,18 +4465,20 @@ namespace DataOfScouts
                 }
 
                 var culture = new System.Globalization.CultureInfo("zh-HK");
+                DateTime maxTime = DateTime.MinValue;
+                DateTime minTime = DateTime.MaxValue;
 
                 if (ds1.Tables["HKjcMatch"].Rows.Count > 0)
                 {
-                    DateTime maxTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CMATCHDATETIME"]);
-                    DateTime minTime = Convert.ToDateTime(ds1.Tables[0].Rows[ds1.Tables[0].Rows.Count - 1]["CMATCHDATETIME"]);
+                    maxTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CMATCHDATETIME"]);
+                    minTime = Convert.ToDateTime(ds1.Tables[0].Rows[ds1.Tables[0].Rows.Count - 1]["CMATCHDATETIME"]);
                     this.bnAreas.Items[17].Text = minTime.ToString("yyyy-MM-dd", culture);
                     this.bnAreas.Items[19].Text = maxTime.ToString("yyyy-MM-dd", culture);
                 }
 
-                DataRow[] rows = ds1.Tables[0].Select( (AppFlag.SyncHkjcDateTime==""?"": "CTIMESTAMP >'" + AppFlag.SyncHkjcDateTime+"'"), "CTIMESTAMP DESC");
+                DataRow[] rows = ds1.Tables[0].Select((AppFlag.SyncHkjcDateTime == "" ? "" : "CTIMESTAMP >'" + AppFlag.SyncHkjcDateTime + "'"), "CTIMESTAMP DESC");
                 if (rows.Length > 0)
-                { 
+                {
                     using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                     {
                         connection.Open();
@@ -4481,14 +4493,14 @@ namespace DataOfScouts
                                 cmd2.Parameters.Add("@EMATCHID", -1);
                                 cmd2.Parameters.Add("@HKJCMATCHNO", dr1["IMATCH_NO"]);
                                 cmd2.Parameters.Add("@HKJCDAYCODE", dr1["CMATCH_DAY_CODE"]);
-                                cmd2.Parameters.Add("@CMATCHDATETIME",dr1["CMATCHDATETIME"]);
+                                cmd2.Parameters.Add("@CMATCHDATETIME", dr1["CMATCHDATETIME"]);
                                 cmd2.Parameters.Add("@HKJCHOSTID", dr1["IHOME_TEAM_CODE"]);
                                 cmd2.Parameters.Add("@HKJCGUESTID", dr1["IAWAY_TEAM_CODE"]);
                                 cmd2.Parameters.Add("@HKJCHOSTNAME", dr1["CHOME_TEAM_ENG_NAME"]);
                                 cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
                                 cmd2.Parameters.Add("@STATUS", dr1["ISTATUS"]);
                                 cmd2.Parameters.Add("@MAPPINGSTATUS", false);
-                                cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null)); 
+                                cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                                 int id = Convert.ToInt32(cmd2.ExecuteScalar());
                                 //  Files.WriteLog((id > 0 ? " [Success]" : "[Failure]") + "Insert EMATCHES[" + dr1["IMATCH_NO"] + "  " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + " " + dr1["CAWAY_TEAM_ENG_NAME"]);
                                 Files.WriteLog((id < 0 ? " [Success] Insert EMATCHES" : "Match exist ") + "[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + "/" + dr1["CAWAY_TEAM_ENG_NAME"]);
@@ -4508,7 +4520,7 @@ namespace DataOfScouts
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
                     // string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
-                    string queryString = "SELECT e.* FROM EMATCHES e  order by  e.EMATCHID desc";
+                    string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
                     using (FbCommand cmd = new FbCommand(queryString, connection))
                     {
                         using (FbCommandBuilder fcb = new FbCommandBuilder())
@@ -4562,6 +4574,38 @@ namespace DataOfScouts
                     }
                     connection.Close();
                 }
+
+                using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                {
+                    string queryString = "SELECT e.id,e.name FROM events e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.start_date and  e.start_date <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' and booked =true order by  e.start_date desc ";
+                    using (FbCommand cmd = new FbCommand(queryString, connection))
+                    {
+                        using (FbCommandBuilder fcb = new FbCommandBuilder())
+                        {
+                            using (FbDataAdapter fda = new FbDataAdapter())
+                            {
+                                fda.SelectCommand = cmd;
+                                fcb.DataAdapter = fda;
+                                using (DataSet data = new DataSet())
+                                {
+                                    fda.Fill(data);
+                                    cmsBooked.Items.Clear();
+                                    foreach (DataRow dr in data.Tables[0].Rows)
+                                    {
+                                        cmsBooked.Items.Add(new ToolStripMenuItem()
+                                        {
+                                            Text = dr["id"].ToString() + " " + dr["Name"].ToString(),
+                                            Tag = dr["id"].ToString()
+                                        });
+                                    }
+
+                                }
+                            }
+                        }
+                        connection.Close();
+                    }
+                }
+
 
                 //DataSet ds = new DataSet();
                 //var ls1 = ds1.Tables["matches1"].AsEnumerable().ToList();
@@ -5004,31 +5048,31 @@ namespace DataOfScouts
                 }
                 else
                 {
-                    
+
                     string event_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
                     //if (Convert.ToInt32 (event_id) > 0)
                     //{
-                        DataSet data = new DataSet();
-                        data = InsertData("events.show2", false, event_id);
-                        // if (data.Tables[0].Rows.Count == 0)
-                        if (data.Tables[0].Rows.Count < 2&& Convert.ToInt32(event_id) > 0)
-                        {
-                            data = InsertData("events.show2", true, event_id);
-                        }
+                    DataSet data = new DataSet();
+                    data = InsertData("events.show2", false, event_id);
+                    // if (data.Tables[0].Rows.Count == 0)
+                    if (data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0)
+                    {
+                        data = InsertData("events.show2", true, event_id);
+                    }
 
-                        if (dgvBookedEvent.childView.TabPages.Count == 0)
-                        {
-                            dgvBookedEvent.childView.AddData(data.Tables[0], "Teams");
-                            dgvBookedEvent.childView.AddData(data.Tables[1], "HPlayers");
-                            dgvBookedEvent.childView.AddData(data.Tables[2], "GPlayers");
-                        }
-                        else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
-                        {
-                            dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
+                    if (dgvBookedEvent.childView.TabPages.Count == 0)
+                    {
+                        dgvBookedEvent.childView.AddData(data.Tables[0], "Teams");
+                        dgvBookedEvent.childView.AddData(data.Tables[1], "HPlayers");
+                        dgvBookedEvent.childView.AddData(data.Tables[2], "GPlayers");
+                    }
+                    else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
+                    {
+                        dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
 
-                            dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
-                            dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
-                        }
+                        dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
+                        dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
+                    }
                     //}
                     //else
                     //{
@@ -5082,6 +5126,8 @@ namespace DataOfScouts
             }
             else
             {
+                dgvBookedEvent.Rows[e.RowIndex].HeaderCell.ContextMenuStrip = cmsBooked;
+
                 this.dgvBookedEvent.collapseRow = false;
             }
         }
@@ -5121,6 +5167,30 @@ namespace DataOfScouts
             //e.HeaderCell.ContextMenuStrip = cmsBook;
 
             // dgvEvent.Rows[0].HeaderCell.ContextMenuStrip = cmsBook;
+        }
+
+        private void cmsBooked_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string eventid = e.ClickedItem.Tag.ToString ();
+            string eventsName = e.ClickedItem.Name;
+            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+            {
+                using (FbCommand cmd = new FbCommand())
+                {
+                    connection.Open();
+                    cmd.CommandText = "SYNCMANUAL_HKJCDATA";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Connection = connection;
+                    cmd.Parameters.Add("@Event_id", e.ClickedItem.Tag.ToString());
+                    cmd.Parameters.Add("@HKJCHOSTNAME", true);
+                    cmd.Parameters.Add("@HKJCGUESTNAME", DateTime.Now);
+                    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                    Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
+                    
+                }
+                connection.Close();
+            }
+
         }
 
         private void cmsBook_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -5213,8 +5283,107 @@ namespace DataOfScouts
 
             }
         }
-    }
 
+        private void DataOfScouts_Load(object sender, EventArgs e)
+        {
+            Files.WriteLog(" Start AMQPService.");
+            bgwAMQPService.RunWorkerAsync();
+        }
+
+        private void DataOfScouts_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //if (bgwAMQPService.IsBusy)
+            //{
+            //    bBreak = true;
+            //    Files.WriteLog(" Stop AMQPService.");
+            //    bgwAMQPService.CancelAsync();
+            //}
+
+            //bgwAMQPService.Dispose();
+
+            if (bBreak == false)
+            {
+                bBreak = true;
+                Files.WriteLog(" Stop AMQPService.");
+            }
+            //else
+            //{
+            //    bBreak = false;
+            //    Files.WriteLog(" Run AMQPService.");
+            //    bgwAMQPService.RunWorkerAsync();
+            //}
+        }
+
+        BackgroundWorker bgwAMQPService = new BackgroundWorker(); 
+        static bool bBreak = false;
+        private void bgwAMQPService_DoWork(object sender, DoWorkEventArgs e)
+        { 
+            try
+            {
+                string serverAddress = "amqp://queue.statscore.com:5672/";
+                Uri uri = new Uri(serverAddress);
+                ConnectionFactory cf = new ConnectionFactory();
+                cf.Uri = uri;
+                cf.HostName = "queue.statscore.com";
+                cf.Port = 5672;
+                cf.UserName = "telecom-digital-data-limited";
+                cf.Password = "Eb76sQDkn9oZEki5L9QreKpaPmD3GbuuW2I";
+                cf.VirtualHost = "statscore";
+                cf.RequestedHeartbeat = 0;
+                using (IConnection conn = cf.CreateConnection())
+                {
+                    using (IModel channel = conn.CreateModel())
+                    {
+                        //var consumer = new EventingBasicConsumer(channel);
+                        //consumer.Received += (model, ea) =>
+                        //{
+                        //    var message = Encoding.UTF8.GetString(ea.Body);
+                        //    string strName = "amqp" + DateTime.Now.ToString("HHmmssffffff");
+                        //    Files.WriteJson(strName, message);
+                        //    //if (bBreak)
+                        //    //{
+                        //    //    /// Files.WriteLog("Stop AMQPService.");
+                        //    //   // break;
+                        //    //}
+                        //};
+                        //channel.BasicConsume("telecom-digital-data-limited", true, consumer);
+
+                        var consumer = new QueueingBasicConsumer(channel);
+                        channel.BasicConsume("telecom-digital-data-limited", true, consumer);
+                        while (true)
+                        {
+                            var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+                            var body = ea.Body;
+                            var message = Encoding.UTF8.GetString(body);
+                            string strName = "amqp" + DateTime.Now.ToString("HHmmssfffff");
+                            Files.WriteJson(strName, message);
+                            if (bBreak)
+                            {
+                                /// Files.WriteLog(" Stop AMQPService.");
+                                break;
+                            }
+                            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(2));
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError(exp.Message); 
+            }
+        }
+
+        private void DataOfScouts_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //if (bgwAMQPService.IsBusy)
+            //{ 
+            //    Files.WriteLog(" Dispose AMQPService.");
+            //    bgwAMQPService.CancelAsync();
+            //}
+
+            //bgwAMQPService.Dispose();
+        }
+    }
 
 
     class utc

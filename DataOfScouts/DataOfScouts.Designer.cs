@@ -92,6 +92,7 @@ namespace DataOfScouts
             this.tsbGet = new System.Windows.Forms.ToolStripButton();
             this.cmsBook = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miBook = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsBooked = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabControl1.SuspendLayout();
             this.tpAuthorization.SuspendLayout();
             this.gbAuthorization.SuspendLayout();
@@ -763,6 +764,12 @@ namespace DataOfScouts
             this.miBook.Size = new System.Drawing.Size(118, 28);
             this.miBook.Text = "Book";
             // 
+            // cmsBooked
+            // 
+            this.cmsBooked.Name = "cmsBooked";
+            this.cmsBooked.Size = new System.Drawing.Size(61, 4);
+            this.cmsBooked.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsBooked_ItemClicked);
+            // 
             // DataOfScouts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -773,7 +780,11 @@ namespace DataOfScouts
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DataOfScouts";
-            this.Text = Directory.GetCurrentDirectory() + @"\DataOfScouts";
+            this.Text = "D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\Data" +
+    "OfScouts";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DataOfScouts_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DataOfScouts_FormClosed);
+            this.Load += new System.EventHandler(this.DataOfScouts_Load);
             this.tabControl1.ResumeLayout(false);
             this.tpAuthorization.ResumeLayout(false);
             this.tpAuthorization.PerformLayout();
@@ -873,6 +884,7 @@ namespace DataOfScouts
         private MasterDetailSample.MasterControl dgvBookedEvent;
         private System.Windows.Forms.ToolStripButton tsbGet2;
         private System.Windows.Forms.ContextMenuStrip cmsBook;
+        private System.Windows.Forms.ContextMenuStrip cmsBooked;
         private System.Windows.Forms.ToolStripMenuItem miBook;
     }
 }

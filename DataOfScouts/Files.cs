@@ -216,7 +216,22 @@ namespace FileLog
                 files.Close();
             }
         }
-
+        public static void WriteJson(string name, string sXmlMsg)
+        {
+            Files files = new Files();
+            lock (files)
+            {
+                files.FilePath = AppDomain.CurrentDomain.BaseDirectory.ToString() + "XmlFolder" + DateTime.Now.ToString("yyyyMMdd") + "\\";
+                if (!Directory.Exists(files.FilePath))
+                {
+                    Directory.CreateDirectory(files.FilePath);
+                }
+                files.FileName = name + ".json";
+                files.Open();
+                files.Write(sXmlMsg);
+                files.Close();
+            }
+        }
         public static void UpdateConfig(string AppKey, string AppValue)
         {
             XmlDocument document = new XmlDocument();
