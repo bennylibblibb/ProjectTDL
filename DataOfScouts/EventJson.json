@@ -1,0 +1,559 @@
+{
+  "id": 182056080,
+  "type": "event",
+  "source": 1628,
+  "ut": 1541587695,
+  "data": {
+    "event": {
+      "id": 2632313,
+      "action": "update",
+      "start_date": "2018-11-07 10:00",
+      "ft_only": "no",
+      "coverage_type": "from_tv",
+      "status_id": 9,
+      "sport_id": 5,
+      "day": null,
+      "neutral_venue": "no",
+      "item_status": "active",
+      "clock_time": 0,
+      "clock_status": "stopped",
+      "area_id": 62,
+      "competition_id": 1565,
+      "season_id": 32782,
+      "stage_id": 0,
+      "tour_id": null,
+      "gender": "male",
+      "bet_status": "active",
+      "relation_status": "not_started",
+      "status_type": "live",
+      "name": "Telavi - Torpedo Kutaisi",
+      "round_id": 207,
+      "round_name": "Semi Finals",
+      "scoutsfeed": "no",
+      "details": [
+        {
+          "id": 8,
+          "value": null
+        },
+        {
+          "id": 16,
+          "value": 45
+        },
+        {
+          "id": 17,
+          "value": 2
+        },
+        {
+          "id": 19,
+          "value": "2018-11-07 10:02"
+        },
+        {
+          "id": 20,
+          "value": null
+        },
+        {
+          "id": 36,
+          "value": null
+        },
+        {
+          "id": 44,
+          "value": null
+        },
+        {
+          "id": 45,
+          "value": null
+        },
+        {
+          "id": 50,
+          "value": 15
+        },
+        {
+          "id": 58,
+          "value": "No Extra Time"
+        },
+        {
+          "id": 124,
+          "value": "up"
+        },
+        {
+          "id": 141,
+          "value": null
+        },
+        {
+          "id": 150,
+          "value": null
+        },
+        {
+          "id": 151,
+          "value": null
+        },
+        {
+          "id": 160,
+          "value": "yes"
+        },
+        {
+          "id": 168,
+          "value": 45
+        },
+        {
+          "id": 169,
+          "value": 15
+        },
+        {
+          "id": 170,
+          "value": 2
+        },
+        {
+          "id": 178,
+          "value": "no"
+        },
+        {
+          "id": 201,
+          "value": null
+        },
+        {
+          "id": 202,
+          "value": null
+        },
+        {
+          "id": 203,
+          "value": null
+        },
+        {
+          "id": 204,
+          "value": null
+        },
+        {
+          "id": 205,
+          "value": "no"
+        }
+      ],
+      "participants": [
+        {
+          "id": 1028219,
+          "counter": 1,
+          "name": "FC Telavi",
+          "short_name": "Telavi",
+          "acronym": "TEL",
+          "area_id": 62,
+          "area_name": "Georgia",
+          "area_code": "GEO",
+          "ut": 1518940537,
+          "stats": [
+            {
+              "id": 8,
+              "value": 0
+            },
+            {
+              "id": 9,
+              "value": 0
+            },
+            {
+              "id": 10,
+              "value": 59
+            },
+            {
+              "id": 11,
+              "value": 42
+            },
+            {
+              "id": 13,
+              "value": 1
+            },
+            {
+              "id": 14,
+              "value": 0
+            },
+            {
+              "id": 15,
+              "value": 0
+            },
+            {
+              "id": 16,
+              "value": 0
+            },
+            {
+              "id": 17,
+              "value": 0
+            },
+            {
+              "id": 18,
+              "value": 0
+            },
+            {
+              "id": 19,
+              "value": 6
+            },
+            {
+              "id": 20,
+              "value": 2
+            },
+            {
+              "id": 21,
+              "value": 4
+            },
+            {
+              "id": 22,
+              "value": 0
+            },
+            {
+              "id": 23,
+              "value": 0
+            },
+            {
+              "id": 24,
+              "value": 1
+            },
+            {
+              "id": 25,
+              "value": 7
+            },
+            {
+              "id": 26,
+              "value": 0
+            },
+            {
+              "id": 27,
+              "value": 0
+            },
+            {
+              "id": 28,
+              "value": 0
+            },
+            {
+              "id": 29,
+              "value": 0
+            },
+            {
+              "id": 30,
+              "value": 7
+            },
+            {
+              "id": 31,
+              "value": 0
+            },
+            {
+              "id": 32,
+              "value": 0
+            },
+            {
+              "id": 33,
+              "value": 0
+            },
+            {
+              "id": 34,
+              "value": 0
+            },
+            {
+              "id": 40,
+              "value": 0
+            },
+            {
+              "id": 639,
+              "value": 0
+            },
+            {
+              "id": 697,
+              "value": 0
+            },
+            {
+              "id": 716,
+              "value": null
+            },
+            {
+              "id": 718,
+              "value": null
+            },
+            {
+              "id": 772,
+              "value": 0
+            },
+            {
+              "id": 773,
+              "value": 0
+            },
+            {
+              "id": 774,
+              "value": 0
+            },
+            {
+              "id": 775,
+              "value": 0
+            },
+            {
+              "id": 776,
+              "value": 0
+            },
+            {
+              "id": 777,
+              "value": 0
+            },
+            {
+              "id": 778,
+              "value": 0
+            },
+            {
+              "id": 779,
+              "value": 0
+            }
+          ],
+          "results": [
+            {
+              "id": 2,
+              "value": 0
+            },
+            {
+              "id": 3,
+              "value": 0
+            },
+            {
+              "id": 4,
+              "value": 0
+            },
+            {
+              "id": 5,
+              "value": null
+            },
+            {
+              "id": 7,
+              "value": null
+            },
+            {
+              "id": 104,
+              "value": null
+            },
+            {
+              "id": 133,
+              "value": null
+            },
+            {
+              "id": 134,
+              "value": null
+            },
+            {
+              "id": 411,
+              "value": 0
+            },
+            {
+              "id": 412,
+              "value": 0
+            }
+          ],
+          "subparticipants": []
+        },
+        {
+          "id": 138593,
+          "counter": 2,
+          "name": "FC Torpedo Kutaisi",
+          "short_name": "Torpedo Kutaisi",
+          "acronym": "TOR",
+          "area_id": 62,
+          "area_name": "Georgia",
+          "area_code": "GEO",
+          "ut": 1457611007,
+          "stats": [
+            {
+              "id": 8,
+              "value": 0
+            },
+            {
+              "id": 9,
+              "value": 0
+            },
+            {
+              "id": 10,
+              "value": 57
+            },
+            {
+              "id": 11,
+              "value": 48
+            },
+            {
+              "id": 13,
+              "value": 2
+            },
+            {
+              "id": 14,
+              "value": 0
+            },
+            {
+              "id": 15,
+              "value": 0
+            },
+            {
+              "id": 16,
+              "value": 0
+            },
+            {
+              "id": 17,
+              "value": 0
+            },
+            {
+              "id": 18,
+              "value": 0
+            },
+            {
+              "id": 19,
+              "value": 8
+            },
+            {
+              "id": 20,
+              "value": 2
+            },
+            {
+              "id": 21,
+              "value": 5
+            },
+            {
+              "id": 22,
+              "value": 0
+            },
+            {
+              "id": 23,
+              "value": 0
+            },
+            {
+              "id": 24,
+              "value": 2
+            },
+            {
+              "id": 25,
+              "value": 6
+            },
+            {
+              "id": 26,
+              "value": 0
+            },
+            {
+              "id": 27,
+              "value": 0
+            },
+            {
+              "id": 28,
+              "value": 1
+            },
+            {
+              "id": 29,
+              "value": 0
+            },
+            {
+              "id": 30,
+              "value": 5
+            },
+            {
+              "id": 31,
+              "value": 0
+            },
+            {
+              "id": 32,
+              "value": 0
+            },
+            {
+              "id": 33,
+              "value": 0
+            },
+            {
+              "id": 34,
+              "value": 0
+            },
+            {
+              "id": 40,
+              "value": 0
+            },
+            {
+              "id": 639,
+              "value": 0
+            },
+            {
+              "id": 697,
+              "value": 0
+            },
+            {
+              "id": 716,
+              "value": null
+            },
+            {
+              "id": 718,
+              "value": null
+            },
+            {
+              "id": 772,
+              "value": 1
+            },
+            {
+              "id": 773,
+              "value": 0
+            },
+            {
+              "id": 774,
+              "value": 0
+            },
+            {
+              "id": 775,
+              "value": 0
+            },
+            {
+              "id": 776,
+              "value": 0
+            },
+            {
+              "id": 777,
+              "value": 0
+            },
+            {
+              "id": 778,
+              "value": 0
+            },
+            {
+              "id": 779,
+              "value": 0
+            }
+          ],
+          "results": [
+            {
+              "id": 2,
+              "value": 1
+            },
+            {
+              "id": 3,
+              "value": 1
+            },
+            {
+              "id": 4,
+              "value": 1
+            },
+            {
+              "id": 5,
+              "value": null
+            },
+            {
+              "id": 7,
+              "value": null
+            },
+            {
+              "id": 104,
+              "value": null
+            },
+            {
+              "id": 133,
+              "value": null
+            },
+            {
+              "id": 134,
+              "value": null
+            },
+            {
+              "id": 411,
+              "value": 0
+            },
+            {
+              "id": 412,
+              "value": 0
+            }
+          ],
+          "subparticipants": []
+        }
+      ]
+    }
+  }
+}

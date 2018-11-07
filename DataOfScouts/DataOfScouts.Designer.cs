@@ -34,10 +34,9 @@ namespace DataOfScouts
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataOfScouts));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpAuthorization = new System.Windows.Forms.TabPage();
-            this.lbResults = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.lstStatus = new System.Windows.Forms.ListBox();
             this.gbAuthorization = new System.Windows.Forms.GroupBox();
+            this.lbResults = new System.Windows.Forms.Label();
             this.lbToken = new System.Windows.Forms.Label();
             this.lbAuthorization = new System.Windows.Forms.Label();
             this.tpAreas = new System.Windows.Forms.TabPage();
@@ -148,9 +147,7 @@ namespace DataOfScouts
             // 
             // tpAuthorization
             // 
-            this.tpAuthorization.Controls.Add(this.lbResults);
-            this.tpAuthorization.Controls.Add(this.textBox1);
-            this.tpAuthorization.Controls.Add(this.button1);
+            this.tpAuthorization.Controls.Add(this.lstStatus);
             this.tpAuthorization.Controls.Add(this.gbAuthorization);
             this.tpAuthorization.Location = new System.Drawing.Point(4, 29);
             this.tpAuthorization.Name = "tpAuthorization";
@@ -159,56 +156,46 @@ namespace DataOfScouts
             this.tpAuthorization.Text = "Authorization";
             this.tpAuthorization.UseVisualStyleBackColor = true;
             // 
-            // lbResults
+            // lstStatus
             // 
-            this.lbResults.Location = new System.Drawing.Point(29, 232);
-            this.lbResults.Name = "lbResults";
-            this.lbResults.Size = new System.Drawing.Size(479, 248);
-            this.lbResults.TabIndex = 3;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(125, 175);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 26);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.Visible = false;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(4, 173);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(80, 28);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.lstStatus.FormattingEnabled = true;
+            this.lstStatus.ItemHeight = 20;
+            this.lstStatus.Location = new System.Drawing.Point(3, 3);
+            this.lstStatus.Name = "lstStatus";
+            this.lstStatus.Size = new System.Drawing.Size(737, 484);
+            this.lstStatus.TabIndex = 1;
             // 
             // gbAuthorization
             // 
+            this.gbAuthorization.Controls.Add(this.lbResults);
             this.gbAuthorization.Controls.Add(this.lbToken);
             this.gbAuthorization.Controls.Add(this.lbAuthorization);
-            this.gbAuthorization.Location = new System.Drawing.Point(3, 17);
+            this.gbAuthorization.Location = new System.Drawing.Point(785, 200);
             this.gbAuthorization.Name = "gbAuthorization";
-            this.gbAuthorization.Size = new System.Drawing.Size(505, 139);
+            this.gbAuthorization.Size = new System.Drawing.Size(144, 99);
             this.gbAuthorization.TabIndex = 0;
             this.gbAuthorization.TabStop = false;
+            this.gbAuthorization.Visible = false;
+            // 
+            // lbResults
+            // 
+            this.lbResults.Location = new System.Drawing.Point(116, 32);
+            this.lbResults.Name = "lbResults";
+            this.lbResults.Size = new System.Drawing.Size(338, 86);
+            this.lbResults.TabIndex = 3;
             // 
             // lbToken
             // 
-            this.lbToken.AutoSize = true;
-            this.lbToken.Location = new System.Drawing.Point(26, 82);
+            this.lbToken.Location = new System.Drawing.Point(22, 59);
             this.lbToken.Name = "lbToken";
-            this.lbToken.Size = new System.Drawing.Size(0, 20);
+            this.lbToken.Size = new System.Drawing.Size(215, 20);
             this.lbToken.TabIndex = 1;
             // 
             // lbAuthorization
             // 
-            this.lbAuthorization.AutoSize = true;
             this.lbAuthorization.Location = new System.Drawing.Point(22, 32);
             this.lbAuthorization.Name = "lbAuthorization";
-            this.lbAuthorization.Size = new System.Drawing.Size(0, 20);
+            this.lbAuthorization.Size = new System.Drawing.Size(88, 20);
             this.lbAuthorization.TabIndex = 0;
             // 
             // tpAreas
@@ -780,16 +767,13 @@ namespace DataOfScouts
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DataOfScouts";
-            this.Text = "D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\Data" +
-    "OfScouts";
+            this.Text = Directory.GetCurrentDirectory() + @"\DataOfScouts";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DataOfScouts_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DataOfScouts_FormClosed);
             this.Load += new System.EventHandler(this.DataOfScouts_Load);
             this.tabControl1.ResumeLayout(false);
             this.tpAuthorization.ResumeLayout(false);
-            this.tpAuthorization.PerformLayout();
             this.gbAuthorization.ResumeLayout(false);
-            this.gbAuthorization.PerformLayout();
             this.tpAreas.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAreas)).EndInit();
             this.tpCompetitions.ResumeLayout(false);
@@ -876,8 +860,6 @@ namespace DataOfScouts
         private System.Windows.Forms.DataGridView dgvTeam;
         private System.Windows.Forms.TabPage tpPlayer;
         private System.Windows.Forms.DataGridView dgvPlayer;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label lbResults;
         private System.Windows.Forms.TabPage tpBook;
         //private System.Windows.Forms.DataGridView dgvBookedEvent;
@@ -886,6 +868,7 @@ namespace DataOfScouts
         private System.Windows.Forms.ContextMenuStrip cmsBook;
         private System.Windows.Forms.ContextMenuStrip cmsBooked;
         private System.Windows.Forms.ToolStripMenuItem miBook;
+        private System.Windows.Forms.ListBox lstStatus;
     }
 }
 
