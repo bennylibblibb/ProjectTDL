@@ -1,8 +1,8 @@
 {
-  "id": 182056080,
+  "id": 182055549,
   "type": "event",
   "source": 1628,
-  "ut": 1541587695,
+  "ut": 1541587629,
   "data": {
     "event": {
       "id": 2632313,
@@ -10,13 +10,13 @@
       "start_date": "2018-11-07 10:00",
       "ft_only": "no",
       "coverage_type": "from_tv",
-      "status_id": 9,
+      "status_id": 33,
       "sport_id": 5,
       "day": null,
       "neutral_venue": "no",
       "item_status": "active",
-      "clock_time": 0,
-      "clock_status": "stopped",
+      "clock_time": 2695,
+      "clock_status": "running",
       "area_id": 62,
       "competition_id": 1565,
       "season_id": 32782,
@@ -150,7 +150,7 @@
             },
             {
               "id": 10,
-              "value": 59
+              "value": 58
             },
             {
               "id": 11,
@@ -362,11 +362,11 @@
             },
             {
               "id": 10,
-              "value": 57
+              "value": 55
             },
             {
               "id": 11,
-              "value": 48
+              "value": 47
             },
             {
               "id": 13,
@@ -414,7 +414,7 @@
             },
             {
               "id": 24,
-              "value": 2
+              "value": 1
             },
             {
               "id": 25,
