@@ -126,8 +126,31 @@ namespace FileLog
                 files.Close();
             }
         }
+        public static void WriteLogNR(string sEventMsg)
+        {
+            try
+            {
+                Files files = new Files();
+                lock (files)
+                {
+                    files.FilePath = AppDomain.CurrentDomain.BaseDirectory.ToString() + "EventFolder\\";
+                    if (!Directory.Exists(files.FilePath))
+                    {
+                        Directory.CreateDirectory(files.FilePath);
+                    }
+                    files.SetFileName(0, "Evt.txt");
+                    files.Open();
+                    files.Write(sEventMsg);
+                    files.Close();
+                }
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss fff ") + exp.Message);
+            }
+        }
 
-        public static void WriteLog(string sEventMsg)
+            public static void WriteLog(string sEventMsg)
         {
             try
             {

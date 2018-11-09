@@ -11,7 +11,7 @@ namespace DataOfScouts
 {
     public class JsonUtil
     {
-        public static object Deserialize(string message)
+        public static object Deserialize(Type type, string message)
         {
             try
             {
@@ -20,7 +20,18 @@ namespace DataOfScouts
                     return null;
                 }
                 var objJSON = JObject.Parse(message);
-                return JsonConvert.DeserializeObject<DOSEventJson.api>(objJSON.ToString());
+                if (typeof(DOSEventJson.EventJson) == type)
+                {
+                    return JsonConvert.DeserializeObject<DOSEventJson.EventJson>(objJSON.ToString());
+                }
+                else if (typeof(DOSIncidentJson.IncidentJson) == type)
+                {
+                    return JsonConvert.DeserializeObject<DOSIncidentJson.IncidentJson>(objJSON.ToString());
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception e)
             {

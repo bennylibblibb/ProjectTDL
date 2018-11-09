@@ -1,6 +1,6 @@
-﻿namespace DOSEventJson
+﻿namespace DOSIncidentJson
 {
-    public class EventJson
+    public class IncidentJson
     {
         public int id { get; set; }
         public string type { get; set; }
@@ -11,7 +11,32 @@
 
     public class Data
     {
-        public Event  @event { get; set; }
+        public Incident incident { get; set; }
+        public Event @event { get; set; }
+    }
+
+    public class Incident
+    {
+        public string id { get; set; }
+        public string action { get; set; }
+        public int incident_id { get; set; }
+        public string incident_name { get; set; }
+        public object participant_id { get; set; }
+        public object participant_name { get; set; }
+        public object subparticipant_id { get; set; }
+        public object subparticipant_name { get; set; }
+        public object info { get; set; }
+        public string important { get; set; }
+        public string important_for_trader { get; set; }
+        public object add_data { get; set; }
+        public string show_popup { get; set; }
+        public string show_scores { get; set; }
+        public string show_action { get; set; }
+        public string show_time { get; set; }
+        public string show_on_timeline { get; set; }
+        public string event_time { get; set; }
+        public int event_status_id { get; set; }
+        public string event_status_name { get; set; }
     }
 
     public class Event
@@ -26,7 +51,7 @@
         public object day { get; set; }
         public string neutral_venue { get; set; }
         public string item_status { get; set; }
-        public object clock_time { get; set; }
+        public int clock_time { get; set; }
         public string clock_status { get; set; }
         public int area_id { get; set; }
         public int competition_id { get; set; }
@@ -40,7 +65,6 @@
         public string name { get; set; }
         public object round_id { get; set; }
         public object round_name { get; set; }
-        public string scoutsfeed { get; set; }
         public Detail[] details { get; set; }
         public Participant[] participants { get; set; }
     }
@@ -64,19 +88,18 @@
         public int ut { get; set; }
         public Stat[] stats { get; set; }
         public Result[] results { get; set; }
-        public object[] subparticipants { get; set; }
     }
 
     public class Stat
     {
         public int id { get; set; }
-        public object value { get; set; }
+        public int? value { get; set; }
     }
 
     public class Result
     {
         public int id { get; set; }
-        public object value { get; set; }
+        public int? value { get; set; }
     }
 
 }

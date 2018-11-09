@@ -96,6 +96,7 @@
       <DependentUpon>DataOfScouts.cs</DependentUpon>
     </Compile>
     <Compile Include="Files.cs" />
+    <Compile Include="XmlType\DOSIncidentJson.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,6 +130,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="EventJson.json" />
+    <None Include="index.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
