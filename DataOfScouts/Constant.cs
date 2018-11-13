@@ -17,7 +17,8 @@ namespace DataOfScouts
         public static int iPageSize =Convert .ToInt32(ConfigurationSettings.AppSettings["PageSize"]);
         public static int iQueryDays = Convert.ToInt32(ConfigurationSettings.AppSettings["QueryDays"]);
         public static string SyncHkjcDateTime = ConfigurationSettings.AppSettings["SyncHkjcDateTime"];
-         
+        public static bool JsonType = ConfigurationSettings.AppSettings["JsonType"].ToLower ()=="all"?false:true;
+        public static string GetTime = ConfigurationSettings.AppSettings["GetTime"];
     }
 
     public enum InformationType

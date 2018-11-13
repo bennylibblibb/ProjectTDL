@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms; 
 
 namespace DataOfScouts
@@ -13,7 +15,17 @@ namespace DataOfScouts
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DataOfScouts()); 
-        }  
+         
+            string name = Directory.GetCurrentDirectory().Replace(@"\", "");
+            Mutex mutex = new Mutex(false, name);
+            if (mutex.WaitOne(0, false))
+            {
+                Application.Run(new DataOfScouts());
+            }
+            else
+            {
+                MessageBox.Show("This Application is Already Running!");
+            }
+        } 
     }
 }
