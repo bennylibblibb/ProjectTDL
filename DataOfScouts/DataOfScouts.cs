@@ -6323,6 +6323,7 @@ namespace DataOfScouts
             }
             catch (Exception exp)
             {
+                Files.WriteError("bgwAMQPService_Completed(),error: " + exp.Message);
             }
         }
 
@@ -6354,6 +6355,7 @@ namespace DataOfScouts
             if (bBreak == true)
             {
                 bBreak = false;
+                Files.WriteLog(" Start AMQPService..");
                 bgwAMQPService.RunWorkerAsync();
             }
         }
@@ -6361,9 +6363,16 @@ namespace DataOfScouts
         private static System.Threading.Timer tTimer;
         private void TimerTask(object timerState)
         {
-            InsertData("events", true, this.bnAreas.Items[19].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
-            //var state = timerState as TimerState;
-            //Interlocked.Increment(ref state.Counter);
+            try
+            {
+                Files.WriteLog(" Auto task get events," + (this.bnAreas.Items[19].Text ==""? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 00:00:00" + "-" + (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 23:59:59");
+                InsertData("events", true, (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 00:00:00", (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 23:59:59");
+                //var state = timerState as TimerState;
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError("TimerTask(),error: " + exp.Message);
+            }      //Interlocked.Increment(ref state.Counter);
         }
         class TimerState
         {
