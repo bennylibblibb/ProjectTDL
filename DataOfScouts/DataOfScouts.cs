@@ -4793,7 +4793,7 @@ namespace DataOfScouts
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
                     // string queryString = "SELECT e.id,e.name FROM events e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.start_date and  e.start_date <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' and booked =true order by  e.start_date desc ";
-                    string queryString = "select a.id,a.name from(" +
+                    string queryString = "select a.id,a.name,a.booked_by from(" +
                                 "select* from events e  where '" + minTime.ToString("yyyy-MM-dd", null) + "'<=  e.start_date and  e.start_date <='" + maxTime.AddDays(1).ToString("yyyy-MM-dd", null) + "' and e.booked = true) a " +
                                 "where not exists(" +
                                 "select r.EMATCHID from EMATCHES r   where    r.EMATCHID is not  null and a.id = r.EMATCHID and '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  r.CMATCHDATETIME  and r.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by a.start_date)";
@@ -4810,15 +4810,19 @@ namespace DataOfScouts
                                 {
                                     fda.Fill(data);
                                     cmsBooked.Items.Clear();
+                                    cmsBooked.Items.Add(new ToolStripMenuItem()
+                                    {
+                                        Text = "Cancel Sync",
+                                        Tag = ""
+                                    });
                                     foreach (DataRow dr in data.Tables[0].Rows)
                                     {
                                         cmsBooked.Items.Add(new ToolStripMenuItem()
                                         {
-                                            Text = dr["id"].ToString() + " " + dr["Name"].ToString(),
+                                            Text = dr["id"].ToString() + " " + dr["Name"].ToString()+" "+ dr["booked_by"].ToString(),
                                             Tag = dr["id"].ToString()
                                         });
-                                    }
-
+                                    } 
                                 }
                             }
                         }
@@ -5396,15 +5400,14 @@ namespace DataOfScouts
                 using (FbCommand cmd = new FbCommand())
                 {
                     connection.Open();
-                    cmd.CommandText = "SYNCMANUAL_HKJCDATA";
+                    cmd.CommandText = "SYNC_MANUAL_HKJCDATA";
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Connection = connection;
-                    cmd.Parameters.Add("@Event_id", e.ClickedItem.Tag.ToString());
-                    cmd.Parameters.Add("@HKJCHOSTNAME", true);
-                    cmd.Parameters.Add("@HKJCGUESTNAME", DateTime.Now);
+                    cmd.Parameters.Add("@Event_id", e.ClickedItem.Tag.ToString()==""?null: e.ClickedItem.Tag.ToString());
+                    cmd.Parameters.Add("@HKJCHOSTNAME", dgvBookedEvent.SelectedRows[0].Cells[3].Value);
+                    cmd.Parameters.Add("@HKJCGUESTNAME", dgvBookedEvent.SelectedRows[0].Cells[4].Value);
                     int id = Convert.ToInt32(cmd.ExecuteScalar());
-                    Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
-
+                    Files.WriteLog((id > 0 ? "[Success] Manual sync " + e.ClickedItem.Text + " To " : id==0? "Cancel sync "+dgvBookedEvent.SelectedRows[0].Cells[0].Value+" ": "[Failure] Manual sync  " + e.ClickedItem.Text + " To ") + dgvBookedEvent.SelectedRows[0].Cells[3].Value + "/" + dgvBookedEvent.SelectedRows[0].Cells[4].Value);
                 }
                 connection.Close();
             }
@@ -5436,11 +5439,12 @@ namespace DataOfScouts
                         using (FbCommand cmd = new FbCommand())
                         {
                             connection.Open();
-                            cmd.CommandText = "Set_BookedEvent";
+                            cmd.CommandText = "Set_BookedEventBy";
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Connection = connection;
                             cmd.Parameters.Add("@ID", eventid);
                             cmd.Parameters.Add("@BOOKED", true);
+                            cmd.Parameters.Add("@BOOKED_BY", null);
                             cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                             int id = Convert.ToInt32(cmd.ExecuteScalar());
                             /// Files.WriteLog(id > 0 ? "[Success] Update Booked " + eventid : "[Failure] Update Booked " + eventid);
@@ -5452,6 +5456,26 @@ namespace DataOfScouts
                         connection.Close();
                     }
                     if (show) MessageBox.Show(eventid + " Booking already Exist.");
+                }
+                else if (errors.message == "You cannot book this event, it is not covered in this product")
+                {
+                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                    {
+                        using (FbCommand cmd = new FbCommand())
+                        {
+                            connection.Open();
+                            cmd.CommandText = "Set_BookedEventBy";
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Connection = connection;
+                            cmd.Parameters.Add("@ID", eventid);
+                            cmd.Parameters.Add("@BOOKED", false);
+                            cmd.Parameters.Add("@BOOKED_BY", "(UnBooked)");
+                            cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                            int id = Convert.ToInt32(cmd.ExecuteScalar());
+                            Files.WriteLog(id > 0 ? "[Success] Update Booked " + eventid : "[Failure] Update Booked " + eventid);
+                        }
+                        connection.Close();
+                    }
                 }
             }
             else
@@ -5465,11 +5489,12 @@ namespace DataOfScouts
                         using (FbCommand cmd = new FbCommand())
                         {
                             connection.Open();
-                            cmd.CommandText = "Set_BookedEvent";
+                            cmd.CommandText = "Set_BookedEventBy";
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Connection = connection;
                             cmd.Parameters.Add("@ID", sevent.id);
                             cmd.Parameters.Add("@BOOKED", true);
+                            cmd.Parameters.Add("@BOOKED_BY", null);
                             cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                             int id = Convert.ToInt32(cmd.ExecuteScalar());
                             Files.WriteLog(id > 0 ? "[Success] Booked " + eventid : "[Failure] Booked " + eventid);
@@ -5505,7 +5530,7 @@ namespace DataOfScouts
                 DOSBookedResults.apiError errors = apis.error;
                 if (errors != null)
                 {
-                    MessageBox.Show(errors.message);
+                      MessageBox.Show(errors.message);
                     Files.WriteLog("[Failure] " + e.ClickedItem.Text + ",Error: " + errors.message);
 
                     if (errors.message == "Booking already Exist")
@@ -5515,14 +5540,15 @@ namespace DataOfScouts
                             using (FbCommand cmd = new FbCommand())
                             {
                                 connection.Open();
-                                cmd.CommandText = "Set_BookedEvent";
+                                cmd.CommandText = "Set_BookedEventBy";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Connection = connection;
                                 cmd.Parameters.Add("@ID", e.ClickedItem.Tag.ToString());
                                 cmd.Parameters.Add("@BOOKED", true);
+                                cmd.Parameters.Add("@BOOKED_BY", null);
                                 cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                 int id = Convert.ToInt32(cmd.ExecuteScalar());
-                                Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
+                                //Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
                                 //if (id > 0)
                                 //{
                                 //    MessageBox.Show("[Success] Booked " + e.ClickedItem.Tag.ToString() + ".");
@@ -5531,7 +5557,28 @@ namespace DataOfScouts
                             connection.Close();
                         }
                     }
+                    else if (errors.message == "You cannot book this event, it is not covered in this product")
+                    {
+                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                        {
+                            using (FbCommand cmd = new FbCommand())
+                            {
+                                connection.Open();
+                                cmd.CommandText = "Set_BookedEventBy";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Connection = connection;
+                                cmd.Parameters.Add("@ID", e.ClickedItem.Tag.ToString());
+                                cmd.Parameters.Add("@BOOKED", false);
+                                cmd.Parameters.Add("@BOOKED_BY", "(UnBooked)");
+                                cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
+                            }
+                            connection.Close();
+                        }
+                    }
                 }
+                
                 else
                 {
                     DOSBookedResults.api apiEvents = XmlUtil.Deserialize(typeof(DOSBookedResults.api), strResponseValue) as DOSBookedResults.api;
@@ -5546,14 +5593,15 @@ namespace DataOfScouts
                             using (FbCommand cmd = new FbCommand())
                             {
                                 connection.Open();
-                                cmd.CommandText = "Set_BookedEvent";
+                                cmd.CommandText = "Set_BookedEventBy";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Connection = connection;
                                 cmd.Parameters.Add("@ID", sevent.id);
                                 cmd.Parameters.Add("@BOOKED", true);
+                                cmd.Parameters.Add("@BOOKED_BY", null);
                                 cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                 int id = Convert.ToInt32(cmd.ExecuteScalar());
-                                Files.WriteLog(id > 0 ? "[Success] " + e.ClickedItem.Text : "[Failure] " + e.ClickedItem.Text);
+                                Files.WriteLog(id > 0 ? "[Success] Booked " + e.ClickedItem.Text : "[Failure] Booked " + e.ClickedItem.Text);
                                 if (id > 0)
                                 {
                                     MessageBox.Show("[Success] Booked " + sevent.id + ".");
@@ -5562,18 +5610,7 @@ namespace DataOfScouts
                             connection.Close();
                         }
                     }
-                }
-
-                //if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
-                //// if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!");   ds = data;break; }
-
-                //DOSParticipants.api apis = XmlUtil.Deserialize(typeof(DOSParticipants.api), strResponseValue) as DOSParticipants.api;
-                //DOSParticipants.apiDataParticipant[] participants = (apis.data.Length == 0) ? null : apis.data[0];
-                ////  if (participants == null) return ds;
-                //if (participants == null) break;
-                //string strName = type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
-                //Files.WriteXml(strName, strResponseValue);
-
+                } 
             }
         }
 
@@ -6158,9 +6195,11 @@ namespace DataOfScouts
                                 }
                                 catch (EndOfStreamException endOfStreamException)
                                 {
-                                    Files.WriteLog("no message." + (strName != "" ? strName + ".json," : ""));
+                                    Files.WriteLog("No message." + (strName != "" ? strName + ".json," : ""));
                                     Files.WriteError("bgwAMQPService_DoWork(while true)," + (strName != "" ? strName + ".json," : "") + "error: " + endOfStreamException.Message);
                                     connection.Close();
+                                    bBreak = true;
+                                    e.Result = "No message,break.";
                                     break;
                                 }
                                 catch (Exception exp)
