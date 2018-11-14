@@ -558,7 +558,7 @@ namespace DataOfScouts
 
                                 using (FbCommand cmd2 = new FbCommand())
                                 {//maybe return booked or no
-                                    cmd2.CommandText = "Sync_HkjcData";
+                                    cmd2.CommandText = "Sync_HkjcData_Auto";
                                     cmd2.CommandType = CommandType.StoredProcedure;
                                     cmd2.Connection = connection;
                                     cmd2.Parameters.Add("@HOME_ID", id1);
@@ -566,7 +566,7 @@ namespace DataOfScouts
                                     cmd2.Parameters.Add("@HKJCHOSTNAME", strHkjcHostName);
                                     cmd2.Parameters.Add("@HKJCGUESTNAME", strHkjcGeustName);
                                     id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                    Files.WriteLog((id > 0 ? " [Success] " : (id == -2) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
+                                    Files.WriteLog((id > 0 ? " [Success] " : (id == 0) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
                                 }
 
                                 if (id > 0) BookEventAction(id.ToString(), false);
@@ -5393,25 +5393,37 @@ namespace DataOfScouts
 
         private void cmsBooked_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            string eventid = e.ClickedItem.Tag.ToString();
-            string eventsName = e.ClickedItem.Name;
-            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-            {
-                using (FbCommand cmd = new FbCommand())
-                {
-                    connection.Open();
-                    cmd.CommandText = "SYNC_MANUAL_HKJCDATA";
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Connection = connection;
-                    cmd.Parameters.Add("@Event_id", e.ClickedItem.Tag.ToString()==""?null: e.ClickedItem.Tag.ToString());
-                    cmd.Parameters.Add("@HKJCHOSTNAME", dgvBookedEvent.SelectedRows[0].Cells[3].Value);
-                    cmd.Parameters.Add("@HKJCGUESTNAME", dgvBookedEvent.SelectedRows[0].Cells[4].Value);
-                    int id = Convert.ToInt32(cmd.ExecuteScalar());
-                    Files.WriteLog((id > 0 ? "[Success] Manual sync " + e.ClickedItem.Text + " To " : id==0? "Cancel sync "+dgvBookedEvent.SelectedRows[0].Cells[0].Value+" ": "[Failure] Manual sync  " + e.ClickedItem.Text + " To ") + dgvBookedEvent.SelectedRows[0].Cells[3].Value + "/" + dgvBookedEvent.SelectedRows[0].Cells[4].Value);
-                }
-                connection.Close();
-            }
 
+            string eventid = e.ClickedItem.Tag.ToString();
+            string eventsName = e.ClickedItem.Text;
+            int id = -1;
+          if(MessageBox.Show("Are you sure " +(e.ClickedItem.Tag.ToString() != ""?"":" CANCEL ") + "sync "+ dgvBookedEvent.SelectedRows[0].Cells[3].Value + "/" + dgvBookedEvent.SelectedRows[0].Cells[4].Value + (e.ClickedItem.Tag.ToString() == "" ? "" : " to " + eventsName) + "?","Alert", MessageBoxButtons.OKCancel) == DialogResult.OK)
+             { 
+                using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                {
+                    using (FbCommand cmd = new FbCommand())
+                    {
+                        connection.Open();
+                        cmd.CommandText = "SYNC_MANUAL_HKJCDATA";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = connection;
+                        cmd.Parameters.Add("@Event_id", e.ClickedItem.Tag.ToString() == "" ? null : e.ClickedItem.Tag.ToString());
+                        cmd.Parameters.Add("@HKJCHOSTNAME", dgvBookedEvent.SelectedRows[0].Cells[3].Value);
+                        cmd.Parameters.Add("@HKJCGUESTNAME", dgvBookedEvent.SelectedRows[0].Cells[4].Value);
+                        id = Convert.ToInt32(cmd.ExecuteScalar());
+                        Files.WriteLog((id > 0 ? "[Success] Manual sync " + e.ClickedItem.Text + " To " : id == 0 ? "Cancel sync " + dgvBookedEvent.SelectedRows[0].Cells[0].Value + " " : "[Failure] Manual sync  " + e.ClickedItem.Text + " To ") + dgvBookedEvent.SelectedRows[0].Cells[3].Value + "/" + dgvBookedEvent.SelectedRows[0].Cells[4].Value);
+                    }
+                    connection.Close();
+                }
+                if (id > 0)
+                {
+                    dgvBookedEvent.SelectedRows[0].Cells[0].Value = id;
+                }
+                else if (id == 0 && e.ClickedItem.Tag.ToString() == "")
+                {
+                    dgvBookedEvent.SelectedRows[0].Cells[0].Value = DBNull.Value;
+                }
+            }
         }
 
         private bool BookEventAction(string eventid, bool show)
