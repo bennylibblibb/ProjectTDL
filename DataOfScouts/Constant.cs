@@ -19,6 +19,8 @@ namespace DataOfScouts
         public static string SyncHkjcDateTime = ConfigurationSettings.AppSettings["SyncHkjcDateTime"];
         public static bool JsonType = ConfigurationSettings.AppSettings["JsonType"].ToLower ()=="all"?false:true;
         public static string GetTime = ConfigurationSettings.AppSettings["GetTime"];
+        public static bool AutoBooked = ConfigurationSettings.AppSettings["AutoBooked"].ToLower() == "yes" ? false : true;
+         
     }
 
     public enum InformationType

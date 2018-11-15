@@ -2658,7 +2658,7 @@ namespace DataOfScouts
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             connection.Open();
-                            for (int i = 1; i < 2 && Convert.ToBoolean(arr[0]) == true; i++)
+                            for (int i = 1; i < 2 && Convert.ToBoolean(arr[0]) == true&& arr[1].ToString()!=""; i++)
                             {
                                 var responseValue = clientTest.GetAccessData(strToken, "events.show", arr[1]);
                                 var strResponseValue = responseValue.Result;
@@ -4651,317 +4651,357 @@ namespace DataOfScouts
             else if (tabControl1.SelectedTab == tpBook)
             {
                 DataSet ds = new DataSet();
-                DataSet ds1 = new DataSet();
-                DataSet ds2 = new DataSet();
-                using (FbConnection connection = new FbConnection(AppFlag.HkjcDBConn))
+                if (sender == null)
                 {
-                    //   string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
-                    //  string queryString = "SELECT e.* FROM matchlist e " + (AppFlag.SyncHkjcDateTime ==""?"": "where e.CTIMESTAMP > '"+ AppFlag.SyncHkjcDateTime+"'") + " order by e.CTIMESTAMP desc";
-                    string queryString = "SELECT e.* FROM matchlist e   order by e.CMATCHDATETIME desc";
-
-                    using (FbCommand cmd = new FbCommand(queryString, connection))
+                    DataSet ds1 = new DataSet();
+                    DataSet ds2 = new DataSet();
+                    using (FbConnection connection = new FbConnection(AppFlag.HkjcDBConn))
                     {
-                        using (FbCommandBuilder fcb = new FbCommandBuilder())
+                        //   string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
+                        //  string queryString = "SELECT e.* FROM matchlist e " + (AppFlag.SyncHkjcDateTime ==""?"": "where e.CTIMESTAMP > '"+ AppFlag.SyncHkjcDateTime+"'") + " order by e.CTIMESTAMP desc";
+                        string queryString = "SELECT e.* FROM matchlist e   order by e.CMATCHDATETIME desc";
+
+                        using (FbCommand cmd = new FbCommand(queryString, connection))
                         {
-                            using (FbDataAdapter fda = new FbDataAdapter())
+                            using (FbCommandBuilder fcb = new FbCommandBuilder())
                             {
-                                fda.SelectCommand = cmd;
-                                fcb.DataAdapter = fda;
-                                using (DataSet data = new DataSet())
+                                using (FbDataAdapter fda = new FbDataAdapter())
                                 {
-                                    data.Tables.Add(new DataTable("HKjcMatch"));
-                                    fda.Fill(data.Tables["HKjcMatch"]);
-                                    ds1 = data;
+                                    fda.SelectCommand = cmd;
+                                    fcb.DataAdapter = fda;
+                                    using (DataSet data = new DataSet())
+                                    {
+                                        data.Tables.Add(new DataTable("HKjcMatch"));
+                                        fda.Fill(data.Tables["HKjcMatch"]);
+                                        ds1 = data;
+                                    }
                                 }
                             }
                         }
+                        connection.Close();
                     }
-                    connection.Close();
-                }
 
-                var culture = new System.Globalization.CultureInfo("zh-HK");
-                DateTime maxTime = DateTime.MinValue;
-                DateTime minTime = DateTime.MaxValue;
+                    var culture = new System.Globalization.CultureInfo("zh-HK");
+                    DateTime maxTime = DateTime.MinValue;
+                    DateTime minTime = DateTime.MaxValue;
 
-                if (ds1.Tables["HKjcMatch"].Rows.Count > 0)
-                {
-                    maxTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CMATCHDATETIME"]);
-                    minTime = Convert.ToDateTime(ds1.Tables[0].Rows[ds1.Tables[0].Rows.Count - 1]["CMATCHDATETIME"]);
-                    this.bnAreas.Items[17].Text = minTime.ToString("yyyy-MM-dd", culture);
-                    this.bnAreas.Items[19].Text = maxTime.ToString("yyyy-MM-dd", culture);
-                }
+                    if (ds1.Tables["HKjcMatch"].Rows.Count > 0)
+                    {
+                        maxTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CMATCHDATETIME"]);
+                        minTime = Convert.ToDateTime(ds1.Tables[0].Rows[ds1.Tables[0].Rows.Count - 1]["CMATCHDATETIME"]);
+                        this.bnAreas.Items[17].Text = minTime.ToString("yyyy-MM-dd", culture);
+                        this.bnAreas.Items[19].Text = maxTime.ToString("yyyy-MM-dd", culture);
+                    }
 
-                // DataRow[] rows = ds1.Tables[0].Select((AppFlag.SyncHkjcDateTime == "" ? "" : "CTIMESTAMP >'" + AppFlag.SyncHkjcDateTime + "'"), "CTIMESTAMP DESC");
-                DataTable table = ds1.Tables[0];
-                if (table.Rows.Count > 0)
-                {
-                    table.DefaultView.RowFilter = (AppFlag.SyncHkjcDateTime == "" ? "" : "CTIMESTAMP >'" + AppFlag.SyncHkjcDateTime + "'");
-                    table.DefaultView.Sort = "CTIMESTAMP DESC";
-                    table = table.DefaultView.ToTable();
+                    // DataRow[] rows = ds1.Tables[0].Select((AppFlag.SyncHkjcDateTime == "" ? "" : "CTIMESTAMP >'" + AppFlag.SyncHkjcDateTime + "'"), "CTIMESTAMP DESC");
+                    DataTable table = ds1.Tables[0];
+                    if (table.Rows.Count > 0)
+                    {
+                        table.DefaultView.RowFilter = (AppFlag.SyncHkjcDateTime == "" ? "" : "CTIMESTAMP >'" + AppFlag.SyncHkjcDateTime + "'");
+                        table.DefaultView.Sort = "CTIMESTAMP DESC";
+                        table = table.DefaultView.ToTable();
+                    }
+                    if (table.Rows.Count > 0)
+                    {
+                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                        {
+                            connection.Open();
+                            foreach (DataRow dr1 in table.Rows)
+                            {
+                                using (FbCommand cmd2 = new FbCommand())
+                                {
+                                    cmd2.CommandText = "ADD_HKJCMATCH4";
+                                    cmd2.CommandType = CommandType.StoredProcedure;
+                                    cmd2.Connection = connection;
+                                    cmd2.Parameters.Add("@EMATCHID", null);
+                                    cmd2.Parameters.Add("@HKJCMATCHNO", dr1["IMATCH_NO"]);
+                                    cmd2.Parameters.Add("@HKJCDAYCODE", dr1["CMATCH_DAY_CODE"]);
+                                    cmd2.Parameters.Add("@CMATCHDATETIME", dr1["CMATCHDATETIME"]);
+                                    cmd2.Parameters.Add("@HKJCHOSTID", dr1["IHOME_TEAM_CODE"]);
+                                    cmd2.Parameters.Add("@HKJCGUESTID", dr1["IAWAY_TEAM_CODE"]);
+                                    cmd2.Parameters.Add("@HKJCHOSTNAME", dr1["CHOME_TEAM_ENG_NAME"]);
+                                    cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
+                                    cmd2.Parameters.Add("@STATUS", dr1["ISTATUS"]);
+                                    cmd2.Parameters.Add("@MAPPINGSTATUS", false);
+                                    cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
+                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                    //  Files.WriteLog((id > 0 ? " [Success]" : "[Failure]") + "Insert EMATCHES[" + dr1["IMATCH_NO"] + "  " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + " " + dr1["CAWAY_TEAM_ENG_NAME"]);
+                                    Files.WriteLog((id < 1 ? " [Success] Insert EMATCHES " : "Match exist ") + "[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + "/" + dr1["CAWAY_TEAM_ENG_NAME"]);
+                                }
+                            }
+                            connection.Close();
+
+                            Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
+                            AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
+
+                            RunSyncHkjcAndBook2(table);
+                            //RunSyncHkjcAndBook(ds1);
+                            // await SyncHkjcAndBook(ds);
+                            // await RunBookEventAction();
+                        }
+                    }
+
+                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                    {
+                        // string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
+                        string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
+                        using (FbCommand cmd = new FbCommand(queryString, connection))
+                        {
+                            using (FbCommandBuilder fcb = new FbCommandBuilder())
+                            {
+                                using (FbDataAdapter fda = new FbDataAdapter())
+                                {
+                                    fda.SelectCommand = cmd;
+                                    fcb.DataAdapter = fda;
+                                    using (DataSet data = new DataSet())
+                                    {
+                                        data.Tables.Add(new DataTable("SocoutMatch"));
+                                        fda.Fill(data.Tables["SocoutMatch"]);
+                                        ds2 = data;
+                                    }
+                                    //if (ds2.Tables["SocoutMatch"].Rows.Count == 0 && ds1.Tables[0].Rows.Count > 0)
+                                    //{
+                                    //    foreach (DataRow dr1 in ds1.Tables[0].Rows)
+                                    //    {
+                                    //        DataRow dr = ds2.Tables[0].NewRow();
+                                    //        dr[1] = dr1["IHOME_TEAM_CODE"];
+                                    //        dr[2] = dr1["IAWAY_TEAM_CODE"];
+                                    //        dr[3] = dr1["CHOME_TEAM_ENG_NAME"];
+                                    //        dr[4] = dr1["CAWAY_TEAM_ENG_NAME"];
+                                    //        dr[5] = dr1["CMATCH_DAY_CODE"];
+                                    //        dr[6] = dr1["IMATCH_NO"];
+                                    //        dr[7] = dr1["ISTATUS"];
+                                    //        dr[8] = dr1["CMATCHDATETIME"];
+                                    //        dr[9] = false;
+                                    //        dr[10] = dr1["CTIMESTAMP"];
+                                    //        ds2.Tables[0].Rows.Add(dr);
+                                    //    }
+                                    //    int count = fda.Update(ds2.Tables[0]);
+                                    //    // ds = ds2;
+                                    //    if (count > -1)
+                                    //    {
+                                    //        Files.WriteLog("[Success] Insert EMATCHES[" + count + "] ");
+                                    //        var culture = new System.Globalization.CultureInfo("zh-HK");
+                                    //        Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(ds1.Tables[0].Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss fff", culture));
+                                    //        AppFlag.SyncHkjcDateTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss fff", culture);
+                                    //    }
+                                    //}
+                                    //else if (ds2.Tables["SocoutMatch"].Rows.Count > 0 && ds1.Tables[0].Rows.Count > 0)
+                                    //{
+
+                                    //}
+
+                                    ds = ds2;
+                                    // if(ds1.Tables["HKjcMatch"])
+                                }
+                            }
+                        }
+                        connection.Close();
+                    }
+
+                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                    {
+                        string queryString = "";
+                        // string queryString = "SELECT e.id,e.name FROM events e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.start_date and  e.start_date <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' and booked =true order by  e.start_date desc ";
+                        if (AppFlag.AutoBooked)
+                        {
+                            queryString = "select a.id,a.name,a.booked_by from(" +
+                                       "select* from events e  where '" + minTime.ToString("yyyy-MM-dd", null) + "'<=  e.start_date and  e.start_date <='" + maxTime.AddDays(1).ToString("yyyy-MM-dd", null) + "' and e.booked = true) a " +
+                                       "where not exists(" +
+                                       "select r.EMATCHID from EMATCHES r   where    r.EMATCHID is not  null and a.id = r.EMATCHID and '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  r.CMATCHDATETIME  and r.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'  ) order by a.name  ";
+                        }
+                        else
+                        {
+                            queryString = "select a.id,a.name,a.booked_by from(" +
+                                        "select* from events e  where '" + this.bnAreas.Items[17].Text + "'<=  e.start_date and  e.start_date <='" + this.bnAreas.Items[19].Text + "' ) a " +
+                                        "where not exists(" +
+                                        "select r.EMATCHID from EMATCHES r   where    r.EMATCHID is not  null and a.id = r.EMATCHID and '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  r.CMATCHDATETIME  and r.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' ) order by a.name  ";
+                        }
+                        using (FbCommand cmd = new FbCommand(queryString, connection))
+                        {
+                            using (FbCommandBuilder fcb = new FbCommandBuilder())
+                            {
+                                using (FbDataAdapter fda = new FbDataAdapter())
+                                {
+                                    fda.SelectCommand = cmd;
+                                    fcb.DataAdapter = fda;
+                                    using (DataSet data = new DataSet())
+                                    {
+                                        fda.Fill(data);
+                                        cmsBooked.Items.Clear();
+                                        cmsBooked.Items.Add(new ToolStripMenuItem()
+                                        {
+                                            Text = "Cancel Sync",
+                                            Tag = ""
+                                        });
+                                        foreach (DataRow dr in data.Tables[0].Rows)
+                                        {
+                                            cmsBooked.Items.Add(new ToolStripMenuItem()
+                                            {
+                                                Text = dr["id"].ToString() + " " + dr["Name"].ToString() + " " + dr["booked_by"].ToString(),
+                                                Tag = dr["id"].ToString()
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                            connection.Close();
+                        }
+                    }
+
+
+                    //DataSet ds = new DataSet();
+                    //var ls1 = ds1.Tables["matches1"].AsEnumerable().ToList();
+                    //var ls2 = ds2.Tables["matches2"].AsEnumerable().ToList();
+
+                    ////var result = from x in ls1 join y in ls2
+                    //// .Where(y => y["HKJCMATCHNO"] == x["IMATCH_NO"] && y["HKJCDAYCODE"] == x["CMATCH_DAY_CODE"]);
+
+                    //var result2 = from x in ls1
+                    //              join y in ls2
+                    //              on new { X1 = x["HKJCMATCHNO"], X2 = x["HKJCDAYCODE"] } equals new { X1 = y["IMATCH_NO"], X2 = y["CMATCH_DAY_CODE"] }
+                    //              //into lj
+                    //              // from r in lj.DefaultIfEmpty()
+                    //              // select ds2.Tables["matches2"].LoadDataRow(new object[]
+                    //              //{
+                    //              //  y.Field<string>("IMATCH_NO"),
+                    //              //  y.Field<string>("CMATCH_DAY_CODE"),
+                    //              // y.Field<string>("CMATCHDATETIME"),
+                    //              //  y.Field<string>("IHOME_TEAM_CODE"),
+                    //              //  y.Field<string>("IAWAY_TEAM_CODE"),
+                    //              //  y.Field<string>("CHOME_TEAM_ENG_NAME"),
+                    //              //  y.Field<string>("CAWAY_TEAM_ENG_NAME"),
+                    //              //  y.Field<string>("ISTATUS")
+                    //              // }, false);
+
+                    //              select new
+                    //              {
+                    //                  HKJCMATCHNO = y["IMATCH_NO"],
+                    //                  HKJCDAYCODE = y["CMATCH_DAY_CODE"],
+                    //                  CMATCHDATETIME = y["CMATCHDATETIME"],
+                    //                  HKJCHOSTID = y["IHOME_TEAM_CODE"],
+                    //                  HKJCGUESTID = y["IAWAY_TEAM_CODE"],
+                    //                  HKJCHOSTNAME = y["CHOME_TEAM_ENG_NAME"],
+                    //                  HKJCGUESTNAME = y["CAWAY_TEAM_ENG_NAME"],
+                    //                  STATUS = y["ISTATUS"]
+                    //              };
+
+                    //var result = from dataRows1 in ls2
+                    //             join dataRows2 in ls1
+                    //             on
+                    //             new { X1 = dataRows1["IMATCH_NO"], X2 = dataRows1["CMATCH_DAY_CODE"] } equals new { X1 = dataRows2["HKJCMATCHNO"], X2 = dataRows2["HKJCDAYCODE"] }
+                    //             //dataRows1.Field<string>("HKJCMATCHNO") equals dataRows2.Field<string>("IMATCH_NO") 
+                    //             into lj
+                    //             from r in lj.DefaultIfEmpty()
+                    //             select new
+                    //             {
+                    //                 HKJCMATCHNO = dataRows1["IMATCH_NO"],
+                    //                 HKJCDAYCODE = dataRows1["CMATCH_DAY_CODE"],
+                    //                 CMATCHDATETIME = dataRows1["CMATCHDATETIME"],
+                    //                 HKJCHOSTID = dataRows1["IHOME_TEAM_CODE"],
+                    //                 HKJCGUESTID = dataRows1["IAWAY_TEAM_CODE"],
+                    //                 HKJCHOSTNAME = dataRows1["CHOME_TEAM_ENG_NAME"],
+                    //                 HKJCGUESTNAME = dataRows1["CAWAY_TEAM_ENG_NAME"],
+                    //                 STATUS = dataRows1["ISTATUS"]
+                    //             };
+                    //                select ds2.Tables["matches2"].LoadDataRow(new object[]
+                    //{
+                    //   dataRows1.Field<int>("IMATCH_NO"),
+                    //   dataRows1.Field<string>("CMATCH_DAY_CODE"),
+                    //   dataRows1.Field<DateTime>("CMATCHDATETIME"),
+                    //   dataRows1.Field<int>("IHOME_TEAM_CODE"),
+                    //   dataRows1.Field<int>("IAWAY_TEAM_CODE"),
+                    //   dataRows1.Field<string>("CHOME_TEAM_ENG_NAME"),
+                    //   dataRows1.Field<string>("CAWAY_TEAM_ENG_NAME"),
+                    //   dataRows1.Field<int>("ISTATUS")
+                    // }
+                    // , false);
+
+                    //var results = from x in ls1 join y in ls2   on
+                    //              where x["HKJCMATCHNO"] != y["HKJCDAYCODE"] && x["HKJCDAYCODE"] == y["CMATCH_DAY_CODE"]
+                    //              select x;
+
+                    // var result3 = ls2.SelectMany(a => ls1.Where(xi => xi["HKJCMATCHNO"] == a["IMATCH_NO"] && xi["HKJCDAYCODE"] == a["CMATCH_DAY_CODE"])).ToList();
+                    //(a, b) => new ResultItem
+                    //{
+                    //    id = a["HKJCMATCHNO"],
+                    //    name = a["HKJCDAYCODE"]
+                    //}).ToList();
+                    string sd = "";
+                    // var query = (from x in ls1 select new { A = x["HKJCMATCHNO"], B = x["HKJCDAYCODE"] }).Concat(from y in ls2 select new { A = y["IMATCH_NO"], B = y["CMATCH_DAY_CODE"] });
+
+                    //var db1 = (from a in ds1.Tables["matches1"] select a).ToList();
+                    //var db2 = (from a in ds1.Tables["matches1"] select a).ToList();
+
+                    //var query = (from a in db1
+                    //             join b in db2 on a.EnteredBy equals b.UserId
+                    //             where a.LHManifestNum == LHManifestNum
+                    //             select new { LHManifestId = a.LHManifestId, LHManifestNum = a.LHManifestNum, LHManifestDate = a.LHManifestDate, StnCode = a.StnCode, Operatr = b.UserName }).FirstOrDefault();
+
+
+                    //DataSet ds = new DataSet();
+                    //if (sender != null && sender.GetType() != typeof(ToolStripButton))
+                    //{
+                    //    if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdGroup")
+                    //    {
+                    //        ds = InsertData("booked-events", false, "Group", tsdGroup.Tag.ToString());
+                    //    }
+                    //    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdStage")
+                    //    {
+                    //        ds = InsertData("booked-events", false, "Stage", tsdStage.Tag.ToString());
+                    //    }
+                    //    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdSeason")
+                    //    {
+                    //        ds = InsertData("booked-events", false, "Season", tsdSeason.Tag.ToString());
+                    //    }
+                    //    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdComp")
+                    //    {
+                    //        ds = InsertData("booked-events", false, "Comp", tsdComp.Tag.ToString());
+                    //    }
+                    //    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdArea")
+                    //    { }
+                    //}
+                    //else if (sender != null && ((ToolStripButton)sender) != null && ((ToolStripButton)sender).Name == "tsbGet2")
+                    //{
+
+                    //    if (Convert.ToDateTime(this.bnAreas.Items[19].Text).Subtract(Convert.ToDateTime(this.bnAreas.Items[17].Text)).Days > 30 && DateTime.Now <= Convert.ToDateTime(this.bnAreas.Items[19].Text + " 23:59:59"))
+                    //    {
+                    //        MessageBox.Show("Maximum period is 30 days!"); return;
+                    //    }
+                    //    ds = InsertData("booked-events", true, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
+                    //}
+                    //else if (sender == null)
+                    //{
+                    //    ds = InsertData("booked-events", false, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
+                    //}
                 }
-                if (table.Rows.Count > 0)
+                else
                 {
                     using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                     {
-                        connection.Open();
-                        foreach (DataRow dr1 in table.Rows)
+                        // string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
+                        string queryString = "SELECT e.* FROM EMATCHES e where  '" + this.bnAreas.Items[17].Text + " 00:00:00" + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + this.bnAreas.Items[19].Text + " 23:59:59" + "' order by  e.CMATCHDATETIME desc ";
+                        using (FbCommand cmd = new FbCommand(queryString, connection))
                         {
-                            using (FbCommand cmd2 = new FbCommand())
+                            using (FbCommandBuilder fcb = new FbCommandBuilder())
                             {
-                                cmd2.CommandText = "ADD_HKJCMATCH4";
-                                cmd2.CommandType = CommandType.StoredProcedure;
-                                cmd2.Connection = connection;
-                                cmd2.Parameters.Add("@EMATCHID", null);
-                                cmd2.Parameters.Add("@HKJCMATCHNO", dr1["IMATCH_NO"]);
-                                cmd2.Parameters.Add("@HKJCDAYCODE", dr1["CMATCH_DAY_CODE"]);
-                                cmd2.Parameters.Add("@CMATCHDATETIME", dr1["CMATCHDATETIME"]);
-                                cmd2.Parameters.Add("@HKJCHOSTID", dr1["IHOME_TEAM_CODE"]);
-                                cmd2.Parameters.Add("@HKJCGUESTID", dr1["IAWAY_TEAM_CODE"]);
-                                cmd2.Parameters.Add("@HKJCHOSTNAME", dr1["CHOME_TEAM_ENG_NAME"]);
-                                cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
-                                cmd2.Parameters.Add("@STATUS", dr1["ISTATUS"]);
-                                cmd2.Parameters.Add("@MAPPINGSTATUS", false);
-                                cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
-                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                //  Files.WriteLog((id > 0 ? " [Success]" : "[Failure]") + "Insert EMATCHES[" + dr1["IMATCH_NO"] + "  " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + " " + dr1["CAWAY_TEAM_ENG_NAME"]);
-                                Files.WriteLog((id < 1 ? " [Success] Insert EMATCHES " : "Match exist ") + "[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + "/" + dr1["CAWAY_TEAM_ENG_NAME"]);
-                            }
-                        }
-                        connection.Close();
-
-                        Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
-                        AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
-
-                        RunSyncHkjcAndBook2(table);
-                        //RunSyncHkjcAndBook(ds1);
-                        // await SyncHkjcAndBook(ds);
-                        // await RunBookEventAction();
-                    }
-                }
-
-                using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-                {
-                    // string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
-                    string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
-                    using (FbCommand cmd = new FbCommand(queryString, connection))
-                    {
-                        using (FbCommandBuilder fcb = new FbCommandBuilder())
-                        {
-                            using (FbDataAdapter fda = new FbDataAdapter())
-                            {
-                                fda.SelectCommand = cmd;
-                                fcb.DataAdapter = fda;
-                                using (DataSet data = new DataSet())
+                                using (FbDataAdapter fda = new FbDataAdapter())
                                 {
-                                    data.Tables.Add(new DataTable("SocoutMatch"));
-                                    fda.Fill(data.Tables["SocoutMatch"]);
-                                    ds2 = data;
-                                }
-                                //if (ds2.Tables["SocoutMatch"].Rows.Count == 0 && ds1.Tables[0].Rows.Count > 0)
-                                //{
-                                //    foreach (DataRow dr1 in ds1.Tables[0].Rows)
-                                //    {
-                                //        DataRow dr = ds2.Tables[0].NewRow();
-                                //        dr[1] = dr1["IHOME_TEAM_CODE"];
-                                //        dr[2] = dr1["IAWAY_TEAM_CODE"];
-                                //        dr[3] = dr1["CHOME_TEAM_ENG_NAME"];
-                                //        dr[4] = dr1["CAWAY_TEAM_ENG_NAME"];
-                                //        dr[5] = dr1["CMATCH_DAY_CODE"];
-                                //        dr[6] = dr1["IMATCH_NO"];
-                                //        dr[7] = dr1["ISTATUS"];
-                                //        dr[8] = dr1["CMATCHDATETIME"];
-                                //        dr[9] = false;
-                                //        dr[10] = dr1["CTIMESTAMP"];
-                                //        ds2.Tables[0].Rows.Add(dr);
-                                //    }
-                                //    int count = fda.Update(ds2.Tables[0]);
-                                //    // ds = ds2;
-                                //    if (count > -1)
-                                //    {
-                                //        Files.WriteLog("[Success] Insert EMATCHES[" + count + "] ");
-                                //        var culture = new System.Globalization.CultureInfo("zh-HK");
-                                //        Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(ds1.Tables[0].Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss fff", culture));
-                                //        AppFlag.SyncHkjcDateTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss fff", culture);
-                                //    }
-                                //}
-                                //else if (ds2.Tables["SocoutMatch"].Rows.Count > 0 && ds1.Tables[0].Rows.Count > 0)
-                                //{
-
-                                //}
-
-                                ds = ds2;
-                                // if(ds1.Tables["HKjcMatch"])
-                            }
-                        }
-                    }
-                    connection.Close();
-                }
-
-                using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-                {
-                    // string queryString = "SELECT e.id,e.name FROM events e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.start_date and  e.start_date <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' and booked =true order by  e.start_date desc ";
-                    string queryString = "select a.id,a.name,a.booked_by from(" +
-                                "select* from events e  where '" + minTime.ToString("yyyy-MM-dd", null) + "'<=  e.start_date and  e.start_date <='" + maxTime.AddDays(1).ToString("yyyy-MM-dd", null) + "' and e.booked = true) a " +
-                                "where not exists(" +
-                                "select r.EMATCHID from EMATCHES r   where    r.EMATCHID is not  null and a.id = r.EMATCHID and '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  r.CMATCHDATETIME  and r.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by a.start_date)";
-
-                    using (FbCommand cmd = new FbCommand(queryString, connection))
-                    {
-                        using (FbCommandBuilder fcb = new FbCommandBuilder())
-                        {
-                            using (FbDataAdapter fda = new FbDataAdapter())
-                            {
-                                fda.SelectCommand = cmd;
-                                fcb.DataAdapter = fda;
-                                using (DataSet data = new DataSet())
-                                {
-                                    fda.Fill(data);
-                                    cmsBooked.Items.Clear();
-                                    cmsBooked.Items.Add(new ToolStripMenuItem()
+                                    fda.SelectCommand = cmd;
+                                    fcb.DataAdapter = fda;
+                                    using (DataSet data = new DataSet())
                                     {
-                                        Text = "Cancel Sync",
-                                        Tag = ""
-                                    });
-                                    foreach (DataRow dr in data.Tables[0].Rows)
-                                    {
-                                        cmsBooked.Items.Add(new ToolStripMenuItem()
-                                        {
-                                            Text = dr["id"].ToString() + " " + dr["Name"].ToString()+" "+ dr["booked_by"].ToString(),
-                                            Tag = dr["id"].ToString()
-                                        });
+                                        data.Tables.Add(new DataTable("SocoutMatch"));
+                                        fda.Fill(data.Tables["SocoutMatch"]);
+                                        ds = data;
                                     } 
+                                     
                                 }
                             }
                         }
                         connection.Close();
                     }
                 }
-
-
-                //DataSet ds = new DataSet();
-                //var ls1 = ds1.Tables["matches1"].AsEnumerable().ToList();
-                //var ls2 = ds2.Tables["matches2"].AsEnumerable().ToList();
-
-                ////var result = from x in ls1 join y in ls2
-                //// .Where(y => y["HKJCMATCHNO"] == x["IMATCH_NO"] && y["HKJCDAYCODE"] == x["CMATCH_DAY_CODE"]);
-
-                //var result2 = from x in ls1
-                //              join y in ls2
-                //              on new { X1 = x["HKJCMATCHNO"], X2 = x["HKJCDAYCODE"] } equals new { X1 = y["IMATCH_NO"], X2 = y["CMATCH_DAY_CODE"] }
-                //              //into lj
-                //              // from r in lj.DefaultIfEmpty()
-                //              // select ds2.Tables["matches2"].LoadDataRow(new object[]
-                //              //{
-                //              //  y.Field<string>("IMATCH_NO"),
-                //              //  y.Field<string>("CMATCH_DAY_CODE"),
-                //              // y.Field<string>("CMATCHDATETIME"),
-                //              //  y.Field<string>("IHOME_TEAM_CODE"),
-                //              //  y.Field<string>("IAWAY_TEAM_CODE"),
-                //              //  y.Field<string>("CHOME_TEAM_ENG_NAME"),
-                //              //  y.Field<string>("CAWAY_TEAM_ENG_NAME"),
-                //              //  y.Field<string>("ISTATUS")
-                //              // }, false);
-
-                //              select new
-                //              {
-                //                  HKJCMATCHNO = y["IMATCH_NO"],
-                //                  HKJCDAYCODE = y["CMATCH_DAY_CODE"],
-                //                  CMATCHDATETIME = y["CMATCHDATETIME"],
-                //                  HKJCHOSTID = y["IHOME_TEAM_CODE"],
-                //                  HKJCGUESTID = y["IAWAY_TEAM_CODE"],
-                //                  HKJCHOSTNAME = y["CHOME_TEAM_ENG_NAME"],
-                //                  HKJCGUESTNAME = y["CAWAY_TEAM_ENG_NAME"],
-                //                  STATUS = y["ISTATUS"]
-                //              };
-
-                //var result = from dataRows1 in ls2
-                //             join dataRows2 in ls1
-                //             on
-                //             new { X1 = dataRows1["IMATCH_NO"], X2 = dataRows1["CMATCH_DAY_CODE"] } equals new { X1 = dataRows2["HKJCMATCHNO"], X2 = dataRows2["HKJCDAYCODE"] }
-                //             //dataRows1.Field<string>("HKJCMATCHNO") equals dataRows2.Field<string>("IMATCH_NO") 
-                //             into lj
-                //             from r in lj.DefaultIfEmpty()
-                //             select new
-                //             {
-                //                 HKJCMATCHNO = dataRows1["IMATCH_NO"],
-                //                 HKJCDAYCODE = dataRows1["CMATCH_DAY_CODE"],
-                //                 CMATCHDATETIME = dataRows1["CMATCHDATETIME"],
-                //                 HKJCHOSTID = dataRows1["IHOME_TEAM_CODE"],
-                //                 HKJCGUESTID = dataRows1["IAWAY_TEAM_CODE"],
-                //                 HKJCHOSTNAME = dataRows1["CHOME_TEAM_ENG_NAME"],
-                //                 HKJCGUESTNAME = dataRows1["CAWAY_TEAM_ENG_NAME"],
-                //                 STATUS = dataRows1["ISTATUS"]
-                //             };
-                //                select ds2.Tables["matches2"].LoadDataRow(new object[]
-                //{
-                //   dataRows1.Field<int>("IMATCH_NO"),
-                //   dataRows1.Field<string>("CMATCH_DAY_CODE"),
-                //   dataRows1.Field<DateTime>("CMATCHDATETIME"),
-                //   dataRows1.Field<int>("IHOME_TEAM_CODE"),
-                //   dataRows1.Field<int>("IAWAY_TEAM_CODE"),
-                //   dataRows1.Field<string>("CHOME_TEAM_ENG_NAME"),
-                //   dataRows1.Field<string>("CAWAY_TEAM_ENG_NAME"),
-                //   dataRows1.Field<int>("ISTATUS")
-                // }
-                // , false);
-
-                //var results = from x in ls1 join y in ls2   on
-                //              where x["HKJCMATCHNO"] != y["HKJCDAYCODE"] && x["HKJCDAYCODE"] == y["CMATCH_DAY_CODE"]
-                //              select x;
-
-                // var result3 = ls2.SelectMany(a => ls1.Where(xi => xi["HKJCMATCHNO"] == a["IMATCH_NO"] && xi["HKJCDAYCODE"] == a["CMATCH_DAY_CODE"])).ToList();
-                //(a, b) => new ResultItem
-                //{
-                //    id = a["HKJCMATCHNO"],
-                //    name = a["HKJCDAYCODE"]
-                //}).ToList();
-                string sd = "";
-                // var query = (from x in ls1 select new { A = x["HKJCMATCHNO"], B = x["HKJCDAYCODE"] }).Concat(from y in ls2 select new { A = y["IMATCH_NO"], B = y["CMATCH_DAY_CODE"] });
-
-                //var db1 = (from a in ds1.Tables["matches1"] select a).ToList();
-                //var db2 = (from a in ds1.Tables["matches1"] select a).ToList();
-
-                //var query = (from a in db1
-                //             join b in db2 on a.EnteredBy equals b.UserId
-                //             where a.LHManifestNum == LHManifestNum
-                //             select new { LHManifestId = a.LHManifestId, LHManifestNum = a.LHManifestNum, LHManifestDate = a.LHManifestDate, StnCode = a.StnCode, Operatr = b.UserName }).FirstOrDefault();
-
-
-                //DataSet ds = new DataSet();
-                //if (sender != null && sender.GetType() != typeof(ToolStripButton))
-                //{
-                //    if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdGroup")
-                //    {
-                //        ds = InsertData("booked-events", false, "Group", tsdGroup.Tag.ToString());
-                //    }
-                //    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdStage")
-                //    {
-                //        ds = InsertData("booked-events", false, "Stage", tsdStage.Tag.ToString());
-                //    }
-                //    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdSeason")
-                //    {
-                //        ds = InsertData("booked-events", false, "Season", tsdSeason.Tag.ToString());
-                //    }
-                //    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdComp")
-                //    {
-                //        ds = InsertData("booked-events", false, "Comp", tsdComp.Tag.ToString());
-                //    }
-                //    else if (sender != null && ((ToolStripDropDownButton)sender).Name == "tsdArea")
-                //    { }
-                //}
-                //else if (sender != null && ((ToolStripButton)sender) != null && ((ToolStripButton)sender).Name == "tsbGet2")
-                //{
-
-                //    if (Convert.ToDateTime(this.bnAreas.Items[19].Text).Subtract(Convert.ToDateTime(this.bnAreas.Items[17].Text)).Days > 30 && DateTime.Now <= Convert.ToDateTime(this.bnAreas.Items[19].Text + " 23:59:59"))
-                //    {
-                //        MessageBox.Show("Maximum period is 30 days!"); return;
-                //    }
-                //    ds = InsertData("booked-events", true, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
-                //}
-                //else if (sender == null)
-                //{
-                //    ds = InsertData("booked-events", false, this.bnAreas.Items[17].Text + " 00:00:00", this.bnAreas.Items[19].Text + " 23:59:59");
-                //}
 
                 if (ds.Tables.Count == 0) { this.dgvBookedEvent.DataSource = null; return; }
                 tbData = ds.Tables[0];
@@ -5279,14 +5319,15 @@ namespace DataOfScouts
                 {
 
                     string event_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
+                    if (event_id == "") return;
                     //if (Convert.ToInt32 (event_id) > 0)
                     //{
                     DataSet data = new DataSet();
-                    data = InsertData("events.show2", false, event_id);
+                    data = InsertData("events.show2", false, event_id==""?"-1": event_id);
                     // if (data.Tables[0].Rows.Count == 0)
-                    if ((data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0)|| data.Tables[1].Rows.Count ==0)
+                    if (event_id != ""&&((data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0)|| data.Tables[1].Rows.Count ==0))
                     {
-                        data = InsertData("events.show2", true, event_id);
+                        data = InsertData("events.show2", true, event_id == "" ? "-1" : event_id);
                     }
 
                     if (dgvBookedEvent.childView.TabPages.Count == 0)
@@ -5427,9 +5468,16 @@ namespace DataOfScouts
                 if (id > 0)
                 {
                     dgvBookedEvent.SelectedRows[0].Cells[0].Value = id;
+                    cmsBooked.Items.Remove(e.ClickedItem);
                 }
                 else if (id == 0 && e.ClickedItem.Tag.ToString() == "")
-                {
+                { 
+                    cmsBooked.Items.Add(new ToolStripMenuItem()
+                    {
+                        Text = dgvBookedEvent.SelectedRows[0].Cells[0].Value + " " + dgvBookedEvent.SelectedRows[0].Cells[3].Value + "/" + dgvBookedEvent.SelectedRows[0].Cells[4].Value,// + " " + dr["booked_by"].ToString(),
+                        Tag = dgvBookedEvent.SelectedRows[0].Cells[0].Value
+                    });
+
                     dgvBookedEvent.SelectedRows[0].Cells[0].Value = DBNull.Value;
                 }
             }
