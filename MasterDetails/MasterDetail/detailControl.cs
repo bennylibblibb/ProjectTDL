@@ -76,6 +76,12 @@
                 DataGridView dgv = dgvs[2];
                 dgv.DataSource = table;
             }
+            else if (pageCaption == "Incidents")
+            {
+                //List<DataGridView> dgvs = this.childGrid[0];
+                DataGridView dgv = dgvs[3];
+                dgv.DataSource = table;
+            }
 
             //cModule.applyGridTheme(ref dgv);
             //cModule.setGridRowHeader(ref dgv, false);

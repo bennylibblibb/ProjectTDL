@@ -2660,7 +2660,7 @@ namespace DataOfScouts
                             connection.Open();
                             for (int i = 1; i < 2 && Convert.ToBoolean(arr[0]) == true; i++)
                             {
-                                var responseValue = clientTest.GetAccessData(strToken, type, arr[1]);
+                                var responseValue = clientTest.GetAccessData(strToken, "events.show", arr[1]);
                                 var strResponseValue = responseValue.Result;
                                 if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
                                 string strName = arr[1].ToString() + type + "-" + i + " " + DateTime.Now.ToString("HHmmss");
@@ -2728,9 +2728,9 @@ namespace DataOfScouts
                                                             cmd2.CommandText = "ADD_Player2";
                                                             cmd2.CommandType = CommandType.StoredProcedure;
                                                             cmd2.Connection = connection;
-                                                            cmd2.Parameters.Add("@ID", lineup.participant_id);
+                                                            cmd2.Parameters.Add("@ID", lineup.participant_id==""?"-1": lineup.participant_id);
                                                             cmd2.Parameters.Add("@NAME", lineup.participant_name);
-                                                            cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id);
+                                                            cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
                                                             cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
                                                             cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
                                                             cmd2.Parameters.Add("@SHIRT_NR", lineup.shirt_nr == "" ? "-1" : lineup.shirt_nr);
@@ -2776,6 +2776,13 @@ namespace DataOfScouts
                                             adapter2.SelectCommand = new FbCommand(queryString, connection);
                                             FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
                                             adapter2.Fill(data.Tables["gplayers"]);
+
+                                            queryString = "SELECT  i.* FROM INCIDENTS i where i.EVENTID='" + arr[1] + "' order by i.id asc";
+                                            data.Tables.Add(new DataTable("Incids"));
+                                            FbDataAdapter adapter3 = new FbDataAdapter();
+                                            adapter3.SelectCommand = new FbCommand(queryString, connection);
+                                         //   FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
+                                            adapter3.Fill(data.Tables["Incids"]);
 
                                             ds = data;
                                         }
@@ -5277,7 +5284,7 @@ namespace DataOfScouts
                     DataSet data = new DataSet();
                     data = InsertData("events.show2", false, event_id);
                     // if (data.Tables[0].Rows.Count == 0)
-                    if (data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0)
+                    if ((data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0)|| data.Tables[1].Rows.Count ==0)
                     {
                         data = InsertData("events.show2", true, event_id);
                     }
@@ -5287,6 +5294,7 @@ namespace DataOfScouts
                         dgvBookedEvent.childView.AddData(data.Tables[0], "Teams");
                         dgvBookedEvent.childView.AddData(data.Tables[1], "HPlayers");
                         dgvBookedEvent.childView.AddData(data.Tables[2], "GPlayers");
+                        dgvBookedEvent.childView.AddData(data.Tables[3], "Incidents");
                     }
                     else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
                     {
@@ -5294,6 +5302,7 @@ namespace DataOfScouts
 
                         dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
                         dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
+                       dgvBookedEvent.childView.BindData(data.Tables[3], "Incidents");
                     }
                     //}
                     //else
@@ -6416,8 +6425,13 @@ namespace DataOfScouts
         {
             try
             {
-                Files.WriteLog(" Auto task get events," + (this.bnAreas.Items[19].Text ==""? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 00:00:00" + "-" + (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 23:59:59");
-                InsertData("events", true, (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 00:00:00", (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 23:59:59");
+                //Files.WriteLog(" Auto task get events," + (this.bnAreas.Items[19].Text ==""? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 00:00:00" + "-" + (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 23:59:59");
+                //InsertData("events", true, (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 00:00:00", (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 23:59:59");
+                //Files.WriteLog(" Auto task get events," + this.bnAreas.Items[19].Text+ " 00:00:00" + "-" +  this.bnAreas.Items[19].Text  + " 23:59:59");
+                //InsertData("events", true,   this.bnAreas.Items[19].Text + " 00:00:00",   this.bnAreas.Items[19].Text+ " 23:59:59");
+                Files.WriteLog(" Auto task get events," +   DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") + " 00:00:00" + "-" + DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") + " 23:59:59");
+                InsertData("events", true, DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") + " 00:00:00", DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") + " 23:59:59");
+
                 //var state = timerState as TimerState;
             }
             catch (Exception exp)
