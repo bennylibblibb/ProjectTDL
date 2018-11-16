@@ -51,7 +51,7 @@
         public object day { get; set; }
         public string neutral_venue { get; set; }
         public string item_status { get; set; }
-        public int clock_time { get; set; }
+        public string clock_time { get; set; }
         public string clock_status { get; set; }
         public int area_id { get; set; }
         public int competition_id { get; set; }
