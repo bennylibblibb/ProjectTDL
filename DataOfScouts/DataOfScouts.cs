@@ -507,7 +507,95 @@ namespace DataOfScouts
             bool results = await SyncHkjcAndBook(ds);
             //this.lbResults.Text = "AMQP:" + results;
         }
+        private bool RunSyncHkjcAndBook3(DataTable table)
+        {
+            bool result = true;
+            try
+            {
+                if (table.Rows.Count > 0)
+                {
+                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                    {
+                        connection.Open();
+                        foreach (DataRow dr1 in table.Rows)
+                        {
+                            string strHkjcHostName = dr1["HKJCHOSTNAME"].ToString();
+                            string strHkjcGeustName = dr1["HKJCGUESTNAME"].ToString();
+                            //string strHkjcHostName = dr1[35].ToString();
+                            //string strHkjcGeustName = dr1[37].ToString();
 
+                            //if (strHkjcHostName == "Valenciennes" || strHkjcGeustName == "Valenciennes") 
+                            //{
+                            //    string str = "";
+                            //}
+                            //connection.Open();
+                            DataSet evtTeams = new DataSet();
+                            //  string queryString = "SELECT distinct t.id,t.name FROM teams t where t.NAME='" + strHkjcHostName + "' OR T.NAME='" + strHkjcGeustName + "'";
+                            string queryString = "SELECT   t.id,t.name,t.SHORT_NAME FROM teams t where t.NAME='" + strHkjcHostName + "' OR T.NAME='" + strHkjcGeustName + "' or  t.SHORT_NAME='" + strHkjcHostName + "' OR T.SHORT_NAME='" + strHkjcGeustName + "'";
+                            using (FbCommand cmd = new FbCommand(queryString, connection))
+                            {
+                                using (FbDataAdapter fda = new FbDataAdapter())
+                                {
+                                    fda.SelectCommand = cmd;
+                                    using (DataSet data = new DataSet())
+                                    {
+                                        data.Tables.Add(new DataTable("eventTeams"));
+                                        fda.Fill(data.Tables["eventTeams"]);
+                                        evtTeams = data;
+                                    }
+                                }
+                            }
+
+                            if ((evtTeams.Tables[0].Rows.Count == 0))
+                            {
+                                Files.WriteLogNR("");
+                                Files.WriteLog("Team not exist on scoutsfeed " + strHkjcHostName + "/" + strHkjcGeustName);
+                            }
+                            else if ((evtTeams.Tables[0].Rows.Count == 1))
+                            {
+                                Files.WriteLogNR("");
+                                Files.WriteLog("Team only one(" + evtTeams.Tables[0].Rows[0]["Name"].ToString() + ") exist on scoutsfeed " + strHkjcHostName + "/" + strHkjcGeustName);
+                            }
+                            else if (evtTeams.Tables[0].Rows.Count == 2)
+                            {
+                                Files.WriteLogNR("");
+                                int id = -1;
+                                string id1 = evtTeams.Tables[0].Select("NAME='" + strHkjcHostName + "' or  SHORT_NAME='" + strHkjcHostName + "'")[0]["ID"].ToString();
+                                string id2 = evtTeams.Tables[0].Select("NAME='" + strHkjcGeustName + "' or  SHORT_NAME='" + strHkjcGeustName + "'")[0]["ID"].ToString();
+                                try
+                                {
+                                    using (FbCommand cmd2 = new FbCommand())
+                                    {//maybe return booked or no
+                                        cmd2.CommandText = "Sync_HkjcData_Auto";
+                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                        cmd2.Connection = connection;
+                                        cmd2.Parameters.Add("@HOME_ID", id1);
+                                        cmd2.Parameters.Add("@GUEST_ID", id2);
+                                        cmd2.Parameters.Add("@HKJCHOSTNAME", strHkjcHostName);
+                                        cmd2.Parameters.Add("@HKJCGUESTNAME", strHkjcGeustName);
+                                        id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                        Files.WriteLog((id > 0 ? " [Success] " : (id == 0) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
+                                    }
+                                }
+                                catch (Exception exp)
+                                {
+                                    Files.WriteError("error:" + exp.ToString());
+                                }
+                                if (id > 0) BookEventAction(id.ToString(), false);
+                            }
+                            // connection.Close();
+                        }
+                        connection.Close();
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError("RunSyncHkjcAndBook3(),error:" + exp.ToString());
+                result = false;
+            }
+            return result;
+        }
         private bool RunSyncHkjcAndBook2(DataTable table)
         {
             bool result = true;
@@ -4699,6 +4787,7 @@ namespace DataOfScouts
                     DateTime maxTime = DateTime.MinValue;
                     DateTime minTime = DateTime.MaxValue;
 
+                    Files.WriteTestLog("Test","HKjcMatch "+ ds1.Tables["HKjcMatch"].Rows.Count);
                     if (ds1.Tables["HKjcMatch"].Rows.Count > 0)
                     {
                         maxTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CMATCHDATETIME"]);
@@ -4714,20 +4803,26 @@ namespace DataOfScouts
                         table.DefaultView.RowFilter = (AppFlag.SyncHkjcDateTime == "" ? "" : "CTIMESTAMP >'" + AppFlag.SyncHkjcDateTime + "'");
                         table.DefaultView.Sort = "CTIMESTAMP DESC";
                         table = table.DefaultView.ToTable();
+                        Files.WriteTestLog("Test", "HKjcMatch 2 " + table.Rows.Count);
                     }
                     if (table.Rows.Count > 0)
                     {
+                        Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
+                        AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
+
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             connection.Open();
+                            int iIndiex = 0;
+                            List<int> indexs = new List<int>();
                             foreach (DataRow dr1 in table.Rows)
                             {
                                 using (FbCommand cmd2 = new FbCommand())
                                 {
-                                    cmd2.CommandText = "ADD_HKJCMATCH4";
+                                    cmd2.CommandText = "ADD_HKJCMATCH";
                                     cmd2.CommandType = CommandType.StoredProcedure;
                                     cmd2.Connection = connection;
-                                    cmd2.Parameters.Add("@EMATCHID", null);
+                                  // cmd2.Parameters.Add("@EMATCHID", null);
                                     cmd2.Parameters.Add("@HKJCMATCHNO", dr1["IMATCH_NO"]);
                                     cmd2.Parameters.Add("@HKJCDAYCODE", dr1["CMATCH_DAY_CODE"]);
                                     cmd2.Parameters.Add("@CMATCHDATETIME", dr1["CMATCHDATETIME"]);
@@ -4739,15 +4834,30 @@ namespace DataOfScouts
                                     cmd2.Parameters.Add("@MAPPINGSTATUS", false);
                                     cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                                     int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                    //  Files.WriteLog((id > 0 ? " [Success]" : "[Failure]") + "Insert EMATCHES[" + dr1["IMATCH_NO"] + "  " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + " " + dr1["CAWAY_TEAM_ENG_NAME"]);
-                                    Files.WriteLog((id < 1 ? " [Success] Insert EMATCHES " : "Match exist ") + "[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + "/" + dr1["CAWAY_TEAM_ENG_NAME"]);
+                                    // Files.WriteLog((id == 0 ? " [Success] Insert EMATCHES " : "Match exist "+id+" ") + "[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + "/" + dr1["CAWAY_TEAM_ENG_NAME"]);
+                                    Files.WriteLog((id == 0 ? " [Success] Insert EMATCHES " : "Match exist " ) + "[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + "/" + dr1["CAWAY_TEAM_ENG_NAME"]);
+                                    if (id > 1)
+                                    {
+                                        //   Files.WriteTestLog("Test", "table [" + id + "] "+ table.Rows[iIndiex]["CHOME_TEAM_ENG_NAME"].ToString()+"/"+ table.Rows[iIndiex]["CAWAY_TEAM_ENG_NAME"].ToString());
+                                        Files.WriteTestLog("Test", "table " + table.Rows[iIndiex]["CHOME_TEAM_ENG_NAME"].ToString() + "/" + table.Rows[iIndiex]["CAWAY_TEAM_ENG_NAME"].ToString());
+                                        //table.Rows[iIndiex].Delete();
+                                        indexs.Add(iIndiex);
+                                    }
                                 }
+                                iIndiex++;
                             }
+                            table.AcceptChanges();
+                            foreach (int i in indexs)
+                            {
+                                table.Rows[i].Delete();
+                            }
+                            table.AcceptChanges();
                             connection.Close();
 
-                            Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
-                            AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
+                            //Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
+                            //AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
 
+                            Files.WriteTestLog("Test", "table2  " + table.Rows.Count);
                             RunSyncHkjcAndBook2(table);
                             //RunSyncHkjcAndBook(ds1);
                             // await SyncHkjcAndBook(ds);
@@ -5098,7 +5208,10 @@ namespace DataOfScouts
                 table = table.DefaultView.ToTable();
             }
             if (table.Rows.Count > 0)
-            {
+            { 
+                Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
+                AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
+
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
                     connection.Open();
@@ -5109,7 +5222,7 @@ namespace DataOfScouts
                             cmd2.CommandText = "ADD_HKJCMATCH";
                             cmd2.CommandType = CommandType.StoredProcedure;
                             cmd2.Connection = connection;
-                            cmd2.Parameters.Add("@EMATCHID", null);
+                           // cmd2.Parameters.Add("@EMATCHID", null);
                             cmd2.Parameters.Add("@HKJCMATCHNO", dr1["IMATCH_NO"]);
                             cmd2.Parameters.Add("@HKJCDAYCODE", dr1["CMATCH_DAY_CODE"]);
                             cmd2.Parameters.Add("@CMATCHDATETIME", dr1["CMATCHDATETIME"]);
@@ -5126,30 +5239,30 @@ namespace DataOfScouts
                     }
                     // connection.Close();
 
-                    //string queryString = "SELECT e.* FROM ematches e  where '" +minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME  and e.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'  and (e.EMATCHID<1 or e.EMATCHID is null) order by e.CMATCHDATETIME desc";
-                    //using (FbCommand cmd = new FbCommand(queryString, connection))
-                    //{
-                    //    using (FbCommandBuilder fcb = new FbCommandBuilder())
-                    //    {
-                    //        using (FbDataAdapter fda = new FbDataAdapter())
-                    //        {
-                    //            fda.SelectCommand = cmd;
-                    //            fcb.DataAdapter = fda;
-                    //            using (DataSet data = new DataSet())
-                    //            {
-                    //                data.Tables.Add(new DataTable("HKjcMatch"));
-                    //                fda.Fill(data.Tables["HKjcMatch"]);
-                    //                table = data.Tables["HKjcMatch"];
-                    //            }
-                    //        }
-                    //    }
-                    //}
+                    string queryString = "SELECT e.* FROM ematches e  where '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME  and e.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'  and (e.EMATCHID<1 or e.EMATCHID is null) order by e.CMATCHDATETIME desc";
+                    using (FbCommand cmd = new FbCommand(queryString, connection))
+                    {
+                        using (FbCommandBuilder fcb = new FbCommandBuilder())
+                        {
+                            using (FbDataAdapter fda = new FbDataAdapter())
+                            {
+                                fda.SelectCommand = cmd;
+                                fcb.DataAdapter = fda;
+                                using (DataSet data = new DataSet())
+                                {
+                                    data.Tables.Add(new DataTable("HKjcMatch"));
+                                    fda.Fill(data.Tables["HKjcMatch"]);
+                                    table = data.Tables["HKjcMatch"];
+                                }
+                            }
+                        }
+                    }
                     connection.Close();
 
-                    Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
-                    AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
+                    //Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
+                    //AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
                     
-                    RunSyncHkjcAndBook2(table);
+                    RunSyncHkjcAndBook3(table);
                 }
             }
             return true;
