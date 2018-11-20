@@ -700,7 +700,7 @@ namespace DataOfScouts
                                         cmd2.Parameters.Add("@HKJCHOSTNAME", strHkjcHostName);
                                         cmd2.Parameters.Add("@HKJCGUESTNAME", strHkjcGeustName);
                                         id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                        Files.WriteLog((id > 0 ? " [Success] " : (id == 0) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
+                                        Files.WriteLog((id > 0 ? " [Success] " : (id == 0) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["HKJCMATCHNO"] + " " + dr1["HKJCDAYCODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
                                     }
                                 }
                                 catch (Exception exp)
