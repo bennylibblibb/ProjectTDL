@@ -1,12 +1,12 @@
 ﻿{
-  "id": 185967693,
+  "id": 185967694,
   "type": "event",
   "source": 1684,
   "ut": 1542675794,
   "data": {
     "event": {
       "id": 2557776,
-      "action": "update",
+      "action": "insert",
       "start_date": "2018-11-20 00:00",
       "ft_only": "no",
       "coverage_type": "basic",
@@ -49,7 +49,7 @@
         },
         {
           "id": 20,
-          "value": null
+          "value": "2018-11-20 01:01"
         },
         {
           "id": 36,
