@@ -104,13 +104,14 @@ namespace DataOfScouts
                 aTimer.AutoReset = true;
                 aTimer.Enabled = true;
 
+                DateTime dueTimes = Convert.ToDateTime((DateTime.Now.Date.ToString("yyyy/MM/dd ") + AppFlag.GetTime));
                 //Timer for Get events
                 var timerState = new TimerState { Counter = 0 };
                 tTimer = new System.Threading.Timer(
                callback: new TimerCallback(TimerTask),
                state: timerState,
-               dueTime: 60 * 1000,
-               period: 24 * 60 * 60 * 1000);
+               dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays (1).Subtract(DateTime .Now) :  dueTimes.Subtract(DateTime.Now)),
+               period: dueTimes.AddDays(1).Subtract(dueTimes));
             }
             catch (Exception exp)
             {
@@ -184,9 +185,9 @@ namespace DataOfScouts
 
             //        for (int i = 0; i < api.data.@event.participants.Length; i++)
             //    {
-                    
-                    
-                        
+
+
+
             //            using (FbCommand cmd2 = new FbCommand())
             //            {
             //                cmd2.CommandText = "PR_participant_stats";
@@ -243,38 +244,40 @@ namespace DataOfScouts
             //}
 
 
-            //string message = (File.ReadAllText("D:\\Users\\Administrator\\Desktop\\New folder\\index.json"));
-            //var objJSON = JObject.Parse(message);
-            //string sID = "";
-            //DOSIncidentJson.IncidentJson incidentJson = JsonUtil.Deserialize(typeof(DOSIncidentJson.IncidentJson), message) as DOSIncidentJson.IncidentJson;
-            //using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-            //{
-            //    connection.Open();
-            //    using (FbCommand cmd2 = new FbCommand())
-            //    {
-            //        cmd2.CommandText = "PR_INCIDENTS";
-            //        cmd2.CommandType = CommandType.StoredProcedure;
-            //        cmd2.Connection = connection;
-            //        cmd2.Parameters.Add("@ID", incidentJson.data.incident.id);
-            //        cmd2.Parameters.Add("@EVENTID", incidentJson.data.@event.id);
-            //        cmd2.Parameters.Add("@CACTION", incidentJson.data.incident.action);
-            //        cmd2.Parameters.Add("@INCIDENT_ID", incidentJson.data.incident.incident_id);
-            //        cmd2.Parameters.Add("@INCIDENT_NAME", incidentJson.data.incident.incident_name);
-            //        cmd2.Parameters.Add("@PARTICIPANT_ID", incidentJson.data.incident.participant_id);
-            //        cmd2.Parameters.Add("@PARTICIPANT_NAME", incidentJson.data.incident.participant_name);
-            //        cmd2.Parameters.Add("@SUBPARTICIPANT_ID", incidentJson.data.incident.subparticipant_id);
-            //        cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", incidentJson.data.incident.subparticipant_name);
-            //        cmd2.Parameters.Add("@IMPORTANT_FOR_TRADER", incidentJson.data.incident.important_for_trader == "yes" ? true : false);
-            //        cmd2.Parameters.Add("@EVENT_TIME", incidentJson.data.incident.event_time);
-            //        cmd2.Parameters.Add("@EVENT_STATUS_ID", incidentJson.data.incident.event_status_id);
-            //        cmd2.Parameters.Add("@EVENT_STATUS_NAME", incidentJson.data.incident.event_status_name);
-            //        cmd2.Parameters.Add("@UT", incidentJson.ut);
-            //        cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-            //        sID = (cmd2.ExecuteScalar()).ToString();
-            //        Files.WriteLog((sID != "" ? " [Success] Insert INCIDENTS " : " [Failure] Insert INCIDENTS ") + "[" + incidentJson.data.@event.id + "]," + "i" + ".json");
-            //    }
-            //    connection.Close();
-            //}
+            string message = (File.ReadAllText("D:\\Users\\Administrator\\Desktop\\New folder (2)\\Incid2332371_053107513.json"));
+            var objJSON = JObject.Parse(message);
+            string sID = "";
+            DOSIncidentJson.IncidentJson incidentJson = JsonUtil.Deserialize(typeof(DOSIncidentJson.IncidentJson), message) as DOSIncidentJson.IncidentJson;
+            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+            {
+                connection.Open();
+                using (FbCommand cmd2 = new FbCommand())
+                {
+                    cmd2.CommandText = "PR_INCIDENTS";
+                    cmd2.CommandType = CommandType.StoredProcedure;
+                    cmd2.Connection = connection;
+                    cmd2.Parameters.Add("@ID", incidentJson.data.incident.id);
+                    cmd2.Parameters.Add("@EVENTID", incidentJson.data.@event.id);
+                    cmd2.Parameters.Add("@CACTION", incidentJson.data.incident.action);
+                    cmd2.Parameters.Add("@INCIDENT_ID", incidentJson.data.incident.incident_id);
+                    cmd2.Parameters.Add("@INCIDENT_NAME", incidentJson.data.incident.incident_name);
+                    cmd2.Parameters.Add("@PARTICIPANT_ID", incidentJson.data.incident.participant_id);
+                    cmd2.Parameters.Add("@PARTICIPANT_NAME", incidentJson.data.incident.participant_name);
+                    cmd2.Parameters.Add("@SUBPARTICIPANT_ID", incidentJson.data.incident.subparticipant_id);
+                    cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", incidentJson.data.incident.subparticipant_name);
+                    cmd2.Parameters.Add("@IMPORTANT_FOR_TRADER", incidentJson.data.incident.important_for_trader == "yes" ? true : false);
+                    cmd2.Parameters.Add("@EVENT_TIME", incidentJson.data.incident.event_time);
+                    cmd2.Parameters.Add("@EVENT_STATUS_ID", incidentJson.data.incident.event_status_id);
+                    cmd2.Parameters.Add("@EVENT_STATUS_NAME", incidentJson.data.incident.event_status_name);
+                    cmd2.Parameters.Add("@UT", incidentJson.ut);
+                    cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                    cmd2.Parameters.Add("@TEAMTYPE",
+                        (incidentJson.data.incident.participant_id.ToString() == incidentJson.data.@event.participants[0].id.ToString() ? "H" : incidentJson.data.incident.participant_id.ToString() == incidentJson.data.@event.participants[1].id.ToString() ? "G" : "H"));
+                    sID = (cmd2.ExecuteScalar()).ToString();
+                    Files.WriteLog((sID != "" ? " [Success] Insert INCIDENTS " : " [Failure] Insert INCIDENTS ") + "[" + incidentJson.data.@event.id + "]," + "i" + ".json");
+                }
+                connection.Close();
+            }
 
 
             //int id = -2;
@@ -3698,7 +3701,8 @@ namespace DataOfScouts
                                 // queryString = "select e.ID, e.NAME, e.HOME_ID, e.GUEST_ID, e.START_DATE,  e.STATUS_NAME,    e.STATUS_TYPE,    e.ROUND_NAME,     e.BOOKED,  e.GROUP_ID, e.STAGE_ID, e.SEASON_ID, e.COMPETITION_ID,    e.AREA_ID, e.CTIMESTAMP from events e where '" + arr[1] + "'<=  e.start_date and  e.start_date <='" + arr[2] + "'";
                                 // queryString = "select e.* from events e where '" + arr[1] + "'<=  e.start_date and  e.start_date <='" + arr[2] + "' order by  e.start_date asc";
                                 // queryString = "select e.* from events e where '" + arr[1] + "'<= e.start_date and  e.start_date <='" + arr[2] + "'  order by  e.start_date asc";
-                                queryString = "SELECT * FROM EVENTS AS G1 JOIN (SELECT id, max(ut) as mostrecent    FROM EVENTS group by id) AS G2 ON G2.id = G1.id and g2.mostrecent = g1.ut where '" + arr[1] + "'<= G1.start_date and  G1.start_date <='" + arr[2] + "'  order by  G1.start_date desc";
+                                ///queryString = "SELECT * FROM EVENTS AS G1 JOIN (SELECT id, max(ut) as mostrecent    FROM EVENTS group by id) AS G2 ON G2.id = G1.id and g2.mostrecent = g1.ut where '" + arr[1] + "'<= G1.start_date and  G1.start_date <='" + arr[2] + "'  order by  G1.start_date desc";
+                                queryString = "SELECT * FROM EVENTS AS G1 where '" + arr[1] + "'<= G1.start_date and  G1.start_date <='" + arr[2] + "'  order by  G1.start_date desc";
 
                             }
                             else
@@ -3711,18 +3715,26 @@ namespace DataOfScouts
                                     //queryString = "SELECT * FROM EVENTS AS G1 JOIN (SELECT id, max(ut) as mostrecent    FROM EVENTS group by id) AS G2 ON G2.id = G1.id and g2.mostrecent = g1.ut   where "
                                     //    + (arr[1].ToString() == "Group" ? " G1.GROUP_ID" : (arr[1].ToString() == "Stage") ? " G1.STAGE_ID" : (arr[1].ToString() == "Season") ? " G1.SEASON_ID" : (arr[1].ToString() == "Comp") ? " G1.COMPETITION_ID" : "")
                                     //    + "='" + arr[2] + "'  order by  G1.start_date asc";
-                                    queryString = "SELECT * FROM EVENTS AS G1 JOIN (SELECT id, max(ut) as mostrecent    FROM EVENTS group by id) AS G2 ON G2.id = G1.id and g2.mostrecent = g1.ut   where "
-                                        + (arr[1].ToString() == "Comp" ? " G1.COMPETITION_ID='" + arr[2] + "'"
-                                        : (arr[1].ToString() == "Season") ? "G1.COMPETITION_ID='" + arr[3] + "' and  G1.SEASON_ID='" + arr[2] + "'"
-                                        : (arr[1].ToString() == "Stage") ? "G1.COMPETITION_ID='" + arr[4] + "' and  G1. SEASON_ID ='" + arr[3] + "' and G1.STAGE_ID='" + arr[2] + "'"
-                                        : (arr[1].ToString() == "Group") ? "G1.COMPETITION_ID='" + arr[5] + "' and  G1. SEASON_ID ='" + arr[4] + "' and G1.STAGE_ID='" + arr[3] + "' and G1.GROUP_ID ='" + arr[2] + "'" : "")
-                                          + "  order by  G1.start_date desc";
+                                    ////queryString = "SELECT * FROM EVENTS AS G1 JOIN (SELECT id, max(ut) as mostrecent    FROM EVENTS group by id) AS G2 ON G2.id = G1.id and g2.mostrecent = g1.ut   where "
+                                    ////    + (arr[1].ToString() == "Comp" ? " G1.COMPETITION_ID='" + arr[2] + "'"
+                                    ////    : (arr[1].ToString() == "Season") ? "G1.COMPETITION_ID='" + arr[3] + "' and  G1.SEASON_ID='" + arr[2] + "'"
+                                    ////    : (arr[1].ToString() == "Stage") ? "G1.COMPETITION_ID='" + arr[4] + "' and  G1. SEASON_ID ='" + arr[3] + "' and G1.STAGE_ID='" + arr[2] + "'"
+                                    ////    : (arr[1].ToString() == "Group") ? "G1.COMPETITION_ID='" + arr[5] + "' and  G1. SEASON_ID ='" + arr[4] + "' and G1.STAGE_ID='" + arr[3] + "' and G1.GROUP_ID ='" + arr[2] + "'" : "")
+                                    ////      + "  order by  G1.start_date desc";
+
+                                    queryString = "SELECT * FROM EVENTS AS G1  where "
+                                       + (arr[1].ToString() == "Comp" ? " G1.COMPETITION_ID='" + arr[2] + "'"
+                                       : (arr[1].ToString() == "Season") ? "G1.COMPETITION_ID='" + arr[3] + "' and  G1.SEASON_ID='" + arr[2] + "'"
+                                       : (arr[1].ToString() == "Stage") ? "G1.COMPETITION_ID='" + arr[4] + "' and  G1. SEASON_ID ='" + arr[3] + "' and G1.STAGE_ID='" + arr[2] + "'"
+                                       : (arr[1].ToString() == "Group") ? "G1.COMPETITION_ID='" + arr[5] + "' and  G1. SEASON_ID ='" + arr[4] + "' and G1.STAGE_ID='" + arr[3] + "' and G1.GROUP_ID ='" + arr[2] + "'" : "")
+                                         + "  order by  G1.start_date desc";
                                 }
                                 else
                                 {
                                     // queryString = "select e.ID, e.NAME, e.HOME_ID, e.GUEST_ID, e.START_DATE,  e.STATUS_NAME,    e.STATUS_TYPE,    e.ROUND_NAME,     e.BOOKED,  e.GROUP_ID, e.STAGE_ID, e.SEASON_ID, e.COMPETITION_ID,    e.AREA_ID, e.CTIMESTAMP from events e where '" + arr[1] + "'<= e.start_date and  e.start_date <='" + arr[2] + "'";
                                     //  queryString = "select e.* from events e where '" + arr[1] + "'<= e.start_date and  e.start_date <='" + arr[2] + "'  order by  e.start_date asc";
-                                    queryString = "SELECT * FROM EVENTS AS G1 JOIN (SELECT id, max(ut) as mostrecent    FROM EVENTS group by id) AS G2 ON G2.id = G1.id and g2.mostrecent = g1.ut where '" + arr[1] + "'<= G1.start_date and  G1.start_date <='" + arr[2] + "'  order by  G1.start_date desc";
+                                    ///queryString = "SELECT * FROM EVENTS AS G1 JOIN (SELECT id, max(ut) as mostrecent    FROM EVENTS group by id) AS G2 ON G2.id = G1.id and g2.mostrecent = g1.ut where '" + arr[1] + "'<= G1.start_date and  G1.start_date <='" + arr[2] + "'  order by  G1.start_date desc";
+                                    queryString = "SELECT * FROM EVENTS AS G1  where '" + arr[1] + "'<= G1.start_date and  G1.start_date <='" + arr[2] + "'  order by  G1.start_date desc";
                                 }
                             }
                             FbDataAdapter adapter = new FbDataAdapter();
@@ -3731,7 +3743,7 @@ namespace DataOfScouts
                             connection.Open();
                             DataSet eventsDs = new DataSet();
                             adapter.Fill(eventsDs);
-                            if (Convert.ToBoolean(arr[0]) && DateTime.Now <= Convert.ToDateTime(arr[2]) && eventsDs.Tables[0].Rows.Count == 0)
+                            if (Convert.ToBoolean(arr[0]) && DateTime.Now <= Convert.ToDateTime(arr[2]))// && eventsDs.Tables[0].Rows.Count == 0)
                             //  if (Convert.ToBoolean(arr[0]))
                             //if (DateTime.Now <= Convert.ToDateTime(arr[2]))
                             {
@@ -3744,7 +3756,7 @@ namespace DataOfScouts
 
                                     var responseValue = clientTest.GetAccessData(strToken, "events/" + i, arr[1], arr[2]);
                                     var strResponseValue = responseValue.Result;
-                                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1153436.xml");
+                                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\events-1 105644.xml");
                                     //var strResponseValue = document.ToString();
 
                                     if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
@@ -5564,221 +5576,236 @@ namespace DataOfScouts
         }
         private void MasterControl_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            Rectangle rectangle = new Rectangle(Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvEvent.rowDefaultHeight, 0x10), 2)), Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvEvent.rowDefaultHeight, 0x10), 2)), 0x10, 0x10);
-            if (rectangle.Contains(e.Location))
+            try
             {
-                if (this.dgvEvent.rowCurrent.Contains(e.RowIndex))
+                Rectangle rectangle = new Rectangle(Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvEvent.rowDefaultHeight, 0x10), 2)), Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvEvent.rowDefaultHeight, 0x10), 2)), 0x10, 0x10);
+                if (rectangle.Contains(e.Location))
                 {
-                    this.dgvEvent.rowCurrent.Clear();
-                    this.dgvEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvEvent.rowDefaultHeight);
-                    this.dgvEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowDefaultDivider);
+                    if (this.dgvEvent.rowCurrent.Contains(e.RowIndex))
+                    {
+                        this.dgvEvent.rowCurrent.Clear();
+                        this.dgvEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvEvent.rowDefaultHeight);
+                        this.dgvEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowDefaultDivider);
+                    }
+                    else
+                    {
+                        ////ADD TEAM INFO   
+                        //string team_id = this.dgvEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        //DataSet data = new DataSet();
+                        //data = InsertData("events.participants", false, team_id); 
+                        //if (data.Tables[0].Rows.Count == 0)
+                        //{
+                        //    data = InsertData("events.participants", true, team_id);
+                        //}
+
+                        //ADD TEAM INFO   
+                        string event_id = this.dgvEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        DataSet data = new DataSet();
+                        data = InsertData("events.show", false, event_id);
+                        // if (data.Tables[0].Rows.Count == 0)
+                        if (data.Tables[0].Rows.Count < 2)
+                        {
+                            data = InsertData("events.show", true, event_id);
+                        }
+
+                        if (dgvEvent.childView.TabPages.Count == 0)
+                        {
+                            dgvEvent.childView.AddData(data.Tables[0], "Teams");
+                            dgvEvent.childView.AddData(data.Tables[1], "HPlayers");
+                            dgvEvent.childView.AddData(data.Tables[2], "GPlayers");
+                        }
+                        else if (dgvEvent.childView.TabPages.Count > 0 && dgvEvent.childView.TabPages[0].Text == "Teams")
+                        {
+                            dgvEvent.childView.BindData(data.Tables[0], "Teams");
+
+                            dgvEvent.childView.BindData(data.Tables[1], "HPlayers");
+                            dgvEvent.childView.BindData(data.Tables[2], "GPlayers");
+                        }
+
+                        if (this.dgvEvent.rowCurrent.Count > 0)
+                        {
+                            int num = this.dgvEvent.rowCurrent[0];
+                            this.dgvEvent.rowCurrent.Clear();
+                            this.dgvEvent.Rows[num].Height = Conversions.ToInteger(this.dgvEvent.rowDefaultHeight);
+                            this.dgvEvent.Rows[num].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowDefaultDivider);
+                            this.dgvEvent.ClearSelection();
+                            this.dgvEvent.collapseRow = true;
+                            this.dgvEvent.Rows[num].Selected = true;
+                        }
+                        this.dgvEvent.rowCurrent.Add(e.RowIndex);
+                        this.dgvEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvEvent.rowExpandedHeight);
+                        this.dgvEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowExpandedDivider);
+                    }
+                    this.dgvEvent.ClearSelection();
+                    this.dgvEvent.collapseRow = true;
+                    this.dgvEvent.Rows[e.RowIndex].Selected = true;
                 }
                 else
                 {
-                    ////ADD TEAM INFO   
-                    //string team_id = this.dgvEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
-                    //DataSet data = new DataSet();
-                    //data = InsertData("events.participants", false, team_id); 
-                    //if (data.Tables[0].Rows.Count == 0)
-                    //{
-                    //    data = InsertData("events.participants", true, team_id);
-                    //}
-
-                    //ADD TEAM INFO   
-                    string event_id = this.dgvEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
-                    DataSet data = new DataSet();
-                    data = InsertData("events.show", false, event_id);
-                    // if (data.Tables[0].Rows.Count == 0)
-                    if (data.Tables[0].Rows.Count < 2)
-                    {
-                        data = InsertData("events.show", true, event_id);
-                    }
-
-                    if (dgvEvent.childView.TabPages.Count == 0)
-                    {
-                        dgvEvent.childView.AddData(data.Tables[0], "Teams");
-                        dgvEvent.childView.AddData(data.Tables[1], "HPlayers");
-                        dgvEvent.childView.AddData(data.Tables[2], "GPlayers");
-                    }
-                    else if (dgvEvent.childView.TabPages.Count > 0 && dgvEvent.childView.TabPages[0].Text == "Teams")
-                    {
-                        dgvEvent.childView.BindData(data.Tables[0], "Teams");
-
-                        dgvEvent.childView.BindData(data.Tables[1], "HPlayers");
-                        dgvEvent.childView.BindData(data.Tables[2], "GPlayers");
-                    }
-
-                    if (this.dgvEvent.rowCurrent.Count > 0)
-                    {
-                        int num = this.dgvEvent.rowCurrent[0];
-                        this.dgvEvent.rowCurrent.Clear();
-                        this.dgvEvent.Rows[num].Height = Conversions.ToInteger(this.dgvEvent.rowDefaultHeight);
-                        this.dgvEvent.Rows[num].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowDefaultDivider);
-                        this.dgvEvent.ClearSelection();
-                        this.dgvEvent.collapseRow = true;
-                        this.dgvEvent.Rows[num].Selected = true;
-                    }
-                    this.dgvEvent.rowCurrent.Add(e.RowIndex);
-                    this.dgvEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvEvent.rowExpandedHeight);
-                    this.dgvEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvEvent.rowExpandedDivider);
+                    dgvEvent.Rows[e.RowIndex].HeaderCell.ContextMenuStrip = cmsBook;
+                    cmsBook.Items[0].Text = "Book " + dgvEvent.Rows[e.RowIndex].Cells[0].Value;
+                    cmsBook.Items[0].Tag = dgvEvent.Rows[e.RowIndex].Cells[0].Value;
+                    this.dgvEvent.collapseRow = false;
                 }
-                this.dgvEvent.ClearSelection();
-                this.dgvEvent.collapseRow = true;
-                this.dgvEvent.Rows[e.RowIndex].Selected = true;
-            }
-            else
-            {
-                dgvEvent.Rows[e.RowIndex].HeaderCell.ContextMenuStrip = cmsBook;
-                cmsBook.Items[0].Text = "Book " + dgvEvent.Rows[e.RowIndex].Cells[0].Value;
-                cmsBook.Items[0].Tag = dgvEvent.Rows[e.RowIndex].Cells[0].Value;
-                this.dgvEvent.collapseRow = false;
-            }
-            /*
-                                       using (FbConnection connection = new FbConnection("User=SYSDBA;Password=masterkey;Database=E:\\Project\\Database\\SCOUTS_DB.FDB;DataSource=127.0.0.1;Port=3050;Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0"))
-                                       {
-                                           connection.Open();
-                                           string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + team_id + "' order by id asc";
-                                           using (FbCommand cmd = new FbCommand(queryString))
+                /*
+                                           using (FbConnection connection = new FbConnection("User=SYSDBA;Password=masterkey;Database=E:\\Project\\Database\\SCOUTS_DB.FDB;DataSource=127.0.0.1;Port=3050;Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0"))
                                            {
-                                               using (FbCommandBuilder fcb = new FbCommandBuilder())
+                                               connection.Open();
+                                               string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + team_id + "' order by id asc";
+                                               using (FbCommand cmd = new FbCommand(queryString))
                                                {
-                                                   using (FbDataAdapter fda = new FbDataAdapter())
+                                                   using (FbCommandBuilder fcb = new FbCommandBuilder())
                                                    {
-                                                       cmd.Connection = connection;
-                                                       fda.SelectCommand = cmd;
-                                                       //using (DataSet data = new DataSet())
-                                                       //{
-                                                       DataSet data = new DataSet();
-                                                       data.Tables.Add(new DataTable("teams"));
-                                                       fda.Fill(data.Tables["teams"]);
-
-                                                       queryString = "select   * from  players2 where team_id=" + team_id;// 174516 ";
-                                                       data.Tables.Add(new DataTable("players"));
-                                                       FbDataAdapter adapter1 = new FbDataAdapter();
-                                                       adapter1.SelectCommand = new FbCommand(queryString, connection);
-                                                       // FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
-                                                       adapter1.Fill(data.Tables["players"]);
-
-                                                       if (data.Tables[0].Rows.Count == 0)
+                                                       using (FbDataAdapter fda = new FbDataAdapter())
                                                        {
-                                                           data = InsertData("participants", false, team_id);
-                                                       }
+                                                           cmd.Connection = connection;
+                                                           fda.SelectCommand = cmd;
+                                                           //using (DataSet data = new DataSet())
+                                                           //{
+                                                           DataSet data = new DataSet();
+                                                           data.Tables.Add(new DataTable("teams"));
+                                                           fda.Fill(data.Tables["teams"]);
 
-                                                       if (dgvEvent.childView.TabPages.Count == 0)
-                                                       {
-                                                           dgvEvent.childView.AddData(data.Tables[0], "Teams");
-                                                           dgvEvent.childView.AddData(data.Tables[1], "Players");
+                                                           queryString = "select   * from  players2 where team_id=" + team_id;// 174516 ";
+                                                           data.Tables.Add(new DataTable("players"));
+                                                           FbDataAdapter adapter1 = new FbDataAdapter();
+                                                           adapter1.SelectCommand = new FbCommand(queryString, connection);
+                                                           // FbCommandBuilder builder3 = new FbCommandBuilder(adapter1);
+                                                           adapter1.Fill(data.Tables["players"]);
+
+                                                           if (data.Tables[0].Rows.Count == 0)
+                                                           {
+                                                               data = InsertData("participants", false, team_id);
+                                                           }
+
+                                                           if (dgvEvent.childView.TabPages.Count == 0)
+                                                           {
+                                                               dgvEvent.childView.AddData(data.Tables[0], "Teams");
+                                                               dgvEvent.childView.AddData(data.Tables[1], "Players");
+                                                           }
+                                                           else if (dgvEvent.childView.TabPages.Count > 0 && dgvEvent.childView.TabPages[0].Text == "Teams")
+                                                           {
+                                                               dgvEvent.childView.BindData(data.Tables[0], "Teams");
+                                                               dgvEvent.childView.BindData(data.Tables[1], "Players");
+                                                           }
+                                                           //}
                                                        }
-                                                       else if (dgvEvent.childView.TabPages.Count > 0 && dgvEvent.childView.TabPages[0].Text == "Teams")
-                                                       {
-                                                           dgvEvent.childView.BindData(data.Tables[0], "Teams");
-                                                           dgvEvent.childView.BindData(data.Tables[1], "Players");
-                                                       }
-                                                       //}
                                                    }
                                                }
+                                               connection.Close();
                                            }
-                                           connection.Close();
-                                       }
-                   */
+                       */
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError("MasterControl_RowHeaderMouseClic(),error:" + exp.Message);
+            }
         }
+
         private void MasterControl_RowHeaderMouseClick2(object sender, DataGridViewCellMouseEventArgs e)
         {
-            Rectangle rectangle = new Rectangle(Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvBookedEvent.rowDefaultHeight, 0x10), 2)), Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvBookedEvent.rowDefaultHeight, 0x10), 2)), 0x10, 0x10);
-            if (rectangle.Contains(e.Location))
+            try
             {
-                if (this.dgvBookedEvent.rowCurrent.Contains(e.RowIndex))
+                Rectangle rectangle = new Rectangle(Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvBookedEvent.rowDefaultHeight, 0x10), 2)), Conversions.ToInteger(Microsoft.VisualBasic.CompilerServices.Operators.DivideObject(Microsoft.VisualBasic.CompilerServices.Operators.SubtractObject(this.dgvBookedEvent.rowDefaultHeight, 0x10), 2)), 0x10, 0x10);
+                if (rectangle.Contains(e.Location))
                 {
-                    this.dgvBookedEvent.rowCurrent.Clear();
-                    this.dgvBookedEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultHeight);
-                    this.dgvBookedEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultDivider);
+                    if (this.dgvBookedEvent.rowCurrent.Contains(e.RowIndex))
+                    {
+                        this.dgvBookedEvent.rowCurrent.Clear();
+                        this.dgvBookedEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultHeight);
+                        this.dgvBookedEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultDivider);
+                    }
+                    else
+                    {
+
+                        string event_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        if (event_id == "") return;
+                        //if (Convert.ToInt32 (event_id) > 0)
+                        //{
+                        DataSet data = new DataSet();
+                        data = InsertData("events.show2", false, event_id == "" ? "-1" : event_id);
+                        // if (data.Tables[0].Rows.Count == 0)
+                        if (event_id != "" && ((data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0) || data.Tables[1].Rows.Count == 0))
+                        {
+                            data = InsertData("events.show2", true, event_id == "" ? "-1" : event_id);
+                        }
+
+                        if (dgvBookedEvent.childView.TabPages.Count == 0)
+                        {
+                            dgvBookedEvent.childView.AddData(data.Tables[0], "Teams");
+                            dgvBookedEvent.childView.AddData(data.Tables[1], "HPlayers");
+                            dgvBookedEvent.childView.AddData(data.Tables[2], "GPlayers");
+                            dgvBookedEvent.childView.AddData(data.Tables[3], "Incidents");
+                        }
+                        else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
+                        {
+                            dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
+
+                            dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
+                            dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
+                            dgvBookedEvent.childView.BindData(data.Tables[3], "Incidents");
+                        }
+                        //}
+                        //else
+                        //{
+                        //    //dgvBookedEvent.childView.Dispose();
+                        //}
+                        ////ADD TEAM INFO  
+                        //iExpand = e.RowIndex;
+                        //string team_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        //DataSet data = new DataSet();
+                        //data = InsertData("events.participants", false, team_id);
+
+                        //if (data.Tables[0].Rows.Count < 2)
+                        //{
+                        //    data = InsertData("events.participants", true, team_id);
+                        //}
+
+                        //if (dgvBookedEvent.childView.TabPages.Count == 0)
+                        //{
+                        //    dgvBookedEvent.childView.AddData(data.Tables[0], "Teams");
+                        //    dgvBookedEvent.childView.AddData(data.Tables[1], "HPlayers");
+                        //    dgvBookedEvent.childView.AddData(data.Tables[2], "GPlayers");
+                        //}
+                        //else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
+                        //{
+                        //    dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
+                        //    // if (dgvBookedEvent.childView.TabPages.Count > 1 && dgvBookedEvent.childView.TabPages[1].Text == "Players")
+                        //    //{ 
+                        //    dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
+                        //    dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
+                        //    //}
+                        //}
+
+
+                        if (this.dgvBookedEvent.rowCurrent.Count > 0)
+                        {
+                            int num = this.dgvBookedEvent.rowCurrent[0];
+                            this.dgvBookedEvent.rowCurrent.Clear();
+                            this.dgvBookedEvent.Rows[num].Height = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultHeight);
+                            this.dgvBookedEvent.Rows[num].DividerHeight = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultDivider);
+                            this.dgvBookedEvent.ClearSelection();
+                            this.dgvBookedEvent.collapseRow = true;
+                            this.dgvBookedEvent.Rows[num].Selected = true;
+                        }
+                        this.dgvBookedEvent.rowCurrent.Add(e.RowIndex);
+                        this.dgvBookedEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvBookedEvent.rowExpandedHeight);
+                        this.dgvBookedEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvBookedEvent.rowExpandedDivider);
+                    }
+                    this.dgvBookedEvent.ClearSelection();
+                    this.dgvBookedEvent.collapseRow = true;
+                    this.dgvBookedEvent.Rows[e.RowIndex].Selected = true;
                 }
                 else
                 {
+                    dgvBookedEvent.Rows[e.RowIndex].HeaderCell.ContextMenuStrip = cmsBooked;
 
-                    string event_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
-                    if (event_id == "") return;
-                    //if (Convert.ToInt32 (event_id) > 0)
-                    //{
-                    DataSet data = new DataSet();
-                    data = InsertData("events.show2", false, event_id == "" ? "-1" : event_id);
-                    // if (data.Tables[0].Rows.Count == 0)
-                    if (event_id != "" && ((data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0) || data.Tables[1].Rows.Count == 0))
-                    {
-                        data = InsertData("events.show2", true, event_id == "" ? "-1" : event_id);
-                    }
-
-                    if (dgvBookedEvent.childView.TabPages.Count == 0)
-                    {
-                        dgvBookedEvent.childView.AddData(data.Tables[0], "Teams");
-                        dgvBookedEvent.childView.AddData(data.Tables[1], "HPlayers");
-                        dgvBookedEvent.childView.AddData(data.Tables[2], "GPlayers");
-                        dgvBookedEvent.childView.AddData(data.Tables[3], "Incidents");
-                    }
-                    else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
-                    {
-                        dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
-
-                        dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
-                        dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
-                        dgvBookedEvent.childView.BindData(data.Tables[3], "Incidents");
-                    }
-                    //}
-                    //else
-                    //{
-                    //    //dgvBookedEvent.childView.Dispose();
-                    //}
-                    ////ADD TEAM INFO  
-                    //iExpand = e.RowIndex;
-                    //string team_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
-                    //DataSet data = new DataSet();
-                    //data = InsertData("events.participants", false, team_id);
-
-                    //if (data.Tables[0].Rows.Count < 2)
-                    //{
-                    //    data = InsertData("events.participants", true, team_id);
-                    //}
-
-                    //if (dgvBookedEvent.childView.TabPages.Count == 0)
-                    //{
-                    //    dgvBookedEvent.childView.AddData(data.Tables[0], "Teams");
-                    //    dgvBookedEvent.childView.AddData(data.Tables[1], "HPlayers");
-                    //    dgvBookedEvent.childView.AddData(data.Tables[2], "GPlayers");
-                    //}
-                    //else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
-                    //{
-                    //    dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
-                    //    // if (dgvBookedEvent.childView.TabPages.Count > 1 && dgvBookedEvent.childView.TabPages[1].Text == "Players")
-                    //    //{ 
-                    //    dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
-                    //    dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
-                    //    //}
-                    //}
-
-
-                    if (this.dgvBookedEvent.rowCurrent.Count > 0)
-                    {
-                        int num = this.dgvBookedEvent.rowCurrent[0];
-                        this.dgvBookedEvent.rowCurrent.Clear();
-                        this.dgvBookedEvent.Rows[num].Height = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultHeight);
-                        this.dgvBookedEvent.Rows[num].DividerHeight = Conversions.ToInteger(this.dgvBookedEvent.rowDefaultDivider);
-                        this.dgvBookedEvent.ClearSelection();
-                        this.dgvBookedEvent.collapseRow = true;
-                        this.dgvBookedEvent.Rows[num].Selected = true;
-                    }
-                    this.dgvBookedEvent.rowCurrent.Add(e.RowIndex);
-                    this.dgvBookedEvent.Rows[e.RowIndex].Height = Conversions.ToInteger(this.dgvBookedEvent.rowExpandedHeight);
-                    this.dgvBookedEvent.Rows[e.RowIndex].DividerHeight = Conversions.ToInteger(this.dgvBookedEvent.rowExpandedDivider);
+                    this.dgvBookedEvent.collapseRow = false;
                 }
-                this.dgvBookedEvent.ClearSelection();
-                this.dgvBookedEvent.collapseRow = true;
-                this.dgvBookedEvent.Rows[e.RowIndex].Selected = true;
             }
-            else
+            catch (Exception exp)
             {
-                dgvBookedEvent.Rows[e.RowIndex].HeaderCell.ContextMenuStrip = cmsBooked;
-
-                this.dgvBookedEvent.collapseRow = false;
+                Files.WriteError("MasterControl_RowHeaderMouseClick2(),error:" + exp.Message);
             }
         }
 
@@ -5863,125 +5890,26 @@ namespace DataOfScouts
 
         private bool BookEventAction(string eventid, bool show)
         {
-            bool b_booked = false;
-            string strName = "Booked" + eventid + "-" + DateTime.Now.ToString("HHmmss");
-            var responseValue = clientTest.PostAccessData(strToken, "booked-events", eventid);
-            var strResponseValue = responseValue.Result;
-
-            Files.WriteLog(strName + ".xml");
-            Files.WriteXml(strName, strResponseValue);
-
-            DOSBookedResults.api apis = XmlUtil.Deserialize(typeof(DOSBookedResults.api), strResponseValue) as DOSBookedResults.api;
-            DOSBookedResults.apiError errors = apis.error;
-            if (errors != null)
+            try
             {
-                if (show) MessageBox.Show(errors.message);
-                Files.WriteLog("[Failure] " + "Booked " + eventid + ",Error: " + errors.message);
-
-                if (errors.message == "Booking already Exist")
-                {
-                    b_booked = true;
-                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-                    {
-                        using (FbCommand cmd = new FbCommand())
-                        {
-                            connection.Open();
-                            cmd.CommandText = "Set_BookedEventBy";
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Connection = connection;
-                            cmd.Parameters.Add("@ID", eventid);
-                            cmd.Parameters.Add("@BOOKED", true);
-                            cmd.Parameters.Add("@BOOKED_BY", null);
-                            cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                            int id = Convert.ToInt32(cmd.ExecuteScalar());
-                            /// Files.WriteLog(id > 0 ? "[Success] Update Booked " + eventid : "[Failure] Update Booked " + eventid);
-                            //if (id > 0)
-                            //{ 
-                            //    if (show) MessageBox.Show(eventid + " Booking already Exist." );
-                            //}
-                        }
-                        connection.Close();
-                    }
-                    if (show) MessageBox.Show(eventid + " Booking already Exist.");
-                }
-                else if (errors.message == "You cannot book this event, it is not covered in this product")
-                {
-                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-                    {
-                        using (FbCommand cmd = new FbCommand())
-                        {
-                            connection.Open();
-                            cmd.CommandText = "Set_BookedEventBy";
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Connection = connection;
-                            cmd.Parameters.Add("@ID", eventid);
-                            cmd.Parameters.Add("@BOOKED", false);
-                            cmd.Parameters.Add("@BOOKED_BY", "(UnBooked)");
-                            cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                            int id = Convert.ToInt32(cmd.ExecuteScalar());
-                            Files.WriteLog(id > 0 ? "[Success] Update Booked " + eventid : "[Failure] Update Booked " + eventid);
-                        }
-                        connection.Close();
-                    }
-                }
-            }
-            else
-            {
-                DOSBookedResults.apiDataBooked_eventsEvent[] bookedEvents = (apis.data.Length == 0) ? null : apis.data[0];
-                if (bookedEvents == null) return false;
-                foreach (DOSBookedResults.apiDataBooked_eventsEvent sevent in bookedEvents)
-                {
-                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-                    {
-                        using (FbCommand cmd = new FbCommand())
-                        {
-                            connection.Open();
-                            cmd.CommandText = "Set_BookedEventBy";
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Connection = connection;
-                            cmd.Parameters.Add("@ID", sevent.id);
-                            cmd.Parameters.Add("@BOOKED", true);
-                            cmd.Parameters.Add("@BOOKED_BY", null);
-                            cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                            int id = Convert.ToInt32(cmd.ExecuteScalar());
-                            Files.WriteLog(id > 0 ? "[Success] Booked " + eventid : "[Failure] Booked " + eventid);
-                            if (id > 0)
-                            {
-                                b_booked = true;
-                                if (show) MessageBox.Show("[Success] Booked " + sevent.id + ".");
-                            }
-                        }
-                        connection.Close();
-                    }
-                }
-            }
-            return b_booked;
-        }
-
-        private void cmsBook_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (e.ClickedItem.Text.IndexOf("Book") == 0)
-            {
-                string strName = "Book" + e.ClickedItem.Tag.ToString() + "-" + DateTime.Now.ToString("HHmmss");
-                Files.WriteLog(e.ClickedItem.Text + ",File: " + strName + ".xml");
-
-                var responseValue = clientTest.PostAccessData(strToken, "booked-events", e.ClickedItem.Tag.ToString());
+                bool b_booked = false;
+                string strName = "Booked" + eventid + "-" + DateTime.Now.ToString("HHmmss");
+                var responseValue = clientTest.PostAccessData(strToken, "booked-events", eventid);
                 var strResponseValue = responseValue.Result;
 
-                //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\Book2556471132507.xml");
-                //var strResponseValue = document.ToString();
-
+                Files.WriteLog(strName + ".xml");
                 Files.WriteXml(strName, strResponseValue);
 
                 DOSBookedResults.api apis = XmlUtil.Deserialize(typeof(DOSBookedResults.api), strResponseValue) as DOSBookedResults.api;
                 DOSBookedResults.apiError errors = apis.error;
                 if (errors != null)
                 {
-                    MessageBox.Show(errors.message);
-                    Files.WriteLog("[Failure] " + e.ClickedItem.Text + ",Error: " + errors.message);
+                    if (show) MessageBox.Show(errors.message);
+                    Files.WriteLog("[Failure] " + "Booked " + eventid + ",Error: " + errors.message);
 
                     if (errors.message == "Booking already Exist")
                     {
+                        b_booked = true;
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             using (FbCommand cmd = new FbCommand())
@@ -5990,21 +5918,22 @@ namespace DataOfScouts
                                 cmd.CommandText = "Set_BookedEventBy";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Connection = connection;
-                                cmd.Parameters.Add("@ID", e.ClickedItem.Tag.ToString());
+                                cmd.Parameters.Add("@ID", eventid);
                                 cmd.Parameters.Add("@BOOKED", true);
                                 cmd.Parameters.Add("@BOOKED_BY", null);
                                 cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                 int id = Convert.ToInt32(cmd.ExecuteScalar());
-                                //Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
+                                /// Files.WriteLog(id > 0 ? "[Success] Update Booked " + eventid : "[Failure] Update Booked " + eventid);
                                 //if (id > 0)
-                                //{
-                                //    MessageBox.Show("[Success] Booked " + e.ClickedItem.Tag.ToString() + ".");
+                                //{ 
+                                //    if (show) MessageBox.Show(eventid + " Booking already Exist." );
                                 //}
                             }
                             connection.Close();
                         }
+                        if (show) MessageBox.Show(eventid + " Booking already Exist.");
                     }
-                    else if (errors.message == "You cannot book this event, it is not covered in this product")
+                    else if (errors.message == "You cannot book this event, it is not covered in this product" || errors.message == "You can order/refuse only events with the statuses: scheduled")
                     {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
@@ -6014,25 +5943,21 @@ namespace DataOfScouts
                                 cmd.CommandText = "Set_BookedEventBy";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Connection = connection;
-                                cmd.Parameters.Add("@ID", e.ClickedItem.Tag.ToString());
+                                cmd.Parameters.Add("@ID", eventid);
                                 cmd.Parameters.Add("@BOOKED", false);
                                 cmd.Parameters.Add("@BOOKED_BY", "(UnBooked)");
                                 cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                 int id = Convert.ToInt32(cmd.ExecuteScalar());
-                                Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
+                                Files.WriteLog(id > 0 ? "[Success] Update Booked " + eventid : "[Failure] Update Booked " + eventid);
                             }
                             connection.Close();
                         }
                     }
                 }
-
                 else
                 {
-                    DOSBookedResults.api apiEvents = XmlUtil.Deserialize(typeof(DOSBookedResults.api), strResponseValue) as DOSBookedResults.api;
-                    if (apiEvents == null) return;
-                    DOSBookedResults.apiDataBooked_eventsEvent[] bookedEvents = (apiEvents.data.Length == 0) ? null : apiEvents.data[0];
-                    if (bookedEvents == null) return;
-
+                    DOSBookedResults.apiDataBooked_eventsEvent[] bookedEvents = (apis.data.Length == 0) ? null : apis.data[0];
+                    if (bookedEvents == null) return false;
                     foreach (DOSBookedResults.apiDataBooked_eventsEvent sevent in bookedEvents)
                     {
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
@@ -6048,16 +5973,133 @@ namespace DataOfScouts
                                 cmd.Parameters.Add("@BOOKED_BY", null);
                                 cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                 int id = Convert.ToInt32(cmd.ExecuteScalar());
-                                Files.WriteLog(id > 0 ? "[Success] Booked " + e.ClickedItem.Text : "[Failure] Booked " + e.ClickedItem.Text);
+                                Files.WriteLog(id > 0 ? "[Success] Booked " + eventid : "[Failure] Booked " + eventid);
                                 if (id > 0)
                                 {
-                                    MessageBox.Show("[Success] Booked " + sevent.id + ".");
+                                    b_booked = true;
+                                    if (show) MessageBox.Show("[Success] Booked " + sevent.id + ".");
                                 }
                             }
                             connection.Close();
                         }
                     }
                 }
+                return b_booked;
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError("BookEventAction(),error:" + exp.Message);
+                return false;
+            }
+        }
+
+        private void cmsBook_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            try
+            {
+                if (e.ClickedItem.Text.IndexOf("Book") == 0)
+                {
+                    string strName = "Book" + e.ClickedItem.Tag.ToString() + "-" + DateTime.Now.ToString("HHmmss");
+                    Files.WriteLog(e.ClickedItem.Text + ",File: " + strName + ".xml");
+
+                    var responseValue = clientTest.PostAccessData(strToken, "booked-events", e.ClickedItem.Tag.ToString());
+                    var strResponseValue = responseValue.Result;
+
+                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\Book2556471132507.xml");
+                    //var strResponseValue = document.ToString();
+
+                    Files.WriteXml(strName, strResponseValue);
+
+                    DOSBookedResults.api apis = XmlUtil.Deserialize(typeof(DOSBookedResults.api), strResponseValue) as DOSBookedResults.api;
+                    DOSBookedResults.apiError errors = apis.error;
+                    if (errors != null)
+                    {
+                        MessageBox.Show(errors.message);
+                        Files.WriteLog("[Failure] " + e.ClickedItem.Text + ",Error: " + errors.message);
+
+                        if (errors.message == "Booking already Exist")
+                        {
+                            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                            {
+                                using (FbCommand cmd = new FbCommand())
+                                {
+                                    connection.Open();
+                                    cmd.CommandText = "Set_BookedEventBy";
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Connection = connection;
+                                    cmd.Parameters.Add("@ID", e.ClickedItem.Tag.ToString());
+                                    cmd.Parameters.Add("@BOOKED", true);
+                                    cmd.Parameters.Add("@BOOKED_BY", null);
+                                    cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                    //Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
+                                    //if (id > 0)
+                                    //{
+                                    //    MessageBox.Show("[Success] Booked " + e.ClickedItem.Tag.ToString() + ".");
+                                    //}
+                                }
+                                connection.Close();
+                            }
+                        }
+                        else if (errors.message == "You cannot book this event, it is not covered in this product" || errors.message == "You can order/refuse only events with the statuses: scheduled")
+                        {
+                            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                            {
+                                using (FbCommand cmd = new FbCommand())
+                                {
+                                    connection.Open();
+                                    cmd.CommandText = "Set_BookedEventBy";
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Connection = connection;
+                                    cmd.Parameters.Add("@ID", e.ClickedItem.Tag.ToString());
+                                    cmd.Parameters.Add("@BOOKED", false);
+                                    cmd.Parameters.Add("@BOOKED_BY", "(UnBooked)");
+                                    cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                    Files.WriteLog(id > 0 ? "[Success] Update " + e.ClickedItem.Text : "[Failure] Update " + e.ClickedItem.Text);
+                                }
+                                connection.Close();
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        DOSBookedResults.api apiEvents = XmlUtil.Deserialize(typeof(DOSBookedResults.api), strResponseValue) as DOSBookedResults.api;
+                        if (apiEvents == null) return;
+                        DOSBookedResults.apiDataBooked_eventsEvent[] bookedEvents = (apiEvents.data.Length == 0) ? null : apiEvents.data[0];
+                        if (bookedEvents == null) return;
+
+                        foreach (DOSBookedResults.apiDataBooked_eventsEvent sevent in bookedEvents)
+                        {
+                            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                            {
+                                using (FbCommand cmd = new FbCommand())
+                                {
+                                    connection.Open();
+                                    cmd.CommandText = "Set_BookedEventBy";
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Connection = connection;
+                                    cmd.Parameters.Add("@ID", sevent.id);
+                                    cmd.Parameters.Add("@BOOKED", true);
+                                    cmd.Parameters.Add("@BOOKED_BY", null);
+                                    cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                    Files.WriteLog(id > 0 ? "[Success] Booked " + e.ClickedItem.Text : "[Failure] Booked " + e.ClickedItem.Text);
+                                    if (id > 0)
+                                    {
+                                        MessageBox.Show("[Success] Booked " + sevent.id + ".");
+                                    }
+                                }
+                                connection.Close();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError("cmsBook_ItemClicked(),error:" + exp.Message);
             }
         }
 
@@ -6452,7 +6494,7 @@ namespace DataOfScouts
                                             // cmd2.Parameters.Add("@SOURCE_DC", api.data.@event.S);
                                             //cmd2.Parameters.Add("@SOURCE_SUPER", api.data.@event.s);
                                             cmd2.Parameters.Add("@RELATION_STATUS", api.data.@event.relation_status);
-                                            cmd2.Parameters.Add("@START_DATE", api.data.@event.start_date);
+                                            cmd2.Parameters.Add("@START_DATE", Convert.ToDateTime (api.data.@event.start_date).AddHours(8));
                                             cmd2.Parameters.Add("@FT_ONLY", api.data.@event.ft_only == "yes" ? true : false);
                                             cmd2.Parameters.Add("@COVERAGE_TYPE", api.data.@event.coverage_type);
                                             //cmd2.Parameters.Add("@CHANNEL_ID", api.data.@event.CH);
