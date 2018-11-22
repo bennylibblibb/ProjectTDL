@@ -65,32 +65,43 @@
 		</script>
 	</HEAD>
 	<body OnLoad="focusload()">
-		<form id="fmSms" method="post" runat="server">
-			<table cellSpacing="0" cellPadding="0" width="100%" border="0">
-				<tr>
-					<td class="top_bar01_bg"><img src="resource/mango_logo_title.gif" width="359" height="49">
-					</td>
-				</tr>
-				<tr>
-					<td class="top_bar02_bg" vAlign="top" height="15">
-						<P align="left"><FONT color="#ffffff"><IMG height="15" src="resource/spacer.gif" width="15"></FONT>
-							用戶:&nbsp;<asp:label id="lbUser" runat="server"></asp:label></P>
-					</td>
-				</tr>
-			</table>
-			<table cellSpacing="0" cellPadding="0" width="100%" border="0">
-				<tr width="100%">
-					<td vAlign="top">
-						<table class="admin-tan-border" id="table1" height="500" cellSpacing="0" cellPadding="0"
-							width="100%" border="0">
-							<tr>
-								<td class="admin-table" style="HEIGHT: 10px" vAlign="top" height="5"><IMG height="15" src="resource/spacer.gif" width="15">
-								</td>
-								<td vAlign="top"><FONT face="新細明體"><uc1:usertabs id="UserTabs1" runat="server"></uc1:usertabs></FONT></td>
-							</tr>
-							<TR vAlign="top">
-								<TD style="WIDTH: 169px; HEIGHT: 100%" vAlign="top" class="left_bar_bg"><uc1:menutabs id="MenuTabs1" runat="server"></uc1:menutabs></TD>
-								<TD vAlign="top"><anthem:panel id="panel1" runat="server" Visible="false">
+	<form id="fmSms" method="post" runat="server">
+        <table cellSpacing="0" cellPadding="0" width="100%" border="0">
+        <tr>
+            <td class="top_bar01_bg">
+                <img src="resource/mango_logo_title.gif" width="359" height="49">
+            </td>
+        </tr>
+        <tr>
+            <td class="top_bar02_bg" vAlign="top" height="15">
+                <P align="left">
+                    <FONT color="#ffffff">
+                        <IMG height="15" src="resource/spacer.gif" width="15">
+                    </FONT>
+                    用戶:&nbsp;<asp:label id="lbUser" runat="server"></asp:label>
+                </P>
+            </td>
+        </tr>
+    </table>
+    <table cellSpacing="0" cellPadding="0" width="100%" border="0">
+        <tr width="100%">
+            <td vAlign="top">
+                <table class="admin-tan-border" id="table1" cellSpacing="0" cellPadding="0"
+                       width="100%" border="0">
+                    <tr>
+                        <td class="admin-table" style="HEIGHT: 10px" vAlign="top" height="2">
+                            <IMG height="15" src="resource/spacer.gif" width="15">
+                        </td>
+                        <td   vAlign="top"> 
+                                <uc1:menutabs id="MenuTabs1" runat="server"></uc1:menutabs>
+                        </td>
+                    </tr>
+                    <TR vAlign="top">
+                        <TD vAlign="top" class="left_bar_bg">
+                            <uc1:sendtabs id="SendTabs1" runat="server"></uc1:sendtabs> 
+                        </TD>
+                        <TD vAlign="top" class="tan-border02" height="1">
+    <anthem:panel id="panel1" runat="server" Visible="false">
 										<TABLE class="tan-border02" style="WIDTH: 100%; BORDER-COLLAPSE: collapse; HEIGHT: 380px"
 											cellSpacing="10" cellPadding="0" rules="none" align="left" border="0">
 											<TR>
@@ -185,7 +196,8 @@
 												<TD colSpan="5"><FONT face="新細明體"></FONT></TD>
 											</TR>
 										</TABLE>
-									</anthem:panel><anthem:panel id="panel2" runat="server" Visible="false">
+									</anthem:panel>
+                                    <anthem:panel id="panel2" runat="server" Visible="false">
 										<TABLE class="tan-border02" style="WIDTH: 100%; BORDER-COLLAPSE: collapse; HEIGHT: 380px"
 											cellSpacing="10" cellPadding="0" rules="none" align="left" border="0">
 											<TR>
@@ -229,14 +241,7 @@
 														<asp:ListItem Value="Y" Selected="True">有</asp:ListItem>
 														<asp:ListItem Value="N">無</asp:ListItem>
 													</anthem:DropDownList></TD>
-											</TR>
-											
-											
-											
-										
-										
-										
-										
+											</TR>  
 											<TR>
 												<TD style="WIDTH: 98px; HEIGHT: 13px" vAlign="baseline" align="right" width="98" height="13"><FONT face="新細明體">
 														<asp:Label id="lbEmail" runat="server">用戶Email：</asp:Label>
@@ -266,7 +271,8 @@
 												<TD align="left" height="100"></TD>
 											</TR>
 										</TABLE>
-									</anthem:panel><anthem:panel id="panel3" runat="server" Visible="false">
+									</anthem:panel>
+                                    <anthem:panel id="panel3" runat="server" Visible="false">
 										<TABLE class="tan-border02" style="WIDTH: 100%; BORDER-COLLAPSE: collapse; HEIGHT: 380px"
 											cellSpacing="10" cellPadding="0" rules="none" align="left" border="0">
 											<TR>
@@ -336,7 +342,8 @@
 												<TD align="left" height="100"></TD>
 											</TR>
 										</TABLE>
-									</anthem:panel><anthem:panel id="panel4" runat="server" Visible="false">
+									</anthem:panel>
+                                    <anthem:panel id="panel4" runat="server" Visible="false">
 										<TABLE class="tan-border02" style="WIDTH: 100%; BORDER-COLLAPSE: collapse; HEIGHT: 380px"
 											cellSpacing="10" cellPadding="0" rules="none" align="left" border="0">
 											<TR>
@@ -361,12 +368,15 @@
 												<TD align="left" height="100"></TD>
 											</TR>
 										</TABLE>
-									</anthem:panel></TD>
-							</TR>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</form>
-	</body>
+									</anthem:panel>    
+    
+                        </TD>
+                    </TR>
+                </table>
+            </td>
+        </tr>
+
+    </table>   
+</form>
+</body>
 </HTML>

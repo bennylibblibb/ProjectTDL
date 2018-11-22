@@ -2,10 +2,10 @@
 <%@ Import namespace="JC_SoccerWeb"%>
 <%@ Import namespace="JC_SoccerWeb.UserControl"%>
 <%@ Register TagPrefix="anthem" Namespace="Anthem" Assembly="Anthem" %>
-<table cellSpacing="0" cellPadding="0" width="100%" border="0">
+<table style="display:none">
 	<tr>
-		<td vAlign="bottom"><anthem:DataList id="tabs" SelectedItemStyle-CssClass="admin-tab-active" ItemStyle-CssClass="admin-tab-inactive"
-				runat="server" EnableViewState="False" RepeatDirection="Horizontal">
+		<td ><anthem:DataList id="tabs" SelectedItemStyle-CssClass="admin-tab-active" ItemStyle-CssClass="admin-tab-inactive"
+				runat="server" EnableViewState="false" >
 				<SelectedItemStyle CssClass="admin-tab-active"></SelectedItemStyle>
 				<SelectedItemTemplate>
 					<%# ((TabItem) Container.DataItem).Name %>

@@ -8,3 +8,26 @@
 
 10:38:15 BEN logout success.
 10:38:44 BEN login success.
+10:54:18 BEN login success.
+11:07:06 BEN login success.
+11:12:39 BEN login success.
+11:13:50 BEN login success.
+11:16:39 BEN login success.
+11:17:22 BEN login success.
+11:18:51 BEN login success.
+11:20:50 BEN login success.
+11:22:40 BEN login success.
+11:23:21 BEN login success.
+11:23:59 BEN login success.
+11:24:37 BEN login success.
+11:35:45 BEN login success.
+12:06:38 BEN logout success.
+12:09:54 BEN login success.
+12:23:06 BEN logout success.
+12:24:51 BEN login success.
+12:40:40 BEN logout success.
+12:40:46 BEN login success.
+12:40:51 BEN logout success.
+12:42:17 login failure.
+12:42:36 BEN login success.
+12:43:19 BEN logout success.

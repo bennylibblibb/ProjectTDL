@@ -24,6 +24,8 @@
     <SccLocalPath>..</SccLocalPath>
     <SccAuxPath />
     <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,6 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Anthem, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -71,7 +75,6 @@
     <Content Include="CheckCode.aspx" />
     <Content Include="CommonPage.aspx" />
     <Content Include="Default.aspx" />
-    <Content Include="Defaults.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Logout.aspx" />
     <Content Include="resource\bars.gif" />
@@ -94,6 +97,7 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="WebForm1.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\Users.cs" />
@@ -112,42 +116,42 @@
     <Compile Include="DAL\UserData.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Default.cs">
+    <Compile Include="Default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Defaults.aspx.cs">
-      <DependentUpon>Defaults.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Defaults.aspx.designer.cs">
-      <DependentUpon>Defaults.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="Logout.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Update.cs">
+    <Compile Include="Update.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="UserControl\GroupTabs.cs">
+    <Compile Include="UserControl\GroupTabs.ascx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="UserControl\MenuTabs.cs">
+    <Compile Include="UserControl\MenuTabs.ascx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="UserControl\SendTabs.cs">
+    <Compile Include="UserControl\SendTabs.ascx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="UserControl\SignIn.cs">
+    <Compile Include="UserControl\SignIn.ascx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControl\TabItem.cs" />
-    <Compile Include="UserControl\UserTabs.cs">
+    <Compile Include="UserControl\UserTabs.ascx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="UserMaintenance.cs">
+    <Compile Include="UserMaintenance.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

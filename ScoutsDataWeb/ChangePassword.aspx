@@ -27,46 +27,43 @@
 	</HEAD>
 	<body OnLoad="fmSms.txtPW.focus()">
 		<form id="fmSms" method="post" runat="server">
-			<table cellSpacing="0" cellPadding="0" width="100%" border="0">
-				<tr>
-					<td class="top_bar01_bg"><img src="resource/mango_logo_title.gif" width="359" height="49">
-					</td>
-				</tr>
-				<tr>
-					<td class="top_bar02_bg" vAlign="top" height="15">
-						<P align="left"><FONT color="#ffffff"><IMG height="15" src="resource/spacer.gif" width="15"></FONT>
-							用戶:&nbsp;<asp:label id="lbUser" runat="server"></asp:label></P>
-					</td>
-				</tr>
-			</table>
-			<table cellSpacing="0" cellPadding="0" width="100%" border="1" height="500" class="tan-border01">
-				<tr width="100%">
-					<td vAlign="top">
-						<table class="tan-border01" id="table1" height="100%" cellSpacing="0" cellPadding="0" width="100%"
-							border="0" style="BORDER-COLLAPSE: collapse">
-							<tr>
-								<td class="admin-table" style="HEIGHT: 10px" vAlign="top" height="2"><IMG height="15" src="resource/spacer.gif" width="15">
-								</td>
-								<td style="HEIGHT: 36px" vAlign="top"><FONT face="新細明體"></FONT></td>
-							</tr>
-							<TR vAlign="top">
-								<TD style="WIDTH: 169px; HEIGHT: 100%" vAlign="top" class="left_bar_bg"><uc1:menutabs id="MenuTabs1" runat="server"></uc1:menutabs></TD>
-								<TD vAlign="top" align="center">
-									<TABLE class="tan-border01" cellSpacing="10" cellPadding="0" rules="none" align="left"
-										border="0">
-										<TR vAlign="middle" width="100%">
-										<TR>
-											<TD vAlign="baseline" align="left" height="1"><FONT face="新細明體"></FONT></TD>
-											<TD align="left" height="1"><FONT face="新細明體">&nbsp;</FONT></TD>
-											<TD align="left" height="1"></TD>
-											<TD align="left" height="1"></TD>
-											<TD align="left" width="15%" height="1"></TD>
-										</TR>
-										<TR width="100%">
-											<TD vAlign="top" align="center" width="50%" colSpan="5" height="256"><FONT face="新細明體">
-													<anthem:panel id="plSendMsg" runat="server">
-														<TABLE id="Table2" style="WIDTH: 399px; HEIGHT: 182px" height="182" cellSpacing="0" cellPadding="0"
-															width="399" border="0">
+		  <table cellSpacing="0" cellPadding="0" width="100%" border="0">
+        <tr>
+            <td class="top_bar01_bg">
+               <!--     <img src="resource/mango_logo_title.gif" width="359" height="49"> -->
+            </td>
+        </tr>
+        <tr>
+            <td class="top_bar02_bg" vAlign="top" height="15">
+                <P align="left">
+                    <FONT color="#ffffff">
+                        <IMG height="15" src="resource/spacer.gif" width="15">
+                    </FONT>
+                    用戶:&nbsp;<asp:label id="lbUser" runat="server"></asp:label>
+                </P>
+            </td>
+        </tr>
+    </table>
+    <table cellSpacing="0" cellPadding="0" width="100%" border="0">
+        <tr width="100%">
+            <td vAlign="top">
+                <table class="admin-tan-border" id="table1" cellSpacing="0" cellPadding="0"
+                       width="100%" border="0">
+                    <tr>
+                        <td class="admin-table" style="HEIGHT: 10px" vAlign="top" height="2">
+                            <IMG height="15" src="resource/spacer.gif" width="15">
+                        </td>
+                        <td   vAlign="top"> 
+                                <uc1:menutabs id="MenuTabs1" runat="server"></uc1:menutabs>
+                        </td>
+                    </tr>
+                    <TR vAlign="top">
+                        <TD vAlign="top" class="left_bar_bg" style="width:5px">
+                            <uc1:sendtabs id="SendTabs1" runat="server" ></uc1:sendtabs> 
+                        </TD>
+                        <TD vAlign="top" class="tan-border02" height="1"><anthem:panel id="plSendMsg" runat="server">
+														<TABLE id="Table2" style=" WIDTH: 1200px; HEIGHT:600px"   cellSpacing="0" cellPadding="0"
+															  border="0">
 															<TR>
 																<TD style="HEIGHT: 30px" width="14"><FONT face="新細明體"></FONT></TD>
 																<TD style="HEIGHT: 30px">
@@ -99,19 +96,17 @@
 																	<anthem:BUTTON id="Save" runat="server" Width="64px" Text="保存"></anthem:BUTTON>&nbsp;&nbsp;&nbsp;<INPUT id="btnCannel" onclick="Clear()" type="button" value="重置" name="btnCannel">&nbsp;&nbsp;
 																	<anthem:LABEL id="lbMsg" runat="server" ForeColor="Red"></anthem:LABEL></TD>
 															</TR>
+                                                            <tr> <td style="HEIGHT: 100%"></td><td></td></tr>
 														</TABLE>
-													</anthem:panel></FONT></TD>
-										</TR>
-										<TR height="100%" width="100%">
-											<TD colSpan="5"><FONT face="新細明體"></FONT></TD>
-										</TR>
-									</TABLE>
-								</TD>
-							</TR>
-						</table>
-					</td>
-				</tr>
-			</table>
+													</anthem:panel>
+                                                
+                        </TD>
+                    </TR>
+                </table>
+            </td>
+        </tr>
+
+    </table>
 		</form>
 	</body>
 </HTML>

@@ -29,7 +29,8 @@
 		<form id="Reports" method="post" runat="server">
 			<table cellSpacing="0" cellPadding="0" width="100%" border="0">
 				<tr>
-					<td class="top_bar01_bg"><img src="resource/mango_logo_title.gif" width="359" height="49">
+					<td class="top_bar01_bg">
+                        <!--     <img src="resource/mango_logo_title.gif" width="359" height="49"> -->
 					</td>
 				</tr>
 				<tr>

@@ -36,7 +36,7 @@
     <table cellSpacing="0" cellPadding="0" width="100%" border="0">
         <tr>
             <td class="top_bar01_bg">
-                <img src="resource/mango_logo_title.gif" width="359" height="49">
+           <!--     <img src="resource/mango_logo_title.gif" width="359" height="49"> -->
             </td>
         </tr>
         <tr>
@@ -53,30 +53,27 @@
     <table cellSpacing="0" cellPadding="0" width="100%" border="0">
         <tr width="100%">
             <td vAlign="top">
-                <table class="admin-tan-border" id="table1" height="500" cellSpacing="0" cellPadding="0"
+                <table class="admin-tan-border" id="table1" cellSpacing="0" cellPadding="0"
                        width="100%" border="0">
                     <tr>
                         <td class="admin-table" style="HEIGHT: 10px" vAlign="top" height="2">
                             <IMG height="15" src="resource/spacer.gif" width="15">
                         </td>
-                        <td style="HEIGHT: 2px" vAlign="top">
-                            <FONT face="新細明體">
-                                <uc1:sendtabs id="SendTabs1" runat="server"></uc1:sendtabs>
-                            </FONT>
+                        <td   vAlign="top"> 
+                                <uc1:menutabs id="MenuTabs1" runat="server"></uc1:menutabs>
                         </td>
                     </tr>
                     <TR vAlign="top">
-                        <TD style="HEIGHT: 100%; WIDTH: 169px;" vAlign="top" class="left_bar_bg">
-                            <uc1:menutabs id="MenuTabs1" runat="server"></uc1:menutabs>
+                        <TD vAlign="top" class="left_bar_bg" style="width:2px;height:100%">
+                            <uc1:sendtabs id="SendTabs1" runat="server"></uc1:sendtabs> 
                         </TD>
                         <TD vAlign="top" class="tan-border02" height="1">
                             <Anthem:panel id="plRankDetails" runat="server">
-                                <TABLE style="BORDER-COLLAPSE: collapse; HEIGHT: 380px; WIDTH: 100%;"
+                                <TABLE style="BORDER-COLLAPSE: collapse;  WIDTH: 1200px; HEIGHT:600px"
                                        cellSpacing="10" cellPadding="0" rules="none" align="left" border="0">
                                     <TR>
                                         <TD vAlign="top" align="left" colspan="5" height="10"></TD>
-                                    </TR>
-                                    
+                                    </TR> 
                                     <TR  >
                                         <TD  valign="top" align="center"  height="1"  style="height: 27px" >
                                         <span > <strong> Histroy Rank:</strong></span> 
