@@ -1,0 +1,10 @@
+﻿10:24:01 login failure.
+10:24:15 login failure.
+10:25:42 login failure.
+10:27:13 login failure.
+10:30:32 login failure.
+10:37:05 BEN login success.
+10:37:54 BEN 更新密碼 123 to 1234.
+
+10:38:15 BEN logout success.
+10:38:44 BEN login success.

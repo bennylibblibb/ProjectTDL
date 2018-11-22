@@ -1,46 +1,599 @@
-ID integer NOT NULL,
-  NAME varchar(100),
-  HOME_ID integer NOT NULL,
-  GUEST_ID integer NOT NULL,
-  SOURCE varchar(10),
-  SOURCE_DC boolean,
-  SOURCE_SUPER varchar(10),
-  RELATION_STATUS varchar(10),
-  START_DATE TSTART_DATE,
-  FT_ONLY boolean,
-  COVERAGE_TYPE varchar(10),
-  CHANNEL_ID varchar(10),
-  CHANNEL_NAME varchar(50),
-  SCOUTSFEED boolean,
-  STATUS_ID integer,
-  STATUS_NAME varchar(10),
-  STATUS_TYPE varchar(10),
-  CDAY varchar(10),
-  CLOCK_TIME varchar(18),
-  CLOCK_STATUS varchar(10),
-  WINNER_ID varchar(10),
-  PROGRESS_ID varchar(10),
-  BET_STATUS varchar(10),
-  NEUTRAL_VENUE boolean,
-  ITEM_STATUS varchar(10),
-  UT varchar(12),
-  OLD_EVENT_ID integer,
-  SLUG varchar(100),
-  VERIFIED_RESULT boolean,
-  IS_PROTOCOL_VERIFIED boolean,
-  PROTOCOL_VERIFIED_BY varchar(10),
-  PROTOCOL_VERIFIED_AT varchar(10),
-  ROUND_ID varchar(10),
-  ROUND_NAME varchar(50),
-  CLIENT_EVENT_ID integer,
-  BOOKED boolean,
-  BOOKED_BY varchar(50),
-  INVERTED_PARTICIPANTS boolean,
-  VENUE_ID varchar(10),
-  GROUP_ID integer,
-  STAGE_ID integer,
-  SEASON_ID integer,
-  COMPETITION_ID integer,
-  AREA_ID integer,
-  CTIMESTAMP timestamp,
-  CACTION varchar(6) )
+{
+  "id": 186232240,
+  "type": "incident",
+  "source": 1250,
+  "ut": 1542765780,
+  "data": {
+    "incident": {
+      "id": "5-67217262",
+      "action": "update",
+      "incident_id": 413,
+      "incident_name": "Goal",
+      "participant_id": 137966,
+      "participant_name": "Peru",
+      "subparticipant_id": 239160,
+      "subparticipant_name": "Farfan Jefferson",
+      "info": null,
+      "important": "yes",
+      "important_for_trader": "yes",
+      "add_data": null,
+      "show_popup": "yes",
+      "show_scores": "no",
+      "show_action": "yes",
+      "show_time": "yes",
+      "show_on_timeline": "yes",
+      "event_time": "72:16",
+      "event_status_id": 34,
+      "event_status_name": "2nd half",
+      "x_pos": null,
+      "y_pos": null
+    },
+    "event": {
+      "id": 2635690,
+      "action": "update",
+      "start_date": "2018-11-21 00:30",
+      "ft_only": "no",
+      "coverage_type": "from_tv",
+      "status_id": 34,
+      "sport_id": 5,
+      "day": null,
+      "neutral_venue": "no",
+      "item_status": "active",
+      "clock_time": 1658,
+      "clock_status": "running",
+      "area_id": 208,
+      "competition_id": 1564,
+      "season_id": 31344,
+      "stage_id": 0,
+      "tour_id": null,
+      "gender": "male",
+      "bet_status": "active",
+      "relation_status": "in_progress",
+      "status_type": "live",
+      "name": "Peru - Costa Rica",
+      "round_id": null,
+      "round_name": null,
+      "scoutsfeed": "yes",
+      "details": [
+        {
+          "id": 8,
+          "value": "Good"
+        },
+        {
+          "id": 16,
+          "value": 45
+        },
+        {
+          "id": 17,
+          "value": 2
+        },
+        {
+          "id": 19,
+          "value": "2018-11-21 00:30"
+        },
+        {
+          "id": 20,
+          "value": "2018-11-21 01:35"
+        },
+        {
+          "id": 36,
+          "value": "Good"
+        },
+        {
+          "id": 44,
+          "value": null
+        },
+        {
+          "id": 45,
+          "value": null
+        },
+        {
+          "id": 50,
+          "value": 15
+        },
+        {
+          "id": 58,
+          "value": "No Extra Time"
+        },
+        {
+          "id": 124,
+          "value": "up"
+        },
+        {
+          "id": 141,
+          "value": null
+        },
+        {
+          "id": 150,
+          "value": null
+        },
+        {
+          "id": 151,
+          "value": null
+        },
+        {
+          "id": 160,
+          "value": "yes"
+        },
+        {
+          "id": 168,
+          "value": 45
+        },
+        {
+          "id": 169,
+          "value": 15
+        },
+        {
+          "id": 170,
+          "value": 2
+        },
+        {
+          "id": 178,
+          "value": "no"
+        },
+        {
+          "id": 201,
+          "value": 2
+        },
+        {
+          "id": 202,
+          "value": null
+        },
+        {
+          "id": 203,
+          "value": null
+        },
+        {
+          "id": 204,
+          "value": null
+        },
+        {
+          "id": 205,
+          "value": "yes"
+        }
+      ],
+      "participants": [
+        {
+          "id": 137966,
+          "counter": 1,
+          "name": "Peru",
+          "short_name": "Peru",
+          "acronym": "PER",
+          "area_id": 143,
+          "area_name": "Peru",
+          "area_code": "PER",
+          "ut": 1467011382,
+          "stats": [
+            {
+              "id": 8,
+              "value": 0
+            },
+            {
+              "id": 9,
+              "value": 0
+            },
+            {
+              "id": 10,
+              "value": 80
+            },
+            {
+              "id": 11,
+              "value": 58
+            },
+            {
+              "id": 13,
+              "value": 6
+            },
+            {
+              "id": 14,
+              "value": 0
+            },
+            {
+              "id": 15,
+              "value": 0
+            },
+            {
+              "id": 16,
+              "value": 0
+            },
+            {
+              "id": 17,
+              "value": 0
+            },
+            {
+              "id": 18,
+              "value": 0
+            },
+            {
+              "id": 19,
+              "value": 9
+            },
+            {
+              "id": 20,
+              "value": 5
+            },
+            {
+              "id": 21,
+              "value": 3
+            },
+            {
+              "id": 22,
+              "value": 13
+            },
+            {
+              "id": 23,
+              "value": 0
+            },
+            {
+              "id": 24,
+              "value": 0
+            },
+            {
+              "id": 25,
+              "value": 15
+            },
+            {
+              "id": 26,
+              "value": 3
+            },
+            {
+              "id": 27,
+              "value": 0
+            },
+            {
+              "id": 28,
+              "value": 1
+            },
+            {
+              "id": 29,
+              "value": 0
+            },
+            {
+              "id": 30,
+              "value": 5
+            },
+            {
+              "id": 31,
+              "value": 4
+            },
+            {
+              "id": 32,
+              "value": 25
+            },
+            {
+              "id": 33,
+              "value": 0
+            },
+            {
+              "id": 34,
+              "value": 0
+            },
+            {
+              "id": 40,
+              "value": 0
+            },
+            {
+              "id": 639,
+              "value": 0
+            },
+            {
+              "id": 697,
+              "value": 0
+            },
+            {
+              "id": 716,
+              "value": null
+            },
+            {
+              "id": 718,
+              "value": 3335
+            },
+            {
+              "id": 770,
+              "value": null
+            },
+            {
+              "id": 771,
+              "value": null
+            },
+            {
+              "id": 772,
+              "value": 0
+            },
+            {
+              "id": 773,
+              "value": 1
+            },
+            {
+              "id": 774,
+              "value": 0
+            },
+            {
+              "id": 775,
+              "value": 0
+            },
+            {
+              "id": 776,
+              "value": 1
+            },
+            {
+              "id": 777,
+              "value": 0
+            },
+            {
+              "id": 778,
+              "value": 0
+            },
+            {
+              "id": 779,
+              "value": 0
+            }
+          ],
+          "results": [
+            {
+              "id": 2,
+              "value": 2
+            },
+            {
+              "id": 3,
+              "value": 2
+            },
+            {
+              "id": 4,
+              "value": 1
+            },
+            {
+              "id": 5,
+              "value": 1
+            },
+            {
+              "id": 7,
+              "value": null
+            },
+            {
+              "id": 104,
+              "value": null
+            },
+            {
+              "id": 133,
+              "value": null
+            },
+            {
+              "id": 134,
+              "value": null
+            },
+            {
+              "id": 411,
+              "value": 0
+            },
+            {
+              "id": 412,
+              "value": 0
+            }
+          ],
+          "subparticipants": []
+        },
+        {
+          "id": 137931,
+          "counter": 2,
+          "name": "Costa Rica",
+          "short_name": "Costa Rica",
+          "acronym": "CRC",
+          "area_id": 99,
+          "area_name": "Costa Rica",
+          "area_code": "CRI",
+          "ut": 1527254767,
+          "stats": [
+            {
+              "id": 8,
+              "value": 2
+            },
+            {
+              "id": 9,
+              "value": 0
+            },
+            {
+              "id": 10,
+              "value": 56
+            },
+            {
+              "id": 11,
+              "value": 22
+            },
+            {
+              "id": 13,
+              "value": 2
+            },
+            {
+              "id": 14,
+              "value": 0
+            },
+            {
+              "id": 15,
+              "value": 0
+            },
+            {
+              "id": 16,
+              "value": 0
+            },
+            {
+              "id": 17,
+              "value": 0
+            },
+            {
+              "id": 18,
+              "value": 0
+            },
+            {
+              "id": 19,
+              "value": 6
+            },
+            {
+              "id": 20,
+              "value": 3
+            },
+            {
+              "id": 21,
+              "value": 2
+            },
+            {
+              "id": 22,
+              "value": 13
+            },
+            {
+              "id": 23,
+              "value": 0
+            },
+            {
+              "id": 24,
+              "value": 2
+            },
+            {
+              "id": 25,
+              "value": 13
+            },
+            {
+              "id": 26,
+              "value": 1
+            },
+            {
+              "id": 27,
+              "value": 0
+            },
+            {
+              "id": 28,
+              "value": 1
+            },
+            {
+              "id": 29,
+              "value": 0
+            },
+            {
+              "id": 30,
+              "value": 8
+            },
+            {
+              "id": 31,
+              "value": 3
+            },
+            {
+              "id": 32,
+              "value": 7
+            },
+            {
+              "id": 33,
+              "value": 0
+            },
+            {
+              "id": 34,
+              "value": 0
+            },
+            {
+              "id": 40,
+              "value": 0
+            },
+            {
+              "id": 639,
+              "value": 0
+            },
+            {
+              "id": 697,
+              "value": 0
+            },
+            {
+              "id": 716,
+              "value": null
+            },
+            {
+              "id": 718,
+              "value": 3160
+            },
+            {
+              "id": 770,
+              "value": null
+            },
+            {
+              "id": 771,
+              "value": null
+            },
+            {
+              "id": 772,
+              "value": 0
+            },
+            {
+              "id": 773,
+              "value": 0
+            },
+            {
+              "id": 774,
+              "value": 1
+            },
+            {
+              "id": 775,
+              "value": 1
+            },
+            {
+              "id": 776,
+              "value": 0
+            },
+            {
+              "id": 777,
+              "value": 0
+            },
+            {
+              "id": 778,
+              "value": 0
+            },
+            {
+              "id": 779,
+              "value": 0
+            }
+          ],
+          "results": [
+            {
+              "id": 2,
+              "value": 2
+            },
+            {
+              "id": 3,
+              "value": 2
+            },
+            {
+              "id": 4,
+              "value": 1
+            },
+            {
+              "id": 5,
+              "value": 1
+            },
+            {
+              "id": 7,
+              "value": null
+            },
+            {
+              "id": 104,
+              "value": null
+            },
+            {
+              "id": 133,
+              "value": null
+            },
+            {
+              "id": 134,
+              "value": null
+            },
+            {
+              "id": 411,
+              "value": 0
+            },
+            {
+              "id": 412,
+              "value": 0
+            }
+          ],
+          "subparticipants": []
+        }
+      ]
+    }
+  }
+}

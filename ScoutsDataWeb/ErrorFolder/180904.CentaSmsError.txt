@@ -1,0 +1,422 @@
+﻿10:12:52 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 247
+10:15:19 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 247
+10:20:04 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 661
+10:20:25 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:30:21 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:30:31 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:30:41 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:30:51 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:31:35 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:31:40 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:41:17 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 661
+10:44:16 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:44:59 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+10:47:38 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 488
+10:47:49 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 488
+10:48:04 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 488
+10:48:20 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 488
+10:49:07 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 661
+10:49:33 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 661
+10:49:53 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+11:00:30 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+11:03:55 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 246
+11:04:02 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 661
+12:31:08 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 251
+12:33:45 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 254
+12:34:50 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 254
+12:41:04 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 251
+12:41:13 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 251
+14:09:42 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 678
+
+14:09:50 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 251
+
+15:00:31 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:00:32 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:00:33 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:00:45 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 253
+
+15:00:52 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 253
+
+15:00:58 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 690
+
+15:01:02 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 690
+
+15:13:31 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:13:32 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:13:32 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:13:32 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:13:33 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:13:33 127.0.0.1:  dgSchedule_DeleteCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 512
+
+15:13:45 127.0.0.1:  btnEdit_Click()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.btnEdit_Click(Object sender, EventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 253
+
+15:13:54 127.0.0.1:  dgSchedule_UpdateCommand()  FirebirdSql.Data.FirebirdClient.FbException: I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file ---> I/O error during "CreateFile (open)" operation for file "E:\Project\Database\JC_Soccer_ID_iPhone\DB\HKJCIPHONE11.FDB"
+Error while trying to open file
+   --- End of inner exception stack trace ---
+   at FirebirdSql.Data.FirebirdClient.FbConnectionInternal.Connect()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.Create()
+   at FirebirdSql.Data.FirebirdClient.FbConnectionPool.CheckOut()
+   at FirebirdSql.Data.FirebirdClient.FbConnection.Open()
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in e:\Project\WebProject\JC_SoccerWeb\JC_SoccerWeb\Update.cs:line 690
+
