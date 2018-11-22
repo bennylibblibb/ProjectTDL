@@ -28,7 +28,7 @@
         public Users()
         {
             this.dsCommand.SelectCommand = new FbCommand();
-            this.dsCommand.SelectCommand.Connection = new FbConnection(AppFlag.HkjcDBConn);
+            this.dsCommand.SelectCommand.Connection = new FbConnection(AppFlag.CENTASMSINTEConn);
             this.dsCommand.TableMappings.Add("Table", "USER_PROFILE");
         }
 
@@ -129,7 +129,7 @@
             if (this.deleteCommand == null)
             {
                 string cmdText = "DELETE FROM  USER_PROFILE   where USER_ID=? ";
-                this.deleteCommand = new FbCommand(cmdText, new FbConnection(AppFlag.HkjcDBConn));
+                this.deleteCommand = new FbCommand(cmdText, new FbConnection(AppFlag.CENTASMSINTEConn));
                 this.deleteCommand.CommandType = CommandType.Text;
                 FbParameterCollection parameters = this.deleteCommand.Parameters;
                 parameters.Add(new FbParameter("@USER_ID", FbDbType.VarChar, 11));
@@ -143,7 +143,7 @@
             if (this.insertCommand == null)
             {
                 string cmdText = "INSERT INTO  USER_PROFILE  ( USER_ID ,  USER_NAME ,  USER_PWD , USER_RIGHT, SHAREDGP_RIGHT ,  USER_EMAIL ,  DEPARTMENT ,  CREATE_DATE ) VALUES (?,?,?,?,?,?,?,?)";
-                this.insertCommand = new FbCommand(cmdText, new FbConnection(AppFlag.HkjcDBConn));
+                this.insertCommand = new FbCommand(cmdText, new FbConnection(AppFlag.CENTASMSINTEConn));
                 this.insertCommand.CommandType = CommandType.Text;
                 FbParameterCollection parameters = this.insertCommand.Parameters;
                 parameters.Add(new FbParameter("@USER_ID", FbDbType.VarChar, 11));
@@ -171,7 +171,7 @@
             if (this.loadCommand == null)
             {
                 this.loadCommand = new FbCommand();
-                this.loadCommand.Connection = new FbConnection(AppFlag.HkjcDBConn);
+                this.loadCommand.Connection = new FbConnection(AppFlag.CENTASMSINTEConn);
                 this.loadCommand.CommandType = CommandType.Text;
             }
             return this.loadCommand;
@@ -182,7 +182,7 @@
             if (this.updateCommand == null)
             {
                 string cmdText = "UPDATE   USER_PROFILE SET   USER_NAME=? ,  USER_PWD=? ,  USER_RIGHT=? , SHAREDGP_RIGHT=? ,  USER_EMAIL=? ,  DEPARTMENT=? ,  CREATE_DATE=? where USER_ID=?";
-                this.updateCommand = new FbCommand(cmdText, new FbConnection(AppFlag.HkjcDBConn));
+                this.updateCommand = new FbCommand(cmdText, new FbConnection(AppFlag.CENTASMSINTEConn));
                 this.updateCommand.CommandType = CommandType.Text;
                 FbParameterCollection parameters = this.updateCommand.Parameters;
                 parameters.Add(new FbParameter("@USER_NAME", FbDbType.VarChar, 0x15));
@@ -303,7 +303,7 @@
         public UserData LoadUserByUSER_IDtest(string user_id)
         {
             UserData dataSet = new UserData();
-            this.loadCommand = new FbCommand("Select   *   from   USER_PROFILE   where   USER_ID=   ?", new FbConnection(AppFlag.HkjcDBConn));
+            this.loadCommand = new FbCommand("Select   *   from   USER_PROFILE   where   USER_ID=   ?", new FbConnection(AppFlag.CENTASMSINTEConn));
             FbParameter parameter = new FbParameter("@SystemID", FbDbType.VarChar, 11);
             parameter.Value = user_id;
             this.loadCommand.Parameters.Add(parameter);

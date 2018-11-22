@@ -28,8 +28,7 @@
         {
             string name = this.Context.User.Identity.Name;
             ArrayList list = new ArrayList();
-            list.Add(new TabItem("Events", Global.GetApplicationPath(base.Request) + "/SyncMatches.aspx?csIndex=" + list.Count));
-            list.Add(new TabItem("Matchlist", Global.GetApplicationPath(base.Request) + "/Matches.aspx?csIndex=" + list.Count));
+            list.Add(new TabItem("Update", Global.GetApplicationPath(base.Request) + "/Update.aspx?csIndex=" + list.Count));
             //list.Add(new TabItem("組別管理", Global.GetApplicationPath(base.Request) + "/GroupAdmin.aspx?csIndex=" + list.Count));
             if (Users.UserCheck(name))
             {

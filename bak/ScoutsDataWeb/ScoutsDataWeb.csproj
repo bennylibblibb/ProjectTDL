@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JC_SoccerWeb</RootNamespace>
     <AssemblyName>JC_SoccerWeb</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -51,12 +51,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Anthem.dll</HintPath>
     </Reference>
-    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=5.12.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DataOfScouts\bin\Debug\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    <Reference Include="FirebirdSql.Data.FirebirdClient">
+      <HintPath>..\..\WIN2008\CSLMMS\CSLMmsWeb\bin\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -72,7 +70,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MatchDetails.aspx" />
     <Content Include="CentaSmsStyle.css" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="CheckCode.aspx" />
@@ -80,7 +77,6 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Logout.aspx" />
-    <Content Include="Matches.aspx" />
     <Content Include="resource\bars.gif" />
     <Content Include="resource\CentaSmsLogo.JPG" />
     <Content Include="resource\green.bmp" />
@@ -91,7 +87,7 @@
     <Content Include="resource\new_ad2_0725.gif" />
     <Content Include="resource\spacer.gif" />
     <Content Include="resource\yellow.bmp" />
-    <Content Include="SyncMatches.aspx" />
+    <Content Include="Update.aspx" />
     <Content Include="UserControl\GroupTabs.ascx" />
     <Content Include="UserControl\MenuTabs.ascx" />
     <Content Include="UserControl\SendTabs.ascx" />
@@ -104,10 +100,6 @@
     <Content Include="WebForm1.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MatchDetails.aspx.cs">
-      <DependentUpon>MatchDetails.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="BLL\Users.cs" />
     <Compile Include="ChangePassword.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -129,10 +121,6 @@
     </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="Logout.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Matches.aspx.cs">
-      <DependentUpon>Matches.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -173,11 +161,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MatchDetails.aspx.resx">
-      <DependentUpon>MatchDetails.aspx.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

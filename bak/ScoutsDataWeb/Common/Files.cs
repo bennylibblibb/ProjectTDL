@@ -116,8 +116,8 @@ namespace JC_SoccerWeb.Common
 			Files m_Log = new Files();
 			lock (m_Log)
 			{
-				m_Log.FilePath = AppDomain.CurrentDomain.BaseDirectory.ToString() + AppFlag.EventFolder;
-				m_Log.SetFileName(0, AppFlag.Log);
+				m_Log.FilePath = AppDomain.CurrentDomain.BaseDirectory.ToString() + AppFlag.CentaSmsEventFolder;
+				m_Log.SetFileName(0, AppFlag.CentaSmsLog);
 				m_Log.Open();
 				m_Log.Write(sEventMsg);
 				m_Log.Close();
@@ -130,8 +130,8 @@ namespace JC_SoccerWeb.Common
 			Files m_Log = new Files();
 			lock (m_Log)
 			{
-				m_Log.FilePath = AppDomain.CurrentDomain.BaseDirectory.ToString() + AppFlag.ErrorFolder;
-				m_Log.SetFileName(0, AppFlag.Error);
+				m_Log.FilePath = AppDomain.CurrentDomain.BaseDirectory.ToString() + AppFlag.CentaSmsErrorFolder;
+				m_Log.SetFileName(0, AppFlag.CentaSmsError);
 				m_Log.Open();
 				m_Log.Write(sEventMsg);
 				m_Log.Close();

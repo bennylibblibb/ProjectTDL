@@ -10,8 +10,8 @@ namespace JC_SoccerWeb.Common
     {
         //Application config
         
-        internal static readonly string ScoutsDBConn = ConfigurationManager.AppSettings["ScoutsDBConn"]        ; 
-        internal static readonly string HkjcDBConn = ConfigurationManager.AppSettings["HkjcDBConn"];
+        internal static readonly string CENTASMSMAININTEConn = ConfigurationManager.AppSettings["CENTASMSMAININTEConn"]        ; 
+        internal static readonly string CENTASMSINTEConn = ConfigurationManager.AppSettings["CENTASMSINTEConn"];
 
         //internal static readonly string SMS_MSG_RECEIVER_TABLE =
         //    ConfigurationManager.AppSettings["SMS_MSG_RECEIVER_TABLE"];
@@ -23,10 +23,10 @@ namespace JC_SoccerWeb.Common
         //internal static readonly string WinMsgID = ConfigurationManager.AppSettings["WinMsgID"];
         //internal static readonly string ServiceURL = ConfigurationManager.AppSettings["ServiceURL"];
 
-        internal static string Error = ConfigurationManager.AppSettings["Error"];
-        internal static string  ErrorFolder = ConfigurationManager.AppSettings["ErrorFolder"];
-        internal static string EventFolder = ConfigurationManager.AppSettings["EventFolder"];
-        internal static string  Log = ConfigurationManager.AppSettings["Log"];
+        internal static string CentaSmsError = ConfigurationManager.AppSettings["CentaSmsError"];
+        internal static string CentaSmsErrorFolder = ConfigurationManager.AppSettings["CentaSmsErrorFolder"];
+        internal static string CentaSmsEventFolder = ConfigurationManager.AppSettings["CentaSmsEventFolder"];
+        internal static string CentaSmsLog = ConfigurationManager.AppSettings["CentaSmsLog"];
         //internal static string CentaSmsUploadFolder = ConfigurationManager.AppSettings["CentaSmsUploadFolder"];
         internal static string CentaSmsAdmin = ConfigurationManager.AppSettings["CentaSmsAdmin"];
         internal static string CentaSmsExtra = ConfigurationManager.AppSettings["CentaSmsExtra"];

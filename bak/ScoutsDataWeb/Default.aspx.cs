@@ -25,7 +25,7 @@
             {
                 if (base.Request.IsAuthenticated)
                 {
-                    base.Response.Redirect("SyncMatches.aspx");
+                    base.Response.Redirect("Update.aspx");
                 }
             }
             else
