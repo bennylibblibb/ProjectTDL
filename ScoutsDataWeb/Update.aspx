@@ -51,7 +51,7 @@
         </tr>
     </table>
     <table cellSpacing="0" cellPadding="0" width="100%" border="0">
-        <tr width="100%">
+        <tr >
             <td vAlign="top">
                 <table class="admin-tan-border" id="table1" cellSpacing="0" cellPadding="0"
                        width="100%" border="0">
@@ -69,7 +69,7 @@
                         </TD>
                         <TD vAlign="top" class="tan-border02" height="1">
                             <Anthem:panel id="plRankDetails" runat="server">
-                                <TABLE style="BORDER-COLLAPSE: collapse;  WIDTH: 1200px; HEIGHT:600px"
+                                <TABLE style="BORDER-COLLAPSE: collapse;  WIDTH:1200px; HEIGHT:600px"
                                        cellSpacing="10" cellPadding="0" rules="none" align="left" border="0">
                                     <TR>
                                         <TD vAlign="top" align="left" colspan="5" height="10"></TD>
@@ -94,9 +94,9 @@
                                        <TR>
                                         <TD  align="left" height="1" colspan="5" >   <hr/>    </TD> 
                                </TR>
-                                    <TR width="100%">
+                                    <TR>
                                         <TD vAlign="top" align="left" colSpan="5" height="256">
-                                            <anthem:DataGrid id="dgRankDetails" runat="server" Width="90%"   AllowPaging="True" AutoGenerateColumns="False"  >
+                                            <anthem:DataGrid id="dgRankDetails" runat="server" Width="100%"   AllowPaging="True" AutoGenerateColumns="False"  >
                                                 <PagerStyle Mode="NumericPages"></PagerStyle><HeaderStyle Font-Bold="True"></HeaderStyle><EditItemStyle ></EditItemStyle><ItemStyle Height="34px" CssClass="grid-item"></ItemStyle><Columns>
                                                     <asp:TemplateColumn HeaderText="ID" Visible ="false" >
                                                         <HeaderStyle HorizontalAlign="Left" Width="30px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="30px" CssClass="grid-item"></ItemStyle>
@@ -170,7 +170,6 @@
                 </table>
             </td>
         </tr>
-
     </table>
 </form>
 </body>

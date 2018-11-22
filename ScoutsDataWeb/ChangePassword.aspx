@@ -62,40 +62,37 @@
                             <uc1:sendtabs id="SendTabs1" runat="server" ></uc1:sendtabs> 
                         </TD>
                         <TD vAlign="top" class="tan-border02" height="1"><anthem:panel id="plSendMsg" runat="server">
-														<TABLE id="Table2" style=" WIDTH: 1200px; HEIGHT:600px"   cellSpacing="0" cellPadding="0"
-															  border="0">
-															<TR>
-																<TD style="HEIGHT: 30px" width="14"><FONT face="新細明體"></FONT></TD>
-																<TD style="HEIGHT: 30px">
+													    <TABLE style="BORDER-COLLAPSE: collapse;  WIDTH:1200px; HEIGHT:600px"
+                                       cellSpacing="10" cellPadding="0" rules="none" align="left" border="0">
+															<TR> 
+																<TD style="HEIGHT: 30px;WIDTH: 200px">
 																	<ASP:LABEL id="lbpw" runat="server">新密碼：</ASP:LABEL></TD>
-															</TR>
+															<TD style="HEIGHT: 30px;WIDTH:98%"></TD></TR>
 															<TR>
-																<TD style="HEIGHT: 30px" width="14"></TD>
+																 
 																<TD style="HEIGHT: 30px">
 																	<ASP:TEXTBOX id="txtPW" runat="server" TextMode="Password" MaxLength="11" CssClass="safari-midtextbox"
 																		Width="200px"></ASP:TEXTBOX>
 																	<ASP:REQUIREDFIELDVALIDATOR id="rfvPW" runat="server" ControlToValidate="txtPW" ErrorMessage="＊"></ASP:REQUIREDFIELDVALIDATOR></TD>
-															</TR>
+															<TD style="HEIGHT: 30px" width="14"></TD></TR>
 															<TR>
-																<TD style="HEIGHT: 30px" width="14">&nbsp;</TD>
-																<TD style="HEIGHT: 30px">
+																 	<TD style="HEIGHT: 30px">
 																	<ASP:LABEL id="lbConfirm" runat="server">確認密碼：</ASP:LABEL></TD>
-															</TR>
+															<TD style="HEIGHT: 30px" width="14"></TD></TR>
 															<TR vAlign="top">
-																<TD style="HEIGHT: 35px" width="14">&nbsp;</TD>
-																<TD style="HEIGHT: 35px">
+																 <TD style="HEIGHT: 35px">
 																	<ASP:TEXTBOX id="txtPW2" runat="server" TextMode="Password" MaxLength="21" CssClass="safari-midtextbox"
 																		Width="200px"></ASP:TEXTBOX>
 																	<ASP:REQUIREDFIELDVALIDATOR id="rfvPW2" runat="server" ControlToValidate="txtPW2" ErrorMessage="＊"></ASP:REQUIREDFIELDVALIDATOR>
 																	<ASP:COMPAREVALIDATOR id="cvPW" runat="server" ControlToValidate="txtPW2" ErrorMessage="Passwords Do Not Match. "
 																		ControlToCompare="txtPW"></ASP:COMPAREVALIDATOR></TD>
-															</TR>
+															<TD style="HEIGHT: 30px" width="14"></TD></TR>
 															<TR>
-																<TD style="HEIGHT: 25px" width="14">&nbsp;</TD>
-																<TD style="HEIGHT: 25px">
+																 <TD style="HEIGHT: 25px">
 																	<anthem:BUTTON id="Save" runat="server" Width="64px" Text="保存"></anthem:BUTTON>&nbsp;&nbsp;&nbsp;<INPUT id="btnCannel" onclick="Clear()" type="button" value="重置" name="btnCannel">&nbsp;&nbsp;
 																	<anthem:LABEL id="lbMsg" runat="server" ForeColor="Red"></anthem:LABEL></TD>
-															</TR>
+														<TD style="HEIGHT: 25px" width="14">&nbsp;</TD>
+																	</TR>
                                                             <tr> <td style="HEIGHT: 100%"></td><td></td></tr>
 														</TABLE>
 													</anthem:panel>

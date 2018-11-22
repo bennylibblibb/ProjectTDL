@@ -31,3 +31,7 @@
 12:42:17 login failure.
 12:42:36 BEN login success.
 12:43:19 BEN logout success.
+12:44:59 BEN login success.
+12:45:29 BEN login success.
+13:02:58 login failure.
+13:03:06 BEN login success.
