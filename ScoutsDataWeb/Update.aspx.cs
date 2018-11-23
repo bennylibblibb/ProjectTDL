@@ -465,78 +465,47 @@
 
         private void dgSchedule_DeleteCommand(object source, DataGridCommandEventArgs e)
         {
-            lbMsg.Text = "";
-            string strConn = "";
-            string sTeam = ((Anthem.Label)e.Item.Cells[3].Controls[1]).Text;
-            string sLeagueAlias = ((Anthem.Label)e.Item.Cells[2].Controls[1]).Text;
-
-            if (cblIP.Items.Count > 0 && cblIP.Items[0].Selected)
-                try
+            string eventId = ((Anthem.Label)e.Item.FindControl("lbID")).Text;
+            string dayCODE = ((Anthem.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text;
+            string matchNo = ((Anthem.Label)e.Item.FindControl("lbHKJCMATCHNO")).Text;
+           // string start_date = ((Anthem.Label)e.Item.FindControl("lbSTART_DATE")).Text;
+           // string sUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff");
+            string eventName = ((Anthem.Label)e.Item.FindControl("lbNAME")).Text;
+            int id = 0;
+            try
+            {
+                using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
-                    using (FbConnection connection = new FbConnection(AppFlag.HkjcDBConn))
-                    using (FbCommand command = connection.CreateCommand())
-                    {
-                        strConn = connection.DataSource;
-                        command.CommandText =
-                            "delete from MISC_RANK_HISTORY_DETAILS Where CTeam = @cTeam and  CLEAGUEALIAS=@cLEAGUEALIAS ";
-                        command.Parameters.AddWithValue("@cTeam", sTeam);
-                        command.Parameters.AddWithValue("@cLEAGUEALIAS", sLeagueAlias);
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                        connection.Close();
-                        BindEvents(dplLeague.SelectedValue);
-                        lbMsg.Text = connection.DataSource + " Success ;  ";
-                        lbMsg.UpdateAfterCallBack = true;
-                        Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + connection.DataSource + ": Delete CLEAGUEALIAS=" + sLeagueAlias + " and  CTeam =" + sTeam);
+                    connection.Open();
+                    using (FbCommand cmd2 = new FbCommand())
+                    {  
+                        cmd2.CommandText = "SYNC_MANUAL_HKJCDATA_WEB_Cancel";
+                        cmd2.CommandType = CommandType.StoredProcedure;
+                        cmd2.Connection = connection;
+                        cmd2.Parameters.Add("@EMATCHID", eventId);
+                        cmd2.Parameters.Add("@HKJCDAYCODE", dayCODE);
+                        cmd2.Parameters.Add("@HKJCMATCHNO", matchNo);
+                       // cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(start_date).AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                     //   cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddDays(1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Cancel Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName);
+                        this.dgRankDetails.EditItemIndex = -1;
                     }
+                    connection.Close();
                 }
-                catch (Exception exp)
+                if (id > 0)
                 {
-                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + strConn + ":[Failure], Delete CLEAGUEALIAS=" + sLeagueAlias + " and  CTeam =" + sTeam);
+                    this.lbMsg.Visible = true;
+                    this.lbMsg.Text = "[Success] Cancel " + dayCODE + " " + matchNo;
+                    this.lbMsg.UpdateAfterCallBack = true;
 
-                    lbMsg.Text = strConn + " Failure ;  ";
-                    // lbMsg.Text = "Failure";
-                    lbMsg.UpdateAfterCallBack = true;
-                    string exps = exp.ToString();
-                    Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + " " + strConn + ":  dgSchedule_DeleteCommand()  " + exps);
                 }
-
-            if (cblIP.Items.Count > 1 && cblIP.Items[1].Selected)
-                try
-                {
-                    int count = 0;
-                    bool done = false;
-                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-                    using (FbCommand command = connection.CreateCommand())
-                    {
-                        strConn = connection.DataSource;
-                        command.CommandText =
-                            "delete from MISC_RANK_HISTORY_DETAILS Where CTeam = @cTeam and  CLEAGUEALIAS=@cLEAGUEALIAS ";
-                        command.Parameters.AddWithValue("@cTeam", sTeam);
-                        command.Parameters.AddWithValue("@cLEAGUEALIAS", sLeagueAlias);
-                        connection.Open();
-                        count = command.ExecuteNonQuery();
-                        done = (count > 0 ? true : false);
-                        connection.Close();
-                        BindEvents(dplLeague.SelectedValue);
-                        lbMsg.Text += connection.DataSource + " Success ;  ";
-                        //  if (lbMsg.Text == "") { lbMsg.Text = connection.DataSource + " Success ;  "; } else { lbMsg.Text += connection.DataSource + " Success ;  "; }
-
-                        lbMsg.UpdateAfterCallBack = true;
-                        Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + connection.DataSource + ": Delete CLEAGUEALIAS=" + sLeagueAlias + " and  CTeam =" + sTeam + (done ? "." : ",but not found on MISC_RANK_HISTORY_DETAILS.") + "\r\n");
-                    }
-                }
-                catch (Exception exp)
-                {
-                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + strConn + ":[Failure], Delete CLEAGUEALIAS=" + sLeagueAlias + " and  CTeam =" + sTeam + "\r\n");
-                    //  if (lbMsg.Text == "") { lbMsg.Text = strConn + " Failure ;  "; } else { lbMsg.Text += strConn + " Failure ;  "; }
-
-                    lbMsg.Text += strConn + " Failure ;  ";
-                    // lbMsg.Text = "Failure";
-                    lbMsg.UpdateAfterCallBack = true;
-                    string exps = exp.ToString();
-                    Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + " " + strConn + ":  dgSchedule_DeleteCommand()  " + exps + "\r\n");
-                }
+                BindEvents(dplLeague.SelectedValue);
+            }
+            catch (Exception exp)
+            {
+                Files.CicsWriteError("Cancel sync, error:" + exp.ToString());
+            }
         }
 
         private void dgSchedule_EditCommand(object source, DataGridCommandEventArgs e)
@@ -551,14 +520,21 @@
 
         private void dgSchedule_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
-            //for (int i = 0; i < this.dgRankDetails.Items.Count; i++)
-            //{
-            //    if ((((Anthem.Label)this.dgRankDetails.Items[i].FindControl("lbdgSTATUS")).Text == "C") || (((Anthem.Label)this.dgRankDetails.Items[i].FindControl("lbdgSTATUS")).Text == "D"))
-            //    {
-            //        this.dgRankDetails.Items[i].Cells[6].Visible = false;
-            //        this.dgRankDetails.Items[i].Cells[7].Visible = false;
-            //    }
-            //}
+            // ((((e.Item.Cells).Items[13])).Controls).Items[3]
+            /// for (int i = 0; i < this.dgRankDetails.Items.Count; i++)
+            {
+                //if (((Anthem.Label)this.dgRankDetails.Items[i].Cells[13].Controls[3]).Text != "")
+                //{
+                //    ((Anthem.DropDownList)this.dgRankDetails.Items[i].Cells[13].Controls[3]).SelectedValue = ((Anthem.Label)this.dgRankDetails.Items[i].Cells[13].Controls[3]).Text;
+                //}
+            }
+            if (e.Item.ItemType == ListItemType.EditItem)
+            {
+                if (((Anthem.Label)e.Item.Cells[13].Controls[3]).Text != "")
+                {
+                    ((Anthem.DropDownList)e.Item.Cells[13].Controls[1]).SelectedValue = ((Anthem.Label)e.Item.Cells[13].Controls[3]).Text;
+                }
+            }
         }
 
         private void dgSchedule_ItemCreated(object sender, DataGridItemEventArgs e)
@@ -567,13 +543,16 @@
             {
                 if (e.Item.ItemType == ListItemType.EditItem)
                 {
-                    ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
-                    ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                    string df = "";
+             //  ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text;
+
+                    //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                    //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                 }
                 else if (e.Item.ItemType == ListItemType.Item)
                 {
-                    ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
-                    ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                    //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                    //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                 }
             }
             catch (Exception exception)
@@ -621,7 +600,7 @@
                         cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(start_date).AddDays (-1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                         cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddDays(1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                           id = Convert.ToInt32(cmd2.ExecuteScalar());
-                        Files.CicsWriteLog((id > 0 ? " [Success] " : " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName);
+                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName);
                      this.dgRankDetails.EditItemIndex = -1;
                     }
                     connection.Close();
@@ -629,14 +608,20 @@
                 if(id>0)
                 {
                     this.lbMsg.Visible = true;
-                    this.lbMsg.Text = "[Success] "  +dayCODE + " " + matchNo;
-                    this.lbMsg.UpdateAfterCallBack = true;
-                   BindEvents(dplLeague.SelectedValue);
+                    this.lbMsg.Text = "[Success] Sync "  +dayCODE + " " + matchNo;
+                    this.lbMsg.UpdateAfterCallBack = true; 
                 }
+                else
+                {
+                    this.lbMsg.Visible = true;
+                    this.lbMsg.Text = "[Failure] Sync" + dayCODE + " " + matchNo;
+                    this.lbMsg.UpdateAfterCallBack = true;
+                }
+                BindEvents(dplLeague.SelectedValue);
             }
             catch (Exception exp)
             {
-                Files.CicsWriteError("dgSchedule_UpdateCommand:" + exp.ToString());
+                Files.CicsWriteError("Sync, error:" + exp.ToString());
             } 
         }
 
@@ -750,7 +735,7 @@
             {
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
-                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP "
+                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked "
                        + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id"
                        + " where r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'"+ (id.ToString ()=="-1"?"": " and STATUS_ID ="+dplLeague.SelectedValue) +  " order by r.START_DATE ASC  ";
                     using (FbCommand cmd = new FbCommand(queryString))

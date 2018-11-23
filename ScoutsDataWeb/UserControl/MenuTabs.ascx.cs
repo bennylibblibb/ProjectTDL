@@ -28,8 +28,8 @@
         {
             string name = this.Context.User.Identity.Name;
             ArrayList list = new ArrayList();
-            list.Add(new TabItem("Events", Global.GetApplicationPath(base.Request) + "/SyncMatches.aspx?csIndex=" + list.Count));
-            list.Add(new TabItem("Matchlist", Global.GetApplicationPath(base.Request) + "/Matches.aspx?csIndex=" + list.Count));
+            list.Add(new TabItem("STATSCORE", Global.GetApplicationPath(base.Request) + "/SyncMatches.aspx?csIndex=" + list.Count));
+            list.Add(new TabItem("HKJC", Global.GetApplicationPath(base.Request) + "/Matches.aspx?csIndex=" + list.Count));
             //list.Add(new TabItem("組別管理", Global.GetApplicationPath(base.Request) + "/GroupAdmin.aspx?csIndex=" + list.Count));
             if (Users.UserCheck(name))
             {

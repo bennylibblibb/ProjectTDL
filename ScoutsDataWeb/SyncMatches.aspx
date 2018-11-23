@@ -158,7 +158,7 @@
                                             <anthem:Button ID="btnEdit" runat="server" Text="Get"     Width="60px" />  
                                         </TD>
                                         <TD  align="left"   style="width:600px" > 
-                                            <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="10px" Visible="false">  </anthem:Label>  
+                                            <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="200px" Visible="false">  </anthem:Label>  
                                           </strong>
                                              <anthem:CheckBoxList ID="cblIP"  Enabled="false"  runat="server"  RepeatDirection="Horizontal"  Width="10px" Visible ="false"  ></anthem:CheckBoxList>  </TD>
                                         </TR> 
@@ -182,7 +182,7 @@
                                                      <asp:TemplateColumn HeaderText="ID"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbID" runat="server" Width="50px" Visible="false" Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
-                                                           <a href=# onclick="window.showModalDialog('MatchDetails.aspx?ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes,width=300px,height=100px,top=300,left=300')" >																	
+                                                           <a href=# onclick="window.open('MatchDetails.aspx?ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes,width=500px,height=120px,top=300,left=300')" >																	
 																		<b><%# DataBinder.Eval(Container, "DataItem.ID") %></b>	</a>  
                                                        </ItemTemplate>
                                                     </asp:TemplateColumn>
@@ -276,7 +276,7 @@
                                                                 <asp:ListItem>SAT</asp:ListItem>
                                                                 <asp:ListItem>SUN</asp:ListItem> 
                                                                 </anthem:DropDownList> 
-                                                            <anthem:Label id="lbDAYCODE" runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE") %>'></anthem:Label>
+                                                            <anthem:Label Visible="false" id="lbDAYCODE" runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE") %>'></anthem:Label>
                                                         </EditItemTemplate> 
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="MATCH NO">
@@ -286,7 +286,7 @@
                                                         <EditItemTemplate>
                                                              <anthem:TextBox id="txtMATCHNO"    runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'>
                                                             </anthem:TextBox>
-                                                            <anthem:Label id="lbMATCHNO" runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'></anthem:Label>
+                                                            <anthem:Label id="lbMATCHNO" Visible="false"  runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'></anthem:Label>
                                                         </EditItemTemplate> 
 
                                                     </asp:TemplateColumn>
@@ -294,9 +294,17 @@
                                                         <HeaderStyle HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="120px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbCTIMESTAMP" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.CTIMESTAMP ") %>'></anthem:Label>
                                                         </ItemTemplate>
-                                                    </asp:TemplateColumn><ASP:EDITCOMMANDCOLUMN EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
+                                                    </asp:TemplateColumn>
+                                                    
+                                                       <asp:TemplateColumn HeaderText="Booked">
+                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbBooked" runat="server" Width="40px" Text='<%# DataBinder.Eval(Container, "DataItem.booked") %>'></anthem:Label>
+                                                        </ItemTemplate>
+                                                         </asp:TemplateColumn>
+
+                                                    <ASP:EDITCOMMANDCOLUMN EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
                                                         <HEADERSTYLE Width="150px"  Wrap="false" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE Width="120px" CssClass="grid-item"></ITEMSTYLE>
-                                                    </ASP:EDITCOMMANDCOLUMN><asp:ButtonColumn Text="刪除" Visible="FALSE" CommandName="Delete" ItemStyle-Font-Bold="True">
+                                                    </ASP:EDITCOMMANDCOLUMN><asp:ButtonColumn Text="Cancel"  CommandName="Delete" ItemStyle-Font-Bold="True">
                                                         <HeaderStyle HorizontalAlign="Left" Wrap="false" Width="150px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="120px" CssClass="grid-item"></ItemStyle>
                                                     </asp:ButtonColumn>
                                                 </Columns>

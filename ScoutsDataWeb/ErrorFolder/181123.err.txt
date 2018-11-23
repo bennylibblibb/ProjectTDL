@@ -1,0 +1,20 @@
+﻿10:25:05   BindLeague()  System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+Parameter name: index
+   at System.Web.UI.ControlCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.Update.dgSchedule_ItemDataBound(Object sender, DataGridItemEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 557
+   at System.Web.UI.WebControls.DataGrid.OnItemDataBound(DataGridItemEventArgs e)
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 771
+10:25:53   BindLeague()  System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+Parameter name: index
+   at System.Web.UI.ControlCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.Update.dgSchedule_ItemDataBound(Object sender, DataGridItemEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 557
+   at System.Web.UI.WebControls.DataGrid.OnItemDataBound(DataGridItemEventArgs e)
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 771

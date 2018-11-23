@@ -12,7 +12,7 @@
 				</SelectedItemTemplate>
 				<ItemStyle Height="36px" CssClass="admin-tab-inactive"></ItemStyle>
 				<ItemTemplate>
-					<asp:HyperLink id="hlMenu"   NavigateUrl="<%# ((TabItem) Container.DataItem).Path %>" runat="server" >
+					<asp:HyperLink id="hlMenu" runat="server"   Target ='<%# ((TabItem) Container.DataItem).Name=="HKJC"?"_blank":"_self" %>'  NavigateUrl="<%# ((TabItem) Container.DataItem).Path %>"  >
 						<%# ((TabItem) Container.DataItem).Name %>
 					</asp:HyperLink>
 				</ItemTemplate>

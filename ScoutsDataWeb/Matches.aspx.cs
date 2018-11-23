@@ -38,7 +38,30 @@
         protected Anthem.Label lbIHEADER_ID;
         protected Anthem.Button btnEdit;
         protected Anthem.Label lbMsg;
-        protected Anthem.CheckBoxList cblIP;
+        protected Anthem.RadioButtonList cbDay;
+
+        protected void cbDay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try {
+                dgRankDetails.CurrentPageIndex = 0;
+                DataSet data = (DataSet)this.Session["matches"];
+                DataTable table = data.Tables[0];
+                if (table.Rows.Count > 0)
+                {
+                    table.DefaultView.RowFilter = (cbDay.SelectedItem.Text == "All" ? "" : "HKJCDAYCODE='" + cbDay.SelectedItem.Text + "' ");
+                    table.DefaultView.Sort = "HKJCMATCHNO asc ";
+                    table = table.DefaultView.ToTable();
+                    dgRankDetails.DataSource = data.Tables[0].DefaultView;
+                    dgRankDetails.DataBind();
+                   
+                    dgRankDetails.UpdateAfterCallBack = true;
+                }
+            }
+            catch (Exception exception)
+            {
+                string str = "cbDay_SelectedIndexChanged(),error:" +exception.ToString();
+            }
+        }
 
         private void dgSchedule_CancelCommand(object source, DataGridCommandEventArgs e)
         {
@@ -104,9 +127,13 @@
             btnEdit.UpdateAfterCallBack = true;
             lbMsg.Text = "";
             lbMsg.UpdateAfterCallBack = true;
+            this.cbDay.SelectedValue= "-1";
+            this.cbDay.AutoUpdateAfterCallBack = true;
         }
         private void btnEdit_Click(object sender, EventArgs e)
-        { 
+        {
+            this.cbDay.SelectedValue = "-1";
+            this.cbDay.AutoUpdateAfterCallBack = true;
             BindMatches(dplLeague.SelectedValue);
         }
 
@@ -118,6 +145,7 @@
             this.dgRankDetails.EditCommand += new DataGridCommandEventHandler(this.dgSchedule_EditCommand);
             this.dplLeague.SelectedIndexChanged += new EventHandler(this.dplLeague_SelectedIndexChanged);
             this.dgRankDetails.ItemCreated += new DataGridItemEventHandler(this.dgSchedule_ItemCreated);
+            this.cbDay.SelectedIndexChanged += cbDay_SelectedIndexChanged;
             this.btnEdit.Click += new EventHandler(this.btnEdit_Click);
 
             base.Load += new EventHandler(this.Page_Load);
@@ -210,6 +238,8 @@
                                     {
                                         maxTime = Convert.ToDateTime(data.Tables[0].Rows[0]["CMATCHDATETIME"]);
                                         minTime = Convert.ToDateTime(data.Tables[0].Rows[data.Tables[0].Rows.Count - 1]["CMATCHDATETIME"]);
+                                        this.txtFrom.Text = minTime.ToString("yyyy-MM-dd", culture);
+                                        this.txtTo.Text = maxTime.ToString("yyyy-MM-dd", culture);
                                     }
                                 }
                             }
@@ -221,7 +251,7 @@
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
                     //string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
-                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,V.CTIMESTAMP  from EMATCHES E " +
+                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,V.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS  from EMATCHES E " +
                          " LEFT JOIN GOALINFO G ON E.EMATCHID = G.EMATCHID LEFT JOIN EVENTS V ON E.EMATCHID = V.ID " +
                            " WHERE E.CMATCHDATETIME >= '"+ minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' and E.CMATCHDATETIME <= '"+ maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null)+"'" + (id.ToString ()=="All"?"": " and STATUS = "+dplLeague.SelectedValue) + "   order by v.id desc";
                     using (FbCommand cmd = new FbCommand(queryString, connection))

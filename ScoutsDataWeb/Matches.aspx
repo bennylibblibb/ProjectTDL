@@ -101,7 +101,16 @@
                                         <TD  align="left"   style="width:600px" > 
                                             <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="120px" Visible="false">  </anthem:Label>  
                                           </strong>
-                                             <anthem:CheckBoxList ID="cblIP"  Enabled="false"  runat="server"  RepeatDirection="Horizontal"  Width="10px" Visible ="false"  ></anthem:CheckBoxList>  </TD>
+                                             <anthem:RadioButtonList ID="cbDay" runat="server"  RepeatDirection="Horizontal"  Width="200px"  AutoCallBack="true"  >
+                                                                <asp:ListItem Value ="-1" Selected="True">All</asp:ListItem>
+                                                                <asp:ListItem>MON</asp:ListItem> 
+                                                                <asp:ListItem>TUE</asp:ListItem>
+                                                                <asp:ListItem>WED</asp:ListItem>
+                                                                <asp:ListItem>THU</asp:ListItem>
+                                                                <asp:ListItem>FRI</asp:ListItem> 
+                                                                <asp:ListItem>SAT</asp:ListItem>
+                                                                <asp:ListItem>SUN</asp:ListItem>  
+                                             </anthem:RadioButtonList>  </TD>
                                         </TR> 
 
 
@@ -120,10 +129,12 @@
                                                             <%#this.dgRankDetails.CurrentPageIndex * this.dgRankDetails.PageSize + Container.ItemIndex + 1%>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
-                                                     <asp:TemplateColumn HeaderText="ID"   >
+                                                 <asp:TemplateColumn HeaderText="ID"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbID" runat="server" Width="50px" Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
-                                                        </ItemTemplate>
+                                                            <anthem:Label id="lbID" runat="server" Width="50px" Visible="false" Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
+                                                           <a href=# onclick="window.open('MatchDetails.aspx?ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes,width=500px,height=120px,top=300,left=300')" >																	
+																		<b><%# DataBinder.Eval(Container, "DataItem.ID") %></b>	</a>  
+                                                       </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="NAME" Visible ="true" >
                                                         <HeaderStyle HorizontalAlign="Left" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
@@ -230,11 +241,17 @@
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
 
-                                                    <asp:TemplateColumn HeaderText="TIMESTAMP">
+                                                    <asp:TemplateColumn HeaderText="MATCHDATETIME">
                                                         <HeaderStyle HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="120px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbCTIMESTAMP" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.CTIMESTAMP ") %>'></anthem:Label>
+                                                            <anthem:Label id="lbCTIMESTAMP" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.CMATCHDATETIME ") %>'></anthem:Label>
                                                         </ItemTemplate>
-                                                    </asp:TemplateColumn><ASP:EDITCOMMANDCOLUMN Visible="FALSE" EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
+                                                    </asp:TemplateColumn>
+                                                       <asp:TemplateColumn HeaderText="Booked">
+                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbBooked" runat="server" Width="40px" Text='<%# DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS") %>'></anthem:Label>
+                                                        </ItemTemplate>
+                                                         </asp:TemplateColumn>
+                                                    <ASP:EDITCOMMANDCOLUMN Visible="FALSE" EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
                                                         <HEADERSTYLE Width="150px"  Wrap="false" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE Width="120px" CssClass="grid-item"></ITEMSTYLE>
                                                     </ASP:EDITCOMMANDCOLUMN><asp:ButtonColumn  Visible="FALSE" Text="刪除" CommandName="Delete" ItemStyle-Font-Bold="True">
                                                         <HeaderStyle HorizontalAlign="Left" Wrap="false" Width="150px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="120px" CssClass="grid-item"></ItemStyle>
