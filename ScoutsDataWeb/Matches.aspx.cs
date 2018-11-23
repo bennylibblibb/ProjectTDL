@@ -49,7 +49,7 @@
                 if (table.Rows.Count > 0)
                 {
                     table.DefaultView.RowFilter = (cbDay.SelectedItem.Text == "All" ? "" : "HKJCDAYCODE='" + cbDay.SelectedItem.Text + "' ");
-                    table.DefaultView.Sort = "HKJCMATCHNO asc ";
+                    table.DefaultView.Sort = cbDay.SelectedItem.Text == "All" ? " CMATCHDATETIME asc " : " HKJCMATCHNO asc";
                     table = table.DefaultView.ToTable();
                     dgRankDetails.DataSource = data.Tables[0].DefaultView;
                     dgRankDetails.DataBind();
