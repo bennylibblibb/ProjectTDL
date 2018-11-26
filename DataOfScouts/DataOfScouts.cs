@@ -640,6 +640,7 @@ namespace DataOfScouts
                             int id = dr1["EMATCHID"] == DBNull.Value ? -1 : Convert.ToInt32(dr1["EMATCHID"]);
                             string strHkjcHostName = dr1["HKJCHOSTNAME"].ToString();
                             string strHkjcGeustName = dr1["HKJCGUESTNAME"].ToString();
+                            DateTime dMATCHDATETIME = Convert.ToDateTime(dr1["CMATCHDATETIME"]);
                             //string strHkjcHostName = dr1[35].ToString();
                             //string strHkjcGeustName = dr1[37].ToString();
 
@@ -692,6 +693,8 @@ namespace DataOfScouts
                                         cmd2.Parameters.Add("@GUEST_ID", id2);
                                         cmd2.Parameters.Add("@HKJCHOSTNAME", strHkjcHostName);
                                         cmd2.Parameters.Add("@HKJCGUESTNAME", strHkjcGeustName);
+                                        cmd2.Parameters.Add("@CMATCHDATETIME1", dMATCHDATETIME.AddHours(-AppFlag.MarginOfDeviation));
+                                        cmd2.Parameters.Add("@CMATCHDATETIME2", dMATCHDATETIME.AddHours(AppFlag.MarginOfDeviation));
                                         id = Convert.ToInt32(cmd2.ExecuteScalar());
                                         Files.WriteLog((id > 0 ? " [Success] " : (id == 0) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["HKJCMATCHNO"] + " " + dr1["HKJCDAYCODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
                                     }
