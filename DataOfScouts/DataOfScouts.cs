@@ -99,7 +99,7 @@ namespace DataOfScouts
                 lstStatus.SelectedValueChanged += new EventHandler(lstStatus_SelectedValueChanged);
 
                 //Timer for amqp
-                aTimer = new System.Timers.Timer(5*60 * 1000);
+                aTimer = new System.Timers.Timer(5 * 60 * 1000);
                 aTimer.Elapsed += OnTimedEvent;
                 aTimer.AutoReset = true;
                 aTimer.Enabled = true;
@@ -639,7 +639,7 @@ namespace DataOfScouts
                         connection.Open();
                         foreach (DataRow dr1 in table.Rows)
                         {
-                            int id = dr1["EMATCHID"] == DBNull.Value ? -1 : Convert.ToInt32(dr1["EMATCHID"]); 
+                            int id = dr1["EMATCHID"] == DBNull.Value ? -1 : Convert.ToInt32(dr1["EMATCHID"]);
                             string strHkjcHostName = dr1["HKJCHOSTNAME"].ToString();
                             string strHkjcGeustName = dr1["HKJCGUESTNAME"].ToString();
                             //string strHkjcHostName = dr1[35].ToString();
@@ -677,10 +677,10 @@ namespace DataOfScouts
                                 Files.WriteLogNR("");
                                 Files.WriteLog("Team only one(" + evtTeams.Tables[0].Rows[0]["Name"].ToString() + ") exist on scoutsfeed " + strHkjcHostName + "/" + strHkjcGeustName);
                             }
-                            else if (evtTeams.Tables[0].Rows.Count == 2) 
+                            else if (evtTeams.Tables[0].Rows.Count == 2)
                             {
                                 Files.WriteLogNR("");
-                               // int id = -1;
+                                // int id = -1;
                                 string id1 = evtTeams.Tables[0].Select("NAME='" + strHkjcHostName + "' or  SHORT_NAME='" + strHkjcHostName + "'")[0]["ID"].ToString();
                                 string id2 = evtTeams.Tables[0].Select("NAME='" + strHkjcGeustName + "' or  SHORT_NAME='" + strHkjcGeustName + "'")[0]["ID"].ToString();
                                 try
@@ -702,9 +702,9 @@ namespace DataOfScouts
                                 {
                                     Files.WriteError("error:" + exp.ToString());
                                 }
-                              //  if (id > 0) BookEventAction(id.ToString(), false);
-                            } 
-                            if (id > 0) BookEventAction(id.ToString(), false); 
+                                //  if (id > 0) BookEventAction(id.ToString(), false);
+                            }
+                            if (id > 0) BookEventAction(id.ToString(), false);
                         }
                         connection.Close();
                     }
@@ -5438,7 +5438,7 @@ namespace DataOfScouts
 
                         //Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                         //AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
- 
+
                         RunSyncHkjcAndBook3(table);
                     }
                 }
@@ -6695,12 +6695,12 @@ namespace DataOfScouts
                                                         cmd2.Parameters.Add("@TEAMTYPE", api.data.@event.participants[i].counter == 2 ? "G" : "H");
                                                         id = Convert.ToInt32(cmd2.ExecuteScalar());
                                                         Files.WriteLog((id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_results") + "[" + api.data.@event.id + "/" + api.data.@event.participants[0].id + "]");
-                                                      //  Thread.Sleep(20);
+                                                        //  Thread.Sleep(20);
                                                     }
 
                                                     //using (FbCommand cmd2 = new FbCommand())
                                                     //{
-                                                         
+
                                                     //    cmd2.CommandText = "PR_stats_GoalInfo";
                                                     //    cmd2.CommandType = CommandType.StoredProcedure;
                                                     //    cmd2.Connection = connection; 
@@ -6713,7 +6713,7 @@ namespace DataOfScouts
                                                     //    Thread.Sleep(20);
                                                     //}
                                                 }
-                                                if (api.data.@event.participants.Length == 2 && api.data.@event.action!= "delete")
+                                                if (api.data.@event.participants.Length == 2 && api.data.@event.action != "delete")
                                                 {
                                                     using (FbCommand cmd2 = new FbCommand())
                                                     {
@@ -6735,7 +6735,7 @@ namespace DataOfScouts
                                                         cmd2.CommandText = "PR_Result_GoalInfo";
                                                         cmd2.CommandType = CommandType.StoredProcedure;
                                                         cmd2.Connection = connection;
-                                                        cmd2.Parameters.Add("@EMATCHID", api.data.@event.id); 
+                                                        cmd2.Parameters.Add("@EMATCHID", api.data.@event.id);
                                                         cmd2.Parameters.Add("@H_GOAL", api.data.@event.participants[0].results.FirstOrDefault(c => c.id == 2).value);
                                                         cmd2.Parameters.Add("@G_GOAL", api.data.@event.participants[1].results.FirstOrDefault(c => c.id == 2).value);
                                                         cmd2.Parameters.Add("@LASTTIME", DateTime.Now);
@@ -7005,7 +7005,7 @@ namespace DataOfScouts
             {
                 this.lstStatus.Invoke(new MethodInvoker(delegate { this.lstStatus.Items.Insert(0, DateTime.Now.ToString("HH:mm:ss.fff   ") + e.Result.ToString()); }));
 
-               // this.lstStatus.Items.Insert(0, DateTime.Now.ToString("HH:mm:ss.fff   ") + e.Result.ToString());
+                // this.lstStatus.Items.Insert(0, DateTime.Now.ToString("HH:mm:ss.fff   ") + e.Result.ToString());
             }
             catch (Exception exp)
             {
@@ -7056,7 +7056,7 @@ namespace DataOfScouts
         private void TimerTask(object timerState)
         {
             try
-            { 
+            {
                 //Files.WriteLog(" Auto task get events," + (this.bnAreas.Items[19].Text ==""? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 00:00:00" + "-" + (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 23:59:59");
                 //InsertData("events", true, (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 00:00:00", (this.bnAreas.Items[19].Text == "" ? DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") : this.bnAreas.Items[19].Text) + " 23:59:59");
                 //Files.WriteLog(" Auto task get events," + this.bnAreas.Items[19].Text+ " 00:00:00" + "-" +  this.bnAreas.Items[19].Text  + " 23:59:59");
