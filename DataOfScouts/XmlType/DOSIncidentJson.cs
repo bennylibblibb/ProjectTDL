@@ -93,7 +93,7 @@
     public class Stat
     {
         public int id { get; set; }
-        public int? value { get; set; }
+        public string value { get; set; }
     }
 
     public class Result

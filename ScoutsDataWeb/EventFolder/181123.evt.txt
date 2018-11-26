@@ -1,0 +1,62 @@
+﻿09:18:15 BEN login success.
+09:23:31 BEN login success.
+09:25:16 BEN login success.
+09:28:55 BEN login success.
+09:43:50 BEN login success.
+09:52:01 BEN login success.
+10:09:16 BEN login success.
+10:13:57 BEN login success.
+10:14:50 BEN login success.
+10:21:50 BEN login success.
+10:22:36 BEN login success.
+10:26:50 BEN login success.
+10:27:31 BEN login success.
+10:35:35 BEN login success.
+10:48:39 BEN login success.
+10:50:21 BEN login success.
+10:53:04 BEN login success.
+10:53:04 BEN login success.
+10:54:19 BEN login success.
+10:55:37 BEN login success.
+11:06:27 BEN login success.
+11:07:14 BEN login success.
+11:08:31 BEN login success.
+11:09:10 BEN login success.
+11:14:45 BEN login success.
+11:17:48 BEN login success.
+11:20:10 BEN login success.
+11:22:02 BEN login success.
+11:24:02 BEN login success.
+11:25:37 BEN login success.
+11:27:17 BEN login success.
+11:28:48 BEN login success.
+11:46:41 BEN login success.
+11:48:56 BEN login success.
+ [Success] Cancel Sync [2639298] EMATCHES[THU 2]  Benfica - Arouca
+11:51:57 BEN login success.
+ [Success] Cancel Sync [2639298] EMATCHES[THU 2]  Benfica - Arouca
+11:54:02 BEN login success.
+ [Success] Sync [2639298] EMATCHES[THU 2]  Benfica - Arouca
+ [Success] Cancel Sync [2639298] EMATCHES[THU 2]  Benfica - Arouca
+ [Failure] Sync [2370872] EMATCHES[WED 3]  Chapecoense-SC - Sport Recife-PE
+ [Failure] Sync [2380484] EMATCHES[WED 3]  Persib Bandung - Perseru Serui
+11:58:51 BEN login success.
+ [Failure] Sync [2637841] EMATCHES[WED 3]  Osasco Audax (W) - Atletico Huila (W)
+11:59:45 BEN login success.
+ [Failure] Sync [2370866] EMATCHES[WED 3]  Vasco da Gama-RJ - Sao Paulo-SP
+12:01:41 BEN login success.
+12:02:13 BEN login success.
+ [Success] Sync [2639298] EMATCHES[THU 2]  Benfica - Arouca
+ [Success] Cancel Sync [2639298] EMATCHES[THU 2]  Benfica - Arouca
+14:26:12 BEN login success.
+14:31:37 BEN login success.
+14:32:35 BEN login success.
+14:35:30 BEN login success.
+14:36:50 BEN login success.
+14:38:18 BEN login success.
+14:40:02 BEN login success.
+14:41:38 BEN login success.
+14:44:43 BEN login success.
+14:46:30 BEN login success.
+14:50:28 BEN login success.
+18:15:04 BEN login success.

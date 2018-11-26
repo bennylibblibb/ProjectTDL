@@ -20,7 +20,8 @@ namespace DataOfScouts
         public static bool JsonType = ConfigurationSettings.AppSettings["JsonType"].ToLower ()=="all"?false:true;
         public static string GetTime = ConfigurationSettings.AppSettings["GetTime"];
         public static bool AutoBooked = ConfigurationSettings.AppSettings["AutoBooked"].ToLower() == "yes" ? false : true;
-         
+        internal static readonly int MarginOfDeviation = Convert.ToInt32(ConfigurationSettings.AppSettings["MarginOfDeviation"]);
+
     }
 
     public enum InformationType
