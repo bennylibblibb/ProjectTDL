@@ -110,7 +110,7 @@ namespace DataOfScouts
                 tTimer = new System.Threading.Timer(
                callback: new TimerCallback(TimerTask),
                state: timerState,
-               dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays (1).Subtract(DateTime .Now) :  dueTimes.Subtract(DateTime.Now)),
+               dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays(1).Subtract(DateTime.Now) : dueTimes.Subtract(DateTime.Now)),
                period: dueTimes.AddDays(1).Subtract(dueTimes));
             }
             catch (Exception exp)
@@ -6475,7 +6475,8 @@ namespace DataOfScouts
                                     //{
                                     DOSEventJson.EventJson api = JsonUtil.Deserialize(typeof(DOSEventJson.EventJson), message) as DOSEventJson.EventJson;
                                     if (api != null && api.type == "event" && (AppFlag.JsonType ? api.data.@event.sport_id == 5 : api.data.@event.sport_id != -1))
-                                    {                                        int id = -2;
+                                    {
+                                        int id = -2;
                                         strName = api.data.@event.id + "_" + DateTime.Now.ToString("HHmmssfff");
                                         Files.WriteJson(strName, message);
                                         //using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
@@ -6494,7 +6495,7 @@ namespace DataOfScouts
                                             // cmd2.Parameters.Add("@SOURCE_DC", api.data.@event.S);
                                             //cmd2.Parameters.Add("@SOURCE_SUPER", api.data.@event.s);
                                             cmd2.Parameters.Add("@RELATION_STATUS", api.data.@event.relation_status);
-                                            cmd2.Parameters.Add("@START_DATE", Convert.ToDateTime (api.data.@event.start_date).AddHours(8));
+                                            cmd2.Parameters.Add("@START_DATE", Convert.ToDateTime(api.data.@event.start_date).AddHours(8));
                                             cmd2.Parameters.Add("@FT_ONLY", api.data.@event.ft_only == "yes" ? true : false);
                                             cmd2.Parameters.Add("@COVERAGE_TYPE", api.data.@event.coverage_type);
                                             //cmd2.Parameters.Add("@CHANNEL_ID", api.data.@event.CH);
@@ -6533,8 +6534,8 @@ namespace DataOfScouts
                                             cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                             cmd2.Parameters.Add("@CACTION", api.data.@event.action);
                                             id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                            Files.WriteLog((id == 0 ? " [Success] Insert event " : id == 1 ? " Update event " :"") + "[" + api.data.@event.id + "]," + strName + ".json");
-                                           // Files.WriteLog((id == 0 ? " [Success] Insert event [" + api.data.@event.id + "]," + strName + ".json":"");
+                                            Files.WriteLog((id == 0 ? " [Success] Insert event " : id == 1 ? " Update event " : "") + "[" + api.data.@event.id + "]," + strName + ".json");
+                                            // Files.WriteLog((id == 0 ? " [Success] Insert event [" + api.data.@event.id + "]," + strName + ".json":"");
                                         }
 
 
@@ -6647,7 +6648,7 @@ namespace DataOfScouts
                                                         cmd2.Parameters.Add("@MPG_778", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 778).value);
                                                         cmd2.Parameters.Add("@MPS_779", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 779).value);
                                                         cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                                                      //  cmd2.Parameters.Add("@CACTION", api.data.@event.action);
+                                                        //  cmd2.Parameters.Add("@CACTION", api.data.@event.action);
                                                         id = Convert.ToInt32(cmd2.ExecuteScalar());
                                                         Files.WriteLog((id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_results") + "[" + api.data.@event.id + "/" + api.data.@event.participants[0].id + "]");
                                                     }
@@ -6673,7 +6674,7 @@ namespace DataOfScouts
                                     {
                                         string sID = "";
                                         DOSIncidentJson.IncidentJson incidentJson = JsonUtil.Deserialize(typeof(DOSIncidentJson.IncidentJson), message) as DOSIncidentJson.IncidentJson;
-                                        if (incidentJson != null && incidentJson.data.@event.sport_id == 5&& incidentJson.data.incident.important_for_trader == "yes")
+                                        if (incidentJson != null && incidentJson.data.@event.sport_id == 5 && incidentJson.data.incident.important_for_trader == "yes")
                                         {
                                             strName = "Incid" + incidentJson.data.@event.id + "_" + DateTime.Now.ToString("HHmmssfff");
                                             Files.WriteJson(strName, message);
@@ -6906,7 +6907,7 @@ namespace DataOfScouts
             {
                 this.lstStatus.Invoke(new MethodInvoker(delegate { this.lstStatus.Items.Insert(0, DateTime.Now.ToString("HH:mm:ss.fff   ") + e.Result.ToString()); }));
 
-               // this.lstStatus.Items.Insert(0, DateTime.Now.ToString("HH:mm:ss.fff   ") + e.Result.ToString());
+                // this.lstStatus.Items.Insert(0, DateTime.Now.ToString("HH:mm:ss.fff   ") + e.Result.ToString());
             }
             catch (Exception exp)
             {
