@@ -5000,7 +5000,7 @@ namespace DataOfScouts
                                         cmd2.Parameters.Add("@HKJCHOSTNAME", dr1["CHOME_TEAM_ENG_NAME"]);
                                         cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
                                         cmd2.Parameters.Add("@STATUS", dr1["ISTATUS"]);
-                                        cmd2.Parameters.Add("@MAPPINGSTATUS", false);
+                                        cmd2.Parameters.Add("@MAPPINGSTATUS", null);
                                         cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                                         int id = Convert.ToInt32(cmd2.ExecuteScalar());
                                         // Files.WriteLog((id == 0 ? " [Success] Insert EMATCHES " : "Match exist "+id+" ") + "[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + "/" + dr1["CAWAY_TEAM_ENG_NAME"]);
@@ -5037,7 +5037,7 @@ namespace DataOfScouts
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             // string queryString = "SELECT t.* FROM teams t  inner  join  events e on   t.id= e.HOME_ID or t.id=e.GUEST_ID   where e.id='" + arr[1] + "' order by id asc";
-                            string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
+                            string queryString = "SELECT e.*,r.start_date ,r.STATUS_ID,r.STATUS_NAME  FROM EMATCHES e left join events r on e.ematchid= r.id  where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
                             using (FbCommand cmd = new FbCommand(queryString, connection))
                             {
                                 using (FbCommandBuilder fcb = new FbCommandBuilder())
@@ -5051,41 +5051,8 @@ namespace DataOfScouts
                                             data.Tables.Add(new DataTable("SocoutMatch"));
                                             fda.Fill(data.Tables["SocoutMatch"]);
                                             ds2 = data;
-                                        }
-                                        //if (ds2.Tables["SocoutMatch"].Rows.Count == 0 && ds1.Tables[0].Rows.Count > 0)
-                                        //{
-                                        //    foreach (DataRow dr1 in ds1.Tables[0].Rows)
-                                        //    {
-                                        //        DataRow dr = ds2.Tables[0].NewRow();
-                                        //        dr[1] = dr1["IHOME_TEAM_CODE"];
-                                        //        dr[2] = dr1["IAWAY_TEAM_CODE"];
-                                        //        dr[3] = dr1["CHOME_TEAM_ENG_NAME"];
-                                        //        dr[4] = dr1["CAWAY_TEAM_ENG_NAME"];
-                                        //        dr[5] = dr1["CMATCH_DAY_CODE"];
-                                        //        dr[6] = dr1["IMATCH_NO"];
-                                        //        dr[7] = dr1["ISTATUS"];
-                                        //        dr[8] = dr1["CMATCHDATETIME"];
-                                        //        dr[9] = false;
-                                        //        dr[10] = dr1["CTIMESTAMP"];
-                                        //        ds2.Tables[0].Rows.Add(dr);
-                                        //    }
-                                        //    int count = fda.Update(ds2.Tables[0]);
-                                        //    // ds = ds2;
-                                        //    if (count > -1)
-                                        //    {
-                                        //        Files.WriteLog("[Success] Insert EMATCHES[" + count + "] ");
-                                        //        var culture = new System.Globalization.CultureInfo("zh-HK");
-                                        //        Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(ds1.Tables[0].Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss fff", culture));
-                                        //        AppFlag.SyncHkjcDateTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss fff", culture);
-                                        //    }
-                                        //}
-                                        //else if (ds2.Tables["SocoutMatch"].Rows.Count > 0 && ds1.Tables[0].Rows.Count > 0)
-                                        //{
-
-                                        //}
-
-                                        ds = ds2;
-                                        // if(ds1.Tables["HKjcMatch"])
+                                        } 
+                                        ds = ds2; 
                                     }
                                 }
                             }
@@ -5745,13 +5712,15 @@ namespace DataOfScouts
                     {
 
                         string event_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        string status_id = this.dgvBookedEvent.Rows[e.RowIndex].Cells[12].Value.ToString();
                         if (event_id == "") return;
                         //if (Convert.ToInt32 (event_id) > 0)
                         //{
                         DataSet data = new DataSet();
                         data = InsertData("events.show2", false, event_id == "" ? "-1" : event_id);
                         // if (data.Tables[0].Rows.Count == 0)
-                        if (event_id != "" && ((data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0) || data.Tables[1].Rows.Count == 0))
+                        //if (event_id != "" && ((data.Tables[0].Rows.Count < 2 && Convert.ToInt32(event_id) > 0) || data.Tables[1].Rows.Count == 0))
+                        if (event_id != "" && event_id != "0" &&( data.Tables[0].Rows.Count < 2|| (status_id != "1" && data.Tables[1].Rows.Count == 0)))
                         {
                             data = InsertData("events.show2", true, event_id == "" ? "-1" : event_id);
                         }
@@ -5770,8 +5739,7 @@ namespace DataOfScouts
                         }
                         else if (dgvBookedEvent.childView.TabPages.Count > 0 && dgvBookedEvent.childView.TabPages[0].Text == "Teams")
                         {
-                            dgvBookedEvent.childView.BindData(data.Tables[0], "Teams");
-
+                            dgvBookedEvent.childView.BindData(data.Tables[0], "Teams"); 
                             dgvBookedEvent.childView.BindData(data.Tables[1], "HPlayers");
                             dgvBookedEvent.childView.BindData(data.Tables[2], "GPlayers");
                             dgvBookedEvent.childView.BindData(data.Tables[3], "Details");

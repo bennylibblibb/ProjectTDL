@@ -42,7 +42,8 @@
 
         protected void cbDay_SelectedIndexChanged(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 dgRankDetails.CurrentPageIndex = 0;
                 DataSet data = (DataSet)this.Session["matches"];
                 DataTable table = data.Tables[0];
@@ -53,13 +54,13 @@
                     table = table.DefaultView.ToTable();
                     dgRankDetails.DataSource = data.Tables[0].DefaultView;
                     dgRankDetails.DataBind();
-                   
+
                     dgRankDetails.UpdateAfterCallBack = true;
                 }
             }
             catch (Exception exception)
             {
-                string str = "cbDay_SelectedIndexChanged(),error:" +exception.ToString();
+                string str = "cbDay_SelectedIndexChanged(),error:" + exception.ToString();
             }
         }
 
@@ -127,14 +128,15 @@
             btnEdit.UpdateAfterCallBack = true;
             lbMsg.Text = "";
             lbMsg.UpdateAfterCallBack = true;
-            this.cbDay.SelectedValue= "-1";
+            this.cbDay.SelectedValue = "-1";
             this.cbDay.AutoUpdateAfterCallBack = true;
         }
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            dgRankDetails.CurrentPageIndex = 0;
             this.cbDay.SelectedValue = "-1";
             this.cbDay.AutoUpdateAfterCallBack = true;
-            BindMatches(dplLeague.SelectedValue);
+            BindMatchesByDate(dplLeague.SelectedValue);
         }
 
         private void InitializeComponent()
@@ -168,7 +170,7 @@
                 this.txtFrom.Text = DateTime.Now.ToString("yyyy-MM-dd", culture);
                 this.txtTo.Text = DateTime.Now.ToString("yyyy-MM-dd", culture);
                 this.lbUser.Text = this.Context.User.Identity.Name;
-             //   BindStatuses();
+                //   BindStatuses();
                 BindMatches(dplLeague.SelectedValue);
 
             }
@@ -197,7 +199,7 @@
                                 dplLeague.DataValueField = "id";
                                 dplLeague.DataBind();
                                 dplLeague.Items.Insert(0, new ListItem("All", "-1"));
-                              this.dplLeague.UpdateAfterCallBack = true; 
+                                this.dplLeague.UpdateAfterCallBack = true;
                             }
                         }
                     }
@@ -253,7 +255,7 @@
                     //string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
                     string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,V.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS  from EMATCHES E " +
                          " LEFT JOIN GOALINFO G ON E.EMATCHID = G.EMATCHID LEFT JOIN EVENTS V ON E.EMATCHID = V.ID " +
-                           " WHERE E.CMATCHDATETIME >= '"+ minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' and E.CMATCHDATETIME <= '"+ maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null)+"'" + (id.ToString ()=="All"?"": " and STATUS = "+dplLeague.SelectedValue) + "   order by  E.CMATCHDATETIME asc";
+                           " WHERE E.CMATCHDATETIME >= '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' and E.CMATCHDATETIME <= '" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'" + (id.ToString() == "All" ? "" : " and STATUS = " + dplLeague.SelectedValue) + "   order by  E.CMATCHDATETIME asc";
                     using (FbCommand cmd = new FbCommand(queryString, connection))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())
@@ -266,7 +268,7 @@
                                 dgRankDetails.PageSize = AppFlag.iPageSize;
                                 dgRankDetails.DataSource = data.Tables[0].DefaultView;
                                 dgRankDetails.DataBind();
-                               dgRankDetails.UpdateAfterCallBack = true;
+                                dgRankDetails.UpdateAfterCallBack = true;
                                 Session["matches"] = data;
                             }
                         }
@@ -278,6 +280,43 @@
             {
                 string exps = exp.ToString();
                 Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   BindMatches()  " + exps);
+            }
+        }
+
+
+        private void BindMatchesByDate(string id)
+        {
+            try { 
+                using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                {
+                    //string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
+                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,V.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS  from EMATCHES E " +
+                         " LEFT JOIN GOALINFO G ON E.EMATCHID = G.EMATCHID LEFT JOIN EVENTS V ON E.EMATCHID = V.ID " +
+                           " WHERE E.CMATCHDATETIME >= '" + this.txtFrom.Text.Trim ()+ ", 00:00:00.000" + "' and E.CMATCHDATETIME <= '" + this.txtTo.Text.Trim() + ", 23:59:59.000" + "" + "'" + (id.ToString() == "All" ? "" : " and STATUS = " + dplLeague.SelectedValue) + "   order by  E.CMATCHDATETIME asc";
+                    using (FbCommand cmd = new FbCommand(queryString, connection))
+                    {
+                        using (FbDataAdapter fda = new FbDataAdapter())
+                        {
+                            fda.SelectCommand = cmd;
+                            using (DataSet data = new DataSet())
+                            {
+                                data.Tables.Add(new DataTable("SocoutMatch"));
+                                fda.Fill(data.Tables["SocoutMatch"]);
+                                dgRankDetails.PageSize = AppFlag.iPageSize;
+                                dgRankDetails.DataSource = data.Tables[0].DefaultView;
+                                dgRankDetails.DataBind();
+                                dgRankDetails.UpdateAfterCallBack = true;
+                                Session["matches"] = data;
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception exp)
+            {
+                string exps = exp.ToString();
+                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   BindMatchesByDate()  " + exps);
             }
         }
     }

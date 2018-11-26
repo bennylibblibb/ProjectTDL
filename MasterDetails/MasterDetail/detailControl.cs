@@ -54,16 +54,16 @@
             List<DataGridView> dgvs = this.childGrid;
             if (pageCaption == "Teams")
             {
-               // List<DataGridView> dgvs = this.childGrid;
+                // List<DataGridView> dgvs = this.childGrid;
                 DataGridView dgv = dgvs[0];
                 dgv.DataSource = table;
             }
-            else if (pageCaption == "Players")
-            {
-                //List<DataGridView> dgvs = this.childGrid[0];
-                DataGridView dgv = dgvs[1];
-                dgv.DataSource = table;
-            }
+            //else if (pageCaption == "Players")
+            //{
+            //    //List<DataGridView> dgvs = this.childGrid[0];
+            //    DataGridView dgv = dgvs[1];
+            //    dgv.DataSource = table;
+            //}
             else if (pageCaption == "HPlayers")
             {
                 //List<DataGridView> dgvs = this.childGrid[0];
@@ -76,13 +76,42 @@
                 DataGridView dgv = dgvs[2];
                 dgv.DataSource = table;
             }
-            else if (pageCaption == "Incidents")
+            else if (pageCaption == "Details")
             {
                 //List<DataGridView> dgvs = this.childGrid[0];
                 DataGridView dgv = dgvs[3];
                 dgv.DataSource = table;
             }
-
+            else if (pageCaption == "Results")
+            {
+                //List<DataGridView> dgvs = this.childGrid[0];
+                DataGridView dgv = dgvs[4];
+                dgv.DataSource = table;
+            }
+            else if (pageCaption == "Stats")
+            {
+                //List<DataGridView> dgvs = this.childGrid[0];
+                DataGridView dgv = dgvs[5];
+                dgv.DataSource = table;
+            }
+            else if (pageCaption == "Incidents")
+            {
+                //List<DataGridView> dgvs = this.childGrid[0];
+                DataGridView dgv = dgvs[6];
+                dgv.DataSource = table;
+            }
+            else if (pageCaption == "GoalInfo")
+            {
+                //List<DataGridView> dgvs = this.childGrid[0];
+                DataGridView dgv = dgvs[7];
+                dgv.DataSource = table;
+            }
+            else if (pageCaption == "MatchDetails")
+            {
+                //List<DataGridView> dgvs = this.childGrid[0];
+                DataGridView dgv = dgvs[8];
+                dgv.DataSource = table;
+            }
             //cModule.applyGridTheme(ref dgv);
             //cModule.setGridRowHeader(ref dgv, false);
             //dgv.RowPostPaint += new DataGridViewRowPostPaintEventHandler(cModule.rowPostPaint_HeaderCount);
@@ -107,4 +136,3 @@
         }
     }
 }
-
