@@ -4,7 +4,7 @@
 <%@ Import namespace="JC_SoccerWeb"%>
   <script type="text/javascript">
       function CheckUrl(obj) { 
-           return true;
+        //   return true;
         if (obj == "HKJC") {
             var deoks = document.getElementById("deok");
          //   alert(deoks.value);

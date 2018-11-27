@@ -181,10 +181,8 @@
                                                     </asp:TemplateColumn>
                                                      <asp:TemplateColumn HeaderText="ID"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbID" runat="server" Width="50px" Visible="false" Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
-                                                           <a href=# onclick="window.open('MatchDetails.aspx?ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes,width=500px,height=120px,top=300,left=300')" >																	
-																		<b><%# DataBinder.Eval(Container, "DataItem.ID") %></b>	</a>  
-                                                       </ItemTemplate>
+                                                            <anthem:Label id="lbID" runat="server" Width="50px"  Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
+                                                        </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="NAME" Visible ="true" >
                                                         <HeaderStyle HorizontalAlign="Left" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
@@ -303,8 +301,12 @@
                                                             <anthem:Label id="lbBooked" runat="server" Width="40px" Text='<%# DataBinder.Eval(Container, "DataItem.booked") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
-
-<ASP:EDITCOMMANDCOLUMN EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
+                                                      <asp:TemplateColumn HeaderText="Detail">
+                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
+                                                         <a href=# onclick="window.open('MatchDetails.aspx?ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes')" >																	
+																		<b>Detail</b>	</a>   </ItemTemplate>
+                                                         </asp:TemplateColumn>
+<ASP:EDITCOMMANDCOLUMN EditText="Edit" CancelText="Cancel" UpdateText="Update" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
                                                         <HEADERSTYLE Width="150px"  Wrap="false" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE Width="120px" CssClass="grid-item"></ITEMSTYLE>
                                                     </ASP:EDITCOMMANDCOLUMN><asp:ButtonColumn Text="Cancel"  CommandName="Delete" ItemStyle-Font-Bold="True">
                                                         <HeaderStyle HorizontalAlign="Left" Wrap="false" Width="150px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="120px" CssClass="grid-item"></ItemStyle>
