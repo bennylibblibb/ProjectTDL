@@ -5,7 +5,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 <HEAD>
-    <title>Telecom Digital MMS Services</title>
+    <title>STATSCORE</title>
     <meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
     <meta content="C#" name="CODE_LANGUAGE">
     <meta content="JavaScript" name="vs_defaultClientScript">
@@ -289,8 +289,10 @@
                                                             <anthem:Label id="lbMATCHNO" Visible="false"  runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'></anthem:Label>
                                                         </EditItemTemplate> 
 
-                                                    </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="DATETIME">
+                                                    </asp:TemplateColumn>  
+   
+
+                                                 <asp:TemplateColumn HeaderText="DateTime">
                                                         <HeaderStyle HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="120px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbCTIMESTAMP" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.CMATCHDATETIME ") %>'></anthem:Label>
                                                         </ItemTemplate>
@@ -302,7 +304,7 @@
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
 
-                                                    <ASP:EDITCOMMANDCOLUMN EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
+<ASP:EDITCOMMANDCOLUMN EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
                                                         <HEADERSTYLE Width="150px"  Wrap="false" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE Width="120px" CssClass="grid-item"></ITEMSTYLE>
                                                     </ASP:EDITCOMMANDCOLUMN><asp:ButtonColumn Text="Cancel"  CommandName="Delete" ItemStyle-Font-Bold="True">
                                                         <HeaderStyle HorizontalAlign="Left" Wrap="false" Width="150px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="120px" CssClass="grid-item"></ItemStyle>

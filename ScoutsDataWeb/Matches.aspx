@@ -5,7 +5,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 <HEAD>
-    <title>Telecom Digital MMS Services</title>
+    <title>HKJC</title>
     <meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
     <meta content="C#" name="CODE_LANGUAGE">
     <meta content="JavaScript" name="vs_defaultClientScript">
@@ -129,7 +129,9 @@
                                                             <%#this.dgRankDetails.CurrentPageIndex * this.dgRankDetails.PageSize + Container.ItemIndex + 1%>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
-                                                 <asp:TemplateColumn HeaderText="ID"   >
+                                                  
+
+                                                     <asp:TemplateColumn HeaderText="ID"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbID" runat="server" Width="50px" Visible="false" Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
                                                            <a href=# onclick="window.open('MatchDetails.aspx?ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes,width=500px,height=120px,top=300,left=300')" >																	
@@ -246,12 +248,13 @@
                                                             <anthem:Label id="lbCTIMESTAMP" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.CMATCHDATETIME ") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
-                                                       <asp:TemplateColumn HeaderText="Booked">
+   <asp:TemplateColumn HeaderText="Booked">
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbBooked" runat="server" Width="40px" Text='<%# DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
-                                                    <ASP:EDITCOMMANDCOLUMN Visible="FALSE" EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
+
+<ASP:EDITCOMMANDCOLUMN Visible="FALSE" EditText="編輯" CancelText="取消" UpdateText="更新" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
                                                         <HEADERSTYLE Width="150px"  Wrap="false" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE Width="120px" CssClass="grid-item"></ITEMSTYLE>
                                                     </ASP:EDITCOMMANDCOLUMN><asp:ButtonColumn  Visible="FALSE" Text="刪除" CommandName="Delete" ItemStyle-Font-Bold="True">
                                                         <HeaderStyle HorizontalAlign="Left" Wrap="false" Width="150px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="120px" CssClass="grid-item"></ItemStyle>

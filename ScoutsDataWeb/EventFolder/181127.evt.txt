@@ -1,0 +1,9 @@
+﻿09:41:13 BEN login success.
+10:01:16 (BEN)   Time out ,please re-login.
+10:01:31 ()   Time out ,please re-login.
+10:32:51 BEN login success.
+10:33:26 [Success] Sync [2445377] EMATCHES[MON 1]  Jong AZ Alkmaar - Twente Enschede
+10:34:05 [Success] Sync [2504688] EMATCHES[MON 2]  Cagliari - Torino FC
+10:34:25 [Success] Sync [2456167] EMATCHES[MON 3]  Hamburger SV - Union Berlin
+11:13:32 BEN login success.
+11:15:35 BEN login success.
