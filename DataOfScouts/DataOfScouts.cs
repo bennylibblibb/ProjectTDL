@@ -3916,9 +3916,10 @@ namespace DataOfScouts
                                                         if (sevent == null) continue;
                                                         //if (ds.Tables.Count == 0) { ds=eventsDs; }
                                                         DataRow[] drs = (ds.Tables.Count == 0 ? eventsDs : ds).Tables[0].Select("id=" + sevent.id);
+                                                        DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant[] participants = sevent.participants;
                                                         if (drs.Length == 0)
                                                         {
-                                                            DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant[] participants = sevent.participants;
+                                                           /// DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant[] participants = sevent.participants;
 
                                                             DataRow dr = eventsDs.Tables[0].NewRow();
                                                             dr[0] = sevent.id;
@@ -3969,36 +3970,61 @@ namespace DataOfScouts
                                                             eventsDs.Tables[0].Rows.Add(dr);
                                                             Files.WriteLog("[" + sevent.id + "] " + (participants[0].counter == "1" ? participants[0].name : participants[1].name) + "/" + (participants[0].counter == "2" ? participants[0].name : participants[1].name));
 
-                                                            foreach (DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant participant in participants)
-                                                            {
-                                                                if (participant == null) continue;
-                                                                using (FbCommand cmd2 = new FbCommand())
-                                                                {
-                                                                    cmd2.CommandText = "ADD_TEAM";
-                                                                    cmd2.CommandType = CommandType.StoredProcedure;
-                                                                    cmd2.Connection = connection;
-                                                                    cmd2.Parameters.Add("@ID", participant.id);
-                                                                    cmd2.Parameters.Add("@NAME", participant.name);
-                                                                    cmd2.Parameters.Add("@SHORT_NAME", participant.short_name);
-                                                                    cmd2.Parameters.Add("@ACRONYM", participant.acronym);
-                                                                    cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
-                                                                    cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                                    cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
-                                                                    cmd2.Parameters.Add("@UT", participant.ut);
-                                                                    cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
-                                                                    cmd2.Parameters.Add("@SLUG", participant.slug);
-                                                                    cmd2.Parameters.Add("@SEASON_ID", "-1");
-                                                                    cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
-                                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                    Files.WriteLog(id > 0 ? " [Success] Insert teams[" + participant.id + "] " + participant.name : "[" + participant.id + "] " + participant.name + " team exist.");
-                                                                }
-                                                            }
-                                                            //    InsertData2("events.show", true, sevent.id);
+                                                            //foreach (DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant participant in participants)
+                                                            //{
+                                                            //    if (participant == null) continue;
+                                                            //    using (FbCommand cmd2 = new FbCommand())
+                                                            //    {
+                                                            //        cmd2.CommandText = "ADD_TEAM";
+                                                            //        cmd2.CommandType = CommandType.StoredProcedure;
+                                                            //        cmd2.Connection = connection;
+                                                            //        cmd2.Parameters.Add("@ID", participant.id);
+                                                            //        cmd2.Parameters.Add("@NAME", participant.name);
+                                                            //        cmd2.Parameters.Add("@SHORT_NAME", participant.short_name);
+                                                            //        cmd2.Parameters.Add("@ACRONYM", participant.acronym);
+                                                            //        cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
+                                                            //        cmd2.Parameters.Add("@AREA_ID", participant.area_id);
+                                                            //        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                            //        cmd2.Parameters.Add("@UT", participant.ut);
+                                                            //        cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
+                                                            //        cmd2.Parameters.Add("@SLUG", participant.slug);
+                                                            //        cmd2.Parameters.Add("@SEASON_ID", "-1");
+                                                            //        cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                                            //        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                            //        Files.WriteLog(id > 0 ? " [Success] Insert teams[" + participant.id + "] " + participant.name : "[" + participant.id + "] " + participant.name + " team exist.");
+                                                            //    }
+                                                            //}
+                                                            ////    InsertData2("events.show", true, sevent.id);
                                                         }
                                                         else
                                                         {
                                                             Files.WriteLog("[" + drs[0]["id"] + "] " + (sevent.participants[0].counter == "1" ? sevent.participants[0].name : sevent.participants[1].name) + "/" + (sevent.participants[0].counter == "2" ? sevent.participants[0].name : sevent.participants[1].name) + "  events existed.");
                                                         }
+                                                        foreach (DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant participant in participants)
+                                                        {
+                                                            if (participant == null) continue;
+                                                            using (FbCommand cmd2 = new FbCommand())
+                                                            {
+                                                                cmd2.CommandText = "ADD_TEAM";
+                                                                cmd2.CommandType = CommandType.StoredProcedure;
+                                                                cmd2.Connection = connection;
+                                                                cmd2.Parameters.Add("@ID", participant.id);
+                                                                cmd2.Parameters.Add("@NAME", participant.name);
+                                                                cmd2.Parameters.Add("@SHORT_NAME", participant.short_name);
+                                                                cmd2.Parameters.Add("@ACRONYM", participant.acronym);
+                                                                cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
+                                                                cmd2.Parameters.Add("@AREA_ID", participant.area_id);
+                                                                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                                cmd2.Parameters.Add("@UT", participant.ut);
+                                                                cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
+                                                                cmd2.Parameters.Add("@SLUG", participant.slug);
+                                                                cmd2.Parameters.Add("@SEASON_ID", "-1");
+                                                                cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                Files.WriteLog(id > 0 ? " [Success] Insert teams[" + participant.id + "] " + participant.name : "[" + participant.id + "] " + participant.name + " team exist.");
+                                                            }
+                                                        }
+                                                        //    InsertData2("events.show", true, sevent.id);
                                                     }
                                                 }
                                             }
@@ -6759,7 +6785,7 @@ namespace DataOfScouts
                                                 cmd2.Parameters.Add("@UT", incidentJson.ut);
                                                 cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                                 cmd2.Parameters.Add("@TEAMTYPE",
-                           (incidentJson.data.incident.participant_id == null ? "" : incidentJson.data.incident.participant_id.ToString() == incidentJson.data.@event.participants[0].id.ToString() ? "H" : incidentJson.data.incident.participant_id.ToString() == incidentJson.data.@event.participants[1].id.ToString() ? "G" : "H"));
+                                                (incidentJson.data.incident.participant_id == null ? "" : incidentJson.data.incident.participant_id.ToString() == incidentJson.data.@event.participants[0].id.ToString() ? "H" : incidentJson.data.incident.participant_id.ToString() == incidentJson.data.@event.participants[1].id.ToString() ? "G" : "H"));
                                                 sID = (cmd2.ExecuteScalar()).ToString(); sID = (cmd2.ExecuteScalar()).ToString();
                                                 Files.WriteLog((sID != "" ? " [Success] Insert INCIDENTS " : " [Failure] Insert INCIDENTS ") + "[" + incidentJson.data.@event.id + "]," + strName + ".json");
                                             }

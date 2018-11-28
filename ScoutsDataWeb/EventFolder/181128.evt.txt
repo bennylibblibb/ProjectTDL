@@ -1,0 +1,57 @@
+﻿10:33:48 BEN login success.
+10:42:38 BEN login success.
+10:50:12 BEN login success.
+10:53:50 BEN login success.
+10:54:46 BEN login success.
+10:56:13 BEN login success.
+10:57:00 BEN login success.
+10:57:32 BEN login success.
+11:07:45 BEN login success.
+11:17:33 (BEN)   Time out ,please re-login.
+11:19:05 BEN login success.
+11:37:25 BEN login success.
+11:38:39 BEN login success.
+11:39:41 BEN login success.
+12:32:53 BEN login success.
+12:34:22 BEN login success.
+12:44:53 BEN login success.
+12:45:52 BEN login success.
+12:47:06 BEN login success.
+12:47:47 BEN login success.
+12:49:19 BEN login success.
+12:50:40 BEN login success.
+12:51:22 BEN login success.
+12:52:54 (BEN)   Time out ,please re-login.
+12:52:56 ()   Time out ,please re-login.
+14:14:47 BEN login success.
+14:21:18 BEN login success.
+14:31:01 BEN login success.
+14:48:06 BEN login success.
+15:23:10 BEN login success.
+15:26:52 BEN login success.
+15:27:36 BEN login success.
+15:28:40 BEN login success.
+15:32:40 BEN login success.
+16:00:20 BEN login success.
+16:03:05 BEN login success.
+16:04:37 BEN login success.
+16:06:14 BEN login success.
+16:21:24 BEN login success.
+16:24:14 BEN login success.
+16:27:40 BEN login success.
+16:29:39 BEN login success.
+16:30:52 BEN login success.
+16:33:24 BEN login success.
+16:59:25 BEN login success.
+17:07:28 BEN login success.
+17:10:49 BEN login success.
+17:11:53 BEN login success.
+17:15:16 BEN login success.
+17:18:19 BEN login success.
+17:19:22 BEN login success.
+17:21:36 BEN login success.
+17:24:25 BEN login success.
+17:28:03 BEN login success.
+17:48:04 (BEN)   Time out ,please re-login.
+17:57:57 ()   Time out ,please re-login.
+17:57:57 BEN login success.
