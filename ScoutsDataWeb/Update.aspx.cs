@@ -45,7 +45,9 @@
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
+            lbMsg.Text = "";
+            lbMsg.UpdateAfterCallBack = true;
+            dgRankDetails.CurrentPageIndex = 0;
             BindEvents(dplLeague.SelectedValue);
             //string[,] strs = new string[this.dgRankDetails.Items.Count, 2];
 
@@ -496,7 +498,7 @@
                 if (id > 0)
                 {
                     this.lbMsg.Visible = true;
-                    this.lbMsg.Text = "[Success] Cancel " + dayCODE + " " + matchNo;
+                    this.lbMsg.Text = "[Success] Cancel [" + eventId + "][" + dayCODE + " " + matchNo + "] " + " " + eventName;
                     this.lbMsg.UpdateAfterCallBack = true;
 
                 }
@@ -504,7 +506,7 @@
             }
             catch (Exception exp)
             {
-                Files.CicsWriteError("Cancel sync, error:" + exp.ToString());
+                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss ") + "Cancel sync, error:" + exp.ToString());
             }
         }
 
@@ -512,9 +514,9 @@
         {
             this.dgRankDetails.EditItemIndex = e.Item.ItemIndex;
             BindEvents(dplLeague.SelectedValue);
-            btnEdit.Text = "Get";
+          //  btnEdit.Text = "Get";
             lbMsg.Text = "";
-            btnEdit.UpdateAfterCallBack = true;
+           // btnEdit.UpdateAfterCallBack = true;
             lbMsg.UpdateAfterCallBack = true;
         }
 
@@ -543,7 +545,7 @@
             {
                 if (e.Item.ItemType == ListItemType.EditItem)
                 {
-                    string df = "";
+                   // string df = "";
              //  ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text;
 
                     //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
@@ -569,8 +571,8 @@
             this.dgRankDetails.PageSize = AppFlag.iPageSize;
             this.dgRankDetails.DataBind();
             this.dgRankDetails.UpdateAfterCallBack = true;
-            btnEdit.Text = "Get";
-            btnEdit.UpdateAfterCallBack = true;
+           // btnEdit.Text = "Get";
+           // btnEdit.UpdateAfterCallBack = true;
             lbMsg.Text = "";
             lbMsg.UpdateAfterCallBack = true;
         }
@@ -608,20 +610,21 @@
                 if(id>0)
                 {
                     this.lbMsg.Visible = true;
-                    this.lbMsg.Text = "[Success] Sync "  +dayCODE + " " + matchNo;
+                    // this.lbMsg.Text = "[Success] Sync "  +dayCODE + " " + matchNo;
+                    this.lbMsg.Text = "[Success] Sync [" + eventId + "][" + dayCODE + " " + matchNo + "] " + " " + eventName;
                     this.lbMsg.UpdateAfterCallBack = true; 
                 }
                 else
                 {
                     this.lbMsg.Visible = true;
-                    this.lbMsg.Text = "[Failure] Sync" + dayCODE + " " + matchNo;
+                    this.lbMsg.Text = "[Failure] Sync [" + eventId + "][" + dayCODE + " " + matchNo + "] " + " " + eventName;
                     this.lbMsg.UpdateAfterCallBack = true;
                 }
                 BindEvents(dplLeague.SelectedValue);
             }
             catch (Exception exp)
             {
-                Files.CicsWriteError("Sync, error:" + exp.ToString());
+                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss ") + "Sync, error:" + exp.ToString());
             } 
         }
 
@@ -644,7 +647,7 @@
             this.dgRankDetails.ItemDataBound += new DataGridItemEventHandler(this.dgSchedule_ItemDataBound);
             this.dgRankDetails.EditCommand += new DataGridCommandEventHandler(this.dgSchedule_EditCommand);
             this.dplLeague.SelectedIndexChanged += new EventHandler(this.dplLeague_SelectedIndexChanged);
-            this.dgRankDetails.ItemCreated += new DataGridItemEventHandler(this.dgSchedule_ItemCreated);
+           // this.dgRankDetails.ItemCreated += new DataGridItemEventHandler(this.dgSchedule_ItemCreated);
             this.btnEdit.Click += new EventHandler(this.btnEdit_Click);
 
             base.Load += new EventHandler(this.Page_Load);

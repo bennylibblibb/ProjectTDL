@@ -1,0 +1,45 @@
+﻿10:27:14 BEN login success.
+10:31:19 [Success] Sync [2426358] EMATCHES[THU 26]  O'Higgins - Audax Italiano
+10:33:14 [Success] Sync [2426358] EMATCHES[THU 25]  O'Higgins - Audax Italiano
+10:34:15 [Success] Sync [2426358] EMATCHES[THU 27]  O'Higgins - Audax Italiano
+10:35:53 [Success] Cancel Sync [2426358] EMATCHES[THU 25]  O'Higgins - Audax Italiano
+10:35:57 [Success] Cancel Sync [2426358] EMATCHES[THU 26]  O'Higgins - Audax Italiano
+10:35:58 [Success] Cancel Sync [2426358] EMATCHES[THU 27]  O'Higgins - Audax Italiano
+10:50:52 BEN login success.
+10:51:30 [Success] Sync [2637314] EMATCHES[THU 25]  New York RB - Atlanta United
+10:56:28 [Success] Sync [2637314] EMATCHES[THU 26]  New York RB - Atlanta United
+11:03:40 [Success] Cancel Sync [2637314] EMATCHES[THU 25]  New York RB - Atlanta United
+11:03:48 [Success] Cancel Sync [2637314] EMATCHES[THU 26]  New York RB - Atlanta United
+11:07:24 BEN login success.
+11:08:04 [Success] Sync [2637314] EMATCHES[THU 27]  New York RB - Atlanta United
+11:09:38 [Success] Sync [2637314] EMATCHES[THU 26]  New York RB - Atlanta United
+11:23:07 BEN login success.
+11:23:46 [Success] Sync [2637314] EMATCHES[THU 27]  New York RB - Atlanta United
+11:24:44 [Success] Sync [2637314] EMATCHES[THU 26]  New York RB - Atlanta United
+11:25:21 [Success] Sync [2426358] EMATCHES[THU 25]  O'Higgins - Audax Italiano
+11:26:06 [Success] Sync [2504324] EMATCHES[THU 27]  Blooming - Bolivar
+11:26:39 [Success] Cancel Sync [2504324] EMATCHES[THU 27]  Blooming - Bolivar
+11:26:50 [Success] Cancel Sync [2637314] EMATCHES[THU 26]  New York RB - Atlanta United
+11:27:11 [Success] Sync [2637314] EMATCHES[THU 26]  New York RB - Atlanta United
+11:35:44 BEN login success.
+11:38:05 [Success] Sync [2632288] EMATCHES[THU 27]  Junior Barranquilla - Indep. Santa Fe
+11:46:12 BEN login success.
+11:47:57 BEN login success.
+11:50:05 BEN login success.
+11:53:43 BEN login success.
+11:54:44 [Success] Sync [2645593] EMATCHES[THU 28]  Toluca - America
+11:58:29 BEN login success.
+12:00:52 [Success] Sync [2645592] EMATCHES[THU 30]  Tigres UANL - UNAM Pumas
+12:12:42 BEN login success.
+12:14:49 BEN login success.
+12:15:32 BEN login success.
+12:16:24 BEN login success.
+12:29:52 BEN login success.
+12:30:30 BEN login success.
+12:31:26 BEN login success.
+12:35:41 BEN login success.
+12:40:04 BEN login success.
+13:06:11 BEN login success.
+13:26:13 (BEN)   Time out ,please re-login.
+13:26:14 ()   Time out ,please re-login.
+13:27:10 BEN login success.

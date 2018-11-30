@@ -87,12 +87,12 @@
                                         </TD>
                                         <TD   align="center" height="1"> 
                                             <anthem:DropDownList ID="dplLeague" runat="server" AutoCallBack="True" Width="100px" >
-                                            <asp:ListItem Selected="True" Value="All">All</asp:ListItem>
-                                                 <asp:ListItem>0</asp:ListItem> 
-                                                                <asp:ListItem>1</asp:ListItem>
-                                                                <asp:ListItem>2</asp:ListItem>
-                                                                <asp:ListItem>3</asp:ListItem> 
-                                                 <asp:ListItem>4</asp:ListItem> 
+                                            <asp:ListItem Selected="True" Value="-1">All</asp:ListItem>
+                                                 <asp:ListItem Value="0">0</asp:ListItem> 
+                                                                <asp:ListItem Value="1">1</asp:ListItem>
+                                                                <asp:ListItem Value="2">2</asp:ListItem>
+                                                                <asp:ListItem Value="3">3</asp:ListItem> 
+                                                                <asp:ListItem Value="9">9</asp:ListItem>  
                                             </anthem:DropDownList>      
                                         </TD>
                                         <TD   align="left" height="1">

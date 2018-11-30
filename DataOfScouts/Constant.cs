@@ -21,7 +21,9 @@ namespace DataOfScouts
         public static string GetTime = ConfigurationSettings.AppSettings["GetTime"];
         public static bool AutoBooked = ConfigurationSettings.AppSettings["AutoBooked"].ToLower() == "yes" ? false : true;
         internal static readonly int MarginOfDeviation = Convert.ToInt32(ConfigurationSettings.AppSettings["MarginOfDeviation"]);
-
+        internal static string lpString = ConfigurationSettings.AppSettings["lpString"];   
+        internal static readonly int LIVEGOALS = Convert.ToInt32(ConfigurationSettings.AppSettings["LIVEGOALS"]);
+        internal static readonly int GOALDETAILS = Convert.ToInt32(ConfigurationSettings.AppSettings["GOALDETAILS"]); 
     }
 
     public enum InformationType

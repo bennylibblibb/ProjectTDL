@@ -16,8 +16,8 @@
         {
             // this.tabs.SelectedIndexChanged += new EventHandler(this.Tabs_SelectedIndexChanged);
             // this.tabs.ItemCommand += new DataListCommandEventHandler( this.tabs_ItemCommand);
-            this.tabs.ItemCreated += new DataListItemEventHandler(this.tabs_ItemCreated);
-            this.tabs.ItemDataBound += new DataListItemEventHandler(this.tabs_ItemDataBound);
+           // this.tabs.ItemCreated += new DataListItemEventHandler(this.tabs_ItemCreated);
+             this.tabs.ItemDataBound += new DataListItemEventHandler(this.tabs_ItemDataBound);
             this.tabs.Load += new EventHandler(this.Page_Load);
             base.Load += new EventHandler(this.Page_Load);
         }
@@ -89,28 +89,24 @@
 
         private void tabs_ItemDataBound(object sender, DataListItemEventArgs e)
         {
-            //HyperLink hl = e.Item.FindControl("hlMenu") as HyperLink;
-            //if ((e.Item.ItemType == ListItemType.Item))
-            //{ 
-            HyperLink hl = e.Item.FindControl("hlMenu") as HyperLink;
-            if (hl != null)
-            {
-                hl.Attributes.Add("onclick", "javascript:return CheckUrl('" + hl.Text + "')");
-            }
-            //}
-            //HyperLink hl = e.Item.FindControl("hlMenu") as HyperLink;
+            //  if ((e.Item.ItemType == ListItemType.Item))
+            //{
+                HyperLink hl = e.Item.FindControl("hlMenu") as HyperLink;
+                if (hl != null)
+                {
+                    hl.Attributes.Add("onclick", "javascript:return CheckUrl('" + hl.Text + "')");
+                }
+           // }
             //if (tabs.SelectedIndex == 1)
             //{
             //    if (e.Item.ItemIndex == 0)
             //    {
             //        DataListItem item = e.Item as DataListItem;
             //        item.Enabled = false;
+            //        item.ForeColor = Color.Black;
             //    }
             //}
-            //if (((e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.AlternatingItem)) && (((e.Item.ItemIndex == 2) && !Users.UserCheck(this.Context.User.Identity.Name)) || ((e.Item.ItemIndex == 4) && !Users.UserCheck(this.Context.User.Identity.Name))))
-            //{
-            //    e.Item.Height = 0; 
-            //}  
+           
         }
         private void tabs_ItemCreated(object sender, DataListItemEventArgs e)
         {

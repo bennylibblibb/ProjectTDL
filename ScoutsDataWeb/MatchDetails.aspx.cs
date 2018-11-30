@@ -10,7 +10,7 @@ namespace JC_SoccerWeb
     /// <summary>
     /// MemberofSent ªººK­n´y­z¡C
     /// </summary>
-    public class MatchDetails : Page
+    public class MatchDetails : CommonPage
     {
         protected DataGrid eventDetails;
         protected DataGrid dgGoalInfo;
@@ -25,8 +25,8 @@ namespace JC_SoccerWeb
                     string sType = this.Request.QueryString["Type"].ToString().Trim();
                     if (sType != "HKJC")
                     { btnSave.Visible = false; }
-                    BindResults(sType, sID);
-                    BindGoalInfo(sType, sID);
+                    BindResults(sType, sID==""?"-1":sID);
+                    BindGoalInfo(sType, sID == "" ? "-1" : sID);
                 }
             }
         }
@@ -106,8 +106,8 @@ namespace JC_SoccerWeb
             {
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
-                    string queryString = queryString =  "select i.TEAMTYPE,  i.PARTICIPANT_NAME,  i.INCIDENT_NAME, i.SUBPARTICIPANT_ID, i.SUBPARTICIPANT_nAME ,T.HKJC_NAME_CN ,i.EVENT_TIME,i.CTIMESTAMP from INCIDENTS  I inner JOIN  TEAMS T  ON T.ID=I.PARTICIPANT_ID  WHERE    i.CACTION!='delete' and  (i.INCIDENT_ID='413' or i.INCIDENT_ID='418' or i.INCIDENT_ID='419' ) and " +
-                    "   EVENTID = '" + id + "'"  ;
+                    string queryString = queryString = "select i.TEAMTYPE,  i.PARTICIPANT_NAME,  i.INCIDENT_NAME, i.SUBPARTICIPANT_ID, i.SUBPARTICIPANT_nAME ,T.HKJC_NAME_CN ,i.EVENT_TIME,i.CTIMESTAMP from INCIDENTS  I inner JOIN  TEAMS T  ON T.ID=I.PARTICIPANT_ID  WHERE    i.CACTION!='delete' AND   i.CACTION!='insert'  and  (i.INCIDENT_ID='413' or i.INCIDENT_ID='418' or i.INCIDENT_ID='419' ) and " +
+                    "   EVENTID = '" + id + "' order by i.EVENT_TIME asc";
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())
