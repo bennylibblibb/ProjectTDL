@@ -1,0 +1,54 @@
+﻿15:21:28 login failure.
+15:21:36 BEN login success.
+16:01:03 (BEN)   Time out ,please re-login.
+16:01:06 ()   Time out ,please re-login.
+16:01:29 ()   Time out ,please re-login.
+16:18:36 BEN login success.
+16:22:37 BEN login success.
+16:45:39 BEN login success.
+16:48:38 BEN login success.
+17:09:45 BEN login success.
+17:11:21 BEN login success.
+17:14:36 BEN login success.
+17:16:54 BEN login success.
+17:17:42 (BEN)   Time out ,please re-login.
+17:20:00 BEN login success.
+17:36:28 BEN login success.
+17:39:59 BEN login success.
+17:42:19 (BEN)   Time out ,please re-login.
+17:42:24 BEN login success.
+17:43:39 BEN login success.
+17:44:47 BEN login success.
+17:45:30 BEN login success.
+17:47:13 ()   Time out ,please re-login.
+17:47:17 BEN login success.
+17:48:58 BEN login success.
+18:00:41 BEN login success.
+18:01:22 BEN login success.
+18:45:08 BEN login success.
+19:05:53 BEN login success.
+[Failure] Update player name:abcd/Aziz Serdar [2554672] 172793
+[Failure] Update player name:阿齐兹/Aziz Serdar [2554672] 172793
+19:30:11 BEN login success.
+19:32:34 BEN login success.
+19:52:54 (BEN)   Time out ,please re-login.
+20:10:39 BEN login success.
+[Success] Update player name:阿/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿ac/Aziz Serdar [2554672] 172793
+20:11:59 BEN login success.
+[Success] Update player name:阿acsadfsdfdsf/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿a/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿dfsdfdsf/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿sd/Aziz Serdar [2554672] 172793
+20:18:42 BEN login success.
+[Success] Update player name:阿/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿a/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿abb/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿sd/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿sddffd/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿sddffddfdf/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿sd/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿sdfdsfdsfd/Aziz Serdar [2554672] 172793
+[Success] Update player name:阿sd/Aziz Serdar [2554672] 172793
+20:40:52 (BEN)   Time out ,please re-login.

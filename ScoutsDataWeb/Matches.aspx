@@ -237,8 +237,8 @@
                                                     </asp:TemplateColumn>
 
                                                     <asp:TemplateColumn HeaderText="STATUS">
-                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJCISTATUS" runat="server" Width="50px" Text='<%# DataBinder.Eval(Container, "DataItem.STATUS") %>'></anthem:Label>
+                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbHKJCISTATUS" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.STATUS") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
 

@@ -15,6 +15,7 @@ namespace JC_SoccerWeb
         protected DataGrid eventDetails;
         protected DataGrid dgGoalInfo;
         protected Button btnSave;
+        protected Anthem.Label lbMsg;
         private void Page_Load(object sender, EventArgs e)
         {
             if (Request.IsAuthenticated)
@@ -48,14 +49,81 @@ namespace JC_SoccerWeb
         /// </summary>
         private void InitializeComponent()
         {
+            this.btnSave.Click += new EventHandler(this.btnSave_Click);
             this.Load += new System.EventHandler(this.Page_Load);
 
         }
 
         #endregion
 
-        private void btnUpdate_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (btnSave.Text == "Edit")
+                {
+                    for (int i = 0; i < this.dgGoalInfo.Items.Count; i++)
+                    {
+                        ((System.Web.UI.WebControls.TextBox)this.dgGoalInfo.Items[i].FindControl("txtCNName")).Enabled = true;
+                    }
+                    this.btnSave.Text = "Save";
+                    this.lbMsg.Text = "";
+                }
+                else if (btnSave.Text == "Save")
+                {
+                    DataSet ds = dgGoalInfo.DataSource as DataSet;
+
+                    for (int i = 0; i < this.dgGoalInfo.Items.Count; i++)
+                    {
+                        string strName = ((System.Web.UI.WebControls.TextBox)this.dgGoalInfo.Items[i].FindControl("txtCNName")).Text;
+                        string strEventid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbEventid")).Text;
+                        string strPlayerid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbPlayerid")).Text;
+                        string strPlayer = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbPlayerName")).Text;
+                        string strTeamid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbTeamid")).Text;
+
+                        if (strName != ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbCNName")).Text)
+                        {
+
+                            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                            {
+                                using (FbCommand cmd = new FbCommand())
+                                {
+                                    connection.Open();
+                                    cmd.CommandText = "Update_CNName_goalinfo_Players";
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Connection = connection;
+                                    cmd.Parameters.Add("@EMATCHID", strEventid);
+                                    cmd.Parameters.Add("@TEAMID", strTeamid == "" ? "-1" : strTeamid);
+                                    cmd.Parameters.Add("@PARTICIPANTID", strPlayerid);
+                                    cmd.Parameters.Add("@ENName", strPlayer);
+                                    cmd.Parameters.Add("@CNName", strName);
+                                    cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                    Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss ") + "[Success] " : "[Failure] ") + "Update player name:" + strName + "/" + strPlayer + " [" + strEventid + "] " + strPlayerid);
+
+                                    this.lbMsg.Text = (id > 0 ? "[Success] " : "[Failure] ") + "Update player name:" + strName + "/" + strPlayer + " [" + strEventid + "] " + strPlayerid;
+                                    if (id > 0)
+                                    {
+                                        ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbCNName")).Text = strName;
+                                    }
+                                }
+                                connection.Close();
+                            }
+                        }
+                         ((System.Web.UI.WebControls.TextBox)this.dgGoalInfo.Items[i].FindControl("txtCNName")).Enabled = false;
+                    }
+                    this.btnSave.Text = "Edit";
+                }
+            }
+            catch (Exception exp)
+            {
+                this.lbMsg.Text = "[Failure]";
+                string exps = exp.ToString();
+                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + " btnSave_Click(),error: " + exps);
+            }
+            this.lbMsg.UpdateAfterCallBack = true;
+            this.btnSave.UpdateAfterCallBack = true;
+            this.dgGoalInfo.UpdateAfterCallBack = true;
         }
 
         private void BindResults(string Type, string id)
@@ -106,8 +174,9 @@ namespace JC_SoccerWeb
             {
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
-                    string queryString = queryString = "select i.TEAMTYPE,  i.PARTICIPANT_NAME,  i.INCIDENT_NAME, i.SUBPARTICIPANT_ID, i.SUBPARTICIPANT_nAME ,T.HKJC_NAME_CN ,i.EVENT_TIME,i.CTIMESTAMP from INCIDENTS  I inner JOIN  TEAMS T  ON T.ID=I.PARTICIPANT_ID  WHERE    i.CACTION!='delete' AND   i.CACTION!='insert'  and  (i.INCIDENT_ID='413' or i.INCIDENT_ID='418' or i.INCIDENT_ID='419' ) and " +
-                    "   EVENTID = '" + id + "' order by i.EVENT_TIME asc";
+                    // string queryString = "select i.TEAMTYPE,  i.PARTICIPANT_NAME,  i.INCIDENT_NAME, i.SUBPARTICIPANT_ID, i.SUBPARTICIPANT_nAME ,t.NAME_CN , i.EVENT_TIME,i.CTIMESTAMP from INCIDENTS  I inner JOIN  players T  ON T.ID=I.SUBPARTICIPANT_ID  WHERE    i.CACTION!='delete' AND   i.CACTION!='insert'  and  (i.INCIDENT_ID='413' or i.INCIDENT_ID='418' or i.INCIDENT_ID='419' ) and " +
+                    //  "   EVENTID = '" + id + "' order by i.EVENT_TIME asc";
+                    string queryString = "select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.NAME_CN , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  players T  ON T.ID = I.PARTICIPANTID  WHERE i.EMATCHID = '" + id + "' order by i.ELAPSED asc";
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())
@@ -119,6 +188,7 @@ namespace JC_SoccerWeb
                             {
                                 data.Tables.Add(new DataTable("EVENT_DETAILS"));
                                 fda.Fill(data.Tables["EVENT_DETAILS"]);
+                                Session["ematchDetials"] = data;
                                 dgGoalInfo.DataSource = data.Tables[0].DefaultView;
                                 dgGoalInfo.DataBind();
                                 dgGoalInfo.UpdateAfterCallBack = true;

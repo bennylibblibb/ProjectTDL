@@ -68,41 +68,49 @@
                           <Columns>   	
                                 <asp:TemplateColumn HeaderText="H/G" Visible ="true" >
                                      <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.TEAMTYPE") %>
+				<%# DataBinder.Eval(Container, "DataItem.hg") %>
 				</ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Team"  >
+                                                    <asp:TemplateColumn Visible ="false"   HeaderText="ID"  >
                            <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.PARTICIPANT_NAME") %>
-				</ItemTemplate> </asp:TemplateColumn>
+                             <asp:label id ="lbEventid" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.EMATCHID") %>'> </asp:label>
+			 				</ItemTemplate>
+                                                    </asp:TemplateColumn>
+                               <asp:TemplateColumn  Visible ="false"  HeaderText="Team"  >
+                           <ItemTemplate>
+                             <asp:label id ="lbTeamid" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.team_id") %>'> </asp:label>
+			 				</ItemTemplate>
+                                                    </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Type">
                            <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.INCIDENT_NAME") %>
+				<%# DataBinder.Eval(Container, "DataItem.CTYPE") %>
 				</ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Player ID">
                            <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.SUBPARTICIPANT_ID") %>
-				</ItemTemplate> </asp:TemplateColumn>
+                                  <asp:label id ="lbPlayerid" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.PARTICIPANTID") %>'> </asp:label>
+			 				 </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Player Name">
                            <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.SUBPARTICIPANT_NAME") %>
+ <asp:label id ="lbPlayerName" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.player") %>'> </asp:label> 
 				</ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="CN Name" >
                          <ItemStyle CssClass="grid-item" Width="180px"></ItemStyle>  <ItemTemplate>
-                             <asp:TextBox ID="txtCNName" runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJC_NAME_CN") %>' > </asp:TextBox>
-				  </ItemTemplate> </asp:TemplateColumn>
+                             <asp:TextBox ID="txtCNName"  Enabled="false" runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>' > </asp:TextBox>
+				         <asp:label id ="lbCNName" Visible ="false"  runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>'> </asp:label>
+                             </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Elapsed">
                            <ItemTemplate> 
-				<%# DataBinder.Eval(Container, "DataItem.EVENT_TIME") %>
+				<%# DataBinder.Eval(Container, "DataItem.ELAPSED") %>
 				</ItemTemplate>  </asp:TemplateColumn> 
                                <asp:TemplateColumn HeaderText="TIMESTAMP">
                            <ItemTemplate> 
-				<%# DataBinder.Eval(Container, "DataItem.CTIMESTAMP") %>
+				<%# DataBinder.Eval(Container, "DataItem.LASTTIME") %>
 				</ItemTemplate>  </asp:TemplateColumn> 
                           </Columns>	</anthem:DataGrid>
 					</TD>
 				</TR>
-                <tr style="height:20px"><td></td></tr>
-				 <tr><td align="right"> <anthem:Button  ID="btnSave" runat="server" Text="Save" /></td></tr>
+                <tr style="height:20px" align="right"><td>   <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="500px"  >  </anthem:Label>  </strong></td></tr>
+				 <tr><td align="right"> <anthem:Button  ID="btnSave" runat="server" Text="Edit" />  
+				     </td></tr>
 			</TABLE>
 		</FORM>
 	</body>
