@@ -143,6 +143,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="SCOUTS_DB.7z" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
