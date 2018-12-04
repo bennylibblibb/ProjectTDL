@@ -1,0 +1,32 @@
+﻿14:50:33 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+14:56:23 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+14:56:25 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+14:58:59 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+14:59:05 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+14:59:46 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+14:59:49 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+14:59:51 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171

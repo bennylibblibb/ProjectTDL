@@ -109,7 +109,7 @@ namespace DataOfScouts
                 lstStatus.SelectedValueChanged += new EventHandler(lstStatus_SelectedValueChanged);
 
                 //Timer for amqp
-                aTimer = new System.Timers.Timer(5 * 60 * 1000);
+                aTimer = new System.Timers.Timer( AppFlag.IntervalSync * 60 * 1000);
                 aTimer.Elapsed += OnTimedEvent;
                 aTimer.AutoReset = true;
                 aTimer.Enabled = true;
@@ -519,6 +519,7 @@ namespace DataOfScouts
         }
         private bool RunSyncHkjcAndBook3(DataTable table)
         {
+
             bool result = true;
             try
             {
@@ -529,9 +530,8 @@ namespace DataOfScouts
                         connection.Open();
                         foreach (DataRow dr1 in table.Rows)
                         {
-                            int id = dr1["EMATCHID"] == DBNull.Value ? -1 : Convert.ToInt32(dr1["EMATCHID"]);
-                            string strHkjcHostName = dr1["HKJCHOSTNAME"].ToString();
-                            string strHkjcGeustName = dr1["HKJCGUESTNAME"].ToString();
+                            string strHkjcHostName = dr1["CHOME_TEAM_ENG_NAME"].ToString();
+                            string strHkjcGeustName = dr1["CAWAY_TEAM_ENG_NAME"].ToString();
                             DateTime dMATCHDATETIME = Convert.ToDateTime(dr1["CMATCHDATETIME"]);
                             //string strHkjcHostName = dr1[35].ToString();
                             //string strHkjcGeustName = dr1[37].ToString();
@@ -571,7 +571,7 @@ namespace DataOfScouts
                             else if (evtTeams.Tables[0].Rows.Count == 2)
                             {
                                 Files.WriteLogNR("");
-                                // int id = -1;
+                                int id = -1;
                                 string id1 = evtTeams.Tables[0].Select("NAME='" + strHkjcHostName + "' or  SHORT_NAME='" + strHkjcHostName + "'")[0]["ID"].ToString();
                                 string id2 = evtTeams.Tables[0].Select("NAME='" + strHkjcGeustName + "' or  SHORT_NAME='" + strHkjcGeustName + "'")[0]["ID"].ToString();
                                 try
@@ -588,16 +588,16 @@ namespace DataOfScouts
                                         cmd2.Parameters.Add("@CMATCHDATETIME1", dMATCHDATETIME.AddHours(-AppFlag.MarginOfDeviation));
                                         cmd2.Parameters.Add("@CMATCHDATETIME2", dMATCHDATETIME.AddHours(AppFlag.MarginOfDeviation));
                                         id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                        Files.WriteLog((id > 0 ? " [Success] " : (id == 0) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["HKJCMATCHNO"] + " " + dr1["HKJCDAYCODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
+                                        Files.WriteLog((id > 0 ? " [Success] " : (id == 0) ? " [Failure] event not exist " : " [Failure] ") + "Sync [" + id + "] EMATCHES[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + strHkjcHostName + "/" + strHkjcGeustName);
                                     }
                                 }
                                 catch (Exception exp)
                                 {
                                     Files.WriteError("error:" + exp.ToString());
                                 }
-                                //  if (id > 0) BookEventAction(id.ToString(), false);
+                                if (id > 0) BookEventAction(id.ToString(), false);
                             }
-                            if (id > 0) BookEventAction(id.ToString(), false);
+                            // connection.Close();
                         }
                         connection.Close();
                     }
@@ -605,7 +605,7 @@ namespace DataOfScouts
             }
             catch (Exception exp)
             {
-                Files.WriteError("RunSyncHkjcAndBook3(),error:" + exp.ToString());
+                Files.WriteError("RunSyncHkjcAndBook2(),error:" + exp.ToString());
                 result = false;
             }
             return result;
@@ -5247,6 +5247,8 @@ namespace DataOfScouts
                                         cmd2.Parameters.Add("@HKJCGUESTID", dr1["IAWAY_TEAM_CODE"]);
                                         cmd2.Parameters.Add("@HKJCHOSTNAME", dr1["CHOME_TEAM_ENG_NAME"]);
                                         cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
+                                        cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_OUTPUT_NAME"]);
+                                        cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_OUTPUT_NAME"]);
                                         cmd2.Parameters.Add("@STATUS", dr1["ISTATUS"]);
                                         cmd2.Parameters.Add("@MAPPINGSTATUS", null);
                                         cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
@@ -5274,8 +5276,9 @@ namespace DataOfScouts
                                 //Files.UpdateConfig("SyncHkjcDateTime", Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                                 //AppFlag.SyncHkjcDateTime = Convert.ToDateTime(table.Rows[0]["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null);
 
-                                Files.WriteTestLog("Test", "table2  " + table.Rows.Count);
-                                RunSyncHkjcAndBook2(table);
+                                ///Files.WriteTestLog("Test", "table2  " + table.Rows.Count);
+                                /// RunSyncHkjcAndBook2(table);
+                                  RunSyncHkjcAndBook2(table);
                                 //RunSyncHkjcAndBook(ds1);
                                 // await SyncHkjcAndBook(ds);
                                 // await RunBookEventAction();
@@ -5620,6 +5623,8 @@ namespace DataOfScouts
                                 cmd2.Parameters.Add("@HKJCGUESTID", dr1["IAWAY_TEAM_CODE"]);
                                 cmd2.Parameters.Add("@HKJCHOSTNAME", dr1["CHOME_TEAM_ENG_NAME"]);
                                 cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
+                                  cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_OUTPUT_NAME"]);
+                                        cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_OUTPUT_NAME"]);
                                 cmd2.Parameters.Add("@STATUS", dr1["ISTATUS"]);
                                 cmd2.Parameters.Add("@MAPPINGSTATUS", null);
                                 cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));

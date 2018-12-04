@@ -1,0 +1,192 @@
+﻿10:51:17 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+10:54:58 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+10:55:02 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+12:01:49 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+12:02:01 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+12:24:42 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM ---> Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+12:24:45 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM ---> Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+12:24:51 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM ---> Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+12:24:55 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+12:24:58 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+12:31:09 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM ---> Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+12:31:10 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM ---> Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 171
+FROM
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+13:05:55 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+13:06:00 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+13:06:08 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+13:10:08 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 545
+= ---> Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 545
+=
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 171
+13:10:43 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+13:11:15 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+13:11:22 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+13:11:27 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+13:11:38 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 175
+14:31:13 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 186
+14:31:15 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 186
+15:29:51 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+X.FHSD_19
+At line 1, column 96 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+X.FHSD_19
+At line 1, column 96
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 182
+15:33:25 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 188
+15:34:38 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id)
+15:44:09 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 188
+15:44:12 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 188
+15:44:15 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 188
+15:45:32 BindResults(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 188

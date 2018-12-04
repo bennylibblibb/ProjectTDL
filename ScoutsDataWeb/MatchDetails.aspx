@@ -24,23 +24,23 @@
                        <anthem:DataGrid id="eventDetails" runat="server" Width="800px"   AllowPaging="false" AutoGenerateColumns="false">
                             <PagerStyle Mode="NumericPages"></PagerStyle>
                            <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center"  Wrap="false" Height="30px" CssClass="grid-header" ></HeaderStyle>
-                           <ItemStyle Height="34px"  Wrap="false" CssClass="grid-item"></ItemStyle>
+                           <ItemStyle Height="34px"  Wrap="false"  CssClass="grid-item"></ItemStyle>
                           <Columns>   
                               <asp:TemplateColumn HeaderText="Host" Visible ="true" >
-                                     <ItemTemplate>
+                                     <ItemTemplate >
                                          <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.HNAME"):DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME")   %>
-			   	 <%#DataBinder.Eval(Container, "DataItem.HNAMECN") %>
+			   <BR/>	 <%#DataBinder.Eval(Container, "DataItem.HNAMECN") %>
                                      </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Guest"  >
                            <ItemTemplate>
 				                          <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.GNAME"):DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME")   %>
-				 <%#DataBinder.Eval(Container, "DataItem.GNAMECN") %>
+			   <BR/>	 <%#DataBinder.Eval(Container, "DataItem.GNAMECN") %>
 
                            </ItemTemplate> </asp:TemplateColumn>
                                                
                                                     <asp:TemplateColumn HeaderText="START DATE">
                            <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.FHSD_19") %>
+				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"not_started": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue?"not_started":DataBinder.Eval(Container, "DataItem.FHSD_19") %>
 				</ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="RESULT">
                            <ItemTemplate>
@@ -94,7 +94,7 @@
 				</ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="CN Name" >
                          <ItemStyle CssClass="grid-item" Width="180px"></ItemStyle>  <ItemTemplate>
-                             <asp:TextBox ID="txtCNName"  Enabled="false" runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>' > </asp:TextBox>
+                             <asp:TextBox ID="txtCNName" MaxLength="100"  Enabled="false" runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>' > </asp:TextBox>
 				         <asp:label id ="lbCNName" Visible ="false"  runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>'> </asp:label>
                              </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Elapsed">

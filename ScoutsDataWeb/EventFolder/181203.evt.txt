@@ -1,0 +1,8 @@
+﻿12:19:55 [Success] Update player name:e/Durante Andrew [2520171] 219699
+12:20:02 [Success] Update player name:x/Krishna Roy [2520171] 251147
+14:50:19 BEN login success.
+14:51:41 [Success] Update player name:a/Magallan Lisandro [2492088] 269334
+15:10:20 (BEN)   Time out ,please re-login.
+15:19:10 ()   Time out ,please re-login.
+15:19:47 ()   Time out ,please re-login.
+15:19:51 ()   Time out ,please re-login.

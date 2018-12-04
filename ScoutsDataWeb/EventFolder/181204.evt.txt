@@ -1,0 +1,30 @@
+﻿10:50:15 BEN login success.
+11:11:55 (BEN)   Time out ,please re-login.
+11:11:55 (BEN)   Time out ,please re-login.
+11:12:45 BEN login success.
+12:00:16 BEN login success.
+12:07:23 BEN login success.
+12:14:46 BEN login success.
+12:23:24 BEN login success.
+12:31:51 BEN login success.
+12:33:12 BEN login success.
+12:53:13 (BEN)   Time out ,please re-login.
+12:53:49 ()   Time out ,please re-login.
+12:56:18 ()   Time out ,please re-login.
+12:56:28 ()   Time out ,please re-login.
+13:05:25 BEN login success.
+13:07:19 [Success] Update player name:A/Inglese Roberto [2504697] 232510
+14:27:45 BEN login success.
+14:31:08 BEN login success.
+14:49:30 BEN login success.
+14:54:10 BEN login success.
+14:56:02 BEN login success.
+15:09:31 (BEN)   Time out ,please re-login.
+15:09:44 BEN login success.
+15:16:57 BEN login success.
+15:26:29 BEN login success.
+15:29:43 BEN login success.
+15:32:19 BEN login success.
+15:35:06 BEN login success.
+15:42:43 BEN login success.
+16:14:53 BEN login success.
