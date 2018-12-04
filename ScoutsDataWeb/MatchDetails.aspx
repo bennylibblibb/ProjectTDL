@@ -29,12 +29,12 @@
                               <asp:TemplateColumn HeaderText="Host" Visible ="true" >
                                      <ItemTemplate >
                                          <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.HNAME"):DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME")   %>
-			   <BR/>	 <%#DataBinder.Eval(Container, "DataItem.HNAMECN") %>
+			   <BR/>	 <%#DataBinder.Eval(Container, "DataItem.HmNAMECN") %>
                                      </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Guest"  >
                            <ItemTemplate>
 				                          <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.GNAME"):DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME")   %>
-			   <BR/>	 <%#DataBinder.Eval(Container, "DataItem.GNAMECN") %>
+			   <BR/>	 <%#DataBinder.Eval(Container, "DataItem.GmNAMECN") %>
 
                            </ItemTemplate> </asp:TemplateColumn>
                                                
