@@ -6691,7 +6691,7 @@ namespace DataOfScouts
 
                                                     if (!backgroundWorker.IsBusy && id > 0)
                                                     {
-                                                        backgroundWorker.RunWorkerAsync("[" + api.data.@event.id + "] " + strName + ".json");
+                                                        backgroundWorker.RunWorkerAsync("[" + api.data.@event.id + "] "+ api.data.@event.name + " " + strName + ".json");
                                                     }
                                                 }
                                             }
@@ -6717,7 +6717,7 @@ namespace DataOfScouts
                                         DOSIncidentJson.IncidentJson incidentJson = JsonUtil.Deserialize(typeof(DOSIncidentJson.IncidentJson), message) as DOSIncidentJson.IncidentJson;
                                         if (incidentJson != null && incidentJson.data.@event.sport_id == 5 && incidentJson.data.incident.important_for_trader == "yes")
                                         {
-                                            strName = "Incid" + incidentJson.data.@event.id + "_" + DateTime.Now.ToString("HHmmssfff");
+                                            strName = "Incid" + incidentJson.data.@event.id +  (incidentJson.data.incident.incident_id==413|| incidentJson.data.incident.incident_id == 418 || incidentJson.data.incident.incident_id == 419 ? "_" + incidentJson.data.incident.incident_id:"") + "-"+ DateTime.Now.ToString("HHmmssfff");
                                             Files.WriteJson(strName, message);
                                             //if(incidentJson.data.incident.incident_id== 429)
                                             //{ 
@@ -6754,7 +6754,7 @@ namespace DataOfScouts
 
                                                 if (!backgroundWorker.IsBusy && sID > 0)
                                                 {
-                                                    backgroundWorker.RunWorkerAsync("[" + incidentJson.data.@event.id + "] " + strName + ".json");
+                                                    backgroundWorker.RunWorkerAsync("[" + incidentJson.data.@event.id + "] " + incidentJson.data.@event.name + " " + strName + ".json");
                                                 }
                                             }
                                             //    connection.Close();

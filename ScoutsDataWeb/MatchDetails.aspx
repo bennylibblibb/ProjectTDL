@@ -40,8 +40,9 @@
                                                
                                                     <asp:TemplateColumn HeaderText="START DATE">
                            <ItemTemplate>
-				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"not_started": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue?"not_started":DataBinder.Eval(Container, "DataItem.FHSD_19") %>
-				</ItemTemplate> </asp:TemplateColumn>
+				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue?"":DataBinder.Eval(Container, "DataItem.FHSD_19") %>
+				  <BR/> <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>  
+                           </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="RESULT">
                            <ItemTemplate>
 				<%# DataBinder.Eval(Container, "DataItem.RESULT") %>
