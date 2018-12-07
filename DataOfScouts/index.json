@@ -9,582 +9,586 @@ CREATE GENERATOR GEN_PARTICIPANT_RESULTS;
 CREATE GENERATOR GEN_PARTICIPANT_STATS;
 /******************** DOMAINS *********************/
 
+CREATE DOMAIN MON$SEC_DATABASE
+ AS char(7) CHARACTER SET ASCII
+ NOT NULL
+ COLLATE ASCII;
 CREATE DOMAIN SEC$KEY
- AS Varchar(10) CHARACTER SET UNICODE_FSS
+ AS varchar(10) CHARACTER SET UNICODE_FSS
  NOT NULL
  COLLATE UNICODE_FSS;
 CREATE DOMAIN SEC$NAME_PART
- AS Varchar(10) CHARACTER SET UNICODE_FSS
+ AS varchar(10) CHARACTER SET UNICODE_FSS
  NOT NULL
  COLLATE UNICODE_FSS;
 CREATE DOMAIN SEC$USER_NAME
- AS Varchar(10) CHARACTER SET UNICODE_FSS
+ AS varchar(10) CHARACTER SET UNICODE_FSS
  NOT NULL
  COLLATE UNICODE_FSS;
 CREATE DOMAIN SEC$VALUE
- AS Varchar(85) CHARACTER SET UNICODE_FSS
+ AS varchar(85) CHARACTER SET UNICODE_FSS
  NOT NULL
  COLLATE UNICODE_FSS;
 CREATE DOMAIN TSTART_DATE
- AS Timestamp
+ AS timestamp
  NOT NULL
 ;
 /******************* PROCEDURES ******************/
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_AREA7 (
-    ID Integer,
-    AREA_CODE Varchar(5),
-    NAME Varchar(100),
-    PARENT_AREA_ID Integer,
-    UT Varchar(12),
-    CTIMESTAMP Timestamp )
+    ID integer,
+    AREA_CODE varchar(5),
+    NAME varchar(100),
+    PARENT_AREA_ID integer,
+    UT varchar(12),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_COMPETITION (
-    ID Integer,
-    NAME Varchar(100),
-    SHORT_NAME Varchar(50),
-    MINI_NAME Varchar(50),
-    GENDER ,
-    CTYPE Varchar(50),
-    AREA_ID Integer,
-    AREA_TYPE Varchar(50),
-    AREA_SORT Integer,
-    OVERALL_SORT Integer,
-    TOUR_ID Integer,
-    TOUR_NAME Varchar(50),
-    UT Varchar(12),
-    OLD_COMPETITION_ID Integer,
-    SLUG Varchar(100),
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    SHORT_NAME varchar(50),
+    MINI_NAME varchar(50),
+    GENDER (1),
+    CTYPE varchar(50),
+    AREA_ID integer,
+    AREA_TYPE varchar(50),
+    AREA_SORT integer,
+    OVERALL_SORT integer,
+    TOUR_ID integer,
+    TOUR_NAME varchar(50),
+    UT varchar(12),
+    OLD_COMPETITION_ID integer,
+    SLUG varchar(100),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_GROUP (
-    ID Integer,
-    NAME Varchar(10),
-    UT Varchar(12),
-    STAGE_ID Integer,
-    SEASON_ID Integer,
-    COMPETITION_ID Integer,
-    AREA_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(10),
+    UT varchar(12),
+    STAGE_ID integer,
+    SEASON_ID integer,
+    COMPETITION_ID integer,
+    AREA_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_HKJCMATCH (
-    HKJCMATCHNO Integer,
-    HKJCDAYCODE Varchar(3),
-    CMATCHDATETIME Timestamp,
-    HKJCHOSTID Integer,
-    HKJCGUESTID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    HKJCHOSTNAME_CN Varchar(100),
-    HKJCGUESTNAME_CN Varchar(100),
-    STATUS Varchar(15),
-    MAPPINGSTATUS ,
-    CTIMESTAMP Timestamp )
+    HKJCMATCHNO integer,
+    HKJCDAYCODE varchar(3),
+    CMATCHDATETIME timestamp,
+    HKJCHOSTID integer,
+    HKJCGUESTID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    HKJCHOSTNAME_CN varchar(100),
+    HKJCGUESTNAME_CN varchar(100),
+    STATUS varchar(15),
+    MAPPINGSTATUS (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_HKJCMATCH2 (
-    EMATCHID Integer,
-    HKJCMATCHNO Integer,
-    HKJCDAYCODE Varchar(3),
-    CMATCHDATETIME Timestamp,
-    HKJCHOSTID Integer,
-    HKJCGUESTID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    STATUS Varchar(15),
-    MAPPINGSTATUS ,
-    CTIMESTAMP Timestamp )
+    EMATCHID integer,
+    HKJCMATCHNO integer,
+    HKJCDAYCODE varchar(3),
+    CMATCHDATETIME timestamp,
+    HKJCHOSTID integer,
+    HKJCGUESTID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    STATUS varchar(15),
+    MAPPINGSTATUS (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_HKJCMATCH4 (
-    EMATCHID Integer,
-    HKJCMATCHNO Integer,
-    HKJCDAYCODE Varchar(3),
-    CMATCHDATETIME Timestamp,
-    HKJCHOSTID Integer,
-    HKJCGUESTID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    STATUS Varchar(15),
-    MAPPINGSTATUS ,
-    CTIMESTAMP Timestamp )
+    EMATCHID integer,
+    HKJCMATCHNO integer,
+    HKJCDAYCODE varchar(3),
+    CMATCHDATETIME timestamp,
+    HKJCHOSTID integer,
+    HKJCGUESTID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    STATUS varchar(15),
+    MAPPINGSTATUS (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_HKJCMATCH_BAK (
-    HKJCMATCHNO Integer,
-    HKJCDAYCODE Varchar(3),
-    CMATCHDATETIME Timestamp,
-    HKJCHOSTID Integer,
-    HKJCGUESTID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    STATUS Varchar(15),
-    MAPPINGSTATUS ,
-    CTIMESTAMP Timestamp )
+    HKJCMATCHNO integer,
+    HKJCDAYCODE varchar(3),
+    CMATCHDATETIME timestamp,
+    HKJCHOSTID integer,
+    HKJCGUESTID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    STATUS varchar(15),
+    MAPPINGSTATUS (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_PLAYER (
-    ID Integer,
-    NAME Varchar(100),
-    SHORT_NAME Varchar(50),
-    ACRONYM Varchar(3),
-    GENDER ,
-    BIRTHDATE Varchar(12),
-    POSITION_NAME Varchar(20),
-    AREA_ID Integer,
-    BNATIONAL ,
-    UT Varchar(50),
-    OLD_PARTICIPANT_ID Integer,
-    SLUG Varchar(100),
-    BENCH ,
-    SHIRT_NR Integer,
-    TEAM_ID Integer,
-    SEASON_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    SHORT_NAME varchar(50),
+    ACRONYM varchar(3),
+    GENDER (1),
+    BIRTHDATE varchar(12),
+    POSITION_NAME varchar(20),
+    AREA_ID integer,
+    BNATIONAL (1),
+    UT varchar(50),
+    OLD_PARTICIPANT_ID integer,
+    SLUG varchar(100),
+    BENCH (1),
+    SHIRT_NR integer,
+    TEAM_ID integer,
+    SEASON_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_PLAYER2 (
-    ID Integer,
-    NAME Varchar(100),
-    AREA_ID Integer,
-    SLUG Varchar(100),
-    BENCH ,
-    SHIRT_NR Integer,
-    TEAM_ID Integer,
-    SEASON_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    AREA_ID integer,
+    SLUG varchar(100),
+    BENCH (1),
+    SHIRT_NR integer,
+    TEAM_ID integer,
+    SEASON_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_SEASON (
-    ID Integer,
-    NAME Varchar(100),
-    COMPETITION_ID Integer,
-    SYEAR Varchar(10),
-    ACTUAL Varchar(10),
-    UT Varchar(12),
-    OLD_SEASON_ID Integer,
-    RANGE Varchar(10),
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    COMPETITION_ID integer,
+    SYEAR varchar(10),
+    ACTUAL varchar(10),
+    UT varchar(12),
+    OLD_SEASON_ID integer,
+    RANGE varchar(10),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_STAGE (
-    ID Integer,
-    STAGE_NAME_ID Integer,
-    NAME Varchar(50),
-    START_DATE Varchar(12),
-    END_DATE Varchar(12),
-    SHOW_STANDINGS ,
-    GROUPS_NR Integer,
-    ISORT Integer,
-    IS_CURRENT ,
-    UT Varchar(12),
-    OLD_STAGE_ID Integer,
-    SEASON_ID Integer,
-    COMPETITION_ID Integer,
-    AREA_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    STAGE_NAME_ID integer,
+    NAME varchar(50),
+    START_DATE varchar(12),
+    END_DATE varchar(12),
+    SHOW_STANDINGS (1),
+    GROUPS_NR integer,
+    ISORT integer,
+    IS_CURRENT (1),
+    UT varchar(12),
+    OLD_STAGE_ID integer,
+    SEASON_ID integer,
+    COMPETITION_ID integer,
+    AREA_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE ADD_TEAM (
-    ID Integer,
-    NAME Varchar(100),
-    SHORT_NAME Varchar(50),
-    ACRONYM Varchar(3),
-    GENDER ,
-    AREA_ID Integer,
-    BNATIONAL ,
-    UT Varchar(50),
-    OLD_PARTICIPANT_ID Integer,
-    SLUG Varchar(100),
-    SEASON_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    SHORT_NAME varchar(50),
+    ACRONYM varchar(3),
+    GENDER (1),
+    AREA_ID integer,
+    BNATIONAL (1),
+    UT varchar(50),
+    OLD_PARTICIPANT_ID integer,
+    SLUG varchar(100),
+    SEASON_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE PR_EVENT_DETAILS (
-    EVENTID Integer,
-    WC_8 Varchar(20),
-    PC_36 Varchar(20),
-    PL_16 Varchar(3),
-    EPL_50 Varchar(3),
-    NOP_17 Varchar(1),
-    EPTC_58 Varchar(100),
-    IT_151 Varchar(2),
-    ATT_141 Varchar(50),
-    FHSD_19 Timestamp,
-    SHSD_20 Timestamp,
-    FEHSD_44 Timestamp,
-    SEHSD_45 Timestamp,
-    PSSD_150 Timestamp,
-    FHIT_201 Varchar(2),
-    SHIT_202 Varchar(2),
-    FEHIT_203 Varchar(2),
-    SEHIT_204 Varchar(2),
-    HL_205 Varchar(8),
-    TD_124 Varchar(4),
-    BM_160 Varchar(4),
-    HF_178 Varchar(4),
-    UT Varchar(12),
-    CTIMESTAMP Timestamp )
+    EVENTID integer,
+    WC_8 varchar(20),
+    PC_36 varchar(20),
+    PL_16 varchar(3),
+    EPL_50 varchar(3),
+    NOP_17 varchar(1),
+    EPTC_58 varchar(100),
+    IT_151 varchar(2),
+    ATT_141 varchar(50),
+    FHSD_19 timestamp,
+    SHSD_20 timestamp,
+    FEHSD_44 timestamp,
+    SEHSD_45 timestamp,
+    PSSD_150 timestamp,
+    FHIT_201 varchar(2),
+    SHIT_202 varchar(2),
+    FEHIT_203 varchar(2),
+    SEHIT_204 varchar(2),
+    HL_205 varchar(8),
+    TD_124 varchar(4),
+    BM_160 varchar(4),
+    HF_178 varchar(4),
+    UT varchar(12),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE PR_INCIDENTS (
-    ID Varchar(12),
-    EVENTID Integer,
-    CACTION Varchar(8),
-    INCIDENT_ID Integer,
-    INCIDENT_NAME Varchar(50),
-    PARTICIPANT_ID Varchar(100),
-    PARTICIPANT_NAME Varchar(100),
-    SUBPARTICIPANT_ID Varchar(100),
-    SUBPARTICIPANT_NAME Varchar(100),
-    IMPORTANT_FOR_TRADER ,
-    EVENT_TIME Varchar(6),
-    EVENT_STATUS_ID Integer,
-    EVENT_STATUS_NAME Varchar(50),
-    UT Varchar(12),
-    CTIMESTAMP Timestamp,
-    TEAMTYPE Varchar(1) )
+    ID varchar(12),
+    EVENTID integer,
+    CACTION varchar(8),
+    INCIDENT_ID integer,
+    INCIDENT_NAME varchar(50),
+    PARTICIPANT_ID varchar(100),
+    PARTICIPANT_NAME varchar(100),
+    SUBPARTICIPANT_ID varchar(100),
+    SUBPARTICIPANT_NAME varchar(100),
+    IMPORTANT_FOR_TRADER (1),
+    EVENT_TIME varchar(6),
+    EVENT_STATUS_ID integer,
+    EVENT_STATUS_NAME varchar(50),
+    UT varchar(12),
+    CTIMESTAMP timestamp,
+    TEAMTYPE varchar(1) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE PR_JSON_EVENT (
-    ID Integer,
-    NAME Varchar(100),
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    RELATION_STATUS Varchar(15),
-    START_DATE Timestamp,
-    FT_ONLY ,
-    COVERAGE_TYPE Varchar(10),
-    SCOUTSFEED ,
-    STATUS_ID Integer,
-    STATUS_TYPE Varchar(15),
-    CDAY Varchar(10),
-    CLOCK_TIME Varchar(18),
-    CLOCK_STATUS Varchar(10),
-    BET_STATUS Varchar(10),
-    NEUTRAL_VENUE ,
-    ITEM_STATUS Varchar(10),
-    ROUND_ID Varchar(10),
-    ROUND_NAME Varchar(50),
-    VENUE_ID Varchar(10),
-    STAGE_ID Integer,
-    SEASON_ID Integer,
-    COMPETITION_ID Integer,
-    AREA_ID Integer,
-    CTIMESTAMP Timestamp,
-    CACTION Varchar(6) )
+    ID integer,
+    NAME varchar(100),
+    HOME_ID integer,
+    GUEST_ID integer,
+    RELATION_STATUS varchar(15),
+    START_DATE timestamp,
+    FT_ONLY (1),
+    COVERAGE_TYPE varchar(10),
+    SCOUTSFEED (1),
+    STATUS_ID integer,
+    STATUS_TYPE varchar(15),
+    CDAY varchar(10),
+    CLOCK_TIME varchar(18),
+    CLOCK_STATUS varchar(10),
+    BET_STATUS varchar(10),
+    NEUTRAL_VENUE (1),
+    ITEM_STATUS varchar(10),
+    ROUND_ID varchar(10),
+    ROUND_NAME varchar(50),
+    VENUE_ID varchar(10),
+    STAGE_ID integer,
+    SEASON_ID integer,
+    COMPETITION_ID integer,
+    AREA_ID integer,
+    CTIMESTAMP timestamp,
+    CACTION varchar(6) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE PR_PARTICIPANT_RESULTS (
-    EVENTID Integer,
-    PARTICIPANTID Integer,
-    PROGRESS_412 Varchar(1),
-    WINNER_411 Varchar(1),
-    RESULT_2 Varchar(3),
-    RT_3 Varchar(3),
-    FH_4 Varchar(3),
-    SH_5 Varchar(3),
-    E1H_133 Varchar(2),
-    E2H_134 Varchar(2),
-    PENALTY_7 Varchar(2),
-    OVERTIME_104 Varchar(2),
-    CTIMESTAMP Timestamp,
-    CACTION Varchar(6),
-    TEAMTYPE Varchar(1) )
+    EVENTID integer,
+    PARTICIPANTID integer,
+    PROGRESS_412 varchar(1),
+    WINNER_411 varchar(1),
+    RESULT_2 varchar(3),
+    RT_3 varchar(3),
+    FH_4 varchar(3),
+    SH_5 varchar(3),
+    E1H_133 varchar(2),
+    E2H_134 varchar(2),
+    PENALTY_7 varchar(2),
+    OVERTIME_104 varchar(2),
+    CTIMESTAMP timestamp,
+    CACTION varchar(6),
+    TEAMTYPE varchar(1) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE PR_PARTICIPANT_STATS (
-    EVENTID Integer,
-    PARTICIPANTID Integer,
-    SOT_20 Varchar(3),
-    SOT_21 Varchar(3),
-    ATTACKS_10 Varchar(3),
-    DA_11 Varchar(3),
-    CORNERS_13 Varchar(3),
-    YELLOW_CARDS_8 Varchar(3),
-    RED_CARDS_9 Varchar(3),
-    TOTAL_SHOTS_19 Varchar(3),
-    FOULS_22 Varchar(3),
-    OFFSIDES_24 Varchar(3),
-    PS_14 Varchar(3),
-    PM_15 Varchar(3),
-    PG_16 Varchar(3),
-    FK_25 Varchar(3),
-    DFK_26 Varchar(3),
-    FKG_18 Varchar(3),
-    SW_27 Varchar(3),
-    SB_28 Varchar(3),
-    GS_29 Varchar(3),
-    GK_30 Varchar(3),
-    TI_32 Varchar(3),
-    SUBSTITUTIONS_31 Varchar(3),
-    GOALS_40 Varchar(3),
-    MP_34 Varchar(3),
-    OWN_GOALS_17 Varchar(3),
-    ADW_33 Varchar(3),
-    FORM_716 Varchar(100),
-    SKIN_718 Varchar(8),
-    PS_639 Varchar(3),
-    PU_697 Varchar(3),
-    GOALS115_772 Varchar(3),
-    GOALS1630_773 Varchar(3),
-    GOALS3145_774 Varchar(3),
-    GOALS4660_775 Varchar(3),
-    GOALS6175_776 Varchar(3),
-    GOALS7690_777 Varchar(3),
-    MPG_778 Varchar(3),
-    MPS_779 Varchar(3),
-    CTIMESTAMP Timestamp,
-    CACTION Varchar(6),
-    TEAMTYPE Varchar(1) )
+    EVENTID integer,
+    PARTICIPANTID integer,
+    SOT_20 varchar(3),
+    SOT_21 varchar(3),
+    ATTACKS_10 varchar(3),
+    DA_11 varchar(3),
+    CORNERS_13 varchar(3),
+    YELLOW_CARDS_8 varchar(3),
+    RED_CARDS_9 varchar(3),
+    TOTAL_SHOTS_19 varchar(3),
+    FOULS_22 varchar(3),
+    OFFSIDES_24 varchar(3),
+    PS_14 varchar(3),
+    PM_15 varchar(3),
+    PG_16 varchar(3),
+    FK_25 varchar(3),
+    DFK_26 varchar(3),
+    FKG_18 varchar(3),
+    SW_27 varchar(3),
+    SB_28 varchar(3),
+    GS_29 varchar(3),
+    GK_30 varchar(3),
+    TI_32 varchar(3),
+    SUBSTITUTIONS_31 varchar(3),
+    GOALS_40 varchar(3),
+    MP_34 varchar(3),
+    OWN_GOALS_17 varchar(3),
+    ADW_33 varchar(3),
+    FORM_716 varchar(100),
+    SKIN_718 varchar(8),
+    PS_639 varchar(3),
+    PU_697 varchar(3),
+    GOALS115_772 varchar(3),
+    GOALS1630_773 varchar(3),
+    GOALS3145_774 varchar(3),
+    GOALS4660_775 varchar(3),
+    GOALS6175_776 varchar(3),
+    GOALS7690_777 varchar(3),
+    MPG_778 varchar(3),
+    MPS_779 varchar(3),
+    CTIMESTAMP timestamp,
+    CACTION varchar(6),
+    TEAMTYPE varchar(1) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE PR_RESULT_GOALINFO (
-    EMATCHID Integer,
-    H_GOAL Integer,
-    G_GOAL Integer,
-    LASTTIME Timestamp )
+    EMATCHID integer,
+    H_GOAL integer,
+    G_GOAL integer,
+    LASTTIME timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE PR_STATS_GOALINFO (
-    EMATCHID Integer,
-    H_YELLOW Integer,
-    H_RED Integer,
-    G_YELLOW Integer,
-    G_RED Integer,
-    LASTTIME Timestamp )
+    EMATCHID integer,
+    H_YELLOW integer,
+    H_RED integer,
+    G_YELLOW integer,
+    G_RED integer,
+    LASTTIME timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SET_BOOKEDEVENT (
-    ID Integer,
-    BOOKED ,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    BOOKED (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SET_BOOKEDEVENTBY (
-    ID Integer,
-    BOOKED ,
-    BOOKED_BY Varchar(50),
-    CTIMESTAMP Timestamp )
+    ID integer,
+    BOOKED (1),
+    BOOKED_BY varchar(50),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SYNCHKJCDATAANDBOOK (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100) )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SYNC_HKJCDATA (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100) )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SYNC_HKJCDATA_AUTO (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    CMATCHDATETIME1 Timestamp,
-    CMATCHDATETIME2 Timestamp )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    CMATCHDATETIME1 timestamp,
+    CMATCHDATETIME2 timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SYNC_HKJCDATA_AUTO_BAK (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    CMATCHDATETIME1 Timestamp,
-    CMATCHDATETIME2 Timestamp )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    CMATCHDATETIME1 timestamp,
+    CMATCHDATETIME2 timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SYNC_HKJCDATA_BOOK (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100) )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SYNC_MANUAL_HKJCDATA (
-    EVENT_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100) )
+    EVENT_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SYNC_MANUAL_HKJCDATA_WEB (
-    EVENT_ID Integer,
-    HKJCDAYCODE Varchar(3),
-    HKJCMATCHNO Integer,
-    CMATCHDATETIME1 Timestamp,
-    CMATCHDATETIME2 Timestamp )
+    EVENT_ID integer,
+    HKJCDAYCODE varchar(3),
+    HKJCMATCHNO integer,
+    CMATCHDATETIME1 timestamp,
+    CMATCHDATETIME2 timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SYNC_MANUAL_HKJCDATA_WEB_CANCEL (
-    EVENT_ID Integer,
-    HKJCDAYCODE Varchar(3),
-    HKJCMATCHNO Integer )
+    EVENT_ID integer,
+    HKJCDAYCODE varchar(3),
+    HKJCMATCHNO integer )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE UPDATE_CNNAME_GOALINFO_PLAYERS (
-    EMATCHID Varchar(20),
-    TEAMID Integer,
-    PARTICIPANTID Varchar(12),
-    ENNAME Varchar(60),
-    CNNAME Varchar(60),
-    CTIMESTAMP Timestamp )
+    EMATCHID varchar(20),
+    TEAMID integer,
+    PARTICIPANTID varchar(12),
+    ENNAME varchar(60),
+    CNNAME varchar(60),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN SUSPEND; END^
 SET TERM ; ^
@@ -593,354 +597,354 @@ SET TERM ; ^
 
 CREATE TABLE AREAS
 (
-  ID Integer NOT NULL,
-  AREA_CODE Varchar(5),
-  NAME Varchar(100),
-  PARENT_AREA_ID Integer,
-  UT Varchar(12),
-  CTIMESTAMP Timestamp,
-  PRIMARY KEY (ID)
+  ID integer NOT NULL,
+  AREA_CODE varchar(5),
+  NAME varchar(100),
+  PARENT_AREA_ID integer,
+  UT varchar(12),
+  CTIMESTAMP timestamp,
+  CONSTRAINT INTEG_65 PRIMARY KEY (ID)
 );
 CREATE TABLE AREAS2
 (
-  ID Integer NOT NULL,
-  AREA_CODE Varchar(5),
-  NAME Varchar(100),
-  PARENT_AREA_ID Integer,
-  UT Varchar(12),
-  CTIMESTAMP Varchar(25),
-  PRIMARY KEY (ID)
+  ID integer NOT NULL,
+  AREA_CODE varchar(5),
+  NAME varchar(100),
+  PARENT_AREA_ID integer,
+  UT varchar(12),
+  CTIMESTAMP varchar(25),
+  CONSTRAINT INTEG_49 PRIMARY KEY (ID)
 );
 CREATE TABLE COMPETITIONS
 (
-  ID Integer NOT NULL,
-  NAME Varchar(100),
-  SHORT_NAME Varchar(50),
-  MINI_NAME Varchar(50),
-  GENDER ,
-  CTYPE Varchar(50),
-  AREA_ID Integer,
-  AREA_NAME Varchar(50),
-  AREA_TYPE Varchar(50),
-  AREA_SORT Integer,
-  AREA_CODE Varchar(5),
-  OVERALL_SORT Integer,
-  TOUR_ID Integer,
-  TOUR_NAME Varchar(50),
-  UT Varchar(12),
-  OLD_COMPETITION_ID Integer,
-  SLUG Varchar(100),
-  CTIMESTAMP Timestamp,
-  PRIMARY KEY (ID)
+  ID integer NOT NULL,
+  NAME varchar(100),
+  SHORT_NAME varchar(50),
+  MINI_NAME varchar(50),
+  GENDER (1),
+  CTYPE varchar(50),
+  AREA_ID integer,
+  AREA_NAME varchar(50),
+  AREA_TYPE varchar(50),
+  AREA_SORT integer,
+  AREA_CODE varchar(5),
+  OVERALL_SORT integer,
+  TOUR_ID integer,
+  TOUR_NAME varchar(50),
+  UT varchar(12),
+  OLD_COMPETITION_ID integer,
+  SLUG varchar(100),
+  CTIMESTAMP timestamp,
+  CONSTRAINT INTEG_55 PRIMARY KEY (ID)
 );
 CREATE TABLE EMATCHES
 (
-  EMATCHID Integer,
-  HKJCHOSTID Integer,
-  HKJCGUESTID Integer,
-  HKJCHOSTNAME Varchar(100),
-  HKJCGUESTNAME Varchar(100),
-  HKJCDAYCODE Varchar(3),
-  HKJCMATCHNO Integer,
-  STATUS Varchar(30),
-  CMATCHDATETIME Timestamp,
-  MAPPINGSTATUS ,
-  CTIMESTAMP Timestamp,
-  HKJCHOSTNAME_CN Varchar(100),
-  HKJCGUESTNAME_CN Varchar(100)
+  EMATCHID integer,
+  HKJCHOSTID integer,
+  HKJCGUESTID integer,
+  HKJCHOSTNAME varchar(100),
+  HKJCGUESTNAME varchar(100),
+  HKJCDAYCODE varchar(3),
+  HKJCMATCHNO integer,
+  STATUS varchar(30),
+  CMATCHDATETIME timestamp,
+  MAPPINGSTATUS (1),
+  CTIMESTAMP timestamp,
+  HKJCHOSTNAME_CN varchar(100),
+  HKJCGUESTNAME_CN varchar(100)
 );
 CREATE TABLE EVENTS
 (
-  ID Integer NOT NULL,
-  NAME Varchar(100),
-  HOME_ID Integer NOT NULL,
-  GUEST_ID Integer NOT NULL,
-  SOURCE Varchar(10),
-  SOURCE_DC ,
-  SOURCE_SUPER Varchar(10),
-  RELATION_STATUS Varchar(15),
+  ID integer NOT NULL,
+  NAME varchar(100),
+  HOME_ID integer NOT NULL,
+  GUEST_ID integer NOT NULL,
+  SOURCE varchar(10),
+  SOURCE_DC (1),
+  SOURCE_SUPER varchar(10),
+  RELATION_STATUS varchar(15),
   START_DATE TSTART_DATE,
-  FT_ONLY ,
-  COVERAGE_TYPE Varchar(10),
-  CHANNEL_ID Varchar(10),
-  CHANNEL_NAME Varchar(50),
-  SCOUTSFEED ,
-  STATUS_ID Integer,
-  STATUS_NAME Varchar(30),
-  STATUS_TYPE Varchar(15),
-  CDAY Varchar(10),
-  CLOCK_TIME Varchar(18),
-  CLOCK_STATUS Varchar(10),
-  WINNER_ID Varchar(10),
-  PROGRESS_ID Varchar(10),
-  BET_STATUS Varchar(10),
-  NEUTRAL_VENUE ,
-  ITEM_STATUS Varchar(10),
-  UT Varchar(12),
-  OLD_EVENT_ID Integer,
-  SLUG Varchar(100),
-  VERIFIED_RESULT ,
-  IS_PROTOCOL_VERIFIED ,
-  PROTOCOL_VERIFIED_BY Varchar(10),
-  PROTOCOL_VERIFIED_AT Varchar(10),
-  ROUND_ID Varchar(10),
-  ROUND_NAME Varchar(50),
-  CLIENT_EVENT_ID Integer,
-  BOOKED ,
-  BOOKED_BY Varchar(50),
-  INVERTED_PARTICIPANTS ,
-  VENUE_ID Varchar(10),
-  GROUP_ID Integer,
-  STAGE_ID Integer,
-  SEASON_ID Integer,
-  COMPETITION_ID Integer,
-  AREA_ID Integer,
-  CTIMESTAMP Timestamp,
-  CACTION Varchar(6),
-  PRIMARY KEY (ID)
+  FT_ONLY (1),
+  COVERAGE_TYPE varchar(10),
+  CHANNEL_ID varchar(10),
+  CHANNEL_NAME varchar(50),
+  SCOUTSFEED (1),
+  STATUS_ID integer,
+  STATUS_NAME varchar(30),
+  STATUS_TYPE varchar(15),
+  CDAY varchar(10),
+  CLOCK_TIME varchar(18),
+  CLOCK_STATUS varchar(10),
+  WINNER_ID varchar(10),
+  PROGRESS_ID varchar(10),
+  BET_STATUS varchar(10),
+  NEUTRAL_VENUE (1),
+  ITEM_STATUS varchar(10),
+  UT varchar(12),
+  OLD_EVENT_ID integer,
+  SLUG varchar(100),
+  VERIFIED_RESULT (1),
+  IS_PROTOCOL_VERIFIED (1),
+  PROTOCOL_VERIFIED_BY varchar(10),
+  PROTOCOL_VERIFIED_AT varchar(10),
+  ROUND_ID varchar(10),
+  ROUND_NAME varchar(50),
+  CLIENT_EVENT_ID integer,
+  BOOKED (1),
+  BOOKED_BY varchar(50),
+  INVERTED_PARTICIPANTS (1),
+  VENUE_ID varchar(10),
+  GROUP_ID integer,
+  STAGE_ID integer,
+  SEASON_ID integer,
+  COMPETITION_ID integer,
+  AREA_ID integer,
+  CTIMESTAMP timestamp,
+  CACTION varchar(6),
+  CONSTRAINT INTEG_47 PRIMARY KEY (ID)
 );
 CREATE TABLE EVENT_DETAILS
 (
-  EVENTID Integer NOT NULL,
-  WC_8 Varchar(20),
-  PC_36 Varchar(20),
-  PL_16 Varchar(3),
-  EPL_50 Varchar(3),
-  NOP_17 Varchar(1),
-  EPTC_58 Varchar(100),
-  IT_151 Varchar(2),
-  ATT_141 Varchar(50),
-  FHSD_19 Timestamp,
-  SHSD_20 Timestamp,
-  FEHSD_44 Timestamp,
-  SEHSD_45 Timestamp,
-  PSSD_150 Timestamp,
-  FHIT_201 Varchar(2),
-  SHIT_202 Varchar(2),
-  FEHIT_203 Varchar(2),
-  SEHIT_204 Varchar(2),
-  HL_205 Varchar(8),
-  TD_124 Varchar(4),
-  BM_160 Varchar(4),
-  HF_178 Varchar(4),
-  UT Varchar(12),
-  CTIMESTAMP Timestamp,
-  PRIMARY KEY (EVENTID)
+  EVENTID integer NOT NULL,
+  WC_8 varchar(20),
+  PC_36 varchar(20),
+  PL_16 varchar(3),
+  EPL_50 varchar(3),
+  NOP_17 varchar(1),
+  EPTC_58 varchar(100),
+  IT_151 varchar(2),
+  ATT_141 varchar(50),
+  FHSD_19 timestamp,
+  SHSD_20 timestamp,
+  FEHSD_44 timestamp,
+  SEHSD_45 timestamp,
+  PSSD_150 timestamp,
+  FHIT_201 varchar(2),
+  SHIT_202 varchar(2),
+  FEHIT_203 varchar(2),
+  SEHIT_204 varchar(2),
+  HL_205 varchar(8),
+  TD_124 varchar(4),
+  BM_160 varchar(4),
+  HF_178 varchar(4),
+  UT varchar(12),
+  CTIMESTAMP timestamp,
+  CONSTRAINT INTEG_93 PRIMARY KEY (EVENTID)
 );
 CREATE TABLE GOALINFO
 (
-  EMATCHID Integer NOT NULL,
-  HRUNSCOREID Integer,
-  GRUNSCOREID Integer,
-  H_GOAL Integer,
-  G_GOAL Integer,
-  H_YELLOW Integer,
-  H_RED Integer,
-  G_YELLOW Integer,
-  G_RED Integer,
-  RECTIME Timestamp,
-  LASTTIME Timestamp,
-  GAMESTATUS Varchar(30),
-  STATUSFK Integer,
-  ELAPSED Integer,
-  TEAMTYPE Varchar(1),
-  PRIMARY KEY (EMATCHID)
+  EMATCHID integer NOT NULL,
+  HRUNSCOREID integer,
+  GRUNSCOREID integer,
+  H_GOAL integer,
+  G_GOAL integer,
+  H_YELLOW integer,
+  H_RED integer,
+  G_YELLOW integer,
+  G_RED integer,
+  RECTIME timestamp,
+  LASTTIME timestamp,
+  GAMESTATUS varchar(30),
+  STATUSFK integer,
+  ELAPSED integer,
+  TEAMTYPE varchar(1),
+  CONSTRAINT INTEG_60 PRIMARY KEY (EMATCHID)
 );
 CREATE TABLE GROUPS
 (
-  ID Integer NOT NULL,
-  NAME Varchar(10),
-  UT Varchar(12),
-  STAGE_ID Integer NOT NULL,
-  SEASON_ID Integer NOT NULL,
-  COMPETITION_ID Integer NOT NULL,
-  AREA_ID Integer,
-  CTIMESTAMP Timestamp,
-  PRIMARY KEY (ID,STAGE_ID,SEASON_ID,COMPETITION_ID)
+  ID integer NOT NULL,
+  NAME varchar(10),
+  UT varchar(12),
+  STAGE_ID integer NOT NULL,
+  SEASON_ID integer NOT NULL,
+  COMPETITION_ID integer NOT NULL,
+  AREA_ID integer,
+  CTIMESTAMP timestamp,
+  CONSTRAINT INTEG_71 PRIMARY KEY (ID,STAGE_ID,SEASON_ID,COMPETITION_ID)
 );
 CREATE TABLE INCIDENTS
 (
-  ID Varchar(12),
-  EVENTID Integer,
-  CACTION Varchar(8),
-  INCIDENT_ID Integer,
-  INCIDENT_NAME Varchar(50),
-  PARTICIPANT_ID Varchar(100),
-  PARTICIPANT_NAME Varchar(100),
-  SUBPARTICIPANT_ID Varchar(100),
-  SUBPARTICIPANT_NAME Varchar(100),
-  IMPORTANT_FOR_TRADER ,
-  EVENT_TIME Varchar(6),
-  EVENT_STATUS_ID Integer,
-  EVENT_STATUS_NAME Varchar(50),
-  UT Varchar(12),
-  CTIMESTAMP Timestamp,
-  TEAMTYPE Varchar(1)
+  ID varchar(12),
+  EVENTID integer,
+  CACTION varchar(8),
+  INCIDENT_ID integer,
+  INCIDENT_NAME varchar(50),
+  PARTICIPANT_ID varchar(100),
+  PARTICIPANT_NAME varchar(100),
+  SUBPARTICIPANT_ID varchar(100),
+  SUBPARTICIPANT_NAME varchar(100),
+  IMPORTANT_FOR_TRADER (1),
+  EVENT_TIME varchar(6),
+  EVENT_STATUS_ID integer,
+  EVENT_STATUS_NAME varchar(50),
+  UT varchar(12),
+  CTIMESTAMP timestamp,
+  TEAMTYPE varchar(1)
 );
 CREATE TABLE MATCHDETAILS
 (
-  ID Integer,
-  EMATCHID Varchar(20),
-  CTYPE Varchar(20),
-  STATUS Varchar(30),
-  LASTTIME Timestamp,
-  PLAYER Varchar(60),
-  PARTICIPANTID Varchar(12),
-  ELAPSED Integer,
-  UPDATETIME Timestamp,
-  N Integer,
-  INCIDENTTYPEFK Integer,
-  HG Varchar(2),
-  PLAYERCHI Varchar(60),
-  INCIDENTS_ID Varchar(12),
-  TEAM_ID Integer
+  ID integer,
+  EMATCHID varchar(20),
+  CTYPE varchar(20),
+  STATUS varchar(30),
+  LASTTIME timestamp,
+  PLAYER varchar(60),
+  PARTICIPANTID varchar(12),
+  ELAPSED integer,
+  UPDATETIME timestamp,
+  N integer,
+  INCIDENTTYPEFK integer,
+  HG varchar(2),
+  PLAYERCHI varchar(60),
+  INCIDENTS_ID varchar(12),
+  TEAM_ID integer
 );
 CREATE TABLE PARTICIPANT_RESULTS
 (
-  ID Integer NOT NULL,
-  EVENTID Integer NOT NULL,
-  PARTICIPANTID Integer NOT NULL,
-  PROGRESS_412 Varchar(1),
-  WINNER_411 Varchar(1),
-  RESULT_2 Varchar(3),
-  RT_3 Varchar(3),
-  FH_4 Varchar(3),
-  SH_5 Varchar(3),
-  E1H_133 Varchar(2),
-  E2H_134 Varchar(2),
-  PENALTY_7 Varchar(2),
-  OVERTIME_104 Varchar(2),
-  CTIMESTAMP Timestamp,
-  CACTION Varchar(6),
-  TEAMTYPE Varchar(1),
-  PRIMARY KEY (EVENTID,PARTICIPANTID)
+  ID integer NOT NULL,
+  EVENTID integer NOT NULL,
+  PARTICIPANTID integer NOT NULL,
+  PROGRESS_412 varchar(1),
+  WINNER_411 varchar(1),
+  RESULT_2 varchar(3),
+  RT_3 varchar(3),
+  FH_4 varchar(3),
+  SH_5 varchar(3),
+  E1H_133 varchar(2),
+  E2H_134 varchar(2),
+  PENALTY_7 varchar(2),
+  OVERTIME_104 varchar(2),
+  CTIMESTAMP timestamp,
+  CACTION varchar(6),
+  TEAMTYPE varchar(1),
+  CONSTRAINT INTEG_85 PRIMARY KEY (EVENTID,PARTICIPANTID)
 );
 CREATE TABLE PARTICIPANT_STATS
 (
-  ID Integer NOT NULL,
-  EVENTID Integer NOT NULL,
-  PARTICIPANTID Integer NOT NULL,
-  SOT_20 Varchar(3),
-  SOT_21 Varchar(3),
-  ATTACKS_10 Varchar(3),
-  DA_11 Varchar(3),
-  CORNERS_13 Varchar(3),
-  YELLOW_CARDS_8 Varchar(3),
-  RED_CARDS_9 Varchar(3),
-  TOTAL_SHOTS_19 Varchar(3),
-  FOULS_22 Varchar(3),
-  OFFSIDES_24 Varchar(3),
-  PS_14 Varchar(3),
-  PM_15 Varchar(3),
-  PG_16 Varchar(3),
-  FK_25 Varchar(3),
-  DFK_26 Varchar(3),
-  FKG_18 Varchar(3),
-  SW_27 Varchar(3),
-  SB_28 Varchar(3),
-  GS_29 Varchar(3),
-  GK_30 Varchar(3),
-  TI_32 Varchar(3),
-  SUBSTITUTIONS_31 Varchar(3),
-  GOALS_40 Varchar(3),
-  MP_34 Varchar(3),
-  OWN_GOALS_17 Varchar(3),
-  ADW_33 Varchar(3),
-  FORM_716 Varchar(100),
-  SKIN_718 Varchar(8),
-  PS_639 Varchar(3),
-  PU_697 Varchar(3),
-  GOALS115_772 Varchar(3),
-  GOALS1630_773 Varchar(3),
-  GOALS3145_774 Varchar(3),
-  GOALS4660_775 Varchar(3),
-  GOALS6175_776 Varchar(3),
-  GOALS7690_777 Varchar(3),
-  MPG_778 Varchar(3),
-  MPS_779 Varchar(3),
-  CTIMESTAMP Timestamp,
-  CACTION Varchar(6),
-  TEAMTYPE Varchar(1),
-  PRIMARY KEY (EVENTID,PARTICIPANTID)
+  ID integer NOT NULL,
+  EVENTID integer NOT NULL,
+  PARTICIPANTID integer NOT NULL,
+  SOT_20 varchar(3),
+  SOT_21 varchar(3),
+  ATTACKS_10 varchar(3),
+  DA_11 varchar(3),
+  CORNERS_13 varchar(3),
+  YELLOW_CARDS_8 varchar(3),
+  RED_CARDS_9 varchar(3),
+  TOTAL_SHOTS_19 varchar(3),
+  FOULS_22 varchar(3),
+  OFFSIDES_24 varchar(3),
+  PS_14 varchar(3),
+  PM_15 varchar(3),
+  PG_16 varchar(3),
+  FK_25 varchar(3),
+  DFK_26 varchar(3),
+  FKG_18 varchar(3),
+  SW_27 varchar(3),
+  SB_28 varchar(3),
+  GS_29 varchar(3),
+  GK_30 varchar(3),
+  TI_32 varchar(3),
+  SUBSTITUTIONS_31 varchar(3),
+  GOALS_40 varchar(3),
+  MP_34 varchar(3),
+  OWN_GOALS_17 varchar(3),
+  ADW_33 varchar(3),
+  FORM_716 varchar(100),
+  SKIN_718 varchar(8),
+  PS_639 varchar(3),
+  PU_697 varchar(3),
+  GOALS115_772 varchar(3),
+  GOALS1630_773 varchar(3),
+  GOALS3145_774 varchar(3),
+  GOALS4660_775 varchar(3),
+  GOALS6175_776 varchar(3),
+  GOALS7690_777 varchar(3),
+  MPG_778 varchar(3),
+  MPS_779 varchar(3),
+  CTIMESTAMP timestamp,
+  CACTION varchar(6),
+  TEAMTYPE varchar(1),
+  CONSTRAINT INTEG_110 PRIMARY KEY (EVENTID,PARTICIPANTID)
 );
 CREATE TABLE PLAYERS
 (
-  ID Integer NOT NULL,
-  NAME Varchar(100),
-  SHORT_NAME Varchar(50),
-  ACRONYM Varchar(3),
-  GENDER ,
-  BIRTHDATE Varchar(12),
-  POSITION_NAME Varchar(20),
-  AREA_ID Integer,
-  BNATIONAL ,
-  UT Varchar(50),
-  OLD_PARTICIPANT_ID Integer,
-  SLUG Varchar(100),
-  TEAM_ID Integer NOT NULL,
-  BENCH ,
-  SHIRT_NR Integer,
-  SEASON_ID Integer,
-  CTIMESTAMP Timestamp,
-  NAME_CN Varchar(100),
-  PRIMARY KEY (ID,TEAM_ID)
+  ID integer NOT NULL,
+  NAME varchar(100),
+  SHORT_NAME varchar(50),
+  ACRONYM varchar(3),
+  GENDER (1),
+  BIRTHDATE varchar(12),
+  POSITION_NAME varchar(20),
+  AREA_ID integer,
+  BNATIONAL (1),
+  UT varchar(50),
+  OLD_PARTICIPANT_ID integer,
+  SLUG varchar(100),
+  TEAM_ID integer NOT NULL,
+  BENCH (1),
+  SHIRT_NR integer,
+  SEASON_ID integer,
+  CTIMESTAMP timestamp,
+  NAME_CN varchar(100),
+  CONSTRAINT INTEG_69 PRIMARY KEY (ID,TEAM_ID)
 );
 CREATE TABLE SEASONS
 (
-  ID Integer NOT NULL,
-  NAME Varchar(100),
-  COMPETITION_ID Integer,
-  SYEAR Varchar(10),
-  ACTUAL Varchar(10),
-  UT Varchar(12),
-  OLD_SEASON_ID Integer,
-  RANGE Varchar(10),
-  CTIMESTAMP Timestamp,
-  PRIMARY KEY (ID)
+  ID integer NOT NULL,
+  NAME varchar(100),
+  COMPETITION_ID integer,
+  SYEAR varchar(10),
+  ACTUAL varchar(10),
+  UT varchar(12),
+  OLD_SEASON_ID integer,
+  RANGE varchar(10),
+  CTIMESTAMP timestamp,
+  CONSTRAINT INTEG_38 PRIMARY KEY (ID)
 );
 CREATE TABLE STAGES
 (
-  ID Integer NOT NULL,
-  STAGE_NAME_ID Integer,
-  NAME Varchar(50),
-  START_DATE Varchar(12),
-  END_DATE Varchar(12),
-  SHOW_STANDINGS ,
-  GROUPS_NR Integer,
-  ISORT Integer,
-  IS_CURRENT ,
-  UT Varchar(12),
-  OLD_STAGE_ID Integer,
-  SEASON_ID Integer,
-  COMPETITION_ID Integer,
-  AREA_ID Integer,
-  CTIMESTAMP Timestamp,
-  PRIMARY KEY (ID)
+  ID integer NOT NULL,
+  STAGE_NAME_ID integer,
+  NAME varchar(50),
+  START_DATE varchar(12),
+  END_DATE varchar(12),
+  SHOW_STANDINGS (1),
+  GROUPS_NR integer,
+  ISORT integer,
+  IS_CURRENT (1),
+  UT varchar(12),
+  OLD_STAGE_ID integer,
+  SEASON_ID integer,
+  COMPETITION_ID integer,
+  AREA_ID integer,
+  CTIMESTAMP timestamp,
+  CONSTRAINT INTEG_23 PRIMARY KEY (ID)
 );
 CREATE TABLE STATUSES
 (
-  ID Integer NOT NULL,
-  NAME Varchar(30),
-  SHORT_NAME Varchar(15),
-  STATUS_TYPE Varchar(15),
-  PRIMARY KEY (ID)
+  ID integer NOT NULL,
+  NAME varchar(30),
+  SHORT_NAME varchar(15),
+  STATUS_TYPE varchar(15),
+  CONSTRAINT INTEG_113 PRIMARY KEY (ID)
 );
 CREATE TABLE TEAMS
 (
-  ID Integer NOT NULL,
-  NAME Varchar(100),
-  SHORT_NAME Varchar(50),
-  ACRONYM Varchar(3),
-  GENDER ,
-  AREA_ID Integer,
-  BNATIONAL ,
-  UT Varchar(50),
-  OLD_PARTICIPANT_ID Integer,
-  SLUG Varchar(100),
-  SEASON_ID Integer,
-  CTIMESTAMP Timestamp,
-  HKJC_NAME Varchar(100),
-  HKJC_NAME_CN Varchar(100)
+  ID integer NOT NULL,
+  NAME varchar(100),
+  SHORT_NAME varchar(50),
+  ACRONYM varchar(3),
+  GENDER (1),
+  AREA_ID integer,
+  BNATIONAL (1),
+  UT varchar(50),
+  OLD_PARTICIPANT_ID integer,
+  SLUG varchar(100),
+  SEASON_ID integer,
+  CTIMESTAMP timestamp,
+  HKJC_NAME varchar(100),
+  HKJC_NAME_CN varchar(100)
 );
 /********************* VIEWS **********************/
 
@@ -950,24 +954,127 @@ CREATE TABLE TEAMS
 
 SET TERM ^ ;
 CREATE TRIGGER TR_EVENTS_EMATCHES FOR EVENTS ACTIVE
-AFTER INSERT OR UPDATE POSITION 1
+AFTER INSERT OR UPDATE POSITION 0
 AS   
+DECLARE VARIABLE MatchStatus varchar(30); 
 BEGIN 
 IF ( new.CACTION !='delete' ) THEN  
+
+--cancelled  deleted finished inprogress interrupted notstarted unknown
+--Cancelled    /      Finished    /      Interrupted   Not started /    
+IF(new.STATUS_TYPE='live') then
+BEGIN 
+MatchStatus='inprogress';
+END
+IF(new.STATUS_TYPE='finished') then
+BEGIN 
+MatchStatus='finished';
+END
+else IF(new.STATUS_NAME='Cancelled') then
+BEGIN 
+MatchStatus='cancelled';
+END
+--else IF(new.STATUS_NAME='Finished') then
+--BEGIN
+ --MatchStatus='finished';
+--END 
+else IF(new.STATUS_NAME='Interrupted') then
+BEGIN
+ MatchStatus='interrupted';
+END 
+else IF(new.STATUS_NAME='Not started'  ) then
+BEGIN
+ MatchStatus='notstarted';
+END 
+else IF(new.STATUS_NAME is null ) then
+BEGIN
+ MatchStatus='notstarted';
+END 
+else 
+BEGIN
+ MatchStatus='unknown';
+END  
 --update  EMATCHES.STATUS
- --UPDATE  EMATCHES e  set e.STATUS =new.RELATION_STATUS where e.EMATCHID=new.ID ;
- UPDATE  EMATCHES e  set e.STATUS =new.STATUS_NAME where e.EMATCHID=new.ID ;
+--UPDATE  EMATCHES e  set e.STATUS =new.RELATION_STATUS where e.EMATCHID=new.ID ;
+UPDATE  EMATCHES e  set e.STATUS =:MatchStatus,e.CTIMESTAMP=new.CTIMESTAMP where e.EMATCHID=new.ID ;
  END^
 SET TERM ; ^
 SET TERM ^ ;
 CREATE TRIGGER TR_EVENTS_GOALINFO FOR EVENTS ACTIVE
-AFTER INSERT OR UPDATE POSITION 0
+AFTER INSERT OR UPDATE POSITION 1
 AS   
+DECLARE VARIABLE sGameStatus varchar(30); 
 BEGIN 
 IF ( new.CACTION !='delete' ) THEN  
+--"gamestarted" "firsthalfended" "secondhalfstarted"  "secondhalfended" "extratimestarted" "extratimefirsthalfended" 
+--"extratimesecondhalfstarted"  "extratimesecondhalfended" "gameended"
+--9 Halftime HT live 
+--15 Extratime Extra  
+--33 1st half 1st half  
+--34 2nd half 2nd half  
+--35 Extratime 1st half Extra 1st  
+--36 Extratime 2nd half Extra 2nd  
+--37 Extratime halftime Extra HT  
+--48 Waiting for extratime Waiting ET  
+--141 Penalty shootout Penalty  
+--142 Waiting for penalty 
+
+--IF(new.STATUS_NAME='Halftime') then
+IF(new.STATUS_ID=9) then
+BEGIN 
+sGameStatus='firsthalfended';
+END
+--else IF(new.STATUS_NAME='Extratime') then
+else IF(new.STATUS_ID=15) then
+BEGIN 
+sGameStatus='secondhalfended';
+END
+--else IF(new.STATUS_NAME='1st half') then
+else IF(new.STATUS_ID=33) then
+BEGIN
+ sGameStatus='gamestarted';
+END 
+--else IF(new.STATUS_NAME='2nd half') then
+else IF(new.STATUS_ID=34) then
+BEGIN
+ sGameStatus='secondhalfstarted';
+END 
+--else IF(new.STATUS_NAME='Extratime 1st half'  ) then
+else IF(new.STATUS_ID=35) then
+BEGIN
+ sGameStatus='extratimestarted';
+END 
+--else IF(new.STATUS_NAME='Extratime 2nd half'  ) then
+else IF(new.STATUS_ID=36) then
+BEGIN
+ sGameStatus='extratimesecondhalfstarted';
+END 
+--else IF(new.STATUS_NAME='Extratime halftime'  ) then
+else IF(new.STATUS_ID=37) then
+BEGIN
+ sGameStatus='extratimefirsthalfended';
+END  
+--else IF(new.STATUS_NAME='Waiting for extratime'  ) then
+else IF(new.STATUS_ID=48) then
+BEGIN
+ sGameStatus='secondhalfended';
+END 
+--else IF(new.STATUS_NAME='Penalty shootout'  ) then
+else IF(new.STATUS_ID=141) then
+BEGIN
+ sGameStatus='gameended';
+END  
+--else IF(new.STATUS_NAME='Waiting for penalty'  ) then
+else IF(new.STATUS_ID=142) then
+BEGIN
+ sGameStatus='gameended';
+END 
+ BEGIN
+ sGameStatus=new.STATUS_NAME ||' x' ;
+END  
  --update  GOALINFO.GAMESTATUS
- UPDATE OR INSERT INTO  GoalInfo (EMATCHID,  GAMESTATUS)VALUES
-                         (new.ID, new.STATUS_NAME) MATCHING  (EMATCHID) ;
+ UPDATE OR INSERT INTO  GoalInfo (EMATCHID,  GAMESTATUS,LASTTIME)VALUES
+                         (new.ID, :sGameStatus,new.CTIMESTAMP) MATCHING  (EMATCHID) ;
  END^
 SET TERM ; ^
 SET TERM ^ ;
@@ -1038,14 +1145,14 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_AREA7 (
-    ID Integer,
-    AREA_CODE Varchar(5),
-    NAME Varchar(100),
-    PARENT_AREA_ID Integer,
-    UT Varchar(12),
-    CTIMESTAMP Timestamp )
+    ID integer,
+    AREA_CODE varchar(5),
+    NAME varchar(100),
+    PARENT_AREA_ID integer,
+    UT varchar(12),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1058,24 +1165,24 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_COMPETITION (
-    ID Integer,
-    NAME Varchar(100),
-    SHORT_NAME Varchar(50),
-    MINI_NAME Varchar(50),
-    GENDER ,
-    CTYPE Varchar(50),
-    AREA_ID Integer,
-    AREA_TYPE Varchar(50),
-    AREA_SORT Integer,
-    OVERALL_SORT Integer,
-    TOUR_ID Integer,
-    TOUR_NAME Varchar(50),
-    UT Varchar(12),
-    OLD_COMPETITION_ID Integer,
-    SLUG Varchar(100),
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    SHORT_NAME varchar(50),
+    MINI_NAME varchar(50),
+    GENDER (1),
+    CTYPE varchar(50),
+    AREA_ID integer,
+    AREA_TYPE varchar(50),
+    AREA_SORT integer,
+    OVERALL_SORT integer,
+    TOUR_ID integer,
+    TOUR_NAME varchar(50),
+    UT varchar(12),
+    OLD_COMPETITION_ID integer,
+    SLUG varchar(100),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1104,16 +1211,16 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_GROUP (
-    ID Integer,
-    NAME Varchar(10),
-    UT Varchar(12),
-    STAGE_ID Integer,
-    SEASON_ID Integer,
-    COMPETITION_ID Integer,
-    AREA_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(10),
+    UT varchar(12),
+    STAGE_ID integer,
+    SEASON_ID integer,
+    COMPETITION_ID integer,
+    AREA_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1141,20 +1248,20 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_HKJCMATCH (
-    HKJCMATCHNO Integer,
-    HKJCDAYCODE Varchar(3),
-    CMATCHDATETIME Timestamp,
-    HKJCHOSTID Integer,
-    HKJCGUESTID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    HKJCHOSTNAME_CN Varchar(100),
-    HKJCGUESTNAME_CN Varchar(100),
-    STATUS Varchar(15),
-    MAPPINGSTATUS ,
-    CTIMESTAMP Timestamp )
+    HKJCMATCHNO integer,
+    HKJCDAYCODE varchar(3),
+    CMATCHDATETIME timestamp,
+    HKJCHOSTID integer,
+    HKJCGUESTID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    HKJCHOSTNAME_CN varchar(100),
+    HKJCGUESTNAME_CN varchar(100),
+    STATUS varchar(15),
+    MAPPINGSTATUS (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1203,19 +1310,19 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_HKJCMATCH2 (
-    EMATCHID Integer,
-    HKJCMATCHNO Integer,
-    HKJCDAYCODE Varchar(3),
-    CMATCHDATETIME Timestamp,
-    HKJCHOSTID Integer,
-    HKJCGUESTID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    STATUS Varchar(15),
-    MAPPINGSTATUS ,
-    CTIMESTAMP Timestamp )
+    EMATCHID integer,
+    HKJCMATCHNO integer,
+    HKJCDAYCODE varchar(3),
+    CMATCHDATETIME timestamp,
+    HKJCHOSTID integer,
+    HKJCGUESTID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    STATUS varchar(15),
+    MAPPINGSTATUS (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1252,19 +1359,19 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_HKJCMATCH4 (
-    EMATCHID Integer,
-    HKJCMATCHNO Integer,
-    HKJCDAYCODE Varchar(3),
-    CMATCHDATETIME Timestamp,
-    HKJCHOSTID Integer,
-    HKJCGUESTID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    STATUS Varchar(15),
-    MAPPINGSTATUS ,
-    CTIMESTAMP Timestamp )
+    EMATCHID integer,
+    HKJCMATCHNO integer,
+    HKJCDAYCODE varchar(3),
+    CMATCHDATETIME timestamp,
+    HKJCHOSTID integer,
+    HKJCGUESTID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    STATUS varchar(15),
+    MAPPINGSTATUS (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1315,18 +1422,18 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_HKJCMATCH_BAK (
-    HKJCMATCHNO Integer,
-    HKJCDAYCODE Varchar(3),
-    CMATCHDATETIME Timestamp,
-    HKJCHOSTID Integer,
-    HKJCGUESTID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    STATUS Varchar(15),
-    MAPPINGSTATUS ,
-    CTIMESTAMP Timestamp )
+    HKJCMATCHNO integer,
+    HKJCDAYCODE varchar(3),
+    CMATCHDATETIME timestamp,
+    HKJCHOSTID integer,
+    HKJCGUESTID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    STATUS varchar(15),
+    MAPPINGSTATUS (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1379,25 +1486,25 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_PLAYER (
-    ID Integer,
-    NAME Varchar(100),
-    SHORT_NAME Varchar(50),
-    ACRONYM Varchar(3),
-    GENDER ,
-    BIRTHDATE Varchar(12),
-    POSITION_NAME Varchar(20),
-    AREA_ID Integer,
-    BNATIONAL ,
-    UT Varchar(50),
-    OLD_PARTICIPANT_ID Integer,
-    SLUG Varchar(100),
-    BENCH ,
-    SHIRT_NR Integer,
-    TEAM_ID Integer,
-    SEASON_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    SHORT_NAME varchar(50),
+    ACRONYM varchar(3),
+    GENDER (1),
+    BIRTHDATE varchar(12),
+    POSITION_NAME varchar(20),
+    AREA_ID integer,
+    BNATIONAL (1),
+    UT varchar(50),
+    OLD_PARTICIPANT_ID integer,
+    SLUG varchar(100),
+    BENCH (1),
+    SHIRT_NR integer,
+    TEAM_ID integer,
+    SEASON_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1443,17 +1550,17 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_PLAYER2 (
-    ID Integer,
-    NAME Varchar(100),
-    AREA_ID Integer,
-    SLUG Varchar(100),
-    BENCH ,
-    SHIRT_NR Integer,
-    TEAM_ID Integer,
-    SEASON_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    AREA_ID integer,
+    SLUG varchar(100),
+    BENCH (1),
+    SHIRT_NR integer,
+    TEAM_ID integer,
+    SEASON_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1486,17 +1593,17 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_SEASON (
-    ID Integer,
-    NAME Varchar(100),
-    COMPETITION_ID Integer,
-    SYEAR Varchar(10),
-    ACTUAL Varchar(10),
-    UT Varchar(12),
-    OLD_SEASON_ID Integer,
-    RANGE Varchar(10),
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    COMPETITION_ID integer,
+    SYEAR varchar(10),
+    ACTUAL varchar(10),
+    UT varchar(12),
+    OLD_SEASON_ID integer,
+    RANGE varchar(10),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1510,23 +1617,23 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_STAGE (
-    ID Integer,
-    STAGE_NAME_ID Integer,
-    NAME Varchar(50),
-    START_DATE Varchar(12),
-    END_DATE Varchar(12),
-    SHOW_STANDINGS ,
-    GROUPS_NR Integer,
-    ISORT Integer,
-    IS_CURRENT ,
-    UT Varchar(12),
-    OLD_STAGE_ID Integer,
-    SEASON_ID Integer,
-    COMPETITION_ID Integer,
-    AREA_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    STAGE_NAME_ID integer,
+    NAME varchar(50),
+    START_DATE varchar(12),
+    END_DATE varchar(12),
+    SHOW_STANDINGS (1),
+    GROUPS_NR integer,
+    ISORT integer,
+    IS_CURRENT (1),
+    UT varchar(12),
+    OLD_STAGE_ID integer,
+    SEASON_ID integer,
+    COMPETITION_ID integer,
+    AREA_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1568,20 +1675,20 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE ADD_TEAM (
-    ID Integer,
-    NAME Varchar(100),
-    SHORT_NAME Varchar(50),
-    ACRONYM Varchar(3),
-    GENDER ,
-    AREA_ID Integer,
-    BNATIONAL ,
-    UT Varchar(50),
-    OLD_PARTICIPANT_ID Integer,
-    SLUG Varchar(100),
-    SEASON_ID Integer,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    NAME varchar(100),
+    SHORT_NAME varchar(50),
+    ACRONYM varchar(3),
+    GENDER (1),
+    AREA_ID integer,
+    BNATIONAL (1),
+    UT varchar(50),
+    OLD_PARTICIPANT_ID integer,
+    SLUG varchar(100),
+    SEASON_ID integer,
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL; 
@@ -1617,32 +1724,32 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE PR_EVENT_DETAILS (
-    EVENTID Integer,
-    WC_8 Varchar(20),
-    PC_36 Varchar(20),
-    PL_16 Varchar(3),
-    EPL_50 Varchar(3),
-    NOP_17 Varchar(1),
-    EPTC_58 Varchar(100),
-    IT_151 Varchar(2),
-    ATT_141 Varchar(50),
-    FHSD_19 Timestamp,
-    SHSD_20 Timestamp,
-    FEHSD_44 Timestamp,
-    SEHSD_45 Timestamp,
-    PSSD_150 Timestamp,
-    FHIT_201 Varchar(2),
-    SHIT_202 Varchar(2),
-    FEHIT_203 Varchar(2),
-    SEHIT_204 Varchar(2),
-    HL_205 Varchar(8),
-    TD_124 Varchar(4),
-    BM_160 Varchar(4),
-    HF_178 Varchar(4),
-    UT Varchar(12),
-    CTIMESTAMP Timestamp )
+    EVENTID integer,
+    WC_8 varchar(20),
+    PC_36 varchar(20),
+    PL_16 varchar(3),
+    EPL_50 varchar(3),
+    NOP_17 varchar(1),
+    EPTC_58 varchar(100),
+    IT_151 varchar(2),
+    ATT_141 varchar(50),
+    FHSD_19 timestamp,
+    SHSD_20 timestamp,
+    FEHSD_44 timestamp,
+    SEHSD_45 timestamp,
+    PSSD_150 timestamp,
+    FHIT_201 varchar(2),
+    SHIT_202 varchar(2),
+    FEHIT_203 varchar(2),
+    SEHIT_204 varchar(2),
+    HL_205 varchar(8),
+    TD_124 varchar(4),
+    BM_160 varchar(4),
+    HF_178 varchar(4),
+    UT varchar(12),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 DECLARE VARIABLE Result2 Integer; 
 BEGIN
@@ -1709,24 +1816,24 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE PR_INCIDENTS (
-    ID Varchar(12),
-    EVENTID Integer,
-    CACTION Varchar(8),
-    INCIDENT_ID Integer,
-    INCIDENT_NAME Varchar(50),
-    PARTICIPANT_ID Varchar(100),
-    PARTICIPANT_NAME Varchar(100),
-    SUBPARTICIPANT_ID Varchar(100),
-    SUBPARTICIPANT_NAME Varchar(100),
-    IMPORTANT_FOR_TRADER ,
-    EVENT_TIME Varchar(6),
-    EVENT_STATUS_ID Integer,
-    EVENT_STATUS_NAME Varchar(50),
-    UT Varchar(12),
-    CTIMESTAMP Timestamp,
-    TEAMTYPE Varchar(1) )
+    ID varchar(12),
+    EVENTID integer,
+    CACTION varchar(8),
+    INCIDENT_ID integer,
+    INCIDENT_NAME varchar(50),
+    PARTICIPANT_ID varchar(100),
+    PARTICIPANT_NAME varchar(100),
+    SUBPARTICIPANT_ID varchar(100),
+    SUBPARTICIPANT_NAME varchar(100),
+    IMPORTANT_FOR_TRADER (1),
+    EVENT_TIME varchar(6),
+    EVENT_STATUS_ID integer,
+    EVENT_STATUS_NAME varchar(50),
+    UT varchar(12),
+    CTIMESTAMP timestamp,
+    TEAMTYPE varchar(1) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL;  
@@ -1777,34 +1884,34 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE PR_JSON_EVENT (
-    ID Integer,
-    NAME Varchar(100),
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    RELATION_STATUS Varchar(15),
-    START_DATE Timestamp,
-    FT_ONLY ,
-    COVERAGE_TYPE Varchar(10),
-    SCOUTSFEED ,
-    STATUS_ID Integer,
-    STATUS_TYPE Varchar(15),
-    CDAY Varchar(10),
-    CLOCK_TIME Varchar(18),
-    CLOCK_STATUS Varchar(10),
-    BET_STATUS Varchar(10),
-    NEUTRAL_VENUE ,
-    ITEM_STATUS Varchar(10),
-    ROUND_ID Varchar(10),
-    ROUND_NAME Varchar(50),
-    VENUE_ID Varchar(10),
-    STAGE_ID Integer,
-    SEASON_ID Integer,
-    COMPETITION_ID Integer,
-    AREA_ID Integer,
-    CTIMESTAMP Timestamp,
-    CACTION Varchar(6) )
+    ID integer,
+    NAME varchar(100),
+    HOME_ID integer,
+    GUEST_ID integer,
+    RELATION_STATUS varchar(15),
+    START_DATE timestamp,
+    FT_ONLY (1),
+    COVERAGE_TYPE varchar(10),
+    SCOUTSFEED (1),
+    STATUS_ID integer,
+    STATUS_TYPE varchar(15),
+    CDAY varchar(10),
+    CLOCK_TIME varchar(18),
+    CLOCK_STATUS varchar(10),
+    BET_STATUS varchar(10),
+    NEUTRAL_VENUE (1),
+    ITEM_STATUS varchar(10),
+    ROUND_ID varchar(10),
+    ROUND_NAME varchar(50),
+    VENUE_ID varchar(10),
+    STAGE_ID integer,
+    SEASON_ID integer,
+    COMPETITION_ID integer,
+    AREA_ID integer,
+    CTIMESTAMP timestamp,
+    CACTION varchar(6) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 DECLARE VARIABLE STATUSName varchar(30); 
 BEGIN 
@@ -1921,23 +2028,23 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE PR_PARTICIPANT_RESULTS (
-    EVENTID Integer,
-    PARTICIPANTID Integer,
-    PROGRESS_412 Varchar(1),
-    WINNER_411 Varchar(1),
-    RESULT_2 Varchar(3),
-    RT_3 Varchar(3),
-    FH_4 Varchar(3),
-    SH_5 Varchar(3),
-    E1H_133 Varchar(2),
-    E2H_134 Varchar(2),
-    PENALTY_7 Varchar(2),
-    OVERTIME_104 Varchar(2),
-    CTIMESTAMP Timestamp,
-    CACTION Varchar(6),
-    TEAMTYPE Varchar(1) )
+    EVENTID integer,
+    PARTICIPANTID integer,
+    PROGRESS_412 varchar(1),
+    WINNER_411 varchar(1),
+    RESULT_2 varchar(3),
+    RT_3 varchar(3),
+    FH_4 varchar(3),
+    SH_5 varchar(3),
+    E1H_133 varchar(2),
+    E2H_134 varchar(2),
+    PENALTY_7 varchar(2),
+    OVERTIME_104 varchar(2),
+    CTIMESTAMP timestamp,
+    CACTION varchar(6),
+    TEAMTYPE varchar(1) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL;  
@@ -1975,51 +2082,51 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE PR_PARTICIPANT_STATS (
-    EVENTID Integer,
-    PARTICIPANTID Integer,
-    SOT_20 Varchar(3),
-    SOT_21 Varchar(3),
-    ATTACKS_10 Varchar(3),
-    DA_11 Varchar(3),
-    CORNERS_13 Varchar(3),
-    YELLOW_CARDS_8 Varchar(3),
-    RED_CARDS_9 Varchar(3),
-    TOTAL_SHOTS_19 Varchar(3),
-    FOULS_22 Varchar(3),
-    OFFSIDES_24 Varchar(3),
-    PS_14 Varchar(3),
-    PM_15 Varchar(3),
-    PG_16 Varchar(3),
-    FK_25 Varchar(3),
-    DFK_26 Varchar(3),
-    FKG_18 Varchar(3),
-    SW_27 Varchar(3),
-    SB_28 Varchar(3),
-    GS_29 Varchar(3),
-    GK_30 Varchar(3),
-    TI_32 Varchar(3),
-    SUBSTITUTIONS_31 Varchar(3),
-    GOALS_40 Varchar(3),
-    MP_34 Varchar(3),
-    OWN_GOALS_17 Varchar(3),
-    ADW_33 Varchar(3),
-    FORM_716 Varchar(100),
-    SKIN_718 Varchar(8),
-    PS_639 Varchar(3),
-    PU_697 Varchar(3),
-    GOALS115_772 Varchar(3),
-    GOALS1630_773 Varchar(3),
-    GOALS3145_774 Varchar(3),
-    GOALS4660_775 Varchar(3),
-    GOALS6175_776 Varchar(3),
-    GOALS7690_777 Varchar(3),
-    MPG_778 Varchar(3),
-    MPS_779 Varchar(3),
-    CTIMESTAMP Timestamp,
-    CACTION Varchar(6),
-    TEAMTYPE Varchar(1) )
+    EVENTID integer,
+    PARTICIPANTID integer,
+    SOT_20 varchar(3),
+    SOT_21 varchar(3),
+    ATTACKS_10 varchar(3),
+    DA_11 varchar(3),
+    CORNERS_13 varchar(3),
+    YELLOW_CARDS_8 varchar(3),
+    RED_CARDS_9 varchar(3),
+    TOTAL_SHOTS_19 varchar(3),
+    FOULS_22 varchar(3),
+    OFFSIDES_24 varchar(3),
+    PS_14 varchar(3),
+    PM_15 varchar(3),
+    PG_16 varchar(3),
+    FK_25 varchar(3),
+    DFK_26 varchar(3),
+    FKG_18 varchar(3),
+    SW_27 varchar(3),
+    SB_28 varchar(3),
+    GS_29 varchar(3),
+    GK_30 varchar(3),
+    TI_32 varchar(3),
+    SUBSTITUTIONS_31 varchar(3),
+    GOALS_40 varchar(3),
+    MP_34 varchar(3),
+    OWN_GOALS_17 varchar(3),
+    ADW_33 varchar(3),
+    FORM_716 varchar(100),
+    SKIN_718 varchar(8),
+    PS_639 varchar(3),
+    PU_697 varchar(3),
+    GOALS115_772 varchar(3),
+    GOALS1630_773 varchar(3),
+    GOALS3145_774 varchar(3),
+    GOALS4660_775 varchar(3),
+    GOALS6175_776 varchar(3),
+    GOALS7690_777 varchar(3),
+    MPG_778 varchar(3),
+    MPS_779 varchar(3),
+    CTIMESTAMP timestamp,
+    CACTION varchar(6),
+    TEAMTYPE varchar(1) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result = NULL;  
@@ -2113,12 +2220,12 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE PR_RESULT_GOALINFO (
-    EMATCHID Integer,
-    H_GOAL Integer,
-    G_GOAL Integer,
-    LASTTIME Timestamp )
+    EMATCHID integer,
+    H_GOAL integer,
+    G_GOAL integer,
+    LASTTIME timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result= null;   
@@ -2141,14 +2248,14 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE PR_STATS_GOALINFO (
-    EMATCHID Integer,
-    H_YELLOW Integer,
-    H_RED Integer,
-    G_YELLOW Integer,
-    G_RED Integer,
-    LASTTIME Timestamp )
+    EMATCHID integer,
+    H_YELLOW integer,
+    H_RED integer,
+    G_YELLOW integer,
+    G_RED integer,
+    LASTTIME timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result= null;   
@@ -2160,11 +2267,11 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SET_BOOKEDEVENT (
-    ID Integer,
-    BOOKED ,
-    CTIMESTAMP Timestamp )
+    ID integer,
+    BOOKED (1),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
   Result = NULL; 
@@ -2177,12 +2284,12 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SET_BOOKEDEVENTBY (
-    ID Integer,
-    BOOKED ,
-    BOOKED_BY Varchar(50),
-    CTIMESTAMP Timestamp )
+    ID integer,
+    BOOKED (1),
+    BOOKED_BY varchar(50),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
   Result = NULL;  
@@ -2199,12 +2306,12 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SYNCHKJCDATAANDBOOK (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100) )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 DECLARE VARIABLE Result2 Integer; 
 BEGIN
@@ -2219,12 +2326,12 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SYNC_HKJCDATA (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100) )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 DECLARE VARIABLE Result2 Integer; 
 BEGIN
@@ -2244,20 +2351,21 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SYNC_HKJCDATA_AUTO (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    CMATCHDATETIME1 Timestamp,
-    CMATCHDATETIME2 Timestamp )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    CMATCHDATETIME1 timestamp,
+    CMATCHDATETIME2 timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 DECLARE VARIABLE Result2 Integer; 
 BEGIN
     Result = null;  
     Result2=null;
-    SELECT first 1 id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID) OR (home_id=:GUEST_ID  and GUEST_ID =:home_id) and (caction !='delete' or caction is null)  order by start_date desc into : Result2;
+   -- SELECT first 1 id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID) OR (home_id=:GUEST_ID  and GUEST_ID =:home_id) and (caction !='delete' or caction is null)  order by start_date desc into : Result2;
+    SELECT first 1 id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID) and (caction !='delete' or caction is null)  order by start_date desc into : Result2;
     IF (Result2 is null) then 
     begin 
     Result2=0;
@@ -2275,14 +2383,14 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SYNC_HKJCDATA_AUTO_BAK (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100),
-    CMATCHDATETIME1 Timestamp,
-    CMATCHDATETIME2 Timestamp )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100),
+    CMATCHDATETIME1 timestamp,
+    CMATCHDATETIME2 timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 DECLARE VARIABLE Result2 Integer; 
 BEGIN
@@ -2303,12 +2411,12 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SYNC_HKJCDATA_BOOK (
-    HOME_ID Integer,
-    GUEST_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100) )
+    HOME_ID integer,
+    GUEST_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 DECLARE VARIABLE Result2 Integer; 
 BEGIN
@@ -2328,11 +2436,11 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SYNC_MANUAL_HKJCDATA (
-    EVENT_ID Integer,
-    HKJCHOSTNAME Varchar(100),
-    HKJCGUESTNAME Varchar(100) )
+    EVENT_ID integer,
+    HKJCHOSTNAME varchar(100),
+    HKJCGUESTNAME varchar(100) )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result= null;   
@@ -2349,13 +2457,13 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SYNC_MANUAL_HKJCDATA_WEB (
-    EVENT_ID Integer,
-    HKJCDAYCODE Varchar(3),
-    HKJCMATCHNO Integer,
-    CMATCHDATETIME1 Timestamp,
-    CMATCHDATETIME2 Timestamp )
+    EVENT_ID integer,
+    HKJCDAYCODE varchar(3),
+    HKJCMATCHNO integer,
+    CMATCHDATETIME1 timestamp,
+    CMATCHDATETIME2 timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result= null;   
@@ -2372,11 +2480,11 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SYNC_MANUAL_HKJCDATA_WEB_CANCEL (
-    EVENT_ID Integer,
-    HKJCDAYCODE Varchar(3),
-    HKJCMATCHNO Integer )
+    EVENT_ID integer,
+    HKJCDAYCODE varchar(3),
+    HKJCMATCHNO integer )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 BEGIN
     Result= null;   
@@ -2392,14 +2500,14 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE UPDATE_CNNAME_GOALINFO_PLAYERS (
-    EMATCHID Varchar(20),
-    TEAMID Integer,
-    PARTICIPANTID Varchar(12),
-    ENNAME Varchar(60),
-    CNNAME Varchar(60),
-    CTIMESTAMP Timestamp )
+    EMATCHID varchar(20),
+    TEAMID integer,
+    PARTICIPANTID varchar(12),
+    ENNAME varchar(60),
+    CNNAME varchar(60),
+    CTIMESTAMP timestamp )
 RETURNS (
-    RESULT Integer )
+    RESULT integer )
 AS
 DECLARE VARIABLE  playerName Varchar(60);
 BEGIN

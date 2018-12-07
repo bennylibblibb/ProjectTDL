@@ -2,7 +2,7 @@
 <%@ Page language="c#" Codebehind="MatchDetails.aspx.cs" AutoEventWireup="false" Inherits="JC_SoccerWeb.MatchDetails" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
-	<HEAD runat="server">
+	<HEAD  runat="server">
 		<TITLE  >Details</TITLE>
 		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
 		<meta content="C#" name="CODE_LANGUAGE">
@@ -28,17 +28,15 @@
                           <Columns>   
                               <asp:TemplateColumn HeaderText="Host" Visible ="true" >
                                      <ItemTemplate >
-                                         <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.HNAME"):DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME")   %>
-			   <BR/>	 <%#DataBinder.Eval(Container, "DataItem.HmNAMECN") %>
+                                     <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.HNAME"):DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME")   %>
+			   <BR/>	 <strong>   <%#DataBinder.Eval(Container, "DataItem.HmNAMECN") %> </strong>   
                                      </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Guest"  >
                            <ItemTemplate>
-				                          <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.GNAME"):DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME")   %>
-			   <BR/>	 <%#DataBinder.Eval(Container, "DataItem.GmNAMECN") %>
-
-                           </ItemTemplate> </asp:TemplateColumn>
-                                               
-                                                    <asp:TemplateColumn HeaderText="START DATE">
+				                            <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.GNAME"):DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME")   %>
+			   <BR/>	 <strong>    <%#DataBinder.Eval(Container, "DataItem.GmNAMECN") %></strong>   
+                                                          </ItemTemplate> </asp:TemplateColumn>
+                                                                                                   <asp:TemplateColumn HeaderText="START DATE">
                            <ItemTemplate>
 				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue?"":DataBinder.Eval(Container, "DataItem.FHSD_19") %>
 				  <BR/> <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>  

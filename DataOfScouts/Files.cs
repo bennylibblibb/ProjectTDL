@@ -9,7 +9,7 @@ namespace FileLog
     using System.Text;
     using System.Windows.Forms;
     using System.Xml;
-
+    using DataOfScouts;
     public class Files
     {
         private static Encoding _CodePage = Encoding.GetEncoding(65001);
@@ -64,6 +64,11 @@ namespace FileLog
             {
                 this.m_FileName = DateTime.Now.ToString("yyyyMMddHHmmfff");
                 this.m_FileName = this.m_FileName + "." + sType;
+            }
+            else if (iFileType == -1)
+            {
+                this.m_FileName = "";
+                this.m_FileName =  sType;
             }
         }
 
@@ -126,6 +131,24 @@ namespace FileLog
                 files.Close();
             }
         }
+
+        public static void WriteUnBookLog(string sEventMsg)
+        {
+            Files files = new Files();
+            lock (files)
+            {
+                files.FilePath = AppDomain.CurrentDomain.BaseDirectory.ToString() + AppFlag.UnbookFiles;
+                if (!Directory.Exists(files.FilePath))
+                {
+                    Directory.CreateDirectory(files.FilePath);
+                }
+                files.SetFileName(AppFlag.UnbookFiles== "EventFolder\\\\"?-1:0, "UnBook.txt");
+                files.Open();
+                files.Write(DateTime.Now.ToString("HH:mm:ss fff ") + sEventMsg);
+                files.Close();
+            }
+        }
+
         public static void WriteLogNR(string sEventMsg)
         {
             try

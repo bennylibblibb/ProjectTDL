@@ -532,10 +532,16 @@
             }
             if (e.Item.ItemType == ListItemType.EditItem)
             {
-                if (((Anthem.Label)e.Item.Cells[13].Controls[3]).Text != "")
-                {
-                    ((Anthem.DropDownList)e.Item.Cells[13].Controls[1]).SelectedValue = ((Anthem.Label)e.Item.Cells[13].Controls[3]).Text;
-                }
+                //if (((Anthem.Label)e.Item.Cells[13].Controls[3]).Text != "")
+                //{
+                //    ((Anthem.DropDownList)e.Item.Cells[13].Controls[1]).SelectedValue = ((Anthem.Label)e.Item.Cells[13].Controls[3]).Text;
+                //}
+                // ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[19].Controls[0];
+                string sID = ((System.Web.UI.WebControls.Label)e.Item.FindControl("lbID")).Text;
+                lbtnEdit.CausesValidation = true;
+                //  lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure？');";
+                lbtnEdit.Attributes.Add("onclick",  "javascript:OpenMapping("+sID+")");
             }
         }
 
@@ -545,15 +551,17 @@
             {
                 if (e.Item.ItemType == ListItemType.EditItem)
                 {
-                   // string df = "";
-             //  ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text;
+                  //   ((System.Web.UI.WebControls.Button)e.Item.FindControl("btnAlert")).Attributes.Add("onclick", "return confirm('Are you sure?');");
 
-                    //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                    // string df = "";
+                    //  ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text;
+                    ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                     //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                 }
                 else if (e.Item.ItemType == ListItemType.Item)
                 {
-                    //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                   //  ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                   //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                     //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                 }
             }
@@ -603,7 +611,11 @@
                         cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddDays(AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                           id = Convert.ToInt32(cmd2.ExecuteScalar());
                         Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName);
-                     this.dgRankDetails.EditItemIndex = -1;
+                        this.dgRankDetails.EditItemIndex = -1;
+                        if(id>0&&AppFlag.AutoMapping)
+                        {
+                            TeamMapping(eventId, dayCODE, matchNo, start_date, eventName);
+                        }
                     }
                     connection.Close();
                 }
@@ -647,7 +659,7 @@
             this.dgRankDetails.ItemDataBound += new DataGridItemEventHandler(this.dgSchedule_ItemDataBound);
             this.dgRankDetails.EditCommand += new DataGridCommandEventHandler(this.dgSchedule_EditCommand);
             this.dplLeague.SelectedIndexChanged += new EventHandler(this.dplLeague_SelectedIndexChanged);
-           // this.dgRankDetails.ItemCreated += new DataGridItemEventHandler(this.dgSchedule_ItemCreated);
+           this.dgRankDetails.ItemCreated += new DataGridItemEventHandler(this.dgSchedule_ItemCreated);
             this.btnEdit.Click += new EventHandler(this.btnEdit_Click);
 
             base.Load += new EventHandler(this.Page_Load);
@@ -692,6 +704,37 @@
             }
         }
 
+        private void TeamMapping(string eventID,string dayCode,string MatchNo,string startDate ,string eventName)
+        {
+            try
+            {
+                using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                {
+                    connection.Open();
+                    using (FbCommand cmd2 = new FbCommand())
+                    {
+                        cmd2.CommandText = "SYNC_MANUAL_HKJCTEAM_WEB";
+                        cmd2.CommandType = CommandType.StoredProcedure;
+                        cmd2.Connection = connection;
+                        cmd2.Parameters.Add("@EMATCHID", eventID);
+                        cmd2.Parameters.Add("@HKJCDAYCODE", dayCode);
+                        cmd2.Parameters.Add("@HKJCMATCHNO", MatchNo);
+                        cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(startDate).AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(startDate).AddDays(1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventName + "] on Teams");
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception exp)
+            {
+                string exps = exp.ToString();
+                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   TeamMapping()  " + exps);
+            }
+        }
+
+
         private void BindLeague()
         {
             try
@@ -726,7 +769,7 @@
             catch (Exception exp)
             {
                 string exps = exp.ToString();
-                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   BindLeague()  " + exps);
+                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   BindStatus()  " + exps);
             }
         }
 
@@ -766,7 +809,7 @@
             catch (Exception exp)
             {
                 string exps = exp.ToString();
-                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   BindLeague()  " + exps);
+                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   BindEvents()  " + exps);
             }
 
         }

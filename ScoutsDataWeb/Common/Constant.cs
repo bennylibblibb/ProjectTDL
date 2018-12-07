@@ -31,7 +31,8 @@ namespace JC_SoccerWeb.Common
         internal static string CentaSmsAdmin = ConfigurationManager.AppSettings["CentaSmsAdmin"];
         internal static string CentaSmsExtra = ConfigurationManager.AppSettings["CentaSmsExtra"];
         internal static readonly int MarginOfDeviation = Convert.ToInt32(ConfigurationManager.AppSettings["MarginOfDeviation"]);
-          //internal static readonly int CentaSmsSendTime =
+        internal static bool AutoMapping = ConfigurationManager.AppSettings["AutoMapping"].ToLower()=="yes"? true:false;   
+        //internal static readonly int CentaSmsSendTime =
         //    Convert.ToInt32(ConfigurationManager.AppSettings["CentaSmsSendTime"]);
 
         //internal static readonly int UploadRefresh =

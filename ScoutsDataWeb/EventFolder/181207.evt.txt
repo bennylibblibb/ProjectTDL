@@ -1,0 +1,9 @@
+﻿10:51:10 BEN login success.
+16:56:32 BEN login success.
+16:58:00 [Success] Sync [2520173] EMATCHES[FRI 1]  Western Sydney W. - Central Coast M.
+17:16:33 (BEN)   Time out ,please re-login.
+17:16:54 ()   Time out ,please re-login.
+18:06:44 BEN login success.
+18:26:45 (BEN)   Time out ,please re-login.
+18:26:48 ()   Time out ,please re-login.
+18:35:45 BEN login success.

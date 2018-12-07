@@ -1,0 +1,82 @@
+﻿12:01:40 BEN login success.
+12:02:37 BEN login success.
+12:06:02 BEN login success.
+12:10:26 BEN login success.
+12:11:34 BEN login success.
+12:12:24 BEN login success.
+14:43:04 BEN login success.
+14:46:39 BEN login success.
+14:50:38 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:51:09 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:51:51 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:52:00 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:52:24 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:52:57 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:53:25 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:53:36 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:58:07 BEN login success.
+14:58:32 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+14:59:50 [Failure] Sync [2439239] EMATCHES[MON 37]  Olympique Marseille - Reims
+15:04:55 BEN login success.
+15:05:44 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:12:40 BEN login success.
+15:13:02 [Success] Cancel Sync [2451777] EMATCHES[MON 1]  Arsenal Tula - Zenit St Petersburg
+15:13:26 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:13:36 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:14:39 BEN login success.
+15:14:56 [Failure] Sync [2439239] EMATCHES[MON 37]  Olympique Marseille - Reims
+15:15:46 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:22:20 BEN login success.
+15:22:30 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:22:42 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:25:40 BEN login success.
+15:25:48 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:26:00 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:28:09 BEN login success.
+15:28:19 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:28:30 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:29:19 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:29:21 [Failure] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:29:35 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:31:10 BEN login success.
+15:31:22 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:31:36 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:32:41 (BEN)   Time out ,please re-login.
+15:32:47 BEN login success.
+15:32:57 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:33:07 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:33:56 BEN login success.
+15:34:18 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:34:29 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:34:41 (BEN)   Time out ,please re-login.
+15:36:08 BEN login success.
+15:36:18 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:36:29 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+15:41:26 BEN login success.
+15:42:21 (BEN)   Time out ,please re-login.
+15:45:45 BEN login success.
+15:48:46 BEN login success.
+15:49:48 BEN login success.
+15:53:32 BEN login success.
+15:55:40 BEN login success.
+16:15:18 BEN login success.
+16:21:59 BEN login success.
+16:22:11 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+16:23:24 BEN login success.
+16:23:54 BEN login success.
+16:24:39 BEN login success.
+16:25:51 BEN login success.
+16:26:51 BEN login success.
+16:31:33 BEN login success.
+16:36:04 BEN login success.
+16:36:35 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+16:37:05 BEN login success.
+16:37:15 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+16:37:30 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+16:37:56 BEN login success.
+16:38:16 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+16:38:27 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+16:39:50 [Success] Cancel Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+16:40:43 BEN login success.
+16:41:04 [Success] Sync [2439239] EMATCHES[SUN 37]  Olympique Marseille - Reims
+17:52:58 BEN login success.

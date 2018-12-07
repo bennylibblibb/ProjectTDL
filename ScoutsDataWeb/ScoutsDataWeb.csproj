@@ -91,6 +91,7 @@
     <Content Include="resource\spacer.gif" />
     <Content Include="resource\yellow.bmp" />
     <Content Include="SyncMatches.aspx" />
+    <Content Include="TeamMapping.aspx" />
     <Content Include="UserControl\GroupTabs.ascx" />
     <Content Include="UserControl\MenuTabs.ascx" />
     <Content Include="UserControl\SendTabs.ascx" />
@@ -135,6 +136,13 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TeamMapping.aspx.cs">
+      <DependentUpon>TeamMapping.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TeamMapping.aspx.designer.cs">
+      <DependentUpon>TeamMapping.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Update.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

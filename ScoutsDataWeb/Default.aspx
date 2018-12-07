@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
-		<title>Telecom Digital MMS Services-Login</title>
+		<title>HKJC-ScoutsFeed-Login</title>
 		<meta name="GENERATOR" Content="Microsoft Visual Studio .NET 7.1">
 		<meta name="CODE_LANGUAGE" Content="C#">
 		<meta name="vs_defaultClientScript" content="JavaScript">
@@ -49,7 +49,7 @@
 								<td align="center" valign="middle"><br>
 									<table width="600" border="0" cellpadding="0" cellspacing="0">
 										<tr>
-											<td width="299" align="center"><img src="resource/login_left.gif" width="236" height="245"></td>
+											<td width="299" align="center"> </td>
 											<td width="1" class="line_bg"></td>
 											<td width="300"><P>
 													<uc1:SignIn id="SignIn1" runat="server"></uc1:SignIn></P>
@@ -71,21 +71,16 @@
 			<TABLE id="Table10" width="100%">
 				<TR valign="top">
 					<TD valign="top">
-						<P align="left"><FONT color="#000000"><STRONG>電</STRONG></FONT><FONT color="#000000"><STRONG>訊數碼服務系統(下稱「服務系統」) 
+						<P align="left"><FONT color="#000000"><STRONG>電訊數碼服務系統(下稱「服務系統」) 
 									使用聲明<br>
-									<br>
-									Acknowledgement on the use of Telecom Digital’s Services System 2.0 (“Services 
-									System 2.0”)</STRONG>
+									<br>Privacy policy</STRONG>
 								<BR>
-							</FONT>服務系統的所有權和運作權歸電訊數碼信息有限公司（下稱「公司」）所有。當用戶使用服務系統，即代表用戶同意遵守與公司簽訂之服務協議內一切條款及細則及在公司未能通知用戶的情況下不時作出更改之條款及細則。若用戶繼續使用服務系統，即代表用戶同意該等條款及細則之更改。 
-							該等條款及細則之最新版本上載於公司的網頁(www.telecomdigital.cc)內供查閱。 Title, ownership and all 
-							rights and privileges of the Services System shall vest in Telecom Digital Data 
-							Limited (“the Company”) at all time. By using the Services System, the 
-							Subscriber agrees to the terms and conditions as set out in the Service 
-							Agreement which the Company may change from time to time without further 
-							notice. If the Subscriber continues to use the Services System, this means the 
-							Subscriber accepts the changes made to these terms and conditions. A copy of 
-							the latest version will be available on the Company’s website (<a target="_blank" href="http://www.telecomdigital.cc"><FONT color="blue">www.telecomdigital.cc</FONT></a>).</P>
+							</FONT>Privacy policy
+The information contained in this document is confidential and cannot be disclosed to any third party without the
+written permission of STATSCORE sp. z o.o. Disclosure, publication or dissemination of documents or any other
+information contained in this document violates the law.
+                            For more information, please contact our sales department at (<a href="sales@statscore.com"><FONT color="blue">sales@statscore.com</FONT></a>).
+						    website (<a target="_blank" href="http://www.statscore.com"><FONT color="blue">www.statscore.com</FONT></a>).</P>
 						<P style="LINE-HEIGHT: 150%" align="left"><IMG id="ctl00_image2" style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 7px; HEIGHT: 7px; BORDER-RIGHT-WIDTH: 0px"
 								src="resource/green.bmp"> <SPAN class="style9">Best viewed with Internet 
 								Explorer 6 and a screen resolution of&nbsp;1024 X 768.<BR>
@@ -93,7 +88,7 @@
 									src="resource/yellow.bmp"> Copyright 2009 Mango Limited. All Rights 
 								Reserved.<BR>
 								<IMG id="ctl00_image4" style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 7px; HEIGHT: 7px; BORDER-RIGHT-WIDTH: 0px"
-									src="resource/images_41.gif"> Last Update：</SPAN><SPAN class="style2" style="COLOR: #cc3333">[01/05/2015]</SPAN></P>
+									src="resource/images_41.gif"> Last Update：</SPAN><SPAN class="style2" style="COLOR: #cc3333">[12/07/2018]</SPAN></P>
 					</TD>
 				</TR>
 			</TABLE>
