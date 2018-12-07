@@ -144,6 +144,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="SCOUTS_DB.7z" />
+    <None Include="SCOUTS_DB1207.zip" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
