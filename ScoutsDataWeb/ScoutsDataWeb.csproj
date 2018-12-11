@@ -71,6 +71,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="JavaScript.js" />
     <Content Include="MatchDetails.aspx" />
     <Content Include="CentaSmsStyle.css" />
     <Content Include="ChangePassword.aspx" />

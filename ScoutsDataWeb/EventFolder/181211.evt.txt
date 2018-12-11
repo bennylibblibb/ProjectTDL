@@ -1,0 +1,109 @@
+﻿09:35:21 BEN login success.
+09:57:12 BEN login success.
+09:58:08 BEN login success.
+09:58:39 BEN login success.
+10:01:22 BEN login success.
+10:02:40 BEN login success.
+10:03:53 BEN login success.
+10:14:05 BEN login success.
+10:16:22 BEN login success.
+10:18:20 BEN login success.
+10:18:59 BEN login success.
+10:20:11 BEN login success.
+10:21:09 BEN login success.
+10:23:04 BEN login success.
+10:28:26 BEN login success.
+10:30:09 BEN login success.
+10:30:50 BEN login success.
+10:31:36 BEN login success.
+10:32:11 BEN login success.
+10:34:19 BEN login success.
+10:34:51 BEN login success.
+10:36:09 BEN login success.
+10:36:45 BEN login success.
+10:37:19 BEN login success.
+10:40:27 BEN login success.
+10:41:10 BEN login success.
+10:41:35 BEN login success.
+10:52:29 BEN login success.
+10:53:37 BEN login success.
+10:53:59 BEN login success.
+10:54:27 BEN login success.
+10:55:18 BEN login success.
+10:56:11 BEN login success.
+10:56:35 BEN login success.
+10:58:11 BEN login success.
+10:58:42 BEN login success.
+10:59:16 BEN login success.
+10:59:41 BEN login success.
+11:01:39 BEN login success.
+11:02:49 BEN login success.
+11:03:25 BEN login success.
+11:05:06 BEN login success.
+11:05:27 BEN login success.
+11:06:12 BEN login success.
+11:09:33 BEN login success.
+11:11:47 BEN login success.
+11:12:06 BEN login success.
+11:13:05 BEN login success.
+11:13:46 BEN login success.
+11:16:36 BEN login success.
+11:21:21 BEN login success.
+11:24:07 BEN login success.
+11:26:08 BEN login success.
+11:27:53 BEN login success.
+12:09:16 BEN login success.
+12:10:38 BEN login success.
+12:14:57 BEN login success.
+12:17:14 BEN login success.
+12:19:52 BEN login success.
+12:23:40 BEN login success.
+12:25:08 BEN login success.
+12:28:13 BEN login success.
+12:32:08 BEN login success.
+12:38:21 [Success] Cancel Sync [2556345] EMATCHES[THU 3]  Villarreal CF - Spartak Moskva
+12:38:22 [Success] Cancel Sync [2556430] EMATCHES[THU 5]  Sevilla FC - FK Krasnodar
+12:38:23 [Success] Cancel Sync [2556338] EMATCHES[THU 9]  PAOK - BATE Borisov
+12:38:23 [Success] Cancel Sync [2556440] EMATCHES[THU 7]  Besiktas - Malmo FF
+12:38:24 [Success] Cancel Sync [2556442] EMATCHES[THU 8]  KRC Genk - Sarpsborg 08
+12:38:25 [Success] Cancel Sync [2556343] EMATCHES[THU 1]  MOL Vidi - Chelsea
+12:38:27 [Success] Cancel Sync [2556429] EMATCHES[THU 11]  Akhisar Belediye - Standard Liege
+12:38:28 [Success] Cancel Sync [2556384] EMATCHES[THU 10]  Olympique Marseille - Apollon Limassol
+12:38:30 [Success] Cancel Sync [2556434] EMATCHES[THU 6]  Lazio - Eintracht Frankfurt
+12:38:32 [Success] Cancel Sync [2556334] EMATCHES[THU 2]  Rapid Wien - Rangers
+12:38:34 [Success] Cancel Sync [2556441] EMATCHES[THU 4]  Stade Rennes - FC Astana
+12:38:35 [Success] Cancel Sync [2556385] EMATCHES[THU 12]  Dynamo Kyiv - Jablonec
+12:40:08 [Success] Cancel Sync [2492014] EMATCHES[THU 25]  Huracan - Argentinos Juniors
+12:40:09 [Failure] Cancel Sync [2492014] EMATCHES[THU 25]  Huracan - Argentinos Juniors
+12:40:13 [Success] Cancel Sync [2556432] EMATCHES[THU 19]  AEK Larnaca - Bayer 04 Leverkusen
+12:40:15 [Success] Cancel Sync [2556342] EMATCHES[THU 15]  Olympiakos Pireus - AC Milan
+12:40:16 [Failure] Cancel Sync [2556342] EMATCHES[THU 15]  Olympiakos Pireus - AC Milan
+12:40:17 [Failure] Cancel Sync [2556342] EMATCHES[THU 15]  Olympiakos Pireus - AC Milan
+12:40:17 [Success] Cancel Sync [2556433] EMATCHES[THU 17]  FC Kobenhavn - Girondins Bordeaux
+12:40:18 [Failure] Cancel Sync [2556433] EMATCHES[THU 17]  FC Kobenhavn - Girondins Bordeaux
+12:40:18 [Success] Cancel Sync [2556388] EMATCHES[THU 22]  Dudelange - Real Betis
+12:40:19 [Failure] Cancel Sync [2556388] EMATCHES[THU 22]  Dudelange - Real Betis
+12:40:19 [Failure] Cancel Sync [2556388] EMATCHES[THU 22]  Dudelange - Real Betis
+12:40:20 [Failure] Cancel Sync [2556433] EMATCHES[THU 17]  FC Kobenhavn - Girondins Bordeaux
+12:40:20 [Failure] Cancel Sync [2556433] EMATCHES[THU 17]  FC Kobenhavn - Girondins Bordeaux
+12:40:21 [Failure] Cancel Sync [2556433] EMATCHES[THU 17]  FC Kobenhavn - Girondins Bordeaux
+12:40:21 [Failure] Cancel Sync [2556433] EMATCHES[THU 17]  FC Kobenhavn - Girondins Bordeaux
+12:40:22 [Failure] Cancel Sync [2556433] EMATCHES[THU 17]  FC Kobenhavn - Girondins Bordeaux
+12:41:11 BEN logout success.
+12:41:17 BEN login success.
+15:30:13 BEN login success.
+15:33:33 BEN login success.
+15:42:38 BEN login success.
+15:44:06 BEN login success.
+15:45:35 BEN login success.
+15:47:22 BEN login success.
+15:50:35 BEN login success.
+15:54:56 [Success] Cancel Sync [2492014] EMATCHES[THU 25]  Huracan - Argentinos Juniors
+15:56:17 [Success] Sync [2492014] EMATCHES[THU 25]  Huracan - Argentinos Juniors
+15:56:17 [Success] Sync [Huracan - Argentinos Juniors] on Teams
+15:57:19 [Success] Sure [2492014 Huracan - Argentinos Juniors] on Teams
+15:59:39 [Success] Cancel Sync [2556387] EMATCHES[THU 14]  Celtic - Red Bull Salzburg
+16:01:45 [Success] Sure [2556387 Celtic - Red Bull Salzburg] on Teams
+16:03:01 [Success] Sync [2556387] EMATCHES[THU 14]  Celtic - Red Bull Salzburg
+16:03:01 [Success] Sync [Celtic - Red Bull Salzburg] on Teams
+16:11:58 BEN login success.

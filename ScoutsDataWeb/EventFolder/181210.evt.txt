@@ -1,0 +1,51 @@
+﻿10:14:24 BEN login success.
+10:20:52 BEN login success.
+10:22:32 [Success] Sync [2647625] EMATCHES[SUN 1]  Seoul - Busan I'Park
+10:22:33 [Success] Sync [Seoul - Busan I'Park] on Teams
+10:23:52 [Success] Cancel Sync [2647625] EMATCHES[SUN 1]  Seoul - Busan I'Park
+10:24:38 [Success] Sync [2647625] EMATCHES[SUN 1]  Seoul - Busan I'Park
+10:24:38 [Success] Sync [Seoul - Busan I'Park] on Teams
+10:28:15 BEN login success.
+10:30:54 BEN login success.
+10:50:55 (BEN)   Time out ,please re-login.
+10:50:59 ()   Time out ,please re-login.
+12:30:31 BEN login success.
+12:34:26 BEN login success.
+12:36:37 BEN login success.
+12:41:39 BEN login success.
+12:42:29 BEN login success.
+12:46:00 BEN login success.
+12:50:55 BEN login success.
+12:55:25 BEN login success.
+12:55:57 [Success] Sure [System.Web.UI.WebControls.Label] on Teams
+12:56:39 (BEN)   Time out ,please re-login.
+13:04:32 BEN login success.
+13:05:07 [Success] Sure [2648852 Al Ain - Team Wellington] on Teams
+13:07:08 BEN login success.
+13:09:30 [Success] Sure [2451784 Akhmat Grozny - Arsenal Tula] on Teams
+13:10:03 [Success] Sure [2445397 Jong AZ Alkmaar - Telstar] on Teams
+15:08:53 BEN login success.
+15:08:55 [Success] Cancel Sync [2451781] EMATCHES[SUN 27]  Zenit St Petersburg - Rubin Kazan
+15:09:25 [Success] Sure [2495500 Athletic Bilbao - Girona FC] on Teams
+15:09:31 [Success] Sure [2445396 Jong PSV - Cambuur Leeuwarden] on Teams
+15:09:45 [Success] Sure [2436964 Everton FC - Watford FC] on Teams
+15:29:49 (BEN)   Time out ,please re-login.
+15:30:24 BEN login success.
+15:34:35 BEN login success.
+15:37:43 BEN login success.
+16:07:47 BEN login success.
+16:08:28 BEN login success.
+16:58:25 BEN login success.
+16:58:34 [Success] Sure [2556410 Sporting - Vorskla Poltava] on Teams
+16:58:44 [Failure] Sure [2492014 Huracan - Argentinos Juniors] on Teams
+16:58:48 [Success] Sure [2556388 Dudelange - Real Betis] on Teams
+16:59:10 [Success] Sure [2556411 Spartak Trnava - Fenerbahce] on Teams
+16:59:31 [Success] Sure [2556413 Dinamo Zagreb - RSC Anderlecht] on Teams
+17:24:24 BEN login success.
+17:24:52 [Success] Cancel Sync [2492014] EMATCHES[THU 25]  Huracan - Argentinos Juniors
+17:24:56 [Success] Cancel Sync [2556388] EMATCHES[THU 22]  Dudelange - Real Betis
+17:24:57 [Success] Cancel Sync [2556432] EMATCHES[THU 19]  AEK Larnaca - Bayer 04 Leverkusen
+17:24:58 [Success] Cancel Sync [2556412] EMATCHES[THU 13]  Arsenal - Qarabag Agdam
+17:28:46 BEN login success.
+17:48:47 (BEN)   Time out ,please re-login.
+17:57:26 ()   Time out ,please re-login.

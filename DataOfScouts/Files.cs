@@ -144,7 +144,7 @@ namespace FileLog
                 }
                 files.SetFileName(AppFlag.UnbookFiles== "EventFolder\\\\"?-1:0, "UnBook.txt");
                 files.Open();
-                files.Write(DateTime.Now.ToString("HH:mm:ss fff ") + sEventMsg);
+                files.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss fff ") + sEventMsg);
                 files.Close();
             }
         }

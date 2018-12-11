@@ -224,6 +224,11 @@ namespace JC_SoccerWeb
                                 dgGoalInfo.DataSource = data.Tables[0].DefaultView;
                                 dgGoalInfo.DataBind();
                                 dgGoalInfo.UpdateAfterCallBack = true;
+                                if(data.Tables["EVENT_DETAILS"].Rows.Count==0)
+                                {
+                                    btnSave.Visible = false;
+                                    btnSave.UpdateAfterCallBack = true;
+                                }
                             }
                         }
                     }

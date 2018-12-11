@@ -541,7 +541,15 @@
                 string sID = ((System.Web.UI.WebControls.Label)e.Item.FindControl("lbID")).Text;
                 lbtnEdit.CausesValidation = true;
                 //  lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure？');";
-                lbtnEdit.Attributes.Add("onclick",  "javascript:OpenMapping("+sID+")");
+                lbtnEdit.Attributes.Add("onclick", "javascript:OpenMapping(" + sID + ")");
+            }
+            else if( e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                if (((System.Web.UI.WebControls.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text == "")
+                {
+                    System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
+                    lbtnEdit.Visible = false;
+                }
             }
         }
 
@@ -781,8 +789,8 @@
             {
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {//(r.caction !='delete' or r.caction is null) and 
-                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME "
-                       + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id"
+                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS "
+                       + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID"
                        + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'"+ (id.ToString ()=="-1"?"": " and STATUS_ID ="+dplLeague.SelectedValue) +  " order by r.START_DATE ASC  ";
                     using (FbCommand cmd = new FbCommand(queryString))
                     {

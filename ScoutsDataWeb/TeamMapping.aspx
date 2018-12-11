@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TeamMapping.aspx.cs" Inherits="JC_SoccerWeb.TeamMapping" %>
+﻿<%@ Page Language="C#" AutoEventWireup="false" CodeBehind="TeamMapping.aspx.cs" Inherits="JC_SoccerWeb.TeamMapping" %>
 <%@ Register TagPrefix="anthem" Namespace="Anthem" Assembly="Anthem" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 
@@ -63,7 +63,7 @@
                 <tr style="height:10px"><td >  </td></tr>
                   <tr><td> <hr/></td></tr> 
                 <tr style="height:20px" align="right"><td>   <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="300px"    >  </anthem:Label>  </strong></td></tr>
-				 <tr><td align="right"> <anthem:Button  ID="btnSave" runat="server" Text="Save" Visible="false" />  
+				 <tr><td align="right"> <anthem:Button  ID="btnSave" runat="server" Text="Save"  />  
 				     </td></tr>
 			</TABLE> 
     </form>

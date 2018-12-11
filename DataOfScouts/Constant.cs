@@ -26,6 +26,7 @@ namespace DataOfScouts
         internal static readonly int GOALDETAILS = Convert.ToInt32(ConfigurationSettings.AppSettings["GOALDETAILS"]);  
         internal static readonly int IntervalSync = Convert.ToInt32(ConfigurationSettings.AppSettings["IntervalSync"]);
         public static string UnbookFiles = ConfigurationSettings.AppSettings["UnbookFiles"];
+        internal static bool AutoMapping = ConfigurationSettings.AppSettings["AutoMapping"].ToLower() == "yes" ? true : false;
     }
 
     public enum InformationType

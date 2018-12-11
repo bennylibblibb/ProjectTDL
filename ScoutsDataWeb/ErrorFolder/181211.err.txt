@@ -1,0 +1,12 @@
+﻿12:40:10 Cancel sync, error:System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value, IFormatProvider provider)
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.WriteRawParameter(XdrStream xdr, DbField field) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 805
+   at FirebirdSql.Data.Client.Managed.Version13.GdsStatement.WriteParameters() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version13\GdsStatement.cs:line 75
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.SendExecuteToBuffer() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 547
+   at FirebirdSql.Data.Client.Managed.Version12.GdsStatement.Execute() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version12\GdsStatement.cs:line 56
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteCommand(CommandBehavior behavior, Boolean returnsSet) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 1175
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 582
+   at JC_SoccerWeb.Update.dgSchedule_DeleteCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 492

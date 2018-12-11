@@ -11,6 +11,7 @@
     <meta content="JavaScript" name="vs_defaultClientScript">
     <meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
     <LINK href="CentaSmsStyle.css" type="text/css" rel="stylesheet">
+    <script language="JavaScript" src="JavaScript.js" type ="text/javascript"></script>
 <script type="text/javascript">
     function CheckNum(obj) {
         var strvalue = obj.value;
@@ -18,7 +19,7 @@
             alert("Number");
         } else { 
         } 
-    }
+    }  
     function OpenMapping(obj) {
         return;
         window.open('TeamMapping.aspx?id='+obj, '', 'scrollbars=yes, resizable=yes, Width=600,height=250, top=200,left=200');
@@ -87,17 +88,7 @@
                 xShowModalDialog(pagePath, '', winAttrs);
             }
 
-</script>
-    <style type="text/css">
-    .auto-style1 { font-size: medium; }
-    .auto-style2 {
-        width: 4%;
-    }
-    .auto-style3 {
-        width: 934px;
-         height: 30px;
-    }
-    </style>
+</script> 
         </HEAD>
         <body>
         <form id="fm1" method="post" runat="server">
@@ -148,10 +139,10 @@
                                     <TR  valign="bottom" >
                                         <TD    align="center"  height="1"    >
                                         <span > <strong> From</strong></span> 
-                                      <anthem:TextBox ID="txtFrom" runat="server"  Width="100px">        </anthem:TextBox>
+                                      <anthem:TextBox ID="txtFrom" runat="server" onclick="SelectDate(this)"  Width="100px">        </anthem:TextBox>
                                        </TD>  
                                         <TD   align="left" height="1"   > <span > <strong> To</strong></span>
-                                             <anthem:TextBox ID="txtTo" runat="server"  Width="100px">   </anthem:TextBox>
+                                             <anthem:TextBox ID="txtTo" runat="server" onclick="SelectDate(this)"   Width="100px">   </anthem:TextBox>
                                         </TD>
                                         <TD   align="center" height="1"> 
                                             <anthem:DropDownList ID="dplLeague" runat="server" AutoCallBack="True" Width="100px" >
@@ -311,8 +302,8 @@
                                                          </asp:TemplateColumn>
                                                      <asp:TemplateColumn HeaderText="Team Mapping">
                                                         <HeaderStyle Wrap="true" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
-                                                          <a href=# onclick="window.open('TeamMapping.aspx?id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=600,height=250, top=200,left=200')" >																	
-																		<b>Mapping</b>	</a></ItemTemplate>
+                                                          <a href=# onclick="window.open('TeamMapping.aspx?id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=600,height=280, top=200,left=200')" >																	
+																		<b><%# DataBinder.Eval(Container, "DataItem.MAPPING_STATUS")==DBNull.Value? "Mapping" :Convert.ToBoolean(DataBinder.Eval(Container, "DataItem.MAPPING_STATUS"))? "Mapped":"Mapping"  %> </b>	</a></ItemTemplate>
                                                          </asp:TemplateColumn>
 <ASP:EDITCOMMANDCOLUMN EditText="Edit" CancelText="Cancel" UpdateText="Update" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
                                                         <HEADERSTYLE Width="150px"  Wrap="false" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE Width="120px" CssClass="grid-item"></ITEMSTYLE>

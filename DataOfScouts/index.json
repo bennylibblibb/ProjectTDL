@@ -1,2671 +1,607 @@
-/********************* ROLES **********************/
-
-CREATE ROLE RDB$ADMIN;
-/********************* UDFS ***********************/
-
-/****************** GENERATORS ********************/
-
-CREATE GENERATOR GEN_PARTICIPANT_RESULTS;
-CREATE GENERATOR GEN_PARTICIPANT_STATS;
-/******************** DOMAINS *********************/
-
-CREATE DOMAIN MON$SEC_DATABASE
- AS char(7) CHARACTER SET ASCII
- NOT NULL
- COLLATE ASCII;
-CREATE DOMAIN SEC$KEY
- AS varchar(10) CHARACTER SET UNICODE_FSS
- NOT NULL
- COLLATE UNICODE_FSS;
-CREATE DOMAIN SEC$NAME_PART
- AS varchar(10) CHARACTER SET UNICODE_FSS
- NOT NULL
- COLLATE UNICODE_FSS;
-CREATE DOMAIN SEC$USER_NAME
- AS varchar(10) CHARACTER SET UNICODE_FSS
- NOT NULL
- COLLATE UNICODE_FSS;
-CREATE DOMAIN SEC$VALUE
- AS varchar(85) CHARACTER SET UNICODE_FSS
- NOT NULL
- COLLATE UNICODE_FSS;
-CREATE DOMAIN TSTART_DATE
- AS timestamp
- NOT NULL
-;
-/******************* PROCEDURES ******************/
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_AREA7 (
-    ID integer,
-    AREA_CODE varchar(5),
-    NAME varchar(100),
-    PARENT_AREA_ID integer,
-    UT varchar(12),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_COMPETITION (
-    ID integer,
-    NAME varchar(100),
-    SHORT_NAME varchar(50),
-    MINI_NAME varchar(50),
-    GENDER (1),
-    CTYPE varchar(50),
-    AREA_ID integer,
-    AREA_TYPE varchar(50),
-    AREA_SORT integer,
-    OVERALL_SORT integer,
-    TOUR_ID integer,
-    TOUR_NAME varchar(50),
-    UT varchar(12),
-    OLD_COMPETITION_ID integer,
-    SLUG varchar(100),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_GROUP (
-    ID integer,
-    NAME varchar(10),
-    UT varchar(12),
-    STAGE_ID integer,
-    SEASON_ID integer,
-    COMPETITION_ID integer,
-    AREA_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_HKJCMATCH (
-    HKJCMATCHNO integer,
-    HKJCDAYCODE varchar(3),
-    CMATCHDATETIME timestamp,
-    HKJCHOSTID integer,
-    HKJCGUESTID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    HKJCHOSTNAME_CN varchar(100),
-    HKJCGUESTNAME_CN varchar(100),
-    STATUS varchar(15),
-    MAPPINGSTATUS (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_HKJCMATCH2 (
-    EMATCHID integer,
-    HKJCMATCHNO integer,
-    HKJCDAYCODE varchar(3),
-    CMATCHDATETIME timestamp,
-    HKJCHOSTID integer,
-    HKJCGUESTID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    STATUS varchar(15),
-    MAPPINGSTATUS (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_HKJCMATCH4 (
-    EMATCHID integer,
-    HKJCMATCHNO integer,
-    HKJCDAYCODE varchar(3),
-    CMATCHDATETIME timestamp,
-    HKJCHOSTID integer,
-    HKJCGUESTID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    STATUS varchar(15),
-    MAPPINGSTATUS (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_HKJCMATCH_BAK (
-    HKJCMATCHNO integer,
-    HKJCDAYCODE varchar(3),
-    CMATCHDATETIME timestamp,
-    HKJCHOSTID integer,
-    HKJCGUESTID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    STATUS varchar(15),
-    MAPPINGSTATUS (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_PLAYER (
-    ID integer,
-    NAME varchar(100),
-    SHORT_NAME varchar(50),
-    ACRONYM varchar(3),
-    GENDER (1),
-    BIRTHDATE varchar(12),
-    POSITION_NAME varchar(20),
-    AREA_ID integer,
-    BNATIONAL (1),
-    UT varchar(50),
-    OLD_PARTICIPANT_ID integer,
-    SLUG varchar(100),
-    BENCH (1),
-    SHIRT_NR integer,
-    TEAM_ID integer,
-    SEASON_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_PLAYER2 (
-    ID integer,
-    NAME varchar(100),
-    AREA_ID integer,
-    SLUG varchar(100),
-    BENCH (1),
-    SHIRT_NR integer,
-    TEAM_ID integer,
-    SEASON_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_SEASON (
-    ID integer,
-    NAME varchar(100),
-    COMPETITION_ID integer,
-    SYEAR varchar(10),
-    ACTUAL varchar(10),
-    UT varchar(12),
-    OLD_SEASON_ID integer,
-    RANGE varchar(10),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_STAGE (
-    ID integer,
-    STAGE_NAME_ID integer,
-    NAME varchar(50),
-    START_DATE varchar(12),
-    END_DATE varchar(12),
-    SHOW_STANDINGS (1),
-    GROUPS_NR integer,
-    ISORT integer,
-    IS_CURRENT (1),
-    UT varchar(12),
-    OLD_STAGE_ID integer,
-    SEASON_ID integer,
-    COMPETITION_ID integer,
-    AREA_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE ADD_TEAM (
-    ID integer,
-    NAME varchar(100),
-    SHORT_NAME varchar(50),
-    ACRONYM varchar(3),
-    GENDER (1),
-    AREA_ID integer,
-    BNATIONAL (1),
-    UT varchar(50),
-    OLD_PARTICIPANT_ID integer,
-    SLUG varchar(100),
-    SEASON_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE PR_EVENT_DETAILS (
-    EVENTID integer,
-    WC_8 varchar(20),
-    PC_36 varchar(20),
-    PL_16 varchar(3),
-    EPL_50 varchar(3),
-    NOP_17 varchar(1),
-    EPTC_58 varchar(100),
-    IT_151 varchar(2),
-    ATT_141 varchar(50),
-    FHSD_19 timestamp,
-    SHSD_20 timestamp,
-    FEHSD_44 timestamp,
-    SEHSD_45 timestamp,
-    PSSD_150 timestamp,
-    FHIT_201 varchar(2),
-    SHIT_202 varchar(2),
-    FEHIT_203 varchar(2),
-    SEHIT_204 varchar(2),
-    HL_205 varchar(8),
-    TD_124 varchar(4),
-    BM_160 varchar(4),
-    HF_178 varchar(4),
-    UT varchar(12),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE PR_INCIDENTS (
-    ID varchar(12),
-    EVENTID integer,
-    CACTION varchar(8),
-    INCIDENT_ID integer,
-    INCIDENT_NAME varchar(50),
-    PARTICIPANT_ID varchar(100),
-    PARTICIPANT_NAME varchar(100),
-    SUBPARTICIPANT_ID varchar(100),
-    SUBPARTICIPANT_NAME varchar(100),
-    IMPORTANT_FOR_TRADER (1),
-    EVENT_TIME varchar(6),
-    EVENT_STATUS_ID integer,
-    EVENT_STATUS_NAME varchar(50),
-    UT varchar(12),
-    CTIMESTAMP timestamp,
-    TEAMTYPE varchar(1) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE PR_JSON_EVENT (
-    ID integer,
-    NAME varchar(100),
-    HOME_ID integer,
-    GUEST_ID integer,
-    RELATION_STATUS varchar(15),
-    START_DATE timestamp,
-    FT_ONLY (1),
-    COVERAGE_TYPE varchar(10),
-    SCOUTSFEED (1),
-    STATUS_ID integer,
-    STATUS_TYPE varchar(15),
-    CDAY varchar(10),
-    CLOCK_TIME varchar(18),
-    CLOCK_STATUS varchar(10),
-    BET_STATUS varchar(10),
-    NEUTRAL_VENUE (1),
-    ITEM_STATUS varchar(10),
-    ROUND_ID varchar(10),
-    ROUND_NAME varchar(50),
-    VENUE_ID varchar(10),
-    STAGE_ID integer,
-    SEASON_ID integer,
-    COMPETITION_ID integer,
-    AREA_ID integer,
-    CTIMESTAMP timestamp,
-    CACTION varchar(6) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE PR_PARTICIPANT_RESULTS (
-    EVENTID integer,
-    PARTICIPANTID integer,
-    PROGRESS_412 varchar(1),
-    WINNER_411 varchar(1),
-    RESULT_2 varchar(3),
-    RT_3 varchar(3),
-    FH_4 varchar(3),
-    SH_5 varchar(3),
-    E1H_133 varchar(2),
-    E2H_134 varchar(2),
-    PENALTY_7 varchar(2),
-    OVERTIME_104 varchar(2),
-    CTIMESTAMP timestamp,
-    CACTION varchar(6),
-    TEAMTYPE varchar(1) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE PR_PARTICIPANT_STATS (
-    EVENTID integer,
-    PARTICIPANTID integer,
-    SOT_20 varchar(3),
-    SOT_21 varchar(3),
-    ATTACKS_10 varchar(3),
-    DA_11 varchar(3),
-    CORNERS_13 varchar(3),
-    YELLOW_CARDS_8 varchar(3),
-    RED_CARDS_9 varchar(3),
-    TOTAL_SHOTS_19 varchar(3),
-    FOULS_22 varchar(3),
-    OFFSIDES_24 varchar(3),
-    PS_14 varchar(3),
-    PM_15 varchar(3),
-    PG_16 varchar(3),
-    FK_25 varchar(3),
-    DFK_26 varchar(3),
-    FKG_18 varchar(3),
-    SW_27 varchar(3),
-    SB_28 varchar(3),
-    GS_29 varchar(3),
-    GK_30 varchar(3),
-    TI_32 varchar(3),
-    SUBSTITUTIONS_31 varchar(3),
-    GOALS_40 varchar(3),
-    MP_34 varchar(3),
-    OWN_GOALS_17 varchar(3),
-    ADW_33 varchar(3),
-    FORM_716 varchar(100),
-    SKIN_718 varchar(8),
-    PS_639 varchar(3),
-    PU_697 varchar(3),
-    GOALS115_772 varchar(3),
-    GOALS1630_773 varchar(3),
-    GOALS3145_774 varchar(3),
-    GOALS4660_775 varchar(3),
-    GOALS6175_776 varchar(3),
-    GOALS7690_777 varchar(3),
-    MPG_778 varchar(3),
-    MPS_779 varchar(3),
-    CTIMESTAMP timestamp,
-    CACTION varchar(6),
-    TEAMTYPE varchar(1) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE PR_RESULT_GOALINFO (
-    EMATCHID integer,
-    H_GOAL integer,
-    G_GOAL integer,
-    LASTTIME timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE PR_STATS_GOALINFO (
-    EMATCHID integer,
-    H_YELLOW integer,
-    H_RED integer,
-    G_YELLOW integer,
-    G_RED integer,
-    LASTTIME timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SET_BOOKEDEVENT (
-    ID integer,
-    BOOKED (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SET_BOOKEDEVENTBY (
-    ID integer,
-    BOOKED (1),
-    BOOKED_BY varchar(50),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SYNCHKJCDATAANDBOOK (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SYNC_HKJCDATA (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SYNC_HKJCDATA_AUTO (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    CMATCHDATETIME1 timestamp,
-    CMATCHDATETIME2 timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SYNC_HKJCDATA_AUTO_BAK (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    CMATCHDATETIME1 timestamp,
-    CMATCHDATETIME2 timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SYNC_HKJCDATA_BOOK (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SYNC_MANUAL_HKJCDATA (
-    EVENT_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SYNC_MANUAL_HKJCDATA_WEB (
-    EVENT_ID integer,
-    HKJCDAYCODE varchar(3),
-    HKJCMATCHNO integer,
-    CMATCHDATETIME1 timestamp,
-    CMATCHDATETIME2 timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SYNC_MANUAL_HKJCDATA_WEB_CANCEL (
-    EVENT_ID integer,
-    HKJCDAYCODE varchar(3),
-    HKJCMATCHNO integer )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE UPDATE_CNNAME_GOALINFO_PLAYERS (
-    EMATCHID varchar(20),
-    TEAMID integer,
-    PARTICIPANTID varchar(12),
-    ENNAME varchar(60),
-    CNNAME varchar(60),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-/******************** TABLES **********************/
-
-CREATE TABLE AREAS
-(
-  ID integer NOT NULL,
-  AREA_CODE varchar(5),
-  NAME varchar(100),
-  PARENT_AREA_ID integer,
-  UT varchar(12),
-  CTIMESTAMP timestamp,
-  CONSTRAINT INTEG_65 PRIMARY KEY (ID)
-);
-CREATE TABLE AREAS2
-(
-  ID integer NOT NULL,
-  AREA_CODE varchar(5),
-  NAME varchar(100),
-  PARENT_AREA_ID integer,
-  UT varchar(12),
-  CTIMESTAMP varchar(25),
-  CONSTRAINT INTEG_49 PRIMARY KEY (ID)
-);
-CREATE TABLE COMPETITIONS
-(
-  ID integer NOT NULL,
-  NAME varchar(100),
-  SHORT_NAME varchar(50),
-  MINI_NAME varchar(50),
-  GENDER (1),
-  CTYPE varchar(50),
-  AREA_ID integer,
-  AREA_NAME varchar(50),
-  AREA_TYPE varchar(50),
-  AREA_SORT integer,
-  AREA_CODE varchar(5),
-  OVERALL_SORT integer,
-  TOUR_ID integer,
-  TOUR_NAME varchar(50),
-  UT varchar(12),
-  OLD_COMPETITION_ID integer,
-  SLUG varchar(100),
-  CTIMESTAMP timestamp,
-  CONSTRAINT INTEG_55 PRIMARY KEY (ID)
-);
-CREATE TABLE EMATCHES
-(
-  EMATCHID integer,
-  HKJCHOSTID integer,
-  HKJCGUESTID integer,
-  HKJCHOSTNAME varchar(100),
-  HKJCGUESTNAME varchar(100),
-  HKJCDAYCODE varchar(3),
-  HKJCMATCHNO integer,
-  STATUS varchar(30),
-  CMATCHDATETIME timestamp,
-  MAPPINGSTATUS (1),
-  CTIMESTAMP timestamp,
-  HKJCHOSTNAME_CN varchar(100),
-  HKJCGUESTNAME_CN varchar(100)
-);
-CREATE TABLE EVENTS
-(
-  ID integer NOT NULL,
-  NAME varchar(100),
-  HOME_ID integer NOT NULL,
-  GUEST_ID integer NOT NULL,
-  SOURCE varchar(10),
-  SOURCE_DC (1),
-  SOURCE_SUPER varchar(10),
-  RELATION_STATUS varchar(15),
-  START_DATE TSTART_DATE,
-  FT_ONLY (1),
-  COVERAGE_TYPE varchar(10),
-  CHANNEL_ID varchar(10),
-  CHANNEL_NAME varchar(50),
-  SCOUTSFEED (1),
-  STATUS_ID integer,
-  STATUS_NAME varchar(30),
-  STATUS_TYPE varchar(15),
-  CDAY varchar(10),
-  CLOCK_TIME varchar(18),
-  CLOCK_STATUS varchar(10),
-  WINNER_ID varchar(10),
-  PROGRESS_ID varchar(10),
-  BET_STATUS varchar(10),
-  NEUTRAL_VENUE (1),
-  ITEM_STATUS varchar(10),
-  UT varchar(12),
-  OLD_EVENT_ID integer,
-  SLUG varchar(100),
-  VERIFIED_RESULT (1),
-  IS_PROTOCOL_VERIFIED (1),
-  PROTOCOL_VERIFIED_BY varchar(10),
-  PROTOCOL_VERIFIED_AT varchar(10),
-  ROUND_ID varchar(10),
-  ROUND_NAME varchar(50),
-  CLIENT_EVENT_ID integer,
-  BOOKED (1),
-  BOOKED_BY varchar(50),
-  INVERTED_PARTICIPANTS (1),
-  VENUE_ID varchar(10),
-  GROUP_ID integer,
-  STAGE_ID integer,
-  SEASON_ID integer,
-  COMPETITION_ID integer,
-  AREA_ID integer,
-  CTIMESTAMP timestamp,
-  CACTION varchar(6),
-  CONSTRAINT INTEG_47 PRIMARY KEY (ID)
-);
-CREATE TABLE EVENT_DETAILS
-(
-  EVENTID integer NOT NULL,
-  WC_8 varchar(20),
-  PC_36 varchar(20),
-  PL_16 varchar(3),
-  EPL_50 varchar(3),
-  NOP_17 varchar(1),
-  EPTC_58 varchar(100),
-  IT_151 varchar(2),
-  ATT_141 varchar(50),
-  FHSD_19 timestamp,
-  SHSD_20 timestamp,
-  FEHSD_44 timestamp,
-  SEHSD_45 timestamp,
-  PSSD_150 timestamp,
-  FHIT_201 varchar(2),
-  SHIT_202 varchar(2),
-  FEHIT_203 varchar(2),
-  SEHIT_204 varchar(2),
-  HL_205 varchar(8),
-  TD_124 varchar(4),
-  BM_160 varchar(4),
-  HF_178 varchar(4),
-  UT varchar(12),
-  CTIMESTAMP timestamp,
-  CONSTRAINT INTEG_93 PRIMARY KEY (EVENTID)
-);
-CREATE TABLE GOALINFO
-(
-  EMATCHID integer NOT NULL,
-  HRUNSCOREID integer,
-  GRUNSCOREID integer,
-  H_GOAL integer,
-  G_GOAL integer,
-  H_YELLOW integer,
-  H_RED integer,
-  G_YELLOW integer,
-  G_RED integer,
-  RECTIME timestamp,
-  LASTTIME timestamp,
-  GAMESTATUS varchar(30),
-  STATUSFK integer,
-  ELAPSED integer,
-  TEAMTYPE varchar(1),
-  CONSTRAINT INTEG_60 PRIMARY KEY (EMATCHID)
-);
-CREATE TABLE GROUPS
-(
-  ID integer NOT NULL,
-  NAME varchar(10),
-  UT varchar(12),
-  STAGE_ID integer NOT NULL,
-  SEASON_ID integer NOT NULL,
-  COMPETITION_ID integer NOT NULL,
-  AREA_ID integer,
-  CTIMESTAMP timestamp,
-  CONSTRAINT INTEG_71 PRIMARY KEY (ID,STAGE_ID,SEASON_ID,COMPETITION_ID)
-);
-CREATE TABLE INCIDENTS
-(
-  ID varchar(12),
-  EVENTID integer,
-  CACTION varchar(8),
-  INCIDENT_ID integer,
-  INCIDENT_NAME varchar(50),
-  PARTICIPANT_ID varchar(100),
-  PARTICIPANT_NAME varchar(100),
-  SUBPARTICIPANT_ID varchar(100),
-  SUBPARTICIPANT_NAME varchar(100),
-  IMPORTANT_FOR_TRADER (1),
-  EVENT_TIME varchar(6),
-  EVENT_STATUS_ID integer,
-  EVENT_STATUS_NAME varchar(50),
-  UT varchar(12),
-  CTIMESTAMP timestamp,
-  TEAMTYPE varchar(1)
-);
-CREATE TABLE MATCHDETAILS
-(
-  ID integer,
-  EMATCHID varchar(20),
-  CTYPE varchar(20),
-  STATUS varchar(30),
-  LASTTIME timestamp,
-  PLAYER varchar(60),
-  PARTICIPANTID varchar(12),
-  ELAPSED integer,
-  UPDATETIME timestamp,
-  N integer,
-  INCIDENTTYPEFK integer,
-  HG varchar(2),
-  PLAYERCHI varchar(60),
-  INCIDENTS_ID varchar(12),
-  TEAM_ID integer
-);
-CREATE TABLE PARTICIPANT_RESULTS
-(
-  ID integer NOT NULL,
-  EVENTID integer NOT NULL,
-  PARTICIPANTID integer NOT NULL,
-  PROGRESS_412 varchar(1),
-  WINNER_411 varchar(1),
-  RESULT_2 varchar(3),
-  RT_3 varchar(3),
-  FH_4 varchar(3),
-  SH_5 varchar(3),
-  E1H_133 varchar(2),
-  E2H_134 varchar(2),
-  PENALTY_7 varchar(2),
-  OVERTIME_104 varchar(2),
-  CTIMESTAMP timestamp,
-  CACTION varchar(6),
-  TEAMTYPE varchar(1),
-  CONSTRAINT INTEG_85 PRIMARY KEY (EVENTID,PARTICIPANTID)
-);
-CREATE TABLE PARTICIPANT_STATS
-(
-  ID integer NOT NULL,
-  EVENTID integer NOT NULL,
-  PARTICIPANTID integer NOT NULL,
-  SOT_20 varchar(3),
-  SOT_21 varchar(3),
-  ATTACKS_10 varchar(3),
-  DA_11 varchar(3),
-  CORNERS_13 varchar(3),
-  YELLOW_CARDS_8 varchar(3),
-  RED_CARDS_9 varchar(3),
-  TOTAL_SHOTS_19 varchar(3),
-  FOULS_22 varchar(3),
-  OFFSIDES_24 varchar(3),
-  PS_14 varchar(3),
-  PM_15 varchar(3),
-  PG_16 varchar(3),
-  FK_25 varchar(3),
-  DFK_26 varchar(3),
-  FKG_18 varchar(3),
-  SW_27 varchar(3),
-  SB_28 varchar(3),
-  GS_29 varchar(3),
-  GK_30 varchar(3),
-  TI_32 varchar(3),
-  SUBSTITUTIONS_31 varchar(3),
-  GOALS_40 varchar(3),
-  MP_34 varchar(3),
-  OWN_GOALS_17 varchar(3),
-  ADW_33 varchar(3),
-  FORM_716 varchar(100),
-  SKIN_718 varchar(8),
-  PS_639 varchar(3),
-  PU_697 varchar(3),
-  GOALS115_772 varchar(3),
-  GOALS1630_773 varchar(3),
-  GOALS3145_774 varchar(3),
-  GOALS4660_775 varchar(3),
-  GOALS6175_776 varchar(3),
-  GOALS7690_777 varchar(3),
-  MPG_778 varchar(3),
-  MPS_779 varchar(3),
-  CTIMESTAMP timestamp,
-  CACTION varchar(6),
-  TEAMTYPE varchar(1),
-  CONSTRAINT INTEG_110 PRIMARY KEY (EVENTID,PARTICIPANTID)
-);
-CREATE TABLE PLAYERS
-(
-  ID integer NOT NULL,
-  NAME varchar(100),
-  SHORT_NAME varchar(50),
-  ACRONYM varchar(3),
-  GENDER (1),
-  BIRTHDATE varchar(12),
-  POSITION_NAME varchar(20),
-  AREA_ID integer,
-  BNATIONAL (1),
-  UT varchar(50),
-  OLD_PARTICIPANT_ID integer,
-  SLUG varchar(100),
-  TEAM_ID integer NOT NULL,
-  BENCH (1),
-  SHIRT_NR integer,
-  SEASON_ID integer,
-  CTIMESTAMP timestamp,
-  NAME_CN varchar(100),
-  CONSTRAINT INTEG_69 PRIMARY KEY (ID,TEAM_ID)
-);
-CREATE TABLE SEASONS
-(
-  ID integer NOT NULL,
-  NAME varchar(100),
-  COMPETITION_ID integer,
-  SYEAR varchar(10),
-  ACTUAL varchar(10),
-  UT varchar(12),
-  OLD_SEASON_ID integer,
-  RANGE varchar(10),
-  CTIMESTAMP timestamp,
-  CONSTRAINT INTEG_38 PRIMARY KEY (ID)
-);
-CREATE TABLE STAGES
-(
-  ID integer NOT NULL,
-  STAGE_NAME_ID integer,
-  NAME varchar(50),
-  START_DATE varchar(12),
-  END_DATE varchar(12),
-  SHOW_STANDINGS (1),
-  GROUPS_NR integer,
-  ISORT integer,
-  IS_CURRENT (1),
-  UT varchar(12),
-  OLD_STAGE_ID integer,
-  SEASON_ID integer,
-  COMPETITION_ID integer,
-  AREA_ID integer,
-  CTIMESTAMP timestamp,
-  CONSTRAINT INTEG_23 PRIMARY KEY (ID)
-);
-CREATE TABLE STATUSES
-(
-  ID integer NOT NULL,
-  NAME varchar(30),
-  SHORT_NAME varchar(15),
-  STATUS_TYPE varchar(15),
-  CONSTRAINT INTEG_113 PRIMARY KEY (ID)
-);
-CREATE TABLE TEAMS
-(
-  ID integer NOT NULL,
-  NAME varchar(100),
-  SHORT_NAME varchar(50),
-  ACRONYM varchar(3),
-  GENDER (1),
-  AREA_ID integer,
-  BNATIONAL (1),
-  UT varchar(50),
-  OLD_PARTICIPANT_ID integer,
-  SLUG varchar(100),
-  SEASON_ID integer,
-  CTIMESTAMP timestamp,
-  HKJC_NAME varchar(100),
-  HKJC_NAME_CN varchar(100)
-);
-/********************* VIEWS **********************/
-
-/******************* EXCEPTIONS *******************/
-
-/******************** TRIGGERS ********************/
-
-SET TERM ^ ;
-CREATE TRIGGER TR_EVENTS_EMATCHES FOR EVENTS ACTIVE
-AFTER INSERT OR UPDATE POSITION 0
-AS   
-DECLARE VARIABLE MatchStatus varchar(30); 
-BEGIN 
-IF ( new.CACTION !='delete' ) THEN  
-
---cancelled  deleted finished inprogress interrupted notstarted unknown
---Cancelled    /      Finished    /      Interrupted   Not started /    
-IF(new.STATUS_TYPE='live') then
-BEGIN 
-MatchStatus='inprogress';
-END
-IF(new.STATUS_TYPE='finished') then
-BEGIN 
-MatchStatus='finished';
-END
-else IF(new.STATUS_NAME='Cancelled') then
-BEGIN 
-MatchStatus='cancelled';
-END
---else IF(new.STATUS_NAME='Finished') then
---BEGIN
- --MatchStatus='finished';
---END 
-else IF(new.STATUS_NAME='Interrupted') then
-BEGIN
- MatchStatus='interrupted';
-END 
-else IF(new.STATUS_NAME='Not started'  ) then
-BEGIN
- MatchStatus='notstarted';
-END 
-else IF(new.STATUS_NAME is null ) then
-BEGIN
- MatchStatus='notstarted';
-END 
-else 
-BEGIN
- MatchStatus='unknown';
-END  
---update  EMATCHES.STATUS
---UPDATE  EMATCHES e  set e.STATUS =new.RELATION_STATUS where e.EMATCHID=new.ID ;
-UPDATE  EMATCHES e  set e.STATUS =:MatchStatus,e.CTIMESTAMP=new.CTIMESTAMP where e.EMATCHID=new.ID ;
- END^
-SET TERM ; ^
-SET TERM ^ ;
-CREATE TRIGGER TR_EVENTS_GOALINFO FOR EVENTS ACTIVE
-AFTER INSERT OR UPDATE POSITION 1
-AS   
-DECLARE VARIABLE sGameStatus varchar(30); 
-BEGIN 
-IF ( new.CACTION !='delete' ) THEN  
---"gamestarted" "firsthalfended" "secondhalfstarted"  "secondhalfended" "extratimestarted" "extratimefirsthalfended" 
---"extratimesecondhalfstarted"  "extratimesecondhalfended" "gameended"
---9 Halftime HT live 
---15 Extratime Extra  
---33 1st half 1st half  
---34 2nd half 2nd half  
---35 Extratime 1st half Extra 1st  
---36 Extratime 2nd half Extra 2nd  
---37 Extratime halftime Extra HT  
---48 Waiting for extratime Waiting ET  
---141 Penalty shootout Penalty  
---142 Waiting for penalty 
-
---IF(new.STATUS_NAME='Halftime') then
-IF(new.STATUS_ID=9) then
-BEGIN 
-sGameStatus='firsthalfended';
-END
---else IF(new.STATUS_NAME='Extratime') then
-else IF(new.STATUS_ID=15) then
-BEGIN 
-sGameStatus='secondhalfended';
-END
---else IF(new.STATUS_NAME='1st half') then
-else IF(new.STATUS_ID=33) then
-BEGIN
- sGameStatus='gamestarted';
-END 
---else IF(new.STATUS_NAME='2nd half') then
-else IF(new.STATUS_ID=34) then
-BEGIN
- sGameStatus='secondhalfstarted';
-END 
---else IF(new.STATUS_NAME='Extratime 1st half'  ) then
-else IF(new.STATUS_ID=35) then
-BEGIN
- sGameStatus='extratimestarted';
-END 
---else IF(new.STATUS_NAME='Extratime 2nd half'  ) then
-else IF(new.STATUS_ID=36) then
-BEGIN
- sGameStatus='extratimesecondhalfstarted';
-END 
---else IF(new.STATUS_NAME='Extratime halftime'  ) then
-else IF(new.STATUS_ID=37) then
-BEGIN
- sGameStatus='extratimefirsthalfended';
-END  
---else IF(new.STATUS_NAME='Waiting for extratime'  ) then
-else IF(new.STATUS_ID=48) then
-BEGIN
- sGameStatus='secondhalfended';
-END 
---else IF(new.STATUS_NAME='Penalty shootout'  ) then
-else IF(new.STATUS_ID=141) then
-BEGIN
- sGameStatus='gameended';
-END  
---else IF(new.STATUS_NAME='Waiting for penalty'  ) then
-else IF(new.STATUS_ID=142) then
-BEGIN
- sGameStatus='gameended';
-END 
- BEGIN
- sGameStatus=new.STATUS_NAME ||' x' ;
-END  
- --update  GOALINFO.GAMESTATUS
- UPDATE OR INSERT INTO  GoalInfo (EMATCHID,  GAMESTATUS,LASTTIME)VALUES
-                         (new.ID, :sGameStatus,new.CTIMESTAMP) MATCHING  (EMATCHID) ;
- END^
-SET TERM ; ^
-SET TERM ^ ;
-CREATE TRIGGER TR_GEN_PARTICIPANT_RESULTS FOR PARTICIPANT_RESULTS ACTIVE
-BEFORE INSERT POSITION 0
-AS 
-BEGIN 
-    if( (new.ID is null) or (new.ID=0)) then
-    begin
-        new.ID=gen_id(GEN_participant_results,1);
-    end
-END^
-SET TERM ; ^
-SET TERM ^ ;
-CREATE TRIGGER TR_GEN_PARTICIPANT_STATS FOR PARTICIPANT_STATS ACTIVE
-BEFORE INSERT POSITION 0
-AS 
-BEGIN 
-    if( (new.ID is null) or (new.ID=0)) then
-    begin
-        new.ID=gen_id(GEN_participant_stats,1);
-    end
-END^
-SET TERM ; ^
-SET TERM ^ ;
-CREATE TRIGGER TR_INCIDENTS_MATCHDETAILS FOR INCIDENTS ACTIVE
-AFTER INSERT OR UPDATE POSITION 0
-AS  
-DECLARE VARIABLE STYPE VARCHAR(10); 
-DECLARE VARIABLE EVENTTIME integer; 
-DECLARE VARIABLE playername varchar(100); 
-BEGIN 
-IF (new.CACTION !='delete' and (new.INCIDENT_ID=413 OR new.INCIDENT_ID=418 OR new.INCIDENT_ID=419 )) THEN 
-BEGIN   
-
-IF(new.INCIDENT_ID=413) then
-BEGIN 
-STYPE='goal';
-END
-else IF(new.INCIDENT_ID=418) then
-BEGIN 
-STYPE='rcard';
-END
-else 
-BEGIN
- STYPE='ycard';
-END 
-
-playername=null;
-if(new.PARTICIPANT_ID is not null and new.SUBPARTICIPANT_ID is not null  and new.SUBPARTICIPANT_NAME is not null) then
- begin 
-  --add current player to players table
- --UPDATE OR INSERT INTO  players ( ID,NAME,TEAM_ID,CTIMESTAMP  ) VALUES  (new.SUBPARTICIPANT_ID,new.PARTICIPANT_NAME,new.PARTICIPANT_ID,new.CTIMESTAMP ) MATCHING  (ID) ;
- UPDATE OR INSERT INTO  players ( ID,NAME,NAME_CN,TEAM_ID,CTIMESTAMP  ) VALUES  (new.SUBPARTICIPANT_ID,NEW.SUBPARTICIPANT_NAME,NULL,NEW.PARTICIPANT_ID,new.CTIMESTAMP ) MATCHING  (ID,TEAM_ID) ;
- SELECT first 1 name_cn FROM players WHERE id=new.SUBPARTICIPANT_ID into : playername;  
- end
- 
-UPDATE OR INSERT INTO  MATCHDETAILS ( ID,EMATCHID,CTYPE,STATUS , LASTTIME  ,  PLAYER  ,
-                         PARTICIPANTID,ELAPSED,UPDATETIME,N,INCIDENTTYPEFK , HG ,  PLAYERCHI, INCIDENTS_ID,Team_id )VALUES
-                         (null,new.EVENTID, :STYPE,new.EVENT_STATUS_NAME,new.CTIMESTAMP,  new.SUBPARTICIPANT_NAME,
-                         new.SUBPARTICIPANT_ID,  SUBSTRING(new.EVENT_TIME FROM 1 FOR 2) , current_timestamp ,null,null,New.TeamType,:playername ,NEW.ID,NEW.PARTICIPANT_ID) MATCHING  (INCIDENTS_ID) ;
-UPDATE  GOALINFO g set  g.ELAPSED=SUBSTRING(new.EVENT_TIME FROM 1 FOR 2), LASTTIME =new.CTIMESTAMP WHERE  g.EMATCHID=new.EVENTID; 
-
-END   
-
-END^
-SET TERM ; ^
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_AREA7 (
-    ID integer,
-    AREA_CODE varchar(5),
-    NAME varchar(100),
-    PARENT_AREA_ID integer,
-    UT varchar(12),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT ID FROM AREAS2 WHERE id= :ID into :Result;
-   IF (Result is NULL) then
- INSERT INTO AREAS2(ID, AREA_CODE,  NAME ,  PARENT_AREA_ID ,  UT  ,  CTIMESTAMP)VALUES  (:ID, :AREA_CODE, :NAME  , :PARENT_AREA_ID, :UT  , :CTIMESTAMP )  RETURNING ID INTO :Result;
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_COMPETITION (
-    ID integer,
-    NAME varchar(100),
-    SHORT_NAME varchar(50),
-    MINI_NAME varchar(50),
-    GENDER (1),
-    CTYPE varchar(50),
-    AREA_ID integer,
-    AREA_TYPE varchar(50),
-    AREA_SORT integer,
-    OVERALL_SORT integer,
-    TOUR_ID integer,
-    TOUR_NAME varchar(50),
-    UT varchar(12),
-    OLD_COMPETITION_ID integer,
-    SLUG varchar(100),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT ID FROM COMPETITIONS WHERE id= :ID into :Result;
-   IF (Result is NULL) then
- INSERT INTO COMPETITIONS(id ,   name ,         short_name ,         mini_name  ,         gender     ,         ctype  ,         area_id  ,          area_type  ,         area_sort  ,          overall_sort ,           tour_id  ,         tour_name  ,         ut  ,         old_competition_id  ,         slug  ,         ctimestamp)
-VALUES  (:id ,
-         :name ,
-         :short_name ,
-         :mini_name  ,
-         :gender     ,
-         :ctype  ,
-         :area_id  , 
-         :area_type  ,
-         :area_sort  , 
-         :overall_sort , 
-         :tour_id  ,
-         :tour_name  ,
-        :ut  ,
-         :old_competition_id  ,
-         :slug  ,
-         :ctimestamp)  RETURNING ID INTO :Result;
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_GROUP (
-    ID integer,
-    NAME varchar(10),
-    UT varchar(12),
-    STAGE_ID integer,
-    SEASON_ID integer,
-    COMPETITION_ID integer,
-    AREA_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT ID FROM GROUPS WHERE id= :ID and STAGE_ID =:STAGE_ID    and SEASON_ID =:SEASON_ID   and COMPETITION_ID =:COMPETITION_ID  into :Result;
-   IF (Result is NULL) then
- INSERT INTO GROUPS(ID ,
-  NAME ,
-  UT ,
-  STAGE_ID ,
-  SEASON_ID ,
-  COMPETITION_ID,
-  AREA_ID ,
-  CTIMESTAMP )
-VALUES  (:ID ,
- :NAME ,
- :UT ,
- :STAGE_ID ,
- :SEASON_ID ,
- :COMPETITION_ID,
-  :AREA_ID ,
-  :CTIMESTAMP )  RETURNING ID INTO :Result;
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_HKJCMATCH (
-    HKJCMATCHNO integer,
-    HKJCDAYCODE varchar(3),
-    CMATCHDATETIME timestamp,
-    HKJCHOSTID integer,
-    HKJCGUESTID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    HKJCHOSTNAME_CN varchar(100),
-    HKJCGUESTNAME_CN varchar(100),
-    STATUS varchar(15),
-    MAPPINGSTATUS (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT count(*) FROM EMATCHES  WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME  into :Result;
-IF (Result = 0) then
-begin
- INSERT INTO EMATCHES( 
-  HKJCMATCHNO ,
-  HKJCDAYCODE , 
-  CMATCHDATETIME , 
-  HKJCHOSTID ,
-  HKJCGUESTID ,
-  HKJCHOSTNAME ,
-  HKJCGUESTNAME ,
-    HKJCHOSTNAME_CN,
-  HKJCGUESTNAME_CN ,
-  STATUS,
-  MAPPINGSTATUS,
-  CTIMESTAMP )
-VALUES  ( 
-  :HKJCMATCHNO ,
-  :HKJCDAYCODE , 
-  :CMATCHDATETIME , 
-  :HKJCHOSTID ,
-  :HKJCGUESTID ,
-  :HKJCHOSTNAME ,
-  :HKJCGUESTNAME ,
-   :HKJCHOSTNAME_CN,
-  :HKJCGUESTNAME_CN ,
-  :STATUS,
-  --null,
-  :MAPPINGSTATUS,
-  :CTIMESTAMP  )  ;
--- RETURNING EMATCHID  INTO :RESULT; 
- RESULT=0; 
- end 
-ELSE 
-begin
- UPDATE  EMATCHES set CMATCHDATETIME=:CMATCHDATETIME, CTIMESTAMP =:CTIMESTAMP, HKJCHOSTNAME_CN =:HKJCHOSTNAME_CN,HKJCGUESTNAME_CN=:HKJCGUESTNAME_CN WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME;-- RETURNING EMATCHID  INTO :Result; 
--- SELECT EMATCHID FROM EMATCHES  WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME and EMATCHID is not null into :Result;
-  RESULT=1 ;
- end
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_HKJCMATCH2 (
-    EMATCHID integer,
-    HKJCMATCHNO integer,
-    HKJCDAYCODE varchar(3),
-    CMATCHDATETIME timestamp,
-    HKJCHOSTID integer,
-    HKJCGUESTID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    STATUS varchar(15),
-    MAPPINGSTATUS (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT EMATCHID FROM EMATCHES  WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME into :Result;
-   IF (Result is NULL) then
- INSERT INTO EMATCHES(EMATCHID  ,
-  HKJCMATCHNO ,
-  HKJCDAYCODE , 
-  CMATCHDATETIME , 
-  HKJCHOSTID ,
-  HKJCGUESTID ,
-  HKJCHOSTNAME ,
-  HKJCGUESTNAME ,
-  STATUS,
-  MAPPINGSTATUS,
-  CTIMESTAMP )
-VALUES  (:EMATCHID  ,
-  :HKJCMATCHNO ,
-  :HKJCDAYCODE , 
-  :CMATCHDATETIME , 
-  :HKJCHOSTID ,
-  :HKJCGUESTID ,
-  :HKJCHOSTNAME ,
-  :HKJCGUESTNAME ,
-  :STATUS,
-  :MAPPINGSTATUS,
-  :CTIMESTAMP  )  RETURNING EMATCHID  INTO :Result;
-ELSE 
-UPDATE  EMATCHES set  STATUS=:STATUS, CTIMESTAMP =:CTIMESTAMP WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME
- RETURNING EMATCHID  INTO :Result; 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_HKJCMATCH4 (
-    EMATCHID integer,
-    HKJCMATCHNO integer,
-    HKJCDAYCODE varchar(3),
-    CMATCHDATETIME timestamp,
-    HKJCHOSTID integer,
-    HKJCGUESTID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    STATUS varchar(15),
-    MAPPINGSTATUS (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT count(*) FROM EMATCHES  WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME into :Result;
-IF (Result = 0) then
-begin
- INSERT INTO EMATCHES(EMATCHID  ,
-  HKJCMATCHNO ,
-  HKJCDAYCODE , 
-  CMATCHDATETIME , 
-  HKJCHOSTID ,
-  HKJCGUESTID ,
-  HKJCHOSTNAME ,
-  HKJCGUESTNAME ,
-  STATUS,
-  MAPPINGSTATUS,
-  CTIMESTAMP )
-VALUES  (:EMATCHID  ,
-  :HKJCMATCHNO ,
-  :HKJCDAYCODE , 
-  :CMATCHDATETIME , 
-  :HKJCHOSTID ,
-  :HKJCGUESTID ,
-  :HKJCHOSTNAME ,
-  :HKJCGUESTNAME ,
-  :STATUS,
-  :MAPPINGSTATUS,
-  :CTIMESTAMP  )  
- RETURNING EMATCHID  INTO :RESULT;
- 
-IF (RESULT is null)  then
-begin
- RESULT=0;
-end
- end 
-ELSE 
-begin
-UPDATE  EMATCHES set  STATUS=:STATUS, CTIMESTAMP =:CTIMESTAMP WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME RETURNING EMATCHID  INTO :Result; 
- 
-IF (RESULT is null)  then
-begin
- RESULT=1;
- end
- end
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_HKJCMATCH_BAK (
-    HKJCMATCHNO integer,
-    HKJCDAYCODE varchar(3),
-    CMATCHDATETIME timestamp,
-    HKJCHOSTID integer,
-    HKJCGUESTID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    STATUS varchar(15),
-    MAPPINGSTATUS (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT count(*) FROM EMATCHES  WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME into :Result;
-IF (Result = 0) then
-begin
- INSERT INTO EMATCHES( 
-  HKJCMATCHNO ,
-  HKJCDAYCODE , 
-  CMATCHDATETIME , 
-  HKJCHOSTID ,
-  HKJCGUESTID ,
-  HKJCHOSTNAME ,
-  HKJCGUESTNAME ,
-  STATUS,
-  MAPPINGSTATUS,
-  CTIMESTAMP )
-VALUES  ( 
-  :HKJCMATCHNO ,
-  :HKJCDAYCODE , 
-  :CMATCHDATETIME , 
-  :HKJCHOSTID ,
-  :HKJCGUESTID ,
-  :HKJCHOSTNAME ,
-  :HKJCGUESTNAME ,
-  :STATUS,
-  --null,
-  :MAPPINGSTATUS,
-  :CTIMESTAMP  )  ;
--- RETURNING EMATCHID  INTO :RESULT; 
- RESULT=0; 
- end 
-ELSE 
-begin
- UPDATE  EMATCHES set   CTIMESTAMP =:CTIMESTAMP WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME;-- RETURNING EMATCHID  INTO :Result; 
- SELECT EMATCHID FROM EMATCHES  WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME and EMATCHID is not null into :Result;
-  if(Result=null) then
-   begin
---  UPDATE  EMATCHES set  STATUS=:STATUS, CTIMESTAMP =:CTIMESTAMP WHERE HKJCMATCHNO =:HKJCMATCHNO and HKJCDAYCODE =:HKJCDAYCODE AND  HKJCHOSTNAME  =:HKJCHOSTNAME AND HKJCGUESTNAME =:HKJCGUESTNAME;-- RETURNING EMATCHID  INTO :Result; 
-  RESULT=1 ;
-  end
-   else if(Result=0) then
-  begin
-  RESULT=1 ;
-    end
- end
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_PLAYER (
-    ID integer,
-    NAME varchar(100),
-    SHORT_NAME varchar(50),
-    ACRONYM varchar(3),
-    GENDER (1),
-    BIRTHDATE varchar(12),
-    POSITION_NAME varchar(20),
-    AREA_ID integer,
-    BNATIONAL (1),
-    UT varchar(50),
-    OLD_PARTICIPANT_ID integer,
-    SLUG varchar(100),
-    BENCH (1),
-    SHIRT_NR integer,
-    TEAM_ID integer,
-    SEASON_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT ID FROM PLAYERS WHERE id= :ID  AND TEAM_ID=:TEAM_ID into :Result;
-   IF (Result is NULL) then
- INSERT INTO PLAYERS (ID ,
-  NAME,
-  SHORT_NAME,
-  ACRONYM ,
-  GENDER ,
-  BIRTHDATE ,
-  POSITION_NAME ,
-  AREA_ID ,
-  BNATIONAL ,
-  UT ,
-  OLD_PARTICIPANT_ID,
-  SLUG ,
-    bench  ,
-  shirt_nr  ,
- TEAM_ID,
-  SEASON_ID ,
-  CTIMESTAMP )
-VALUES  (:ID ,
-  :NAME,
- : SHORT_NAME,
- : ACRONYM ,
- : GENDER ,
-:  BIRTHDATE ,
- : POSITION_NAME ,
- : AREA_ID ,
- : BNATIONAL ,
- : UT ,
- : OLD_PARTICIPANT_ID,
- : SLUG ,
-  : bench  ,
- : shirt_nr  ,
-:TEAM_ID,
-  :SEASON_ID ,
-  :CTIMESTAMP  )  RETURNING ID INTO :Result;
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_PLAYER2 (
-    ID integer,
-    NAME varchar(100),
-    AREA_ID integer,
-    SLUG varchar(100),
-    BENCH (1),
-    SHIRT_NR integer,
-    TEAM_ID integer,
-    SEASON_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT ID FROM PLAYERS WHERE id= :ID  AND TEAM_ID=:TEAM_ID into :Result;
-   IF (Result is NULL) then
- INSERT INTO PLAYERS (ID ,
-  NAME, 
-  AREA_ID , 
-  SLUG ,
-    bench  ,
-  shirt_nr  ,
- TEAM_ID,
-  SEASON_ID ,
-  CTIMESTAMP )
-VALUES  (:ID ,
-  :NAME, 
- : AREA_ID , 
- : SLUG ,
-  : bench  ,
- : shirt_nr  ,
-:TEAM_ID,
-  :SEASON_ID ,
-  :CTIMESTAMP  )  RETURNING ID INTO :Result;
-else
-UPDATE  PLAYERS set  NAME=:NAME , shirt_nr  =:shirt_nr   ,bench  =:bench   , ctimestamp =:ctimestamp WHERE id= :ID  AND TEAM_ID=:TEAM_ID RETURNING id INTO :Result; 
-
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_SEASON (
-    ID integer,
-    NAME varchar(100),
-    COMPETITION_ID integer,
-    SYEAR varchar(10),
-    ACTUAL varchar(10),
-    UT varchar(12),
-    OLD_SEASON_ID integer,
-    RANGE varchar(10),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT ID FROM SEASONS WHERE id= :ID into :Result;
-   IF (Result is NULL) then
- INSERT INTO SEASONS (id ,   name ,  COMPETITION_ID , SYEAR ,   ACTUAL ,  UT   ,OLD_SEASON_ID   , RANGE , CTIMESTAMP )
-VALUES  (:id ,   :name ,  :COMPETITION_ID , :SYEAR ,   :ACTUAL ,  :UT   ,:OLD_SEASON_ID   , :RANGE ,:CTIMESTAMP)  RETURNING ID INTO :Result;
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_STAGE (
-    ID integer,
-    STAGE_NAME_ID integer,
-    NAME varchar(50),
-    START_DATE varchar(12),
-    END_DATE varchar(12),
-    SHOW_STANDINGS (1),
-    GROUPS_NR integer,
-    ISORT integer,
-    IS_CURRENT (1),
-    UT varchar(12),
-    OLD_STAGE_ID integer,
-    SEASON_ID integer,
-    COMPETITION_ID integer,
-    AREA_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT ID FROM STAGES WHERE id= :ID into :Result;
-   IF (Result is NULL) then
- INSERT INTO STAGES (ID ,
-  STAGE_NAME_ID ,
-  NAME  ,
-  START_DATE ,
-  END_DATE ,
-  SHOW_STANDINGS ,
-  GROUPS_NR ,
-  ISORT ,
-  IS_CURRENT ,
-  UT  ,
-  OLD_STAGE_ID ,
-  SEASON_ID ,
-  COMPETITION_ID ,
-  AREA_ID ,
-  CTIMESTAMP)
-VALUES  (:ID ,
-  :STAGE_NAME_ID ,
-  :NAME  ,
-  :START_DATE ,
-:END_DATE ,
-  :SHOW_STANDINGS ,
-:GROUPS_NR ,
- :ISORT ,
- :IS_CURRENT ,
- :UT  ,
- :OLD_STAGE_ID ,
-  :SEASON_ID ,
-  :COMPETITION_ID ,
- :AREA_ID ,
-  :CTIMESTAMP)  RETURNING ID INTO :Result;
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE ADD_TEAM (
-    ID integer,
-    NAME varchar(100),
-    SHORT_NAME varchar(50),
-    ACRONYM varchar(3),
-    GENDER (1),
-    AREA_ID integer,
-    BNATIONAL (1),
-    UT varchar(50),
-    OLD_PARTICIPANT_ID integer,
-    SLUG varchar(100),
-    SEASON_ID integer,
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL; 
-    SELECT ID FROM TEAMS WHERE id= :ID into :Result;
-   IF (Result is NULL) then
- INSERT INTO TEAMS (ID ,
-  NAME ,
-  SHORT_NAME ,
-  ACRONYM,
-  GENDER,
-  AREA_ID ,
-  BNATIONAL,
-  UT ,
-  OLD_PARTICIPANT_ID,
-  SLUG,
-  SEASON_ID ,
-  CTIMESTAMP )
-VALUES  (:ID ,
-  : NAME ,
-  : SHORT_NAME ,
- :  ACRONYM,
- :  GENDER,
-  : AREA_ID ,
-  : BNATIONAL,
-  : UT ,
-  : OLD_PARTICIPANT_ID,
-  : SLUG,
-  : SEASON_ID ,
-   :CTIMESTAMP   )  RETURNING ID INTO :Result;
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_EVENT_DETAILS (
-    EVENTID integer,
-    WC_8 varchar(20),
-    PC_36 varchar(20),
-    PL_16 varchar(3),
-    EPL_50 varchar(3),
-    NOP_17 varchar(1),
-    EPTC_58 varchar(100),
-    IT_151 varchar(2),
-    ATT_141 varchar(50),
-    FHSD_19 timestamp,
-    SHSD_20 timestamp,
-    FEHSD_44 timestamp,
-    SEHSD_45 timestamp,
-    PSSD_150 timestamp,
-    FHIT_201 varchar(2),
-    SHIT_202 varchar(2),
-    FEHIT_203 varchar(2),
-    SEHIT_204 varchar(2),
-    HL_205 varchar(8),
-    TD_124 varchar(4),
-    BM_160 varchar(4),
-    HF_178 varchar(4),
-    UT varchar(12),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-DECLARE VARIABLE Result2 Integer; 
-BEGIN
-    Result2 = -1; 
-    Result = NULL;  
-    -- SELECT EVENTID FROM event_details WHERE EVENTID=:EVENTID and ut>=:ut into :Result;
-     SELECT EVENTID FROM event_details WHERE EVENTID=:EVENTID and ut>:ut  into :Result;
-    IF (Result is NULL) then
-    UPDATE OR INSERT INTO   event_details ( 
-EVENTID,
-  WC_8 ,
-  PC_36 ,
-  PL_16 ,
-  EPL_50 ,
-  NOP_17,
-  EPTC_58,
-  IT_151 ,
-  ATT_141,
-  FHSD_19 ,
-  SHSD_20 ,
-  FEHSD_44 ,
-  SEHSD_45,
-  PSSD_150 ,
-  FHIT_201,
-  SHIT_202 ,
-  FEHIT_203 ,
-  SEHIT_204,
-  HL_205 ,
-  TD_124 ,
-  BM_160 ,
-  HF_178 ,
-  UT ,
-  CTIMESTAMP)VALUES
-      (  :EVENTID,
-  :WC_8 ,
-  :PC_36 ,
-  :PL_16 ,
-  :EPL_50 ,
-  :NOP_17,
-  :EPTC_58,
-  :IT_151 ,
-  :ATT_141,
-  :FHSD_19 ,
-  :SHSD_20 ,
-  :FEHSD_44 ,
-  :SEHSD_45,
-  :PSSD_150 ,
-  :FHIT_201,
-  :SHIT_202 ,
- :FEHIT_203 ,
-  :SEHIT_204,
-  :HL_205 ,
-  :TD_124 ,
-  :BM_160 ,
-  :HF_178 ,
-  :UT ,
-  :CTIMESTAMP      )  MATCHING  ( EVENTID)           RETURNING EVENTID INTO :Result; 
-  ELSE   
-   Result=Result2; 
-       --    Result2   =:Result; 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_INCIDENTS (
-    ID varchar(12),
-    EVENTID integer,
-    CACTION varchar(8),
-    INCIDENT_ID integer,
-    INCIDENT_NAME varchar(50),
-    PARTICIPANT_ID varchar(100),
-    PARTICIPANT_NAME varchar(100),
-    SUBPARTICIPANT_ID varchar(100),
-    SUBPARTICIPANT_NAME varchar(100),
-    IMPORTANT_FOR_TRADER (1),
-    EVENT_TIME varchar(6),
-    EVENT_STATUS_ID integer,
-    EVENT_STATUS_NAME varchar(50),
-    UT varchar(12),
-    CTIMESTAMP timestamp,
-    TEAMTYPE varchar(1) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL;  
-    UPDATE OR INSERT INTO   INCIDENTS (  ID ,
-  EVENTID ,
-  CACTION ,
-  INCIDENT_ID ,
-  INCIDENT_NAME ,
-  PARTICIPANT_ID ,
-  PARTICIPANT_NAME ,
-  SUBPARTICIPANT_ID ,
-  SUBPARTICIPANT_NAME ,
-  IMPORTANT_FOR_TRADER ,
-  EVENT_TIME ,
-  EVENT_STATUS_ID ,
-  EVENT_STATUS_NAME ,UT,
-  CTIMESTAMP,TEAMTYPE)VALUES
-      ( :ID ,
-  :EVENTID ,
-  :CACTION ,
-  :INCIDENT_ID ,
-  :INCIDENT_NAME ,
-  :PARTICIPANT_ID ,
-  :PARTICIPANT_NAME ,
-  :SUBPARTICIPANT_ID ,
-  :SUBPARTICIPANT_NAME ,
-  :IMPORTANT_FOR_TRADER ,
-  :EVENT_TIME ,
-  :EVENT_STATUS_ID ,
-  :EVENT_STATUS_NAME ,:UT,
-  :CTIMESTAMP,:TEAMTYPE) MATCHING  (ID );
-        --RETURNING ID INTO :Result; 
-      
-SELECT  first 1 EMATCHID FROM EMATCHES WHERE EMATCHID=:EVENTID into :Result;
-
-   IF (Result is NULL) then  
-    begin
-    Result=0;
-    end
-    else 
-    begin
-    Result=1; 
-    end    
-        
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_JSON_EVENT (
-    ID integer,
-    NAME varchar(100),
-    HOME_ID integer,
-    GUEST_ID integer,
-    RELATION_STATUS varchar(15),
-    START_DATE timestamp,
-    FT_ONLY (1),
-    COVERAGE_TYPE varchar(10),
-    SCOUTSFEED (1),
-    STATUS_ID integer,
-    STATUS_TYPE varchar(15),
-    CDAY varchar(10),
-    CLOCK_TIME varchar(18),
-    CLOCK_STATUS varchar(10),
-    BET_STATUS varchar(10),
-    NEUTRAL_VENUE (1),
-    ITEM_STATUS varchar(10),
-    ROUND_ID varchar(10),
-    ROUND_NAME varchar(50),
-    VENUE_ID varchar(10),
-    STAGE_ID integer,
-    SEASON_ID integer,
-    COMPETITION_ID integer,
-    AREA_ID integer,
-    CTIMESTAMP timestamp,
-    CACTION varchar(6) )
-RETURNS (
-    RESULT integer )
-AS
-DECLARE VARIABLE STATUSName varchar(30); 
-BEGIN 
-  --  Result2 = -1; 
-    STATUSName = NULL;   
-    select name from STATUSES where id =:STATUS_ID     INTO :STATUSName;
-    
- UPDATE OR INSERT INTO   events ( ID ,
-  NAME  ,
-  HOME_ID ,
-  GUEST_ID  ,
-  --SOURCE ,
-  --SOURCE_DC ,
- -- SOURCE_SUPER  ,
-  RELATION_STATUS,
-  START_DATE ,
-  FT_ONLY,
-  COVERAGE_TYPE ,
- -- CHANNEL_ID ,
- -- CHANNEL_NAME ,
-  SCOUTSFEED ,
-  STATUS_ID,
- STATUS_NAME,
-  STATUS_TYPE ,
-  CDAY ,
-  CLOCK_TIME ,
-  CLOCK_STATUS ,
- -- WINNER_ID ,
---  PROGRESS_ID ,
-  BET_STATUS ,
-  NEUTRAL_VENUE,
-  ITEM_STATUS ,
-  --UT ,
-  --OLD_EVENT_ID ,
- -- SLUG,
-  --VERIFIED_RESULT,
-  --IS_PROTOCOL_VERIFIED,
- -- PROTOCOL_VERIFIED_BY ,
-  --PROTOCOL_VERIFIED_AT,
-  ROUND_ID ,
-  ROUND_NAME ,
- -- CLIENT_EVENT_ID ,
-  --BOOKED ,
-  --BOOKED_BY ,
-  --INVERTED_PARTICIPANTS,
-  VENUE_ID,
- -- GROUP_ID ,
-  STAGE_ID ,
-  SEASON_ID ,
-  COMPETITION_ID ,
-  AREA_ID ,
-  CTIMESTAMP ,
-  CACTION  )VALUES
-      (  :ID ,
-   :NAME  ,
-   :HOME_ID ,
-   :GUEST_ID  ,
-  -- :SOURCE ,
- -- :SOURCE_DC ,
-  --:SOURCE_SUPER  ,
-  :RELATION_STATUS,
-  :START_DATE ,
-  :FT_ONLY,
-  :COVERAGE_TYPE ,
---  :CHANNEL_ID ,
- -- :CHANNEL_NAME ,
-  :SCOUTSFEED ,
-  :STATUS_ID,
-  :STATUSName,
-  :STATUS_TYPE ,
-  :CDAY ,
-  :CLOCK_TIME ,
-  :CLOCK_STATUS ,
- -- :WINNER_ID ,
- -- :PROGRESS_ID ,
-  :BET_STATUS ,
-  :NEUTRAL_VENUE,
-  :ITEM_STATUS ,
-  --:UT ,
- --:OLD_EVENT_ID ,
- -- :SLUG,
-  --:VERIFIED_RESULT,
-  --:IS_PROTOCOL_VERIFIED,
- -- :PROTOCOL_VERIFIED_BY ,
- -- :PROTOCOL_VERIFIED_AT,
-  :ROUND_ID ,
-  :ROUND_NAME ,
-  --:CLIENT_EVENT_ID ,
-  --:BOOKED ,
-  --:BOOKED_BY ,
-  --:INVERTED_PARTICIPANTS,
-  :VENUE_ID,
- -- :GROUP_ID ,
-  :STAGE_ID ,
-  :SEASON_ID ,
-  :COMPETITION_ID ,
-  :AREA_ID ,
-  :CTIMESTAMP ,
-  :CACTION      )  MATCHING  ( ID) ;
-  
-SELECT  first 1 ID FROM events WHERE ID=:ID order by start_date desc into :Result;
-
-   IF (Result is NULL) then  
-    begin
-    Result=0;
-    end
-    else 
-    begin
-    Result=1; 
-    end 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_PARTICIPANT_RESULTS (
-    EVENTID integer,
-    PARTICIPANTID integer,
-    PROGRESS_412 varchar(1),
-    WINNER_411 varchar(1),
-    RESULT_2 varchar(3),
-    RT_3 varchar(3),
-    FH_4 varchar(3),
-    SH_5 varchar(3),
-    E1H_133 varchar(2),
-    E2H_134 varchar(2),
-    PENALTY_7 varchar(2),
-    OVERTIME_104 varchar(2),
-    CTIMESTAMP timestamp,
-    CACTION varchar(6),
-    TEAMTYPE varchar(1) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL;  
-    UPDATE OR INSERT INTO   participant_results (
-EVENTID,
-  participantID ,
- progress_412 ,
-  winner_411 ,
-  result_2 ,
-  rt_3 ,
-  fh_4 ,
- sh_5 ,
-  e1h_133 ,
-  e2h_134  ,
-  penalty_7 ,
-  overtime_104 ,
-  CTIMESTAMP,CACTION,TEAMTYPE)VALUES
-      ( :EVENTID,
-  :participantID ,
- :progress_412 ,
- :winner_411 ,
-  :result_2 ,
-  :rt_3 ,
-  :fh_4 ,
- :sh_5 ,
-  :e1h_133 ,
-  :e2h_134  ,
-  :penalty_7 ,
-  :overtime_104 ,
-  :CTIMESTAMP,:CACTION,:TEAMTYPE) MATCHING  (EVENTID,participantID )
-        RETURNING participantID INTO :Result; 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_PARTICIPANT_STATS (
-    EVENTID integer,
-    PARTICIPANTID integer,
-    SOT_20 varchar(3),
-    SOT_21 varchar(3),
-    ATTACKS_10 varchar(3),
-    DA_11 varchar(3),
-    CORNERS_13 varchar(3),
-    YELLOW_CARDS_8 varchar(3),
-    RED_CARDS_9 varchar(3),
-    TOTAL_SHOTS_19 varchar(3),
-    FOULS_22 varchar(3),
-    OFFSIDES_24 varchar(3),
-    PS_14 varchar(3),
-    PM_15 varchar(3),
-    PG_16 varchar(3),
-    FK_25 varchar(3),
-    DFK_26 varchar(3),
-    FKG_18 varchar(3),
-    SW_27 varchar(3),
-    SB_28 varchar(3),
-    GS_29 varchar(3),
-    GK_30 varchar(3),
-    TI_32 varchar(3),
-    SUBSTITUTIONS_31 varchar(3),
-    GOALS_40 varchar(3),
-    MP_34 varchar(3),
-    OWN_GOALS_17 varchar(3),
-    ADW_33 varchar(3),
-    FORM_716 varchar(100),
-    SKIN_718 varchar(8),
-    PS_639 varchar(3),
-    PU_697 varchar(3),
-    GOALS115_772 varchar(3),
-    GOALS1630_773 varchar(3),
-    GOALS3145_774 varchar(3),
-    GOALS4660_775 varchar(3),
-    GOALS6175_776 varchar(3),
-    GOALS7690_777 varchar(3),
-    MPG_778 varchar(3),
-    MPS_779 varchar(3),
-    CTIMESTAMP timestamp,
-    CACTION varchar(6),
-    TEAMTYPE varchar(1) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result = NULL;  
-    UPDATE OR INSERT INTO   PARTICIPANT_STATS (
-  EVENTID ,
-  PARTICIPANTID ,
-  SOT_20 ,
-  SOT_21 ,
-  ATTACKS_10 ,
-  DA_11 ,
-  CORNERS_13 ,
-  YELLOW_CARDS_8,
-  RED_CARDS_9 ,
-  TOTAL_SHOTS_19 ,
-  FOULS_22 ,
-  OFFSIDES_24,
-  PS_14 ,
-  PM_15 ,
-  PG_16 ,
-  FK_25 ,
-  DFK_26 ,
-  FKG_18,
-  SW_27 ,
-  SB_28 ,
-  GS_29 ,
-  GK_30,
-  TI_32 ,
-  SUBSTITUTIONS_31,
-  GOALS_40,
-  MP_34 ,
-  OWN_GOALS_17 ,
-  ADW_33 ,
-  FORM_716 ,
-  SKIN_718 ,
-  PS_639 ,
-  PU_697 ,
-  GOALS115_772 ,
-  GOALS1630_773 ,
-  GOALS3145_774 ,
-  GOALS4660_775,
-  GOALS6175_776 ,
-  GOALS7690_777,
-  MPG_778,
-  MPS_779 ,
-  CTIMESTAMP,CACTION  ,TEAMTYPE  )VALUES
-      ( :EVENTID ,
- :PARTICIPANTID ,
-  :SOT_20 ,
-  :SOT_21 ,
-  :ATTACKS_10 ,
-  :DA_11 ,
-  :CORNERS_13 ,
-  :YELLOW_CARDS_8,
-  :RED_CARDS_9 ,
-  :TOTAL_SHOTS_19 ,
-  :FOULS_22 ,
-  :OFFSIDES_24,
-  :PS_14 ,
-  :PM_15 ,
-  :PG_16 ,
-  :FK_25 ,
-  :DFK_26 ,
-  :FKG_18,
-  :SW_27 ,
-  :SB_28 ,
-  :GS_29 ,
-  :GK_30,
-  :TI_32 ,
-  :SUBSTITUTIONS_31,
-  :GOALS_40,
-  :MP_34 ,
-  :OWN_GOALS_17 ,
-  :ADW_33 ,
-  :FORM_716 ,
-  :SKIN_718 ,
-  :PS_639 ,
-  :PU_697 ,
-  :GOALS115_772 ,
-  :GOALS1630_773 ,
-  :GOALS3145_774 ,
-  :GOALS4660_775,
-  :GOALS6175_776 ,
-  :GOALS7690_777,
-  :MPG_778,
-  :MPS_779 ,
-  :CTIMESTAMP,:CACTION  ,:TEAMTYPE  ) MATCHING  (EVENTID,participantID )
-        RETURNING participantID INTO :Result; 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_RESULT_GOALINFO (
-    EMATCHID integer,
-    H_GOAL integer,
-    G_GOAL integer,
-    LASTTIME timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result= null;   
-    UPDATE  GOALINFO set  H_GOAL=:H_GOAL, G_GOAL=:G_GOAL ,LASTTIME=:LASTTIME  WHERE EMATCHID  = :EMATCHID ;
-    --  RETURNING EMATCHID INTO :Result; 
-    SELECT  first 1 EMATCHID FROM EMATCHES WHERE EMATCHID=:EMATCHID into :Result;
-
-   IF (Result is NULL) then  
-    begin
-    Result=0;
-    end
-    else 
-    begin
-    Result=1; 
-    end    
- 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_STATS_GOALINFO (
-    EMATCHID integer,
-    H_YELLOW integer,
-    H_RED integer,
-    G_YELLOW integer,
-    G_RED integer,
-    LASTTIME timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result= null;   
-    UPDATE  GOALINFO set  H_RED=:H_RED, G_RED=:G_RED,H_YELLOW=:H_YELLOW,G_YELLOW=:G_YELLOW,LASTTIME=:LASTTIME  WHERE EMATCHID  = :EMATCHID   RETURNING EMATCHID INTO :Result; 
- 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SET_BOOKEDEVENT (
-    ID integer,
-    BOOKED (1),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-  Result = NULL; 
-  SELECT ID  FROM events WHERE id= :id into :Result;
-  IF (Result is  not NULL) then 
-UPDATE  events set  booked=true ,  ctimestamp =:ctimestamp  WHERE id= :id  RETURNING id INTO :Result; 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SET_BOOKEDEVENTBY (
-    ID integer,
-    BOOKED (1),
-    BOOKED_BY varchar(50),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-  Result = NULL;  
-UPDATE    events set  booked=:BOOKED ,BOOKED_BY=:BOOKED_BY,  ctimestamp =:ctimestamp WHERE id= :id ;--  RETURNING id INTO :Result; 
-UPDATE    EMATCHES  e set e.MAPPINGSTATUS=:BOOKED    WHERE e.EMATCHID =:id ;
-SELECT FIRST 1 ID  FROM events WHERE id= :id     into :Result;
-  IF (Result is   NULL) then  
-  Result=-1;
---SELECT ID  FROM EVENTS E where  E.ID=  (SELECT  first 1 p.ID  FROM events  P WHERE p.id= :id   ORDER BY p.START_DATE DESC)  into :Result;
-
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SYNCHKJCDATAANDBOOK (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100) )
-RETURNS (
-    RESULT integer )
-AS
-DECLARE VARIABLE Result2 Integer; 
-BEGIN
-    Result = null;  
-    Result2=-2;
-    SELECT id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID)  or  (home_id=:GUEST_ID and GUEST_ID =:home_id ) into : Result2;
-    IF (Result2 is not NULL) then 
-  UPDATE  EMATCHES set  EMATCHID=:Result2 WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME  RETURNING EMATCHID INTO :Result; 
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SYNC_HKJCDATA (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100) )
-RETURNS (
-    RESULT integer )
-AS
-DECLARE VARIABLE Result2 Integer; 
-BEGIN
-    Result = null;  
-    Result2=-2;
-    SELECT id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID) into : Result2;
-    IF (Result2 = -2) then  
-    UPDATE  EMATCHES set  EMATCHID=:Result2 WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME  RETURNING EMATCHID INTO :Result; 
-    else if (Result2 >0)
-    then
-     --UPDATE  events set  booked=true  WHERE id=:Result2;
-     UPDATE  EMATCHES set  EMATCHID=:Result2   WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME  RETURNING EMATCHID INTO :Result; 
-    
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SYNC_HKJCDATA_AUTO (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    CMATCHDATETIME1 timestamp,
-    CMATCHDATETIME2 timestamp )
-RETURNS (
-    RESULT integer )
-AS
-DECLARE VARIABLE Result2 Integer; 
-BEGIN
-    Result = null;  
-    Result2=null;
-   -- SELECT first 1 id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID) OR (home_id=:GUEST_ID  and GUEST_ID =:home_id) and (caction !='delete' or caction is null)  order by start_date desc into : Result2;
-    SELECT first 1 id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID) and (caction !='delete' or caction is null)  order by start_date desc into : Result2;
-    IF (Result2 is null) then 
-    begin 
-    Result2=0;
-     UPDATE  EMATCHES set  EMATCHID=:Result2 WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME and CMATCHDATETIME >= :CMATCHDATETIME1 and CMATCHDATETIME <= :CMATCHDATETIME2  RETURNING EMATCHID INTO :Result; 
-    end
-     else if (Result2 >0) then
-     begin 
-     UPDATE  EMATCHES set  EMATCHID=:Result2   WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME and (EMATCHID is null or ematchid ='0')and CMATCHDATETIME >= :CMATCHDATETIME1 and CMATCHDATETIME <= :CMATCHDATETIME2  RETURNING EMATCHID INTO :Result; 
-     end 
-     SELECT first 1 EMATCHID FROM EMATCHES WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME and CMATCHDATETIME >= :CMATCHDATETIME1 and CMATCHDATETIME <= :CMATCHDATETIME2    order by CTIMESTAMP desc into : RESULT;
-    
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SYNC_HKJCDATA_AUTO_BAK (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100),
-    CMATCHDATETIME1 timestamp,
-    CMATCHDATETIME2 timestamp )
-RETURNS (
-    RESULT integer )
-AS
-DECLARE VARIABLE Result2 Integer; 
-BEGIN
-    Result = null;  
-    Result2=0;
-    SELECT first 1 id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID) OR (home_id=:GUEST_ID  and GUEST_ID =:home_id) and (caction !='delete' or caction is null)  order by start_date desc into : Result2;
-    IF (Result2 <= 0) then  
-    UPDATE  EMATCHES set  EMATCHID=:Result2 WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME and CMATCHDATETIME >= :CMATCHDATETIME1 and CMATCHDATETIME <= :CMATCHDATETIME2  RETURNING EMATCHID INTO :Result; 
-    else if (Result2 >0)
-    then
-     --UPDATE  events set  booked=true  WHERE id=:Result2;
-    UPDATE  EMATCHES set  EMATCHID=:Result2   WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME and (EMATCHID is null or ematchid ='0')and CMATCHDATETIME >= :CMATCHDATETIME1 and CMATCHDATETIME <= :CMATCHDATETIME2  RETURNING EMATCHID INTO :Result; 
-    SELECT first 1 EMATCHID FROM EMATCHES WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME and CMATCHDATETIME >= :CMATCHDATETIME1 and CMATCHDATETIME <= :CMATCHDATETIME2    order by CTIMESTAMP desc into : RESULT;
-    
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SYNC_HKJCDATA_BOOK (
-    HOME_ID integer,
-    GUEST_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100) )
-RETURNS (
-    RESULT integer )
-AS
-DECLARE VARIABLE Result2 Integer; 
-BEGIN
-    Result = null;  
-    Result2=-2;
-    SELECT id FROM events WHERE (home_id=:home_id and GUEST_ID =:GUEST_ID)  or  (home_id=:GUEST_ID and GUEST_ID =:home_id ) into : Result2;
-    IF (Result2 = -2) then  
-    UPDATE  EMATCHES set  EMATCHID=:Result2 WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME  RETURNING EMATCHID INTO :Result; 
-    else if (Result2 >0)
-    then
-     UPDATE  events set  booked=true  WHERE id=:Result2;
-    UPDATE  EMATCHES set  EMATCHID=:Result2   WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME  RETURNING EMATCHID INTO :Result; 
-    
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SYNC_MANUAL_HKJCDATA (
-    EVENT_ID integer,
-    HKJCHOSTNAME varchar(100),
-    HKJCGUESTNAME varchar(100) )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result= null;   
-    UPDATE  EMATCHES set  EMATCHID=:Event_id    WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME  RETURNING EMATCHID INTO :Result; 
-    IF (RESULT is null)  then
-begin
- UPDATE  EMATCHES set  EMATCHID=:Event_id   WHERE HKJCGUESTNAME  = :HKJCGUESTNAME    AND HKJCHOSTNAME =:HKJCHOSTNAME  RETURNING EMATCHID INTO :Result; 
-   
- RESULT=0;
- end
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SYNC_MANUAL_HKJCDATA_WEB (
-    EVENT_ID integer,
-    HKJCDAYCODE varchar(3),
-    HKJCMATCHNO integer,
-    CMATCHDATETIME1 timestamp,
-    CMATCHDATETIME2 timestamp )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result= null;   
-    UPDATE EMATCHES SET  EMATCHID=NULL WHERE EMATCHID=:EVENT_ID;
-    UPDATE  EMATCHES set  EMATCHID=:Event_id  WHERE HKJCDAYCODE  = :HKJCDAYCODE    AND HKJCMATCHNO =:HKJCMATCHNO and CMATCHDATETIME >= :CMATCHDATETIME1 and CMATCHDATETIME <= :CMATCHDATETIME2   RETURNING EMATCHID INTO :Result; 
-    IF (RESULT is null)  then
-begin
-    --UPDATE  EMATCHES set  EMATCHID=:Event_id  WHERE HKJCDAYCODE  = :HKJCDAYCODE    AND HKJCMATCHNO =:HKJCMATCHNO  and CMATCHDATETIME >= :CMATCHDATETIME1 and CMATCHDATETIME <= :CMATCHDATETIME2 RETURNING EMATCHID INTO :Result; 
-    RESULT=0;
- end
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SYNC_MANUAL_HKJCDATA_WEB_CANCEL (
-    EVENT_ID integer,
-    HKJCDAYCODE varchar(3),
-    HKJCMATCHNO integer )
-RETURNS (
-    RESULT integer )
-AS
-BEGIN
-    Result= null;   
-    UPDATE  EMATCHES set  EMATCHID=NULL  WHERE HKJCDAYCODE  = :HKJCDAYCODE    AND HKJCMATCHNO =:HKJCMATCHNO and EMATCHID =:EVENT_ID     RETURNING HKJCMATCHNO INTO :Result; 
-    IF (RESULT is null)  then
-begin
-   
- RESULT=0;
- end
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE UPDATE_CNNAME_GOALINFO_PLAYERS (
-    EMATCHID varchar(20),
-    TEAMID integer,
-    PARTICIPANTID varchar(12),
-    ENNAME varchar(60),
-    CNNAME varchar(60),
-    CTIMESTAMP timestamp )
-RETURNS (
-    RESULT integer )
-AS
-DECLARE VARIABLE  playerName Varchar(60);
-BEGIN
-  Result = NULL;  
-UPDATE  MATCHDETAILS e  set  e.PLAYERCHI=:CNName,e.LASTTIME=:CTIMESTAMP   WHERE e.EMATCHID= :EMATCHID and e.PARTICIPANTID=:PARTICIPANTID ;--   RETURNING PLAYERCHI INTO :playerName; 
---UPDATE  PLAYERS p  set p.NAME_CN =:CNName ,p.CTIMESTAMP=:CTIMESTAMP  WHERE p.ID =:PARTICIPANTID ;
- UPDATE OR INSERT INTO  players ( ID,NAME,NAME_CN, TEAM_ID,CTIMESTAMP  ) VALUES  (:PARTICIPANTID,:ENName,:CNName,:TEAMID,:CTIMESTAMP ) MATCHING  (ID,TEAM_ID) ; 
-
- SELECT first 1 e.PLAYERCHI FROM MATCHDETAILS e WHERE  e.EMATCHID= :EMATCHID and e.PARTICIPANTID=:PARTICIPANTID into : playername;  
- 
-IF (playerName is NULL) then  
-  Result=0; 
-  else
-   Result=1; 
-END^
-SET TERM ; ^
-
-
-CREATE INDEX IDX_INCIDENTS ON INCIDENTS (EVENTID);
-CREATE INDEX IDX_MATCHDETAILS1 ON MATCHDETAILS (EMATCHID);
-GRANT EXECUTE
- ON PROCEDURE ADD_AREA7 TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_COMPETITION TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_GROUP TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_HKJCMATCH TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_HKJCMATCH2 TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_HKJCMATCH4 TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_HKJCMATCH_BAK TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_PLAYER TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_PLAYER2 TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_SEASON TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_STAGE TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE ADD_TEAM TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE PR_EVENT_DETAILS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE PR_INCIDENTS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE PR_JSON_EVENT TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE PR_PARTICIPANT_RESULTS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE PR_PARTICIPANT_STATS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE PR_RESULT_GOALINFO TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE PR_STATS_GOALINFO TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SET_BOOKEDEVENT TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SET_BOOKEDEVENTBY TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SYNCHKJCDATAANDBOOK TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SYNC_HKJCDATA TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SYNC_HKJCDATA_AUTO TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SYNC_HKJCDATA_AUTO_BAK TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SYNC_HKJCDATA_BOOK TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SYNC_MANUAL_HKJCDATA TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SYNC_MANUAL_HKJCDATA_WEB TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE SYNC_MANUAL_HKJCDATA_WEB_CANCEL TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE UPDATE_CNNAME_GOALINFO_PLAYERS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON AREAS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON AREAS2 TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON COMPETITIONS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON EMATCHES TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON EVENTS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON EVENT_DETAILS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON GOALINFO TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON GROUPS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON INCIDENTS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON MATCHDETAILS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON PARTICIPANT_RESULTS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON PARTICIPANT_STATS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON PLAYERS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON SEASONS TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON STAGES TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON STATUSES TO  SYSDBA WITH GRANT OPTION;
-
-GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
- ON TEAMS TO  SYSDBA WITH GRANT OPTION;
-
+{
+  "id": 191547106,
+  "type": "incident",
+  "source": 1988,
+  "ut": 1544462137,
+  "data": {
+    "incident": {
+      "id": "5-68686931",
+      "action": "insert",
+      "incident_id": 445,
+      "incident_name": "Halftime",
+      "participant_id": null,
+      "participant_name": null,
+      "subparticipant_id": null,
+      "subparticipant_name": null,
+      "info": null,
+      "important": "yes",
+      "important_for_trader": "yes",
+      "add_data": null,
+      "show_popup": "yes",
+      "show_scores": "no",
+      "show_action": "yes",
+      "show_time": "yes",
+      "show_on_timeline": "no",
+      "event_time": "45:08",
+      "event_status_id": 9,
+      "event_status_name": "Halftime",
+      "x_pos": null,
+      "y_pos": null
+    },
+    "event": {
+      "id": 2451784,
+      "action": "update",
+      "start_date": "2018-12-10 16:30",
+      "ft_only": "no",
+      "coverage_type": "from_tv",
+      "status_id": 9,
+      "sport_id": 5,
+      "day": 17,
+      "neutral_venue": "no",
+      "item_status": "active",
+      "clock_time": 0,
+      "clock_status": "stopped",
+      "area_id": 149,
+      "competition_id": 2183,
+      "season_id": 33935,
+      "stage_id": 90671,
+      "tour_id": null,
+      "gender": "male",
+      "bet_status": "active",
+      "relation_status": "in_progress",
+      "status_type": "live",
+      "name": "Akhmat Grozny - Arsenal Tula",
+      "round_id": 17,
+      "round_name": "Round 17",
+      "scoutsfeed": "yes",
+      "details": [
+        {
+          "id": 8,
+          "value": "Good"
+        },
+        {
+          "id": 16,
+          "value": 45
+        },
+        {
+          "id": 17,
+          "value": 2
+        },
+        {
+          "id": 19,
+          "value": "2018-12-10 16:30"
+        },
+        {
+          "id": 20,
+          "value": null
+        },
+        {
+          "id": 36,
+          "value": "Artificial pitch"
+        },
+        {
+          "id": 44,
+          "value": null
+        },
+        {
+          "id": 45,
+          "value": null
+        },
+        {
+          "id": 50,
+          "value": 15
+        },
+        {
+          "id": 58,
+          "value": "No Extra Time"
+        },
+        {
+          "id": 124,
+          "value": "up"
+        },
+        {
+          "id": 141,
+          "value": null
+        },
+        {
+          "id": 150,
+          "value": null
+        },
+        {
+          "id": 151,
+          "value": null
+        },
+        {
+          "id": 160,
+          "value": "yes"
+        },
+        {
+          "id": 168,
+          "value": 45
+        },
+        {
+          "id": 169,
+          "value": 15
+        },
+        {
+          "id": 170,
+          "value": 2
+        },
+        {
+          "id": 178,
+          "value": "no"
+        },
+        {
+          "id": 201,
+          "value": null
+        },
+        {
+          "id": 202,
+          "value": null
+        },
+        {
+          "id": 203,
+          "value": null
+        },
+        {
+          "id": 204,
+          "value": null
+        },
+        {
+          "id": 205,
+          "value": "yes"
+        }
+      ],
+      "participants": [
+        {
+          "id": 136834,
+          "counter": 1,
+          "name": "FK Akhmat Grozny",
+          "short_name": "Akhmat Grozny",
+          "acronym": "AKH",
+          "area_id": 149,
+          "area_name": "Russia",
+          "area_code": "RUS",
+          "ut": 1512636041,
+          "stats": [
+            {
+              "id": 8,
+              "value": 1
+            },
+            {
+              "id": 9,
+              "value": 0
+            },
+            {
+              "id": 10,
+              "value": 62
+            },
+            {
+              "id": 11,
+              "value": 33
+            },
+            {
+              "id": 13,
+              "value": 1
+            },
+            {
+              "id": 14,
+              "value": 0
+            },
+            {
+              "id": 15,
+              "value": 0
+            },
+            {
+              "id": 16,
+              "value": 0
+            },
+            {
+              "id": 17,
+              "value": 0
+            },
+            {
+              "id": 18,
+              "value": 0
+            },
+            {
+              "id": 19,
+              "value": 7
+            },
+            {
+              "id": 20,
+              "value": 1
+            },
+            {
+              "id": 21,
+              "value": 6
+            },
+            {
+              "id": 22,
+              "value": 7
+            },
+            {
+              "id": 23,
+              "value": 0
+            },
+            {
+              "id": 24,
+              "value": 2
+            },
+            {
+              "id": 25,
+              "value": 3
+            },
+            {
+              "id": 26,
+              "value": 1
+            },
+            {
+              "id": 27,
+              "value": 0
+            },
+            {
+              "id": 28,
+              "value": 0
+            },
+            {
+              "id": 29,
+              "value": 0
+            },
+            {
+              "id": 30,
+              "value": 3
+            },
+            {
+              "id": 31,
+              "value": 0
+            },
+            {
+              "id": 32,
+              "value": 9
+            },
+            {
+              "id": 33,
+              "value": 0
+            },
+            {
+              "id": 34,
+              "value": 0
+            },
+            {
+              "id": 40,
+              "value": 0
+            },
+            {
+              "id": 639,
+              "value": 0
+            },
+            {
+              "id": 697,
+              "value": 0
+            },
+            {
+              "id": 716,
+              "value": null
+            },
+            {
+              "id": 718,
+              "value": 961
+            },
+            {
+              "id": 770,
+              "value": "00:15:46"
+            },
+            {
+              "id": 771,
+              "value": 56.99
+            },
+            {
+              "id": 772,
+              "value": 0
+            },
+            {
+              "id": 773,
+              "value": 0
+            },
+            {
+              "id": 774,
+              "value": 1
+            },
+            {
+              "id": 775,
+              "value": 0
+            },
+            {
+              "id": 776,
+              "value": 0
+            },
+            {
+              "id": 777,
+              "value": 0
+            },
+            {
+              "id": 778,
+              "value": 0
+            },
+            {
+              "id": 779,
+              "value": 0
+            },
+            {
+              "id": 845,
+              "value": null
+            }
+          ],
+          "results": [
+            {
+              "id": 2,
+              "value": 1
+            },
+            {
+              "id": 3,
+              "value": 1
+            },
+            {
+              "id": 4,
+              "value": 1
+            },
+            {
+              "id": 5,
+              "value": null
+            },
+            {
+              "id": 7,
+              "value": null
+            },
+            {
+              "id": 104,
+              "value": null
+            },
+            {
+              "id": 133,
+              "value": null
+            },
+            {
+              "id": 134,
+              "value": null
+            },
+            {
+              "id": 411,
+              "value": 0
+            },
+            {
+              "id": 412,
+              "value": 0
+            }
+          ],
+          "subparticipants": []
+        },
+        {
+          "id": 141053,
+          "counter": 2,
+          "name": "FK Arsenal Tula",
+          "short_name": "Arsenal Tula",
+          "acronym": "ATU",
+          "area_id": 149,
+          "area_name": "Russia",
+          "area_code": "RUS",
+          "ut": 1512637195,
+          "stats": [
+            {
+              "id": 8,
+              "value": 1
+            },
+            {
+              "id": 9,
+              "value": 0
+            },
+            {
+              "id": 10,
+              "value": 40
+            },
+            {
+              "id": 11,
+              "value": 23
+            },
+            {
+              "id": 13,
+              "value": 3
+            },
+            {
+              "id": 14,
+              "value": 0
+            },
+            {
+              "id": 15,
+              "value": 0
+            },
+            {
+              "id": 16,
+              "value": 0
+            },
+            {
+              "id": 17,
+              "value": 0
+            },
+            {
+              "id": 18,
+              "value": 0
+            },
+            {
+              "id": 19,
+              "value": 6
+            },
+            {
+              "id": 20,
+              "value": 1
+            },
+            {
+              "id": 21,
+              "value": 3
+            },
+            {
+              "id": 22,
+              "value": 3
+            },
+            {
+              "id": 23,
+              "value": 0
+            },
+            {
+              "id": 24,
+              "value": 0
+            },
+            {
+              "id": 25,
+              "value": 9
+            },
+            {
+              "id": 26,
+              "value": 1
+            },
+            {
+              "id": 27,
+              "value": 0
+            },
+            {
+              "id": 28,
+              "value": 2
+            },
+            {
+              "id": 29,
+              "value": 0
+            },
+            {
+              "id": 30,
+              "value": 8
+            },
+            {
+              "id": 31,
+              "value": 0
+            },
+            {
+              "id": 32,
+              "value": 11
+            },
+            {
+              "id": 33,
+              "value": 0
+            },
+            {
+              "id": 34,
+              "value": 0
+            },
+            {
+              "id": 40,
+              "value": 0
+            },
+            {
+              "id": 639,
+              "value": 0
+            },
+            {
+              "id": 697,
+              "value": 0
+            },
+            {
+              "id": 716,
+              "value": null
+            },
+            {
+              "id": 718,
+              "value": 615
+            },
+            {
+              "id": 770,
+              "value": "00:11:54"
+            },
+            {
+              "id": 771,
+              "value": 43.01
+            },
+            {
+              "id": 772,
+              "value": 0
+            },
+            {
+              "id": 773,
+              "value": 0
+            },
+            {
+              "id": 774,
+              "value": 0
+            },
+            {
+              "id": 775,
+              "value": 0
+            },
+            {
+              "id": 776,
+              "value": 0
+            },
+            {
+              "id": 777,
+              "value": 0
+            },
+            {
+              "id": 778,
+              "value": 0
+            },
+            {
+              "id": 779,
+              "value": 0
+            },
+            {
+              "id": 845,
+              "value": null
+            }
+          ],
+          "results": [
+            {
+              "id": 2,
+              "value": 0
+            },
+            {
+              "id": 3,
+              "value": 0
+            },
+            {
+              "id": 4,
+              "value": 0
+            },
+            {
+              "id": 5,
+              "value": null
+            },
+            {
+              "id": 7,
+              "value": null
+            },
+            {
+              "id": 104,
+              "value": null
+            },
+            {
+              "id": 133,
+              "value": null
+            },
+            {
+              "id": 134,
+              "value": null
+            },
+            {
+              "id": 411,
+              "value": 0
+            },
+            {
+              "id": 412,
+              "value": 0
+            }
+          ],
+          "subparticipants": []
+        }
+      ]
+    }
+  }
+}
