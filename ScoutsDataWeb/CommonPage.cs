@@ -8,10 +8,10 @@
     {
         protected override void OnInit(EventArgs e)
         {
-            if (this.Session[this.Session.SessionID] == null)
-            {
-                this.Session[this.Session.SessionID] = "s";
-            }
+            //if (this.Session[this.Session.SessionID] == null)
+            //{
+            //    this.Session[this.Session.SessionID] = "s";
+            //}
             Hashtable hashtable = (Hashtable) base.Application["Online"];
             if (hashtable != null)
             {
@@ -34,7 +34,7 @@
                     }
                 }
             }
-            this.RegisterStartupScript("key", " <script language='javascript'>setTimeout(\"window.location.replace('Default.aspx?redtype=again')\"," + (((Convert.ToInt32(this.Session.Timeout) * 60) * 0x3e8)).ToString() + "); </script> ");
+            RegisterStartupScript("key", " <script language='javascript'>setTimeout(\"window.location.replace('Default.aspx?redtype=again')\"," + (Session.Timeout * 60 * 0x3e8).ToString() + "); </script> ");
         }
 
         private void Page_Load(object sender, EventArgs e)

@@ -1,7 +1,8 @@
 ﻿namespace JC_SoccerWeb
 {
    using System;
-using System.ComponentModel;
+    using System.Collections;
+    using System.ComponentModel;
 using System.IO;
 using System.Runtime.Remoting;
 using System.Web;
@@ -67,6 +68,14 @@ using System.Web;
 
         protected void Session_End(object sender, EventArgs e)
         {
+            Hashtable hOnline = (Hashtable)Application["Online"];
+            if (hOnline[Session.SessionID] != null)
+            {
+                hOnline.Remove(Session.SessionID);
+                Application.Lock();
+                Application["Online"] = hOnline;
+                Application.UnLock();
+            }
         }
 
         protected void Session_Start(object sender, EventArgs e)

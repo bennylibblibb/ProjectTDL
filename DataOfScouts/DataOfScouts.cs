@@ -614,8 +614,9 @@ namespace DataOfScouts
                                         //  if (id > 0) BookEventAction(id.ToString(), false);
                                     }
                                 }
-                                if (id > 0) BookEventAction(id.ToString(), dr1["NAME"].ToString(), dr1["START_DATE"].ToString(), dr1["HKJCHOSTNAME"].ToString (), dr1["HKJCGUESTNAME"].ToString(), dr1["HKJCDAYCODE"].ToString(), dr1["HKJCMATCHNO"].ToString(), dr1["MAPPINGSTATUS"].ToString(), false);
-                            }
+                               // if (id > 0) BookEventAction(id.ToString(), dr1["NAME"].ToString(), dr1["START_DATE"].ToString(), dr1["HKJCHOSTNAME"].ToString (), dr1["HKJCGUESTNAME"].ToString(), dr1["HKJCDAYCODE"].ToString(), dr1["HKJCMATCHNO"].ToString(), dr1["MAPPINGSTATUS"].ToString(), false);
+                          if (id > 0) BookEventAction(id.ToString(), dr1["NAME"].ToString(), dr1["CMATCHDATETIME"].ToString(), dr1["HKJCHOSTNAME"].ToString (), dr1["HKJCGUESTNAME"].ToString(), dr1["HKJCDAYCODE"].ToString(), dr1["HKJCMATCHNO"].ToString(), false);
+                          }
                             catch (Exception exp)
                             {
                                 Files.WriteError("RunSyncHkjcAndBook3(), foreach " + dr1["EMATCHID"] +"-"+dr1["HKJCHOSTNAME"]+"/"+ dr1["HKJCGUESTNAME"] + " error:" + exp.ToString());
@@ -6172,7 +6173,7 @@ namespace DataOfScouts
             }
         }
 
-        private bool BookEventAction(string eventid,string EName, string start_date,string hkjcHname,string hkjcGname, string hkjcDaycode, string hkjcMatchNo,string status, bool show)
+        private bool BookEventAction(string eventid,string EName, string start_date,string hkjcHname,string hkjcGname, string hkjcDaycode, string hkjcMatchNo, bool show)
         {  
             try
             {
@@ -6220,7 +6221,8 @@ namespace DataOfScouts
                     else if (errors.message == "You cannot book this event, it is not covered in this product" || errors.message == "You can order/refuse only events with the statuses: scheduled")
                     {
                         //id.ToString(), dr1["NAME"].ToString(), dr1["START_DATE"], dr1["HKJCHOSTNAME"], dr1["HKJCGUESTNAME"].ToString(), dr1["HKJCDAYCODE"].ToString(), dr1["HKJCMATCHNO"].ToString(), dr1["MAPPINGSTATUS"].ToString(), false
-                        Files.WriteUnBookLog("["+eventid+"]"+EName+" "+ start_date +"  "+hkjcHname+"/"+hkjcGname +" - [" +hkjcDaycode+"]" +hkjcMatchNo+" "+ status);
+                        //  Files.WriteUnBookLog("["+eventid+"]"+EName+" "+ start_date +"  "+hkjcHname+"/"+hkjcGname +" - [" +hkjcDaycode+"]" +hkjcMatchNo+" "+ status);
+                        Files.WriteUnBookLog("[" + eventid + "]" + EName  + "      " + hkjcHname + "/" + hkjcGname + " - [" + hkjcDaycode + "]" + hkjcMatchNo + "      " + start_date);
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             using (FbCommand cmd = new FbCommand())
@@ -6465,6 +6467,7 @@ namespace DataOfScouts
                                     //    Files.WriteLog("no message");
                                     //    continue;
                                     //} 
+                                    if (!consumer.Queue.Any()) { Files.WriteLog("no message"); continue; }
                                     var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
                                     if (ea == null) { Files.WriteError("ea == null"); break; }
                                     var body = ea.Body;
@@ -6743,7 +6746,7 @@ namespace DataOfScouts
                                         DOSIncidentJson.IncidentJson incidentJson = JsonUtil.Deserialize(typeof(DOSIncidentJson.IncidentJson), message) as DOSIncidentJson.IncidentJson;
                                         if (incidentJson != null && incidentJson.data.@event.sport_id == 5 && incidentJson.data.incident.important_for_trader == "yes")
                                         {
-                                            strName = "Incid" + incidentJson.data.@event.id +  (incidentJson.data.incident.incident_id==413|| incidentJson.data.incident.incident_id == 418 || incidentJson.data.incident.incident_id == 419 ? "_" + incidentJson.data.incident.incident_id:"") + "-"+ DateTime.Now.ToString("HHmmssfff");
+                                            strName = "Incid" + incidentJson.data.@event.id + (incidentJson.data.incident.incident_id == 413 || incidentJson.data.incident.incident_id == 418 || incidentJson.data.incident.incident_id == 419 ? "_" + incidentJson.data.incident.incident_id : "") + "-" + DateTime.Now.ToString("HHmmssfff");
                                             Files.WriteJson(strName, message);
                                             //if(incidentJson.data.incident.incident_id== 429)
                                             //{ 
@@ -6781,7 +6784,7 @@ namespace DataOfScouts
                                                 if (!backgroundWorker.IsBusy && sID > 0)
                                                 {
                                                     // backgroundWorker.RunWorkerAsync("[" + incidentJson.data.@event.id + "] " + incidentJson.data.@event.name + " " + strName + ".json");
-                                                    backgroundWorker.RunWorkerAsync( incidentJson.data.@event.name + " " + strName + ".json");
+                                                    backgroundWorker.RunWorkerAsync(incidentJson.data.@event.name + " " + strName + ".json");
                                                 }
                                             }
                                             //    connection.Close();
@@ -6846,7 +6849,7 @@ namespace DataOfScouts
             }
             catch (Exception exp)
             {
-                Files.WriteError("bgwAMQPService_DoWork(),error: " + exp.Message);
+                Files.WriteError("bgwAMQPService_DoWork(),error: " + exp);
                 e.Result = "No AMQPService.";
                 bBreak = true;
                 ///  bgwAMQPService.RunWorkerAsync();

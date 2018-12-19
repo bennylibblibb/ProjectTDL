@@ -1,0 +1,26 @@
+﻿14:36:39 BEN login success.
+14:56:42 (BEN)   Time out ,please re-login.
+14:56:44 ()   Time out ,please re-login.
+16:26:34 ()   Time out ,please re-login.
+16:26:40 ()   Time out ,please re-login.
+16:26:40 BEN login success.
+16:44:53 BEN login success.
+16:53:28 [Success] Sure [2449858 Gazelec Ajaccio - Le Havre] on Teams
+17:12:28 (BEN)   Time out ,please re-login.
+17:12:37 ()   Time out ,please re-login.
+17:15:18 ()   Time out ,please re-login.
+17:16:43 ()   Time out ,please re-login.
+17:23:12 BEN login success.
+18:20:14 BEN login success.
+18:20:32 [Success] Cancel Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+18:20:48 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+18:21:11 [Success] Cancel Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+18:21:29 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+18:22:52 BEN login success.
+18:23:02 [Success] Cancel Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+18:23:15 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+18:25:17 BEN login success.
+18:25:27 [Success] Cancel Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+18:25:36 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+18:25:48 [Failure] Sync [River Plate - Al Ain] on Teams
+18:45:18 (BEN)   Time out ,please re-login.

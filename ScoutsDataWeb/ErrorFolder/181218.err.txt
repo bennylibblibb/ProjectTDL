@@ -1,0 +1,4 @@
+﻿18:20:56   TeamMapping()  System.InvalidCastException: Object cannot be cast from DBNull to other types.
+   at System.DBNull.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value)
+   at JC_SoccerWeb.Update.TeamMapping(String eventID, String dayCode, String MatchNo, String startDate, String eventName) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 732
