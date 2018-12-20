@@ -40,7 +40,22 @@
         protected Anthem.Label lbMsg;
         protected Anthem.RadioButtonList cbDay;
 
-        protected void cbDay_SelectedIndexChanged(object sender, EventArgs e)
+
+        protected void dgRankDetails_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string d = dgRankDetails.SelectedIndex.ToString();
+        }
+        private void dgRankDetails_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                e.Item.Attributes["style"] = "cursor:hand";
+                System.Web.UI.WebControls.LinkButton link = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[0].Controls[1];
+                e.Item.Attributes.Add("onclick", "javascript:return ClickLinkBtn(" + link.ClientID + ")"); 
+            }
+        }
+
+            protected void cbDay_SelectedIndexChanged(object sender, EventArgs e)
         {
             dgRankDetails.CurrentPageIndex = 0;
             BindMatchesByDateDay(dplLeague.SelectedValue);
@@ -76,6 +91,10 @@
 
         private void dgSchedule_ItemCreated(object sender, DataGridItemEventArgs e)
         {
+            //if (e.Item.ItemType == ListItemType.Item)
+            //{
+            //    e.Item.Attributes["style"] = "cursor:hand";
+            //}
             //try
             //{
             //    if (e.Item.ItemType == ListItemType.EditItem)
@@ -142,7 +161,8 @@
             this.dgRankDetails.CancelCommand += new DataGridCommandEventHandler(this.dgSchedule_CancelCommand);
             this.dgRankDetails.EditCommand += new DataGridCommandEventHandler(this.dgSchedule_EditCommand);
             this.dplLeague.SelectedIndexChanged += new EventHandler(this.dplLeague_SelectedIndexChanged);
-          //  this.dgRankDetails.ItemCreated += new DataGridItemEventHandler(this.dgSchedule_ItemCreated);
+            //  this.dgRankDetails.ItemCreated += new DataGridItemEventHandler(this.dgSchedule_ItemCreated);
+            this.dgRankDetails.ItemDataBound += new DataGridItemEventHandler(this.dgRankDetails_ItemDataBound);
             this.cbDay.SelectedIndexChanged += cbDay_SelectedIndexChanged;
             this.btnEdit.Click += new EventHandler(this.btnEdit_Click);
 

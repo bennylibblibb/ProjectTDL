@@ -88,7 +88,7 @@ namespace JC_SoccerWeb
                     connection.Open();
                     using (FbCommand cmd2 = new FbCommand())
                     {
-                        cmd2.CommandText = "SYNC_HKJCTEAM_WEB_Sure";
+                        cmd2.CommandText = "WEB_SYNC_MANUAL_HKJCTEAM_SURE";
                         cmd2.CommandType = CommandType.StoredProcedure;
                         cmd2.Connection = connection;
                         cmd2.Parameters.Add("@EVENT_ID", eventID);

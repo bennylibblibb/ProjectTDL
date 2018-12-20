@@ -12,14 +12,12 @@
     <meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
     <LINK href="CentaSmsStyle.css" type="text/css" rel="stylesheet">
      <script language="JavaScript" src="JavaScript.js" type ="text/javascript"></script>
-<script type="text/javascript">
-    function CheckNum(obj) {
-        var strvalue = obj.value;
-        if (isNaN(strvalue)) {
-            alert("Number");
-        } else { 
-        } 
-    }
+<script type="text/javascript"> 
+    
+    function ClickLinkBtn(obj) {   
+        obj.onclick();  
+    }  
+
 </script> 
         </HEAD>
         <body>
@@ -114,26 +112,28 @@
                                   </TR> 
                                     <TR  valign="top">
                                         <TD vAlign="top" align="left" colSpan="5"  >
-                                            <anthem:DataGrid id="dgRankDetails" runat="server" Width="100%"   AllowPaging="True" AutoGenerateColumns="False"  >
-                                                <PagerStyle Mode="NumericPages"></PagerStyle><HeaderStyle Font-Bold="True"></HeaderStyle><EditItemStyle ></EditItemStyle><ItemStyle Height="34px" CssClass="grid-item"></ItemStyle><Columns>
+                                            <anthem:DataGrid id="dgRankDetails" runat="server" OnSelectedIndexChanged="dgRankDetails_SelectedIndexChanged" Width="100%"  AlternatingItemStyle-BackColor="#EFEFEF"   AllowPaging="True" AutoGenerateColumns="False"  >
+                                                <PagerStyle Mode="NumericPages"></PagerStyle><HeaderStyle Font-Bold="True"></HeaderStyle><EditItemStyle ></EditItemStyle><ItemStyle Height="34px" CssClass="grid-item"></ItemStyle>
+                                                 <SelectedItemStyle   BackColor="#CECB7B"></SelectedItemStyle> 
+                                                <Columns>
                                                     <asp:TemplateColumn HeaderText=""   >
-                                                        <HeaderStyle HorizontalAlign="Left" Width="20px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="30px" CssClass="grid-item"></ItemStyle>
-                                                        <ItemTemplate>
-                                                            <%#this.dgRankDetails.CurrentPageIndex * this.dgRankDetails.PageSize + Container.ItemIndex + 1%>
-                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Left" Width="20px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle>
+                                                        <ItemStyle Width="30px" CssClass="grid-item"></ItemStyle>
+                                                        <ItemTemplate> 
+  <asp:LinkButton id="btnSelect"  runat="server"  CommandName="Select" Text=' <%#this.dgRankDetails.CurrentPageIndex * this.dgRankDetails.PageSize + Container.ItemIndex + 1%>'> </asp:LinkButton>
+                                                          </ItemTemplate>
                                                     </asp:TemplateColumn>
-                                                  
-
-                                                     <asp:TemplateColumn HeaderText="ID"   >
+                                                    <asp:TemplateColumn HeaderText="ID"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbID" runat="server" Width="50px"   Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
+                                                            <anthem:Label id="lbID" runat="server" Width="50px"    Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
+                                                           <%--<asp:LinkButton ID="btnSelect" Visible="false" runat="server" Width="50px" CommandName="Select" Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'> </asp:LinkButton>--%>
                                                           
                                                        </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="NAME" Visible ="true" >
                                                         <HeaderStyle HorizontalAlign="Left" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbNAME" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.NAME") %>'></anthem:Label>
-                                                        </ItemTemplate>
+                                                            <anthem:Label id="lbNAME"   runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.NAME") %>'></anthem:Label>
+                                                     </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="START DATE"   Visible ="true" >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
@@ -193,13 +193,13 @@
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="JC HOST" Visible ="true" >
-                                                        <HeaderStyle HorizontalAlign="Left" Wrap="true" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJCHOSTNAME" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME") %>'></anthem:Label>
+                                                        <HeaderStyle HorizontalAlign="Left" Wrap="true" Width="100px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" ></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbHKJCHOSTNAME" runat="server" Width="100px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn> 
                                                     <asp:TemplateColumn HeaderText="JC GUEST">
-                                                       <HeaderStyle Wrap="true" HorizontalAlign="Left"  Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJCGUESTNAME" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME") %>'></anthem:Label>
+                                                       <HeaderStyle Wrap="true" HorizontalAlign="Left"  Width="100px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbHKJCGUESTNAME" runat="server" Width="100px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn><asp:TemplateColumn HeaderText="DAY CODE">
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="60px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
@@ -230,8 +230,8 @@
                                                     </asp:TemplateColumn>
 
                                                     <asp:TemplateColumn HeaderText="STATUS">
-                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJCISTATUS" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.STATUS") %>'></anthem:Label>
+                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="70px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbHKJCISTATUS" runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.STATUS") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
 

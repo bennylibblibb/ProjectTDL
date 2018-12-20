@@ -231,9 +231,10 @@ namespace FileLog
                     {
                         Directory.CreateDirectory(files.FilePath);
                     } // files.SetFileName(0, AppFlag.Eventlog);
-                    files.FileName = name + "Test.txt";
+                    files.FileName = name + "log.txt";
                     files.Open();
-                    files.Write(DateTime.Now.ToString("HH:mm:ss fff ") + sEventMsg);
+                    // files.Write(DateTime.Now.ToString("HH:mm:ss fff ") + sEventMsg);
+                    files.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss fff ") + sEventMsg);
                     files.Close();
                 }
             }

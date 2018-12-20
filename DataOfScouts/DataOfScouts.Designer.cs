@@ -767,7 +767,8 @@ namespace DataOfScouts
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DataOfScouts";
-            this.Text = Directory.GetCurrentDirectory() + @"\DataOfScouts";
+            this.Text = "D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\Data" +
+    "OfScouts";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DataOfScouts_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DataOfScouts_FormClosed);
             this.Load += new System.EventHandler(this.DataOfScouts_Load);

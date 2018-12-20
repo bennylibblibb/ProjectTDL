@@ -27,6 +27,8 @@ namespace DataOfScouts
         internal static readonly int IntervalSync = Convert.ToInt32(ConfigurationSettings.AppSettings["IntervalSync"]);
         public static string UnbookFiles = ConfigurationSettings.AppSettings["UnbookFiles"];
         internal static bool AutoMapping = ConfigurationSettings.AppSettings["AutoMapping"].ToLower() == "yes" ? true : false;
+        internal static bool TestMode = ConfigurationSettings.AppSettings["TestMode"].ToLower() == "yes" ? true : false;
+        internal static bool Important_for_trader = ConfigurationSettings.AppSettings["Important_for_trader"].ToLower() == "yes" ? true : false;
     }
 
     public enum InformationType

@@ -43,6 +43,12 @@
         //protected Anthem.RequiredFieldValidator rfv12;
         //protected Anthem.RangeValidator RangeValidator1;
 
+        protected void dgRankDetails_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string d = dgRankDetails.SelectedIndex.ToString();
+         //   dgRankDetails.Items[dgRankDetails.SelectedIndex].Attributes.Add("onclick", "this.style.backgroundColor='red';");
+        }
+
         private void btnEdit_Click(object sender, EventArgs e)
         {
             lbMsg.Text = "";
@@ -543,8 +549,13 @@
                 //  lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure？');";
                 lbtnEdit.Attributes.Add("onclick", "javascript:OpenMapping(" + sID + ")");
             }
-            else if( e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                e.Item.Attributes["style"] = "cursor:hand";
+                System.Web.UI.WebControls.LinkButton link = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[1].Controls[3]; 
+                //e.Item.Attributes.Add("onclick", "this.style.backgroundColor='Gray';");
+                //href: "javascript:__doPostBack('dgRankDetails$ctl04$btnSelect','')"
+                e.Item.Attributes.Add("onclick", "javascript:return ClickLinkBtn(" + link.ClientID + ")");
                 if (((System.Web.UI.WebControls.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text == "")
                 {
                     System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
@@ -567,9 +578,9 @@
                     //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                 }
                 else if (e.Item.ItemType == ListItemType.Item)
-                {
-                   //  ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
-                   //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                { 
+                    //  ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                    //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtIHOSTORYRANK2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                     //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE2")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                 }
             }
@@ -609,7 +620,7 @@
                     connection.Open();
                     using (FbCommand cmd2 = new FbCommand())
                     {  //maybe return booked or no
-                        cmd2.CommandText = "SYNC_MANUAL_HKJCDATA_WEB";
+                        cmd2.CommandText = "WEB_SYNC_MANUAL_HKJCDATA";
                         cmd2.CommandType = CommandType.StoredProcedure;
                         cmd2.Connection = connection;
                         cmd2.Parameters.Add("@EMATCHID", eventId);
@@ -721,7 +732,7 @@
                     connection.Open();
                     using (FbCommand cmd2 = new FbCommand())
                     {
-                        cmd2.CommandText = "SYNC_MANUAL_HKJCTEAM_WEB";
+                        cmd2.CommandText = "WEB_SYNC_MANUAL_HKJCTEAM";
                         cmd2.CommandType = CommandType.StoredProcedure;
                         cmd2.Connection = connection;
                         cmd2.Parameters.Add("@EMATCHID", eventID);
