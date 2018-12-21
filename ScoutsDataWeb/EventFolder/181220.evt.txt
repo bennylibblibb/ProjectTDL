@@ -8,3 +8,16 @@
 13:11:52 (BEN)   Time out ,please re-login.
 13:11:55 ()   Time out ,please re-login.
 13:12:48 ()   Time out ,please re-login.
+17:15:08 BEN login success.
+17:17:09 BEN login success.
+17:21:09 BEN login success.
+17:21:24 [Success] Cancel Sync [2655753] EMATCHES[WED 2]  Kashima Antlers - Real Madrid
+17:21:27 [Success] Cancel Sync [2455876] EMATCHES[WED 3]  FC Schalke 04 - Bayer 04 Leverkusen
+17:23:45 BEN login success.
+17:24:33 [Success] Cancel Sync [2654430] EMATCHES[WED 1]  Aves - Chaves
+17:27:30 [Success] Sync [2654430] EMATCHES[WED 1]  Aves - Chaves
+17:27:30 [Failure] Sync [Aves - Chaves] on Teams
+17:41:01 BEN login success.
+17:41:37 BEN login success.
+17:47:20 (BEN)   Time out ,please re-login.
+17:55:22 BEN login success.

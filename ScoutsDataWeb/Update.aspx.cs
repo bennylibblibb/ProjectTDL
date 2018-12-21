@@ -592,6 +592,7 @@
 
         private void dgSchedule_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
         {
+            dgRankDetails.SelectedIndex = -1;
             this.dgRankDetails.CurrentPageIndex = e.NewPageIndex;
             DataSet data = (DataSet)this.Session["rankData"];
             this.dgRankDetails.DataSource = data.Tables["events"].DefaultView;

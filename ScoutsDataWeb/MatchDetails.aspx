@@ -26,30 +26,30 @@
                            <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center"  Wrap="false" Height="30px" CssClass="grid-header" ></HeaderStyle>
                            <ItemStyle Height="34px"  Wrap="false"  CssClass="grid-item"></ItemStyle>
                           <Columns>   
-                              <asp:TemplateColumn HeaderText="Host" Visible ="true" >
+                              <asp:TemplateColumn HeaderText="Host" Visible ="true" >  <HeaderStyle  CssClass="grid-header" />
                                      <ItemTemplate >
                                      <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.HNAME"):DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME")   %>
 			   <BR/>	 <strong>   <%#DataBinder.Eval(Container, "DataItem.HmNAMECN") %> </strong>   
                                      </ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Guest"  >
+                                                    <asp:TemplateColumn HeaderText="Guest"  >  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
 				                            <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.GNAME"):DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME")   %>
 			   <BR/>	 <strong>    <%#DataBinder.Eval(Container, "DataItem.GmNAMECN") %></strong>   
                                                           </ItemTemplate> </asp:TemplateColumn>
-                                                                                                   <asp:TemplateColumn HeaderText="START DATE">
+                                                                                                   <asp:TemplateColumn HeaderText="START DATE">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
 				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue?"":DataBinder.Eval(Container, "DataItem.FHSD_19") %>
 				  <BR/> <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>  
                            </ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="RESULT">
+                                                    <asp:TemplateColumn HeaderText="RESULT">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
 				<%# DataBinder.Eval(Container, "DataItem.RESULT") %>
 				</ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="DAYCODE" >
+                                                    <asp:TemplateColumn HeaderText="DAYCODE" >  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
 				<%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE") %>
 				</ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="MATCHNO">
+                                                    <asp:TemplateColumn HeaderText="MATCHNO">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
 				<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>
 				</ItemTemplate>  </asp:TemplateColumn> 
@@ -65,7 +65,7 @@
                            <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center" Wrap="false" Height="30px" CssClass="grid-header" ></HeaderStyle>
                            <ItemStyle Height="34px"    Wrap="false" CssClass="grid-item"></ItemStyle>
                           <Columns>   	
-                                <asp:TemplateColumn HeaderText="H/G" Visible ="true" >
+                                <asp:TemplateColumn HeaderText="H/G" Visible ="true" >  <HeaderStyle  CssClass="grid-header" />
                                      <ItemTemplate>
 				<%# DataBinder.Eval(Container, "DataItem.hg") %>
 				</ItemTemplate> </asp:TemplateColumn>
@@ -80,27 +80,28 @@
 			 				</ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Type">
+                                                         <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
 				<%# DataBinder.Eval(Container, "DataItem.CTYPE") %>
 				</ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Player ID">
+                                                    <asp:TemplateColumn HeaderText="Player ID">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
                                   <asp:label id ="lbPlayerid" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.PARTICIPANTID") %>'> </asp:label>
 			 				 </ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Player Name">
+                                                    <asp:TemplateColumn HeaderText="Player Name">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
  <asp:label id ="lbPlayerName" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.player") %>'> </asp:label> 
 				</ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="CN Name" >
+                                                    <asp:TemplateColumn HeaderText="CN Name" >  <HeaderStyle  CssClass="grid-header" />
                          <ItemStyle CssClass="grid-item" Width="180px"></ItemStyle>  <ItemTemplate>
                              <asp:TextBox ID="txtCNName" MaxLength="100"  Enabled="false" runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>' > </asp:TextBox>
 				         <asp:label id ="lbCNName" Visible ="false"  runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>'> </asp:label>
                              </ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Elapsed">
+                                                    <asp:TemplateColumn HeaderText="Elapsed">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate> 
 				<%# DataBinder.Eval(Container, "DataItem.ELAPSED") %>
 				</ItemTemplate>  </asp:TemplateColumn> 
-                               <asp:TemplateColumn HeaderText="TIMESTAMP">
+                               <asp:TemplateColumn HeaderText="TIMESTAMP">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate> 
 				<%# DataBinder.Eval(Container, "DataItem.LASTTIME") %>
 				</ItemTemplate>  </asp:TemplateColumn> 

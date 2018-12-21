@@ -171,6 +171,10 @@ BODY
 	padding-top: 4px;
 	margin: 1px;
 }
+
+.grid-select-item {
+    background-color: #CECB7B;
+}
 .grid-header
 {
 	border-bottom: #696969 1px solid;
@@ -416,9 +420,9 @@ background-color: #edecd1;
 
 
 
-.top_bar01_bg{
-   background-color: #525252;
-    height:20px;
+.top_bar01_bg {
+    background-color: #635139;
+    height: 5px;
 }
 
 .top_bar02_bg{

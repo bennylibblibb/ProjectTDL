@@ -114,6 +114,7 @@
 
         private void dgSchedule_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
         {
+            dgRankDetails.SelectedIndex = -1;
             try
             {
                 this.dgRankDetails.CurrentPageIndex = e.NewPageIndex;
