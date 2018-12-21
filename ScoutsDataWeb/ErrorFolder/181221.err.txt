@@ -1,0 +1,95 @@
+﻿11:53:23   TeamMapping()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): arithmetic exception, numeric overflow, or string truncation
+string right truncation
+expected length 10, actual 100
+At procedure 'WEB_SYNC_MANUAL_HKJCTEAM' line: 47, col: 7 ---> arithmetic exception, numeric overflow, or string truncation
+string right truncation
+expected length 10, actual 100
+At procedure 'WEB_SYNC_MANUAL_HKJCTEAM' line: 47, col: 7
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.TeamMapping(String eventID, String dayCode, String MatchNo, String startDate, String eventName) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 744
+12:01:23 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632
+12:01:27 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632
+12:01:29 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632
+12:01:29 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632
+12:01:30 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632
+12:01:30 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632
+12:01:31 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632
+12:01:31 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16178871
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632
+12:35:10   TeamMapping()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): conversion error from string "River Plate"
+At procedure 'WEB_SYNC_MANUAL_HKJCTEAM' line: 48, col: 7 ---> conversion error from string "River Plate"
+At procedure 'WEB_SYNC_MANUAL_HKJCTEAM' line: 48, col: 7
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.TeamMapping(String eventID, String dayCode, String MatchNo, String startDate, String eventName) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 744
+13:13:01 Sync, error:FirebirdSql.Data.FirebirdClient.FbException (0x80004005): deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16179340
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5 ---> deadlock
+update conflicts with concurrent update
+concurrent transaction number is 16179340
+At procedure 'WEB_SYNC_MANUAL_HKJCDATA' line: 14, col: 5
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 577
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 632

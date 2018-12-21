@@ -1,0 +1,68 @@
+﻿10:15:59 BEN login success.
+10:20:09 [Success] Cancel Sync [2436985] EMATCHES[FRI 22]  Wolverhampton - Liverpool FC
+10:43:34 [Success] Sync [2436985] EMATCHES[FRI 22]  Wolverhampton - Liverpool FC
+10:43:34 [Success] Sync [Wolverhampton - Liverpool FC] on Teams
+10:44:07 [Success] Sure [2436985 Wolverhampton - Liverpool FC] on Teams
+10:47:13 [Success] Sync [2436985] EMATCHES[FRI 22]  Wolverhampton - Liverpool FC
+10:47:13 [Success] Sync [Wolverhampton - Liverpool FC] on Teams
+10:47:20 [Success] Sure [2436985 Wolverhampton - Liverpool FC] on Teams
+10:49:45 [Success] Sync [2436985] EMATCHES[FRI 22]  Wolverhampton - Liverpool FC
+10:49:46 [Failure] Sync [Wolverhampton - Liverpool FC] on Teams
+11:01:56 [Success] Sync [2436985] EMATCHES[FRI 22]  Wolverhampton - Liverpool FC
+11:01:56 [Failure] Sync [Wolverhampton - Liverpool FC] on Teams
+11:08:44 [Success] Cancel Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+11:09:11 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+11:09:11 [Success] Sync [River Plate - Al Ain] on Teams
+11:22:02 (BEN)   Time out ,please re-login.
+11:35:12 ()   Time out ,please re-login.
+11:40:23 ()   Time out ,please re-login.
+11:40:23 BEN login success.
+11:41:13 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+11:41:13 [Success] Sync [River Plate - Al Ain] on Teams
+11:44:26 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+11:44:26 [Success] Sync [River Plate - Al Ain] on Teams
+11:53:23 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+11:59:17 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+11:59:17 [Success] Sync [River Plate - Al Ain] on Teams
+12:02:36 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+12:02:36 [Success] Sync [River Plate - Al Ain] on Teams
+12:22:15 (BEN)   Time out ,please re-login.
+12:22:16 ()   Time out ,please re-login.
+12:22:51 ()   Time out ,please re-login.
+12:22:51 BEN login success.
+12:35:10 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+12:38:12 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+12:38:13 [Success] Sync [River Plate - Al Ain] on Teams
+12:41:20 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+12:41:20 [Success] Sync [River Plate - Al Ain] on Teams
+12:53:08 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+12:53:08 [Success] Sync [River Plate - Al Ain] on Teams
+13:12:24 BEN login success.
+13:14:38 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+13:14:38 [Success] Sync [River Plate - Al Ain] on Teams
+13:21:46 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+13:21:46 [Success] Sync [River Plate - Al Ain] on Teams
+13:41:30 (BEN)   Time out ,please re-login.
+13:43:28 ()   Time out ,please re-login.
+13:43:36 ()   Time out ,please re-login.
+13:43:36 BEN login success.
+13:43:57 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+13:43:57 [Success] Sync [River Plate - Al Ain] on Teams
+13:45:51 [Success] Sure [2655752 River Plate - Al Ain] on Teams
+13:46:58 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+13:46:58 [Success] Sync [River Plate - Al Ain] on Teams
+13:47:10 [Success] Sure [2655752 River Plate - Al Ain] on Teams
+13:48:17 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+13:48:17 [Success] Sync [River Plate - Al Ain] on Teams
+13:48:20 [Success] Sure [2655752 River Plate - Al Ain] on Teams
+13:49:06 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+13:49:06 [Success] Sync [River Plate - Al Ain] on Teams
+13:49:12 [Success] Sure [2655752 River Plate - Al Ain] on Teams
+13:50:29 [Success] Sync [2655752] EMATCHES[TUE 2]  River Plate - Al Ain
+13:50:30 [Success] Sync [River Plate - Al Ain] on Teams
+13:50:58 [Success] Sure [2655752 River Plate - Al Ain] on Teams
+14:12:48 (BEN)   Time out ,please re-login.
+17:41:28 ()   Time out ,please re-login.
+17:41:28 BEN login success.
+18:01:29 (BEN)   Time out ,please re-login.
+18:01:34 ()   Time out ,please re-login.

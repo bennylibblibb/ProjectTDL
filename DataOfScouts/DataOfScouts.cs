@@ -650,12 +650,12 @@ namespace DataOfScouts
                                         Files.WriteLog(queryString);
                                     }
                                 }
-                               // if (id > 0) BookEventAction(id.ToString(), dr1["NAME"].ToString(), dr1["START_DATE"].ToString(), dr1["HKJCHOSTNAME"].ToString (), dr1["HKJCGUESTNAME"].ToString(), dr1["HKJCDAYCODE"].ToString(), dr1["HKJCMATCHNO"].ToString(), dr1["MAPPINGSTATUS"].ToString(), false);
-                          if (id > 0) BookEventAction(id.ToString(), dr1["NAME"].ToString(), dr1["CMATCHDATETIME"].ToString(), dr1["HKJCHOSTNAME"].ToString (), dr1["HKJCGUESTNAME"].ToString(), dr1["HKJCDAYCODE"].ToString(), dr1["HKJCMATCHNO"].ToString(), false);
-                          }
+                                // if (id > 0) BookEventAction(id.ToString(), dr1["NAME"].ToString(), dr1["START_DATE"].ToString(), dr1["HKJCHOSTNAME"].ToString (), dr1["HKJCGUESTNAME"].ToString(), dr1["HKJCDAYCODE"].ToString(), dr1["HKJCMATCHNO"].ToString(), dr1["MAPPINGSTATUS"].ToString(), false);
+                                if (id > 0) BookEventAction(id.ToString(), dr1["NAME"].ToString(), dr1["CMATCHDATETIME"].ToString(), dr1["HKJCHOSTNAME"].ToString(), dr1["HKJCGUESTNAME"].ToString(), dr1["HKJCDAYCODE"].ToString(), dr1["HKJCMATCHNO"].ToString(), false);
+                            }
                             catch (Exception exp)
                             {
-                                Files.WriteError("RunSyncHkjcAndBook3(), foreach " + dr1["EMATCHID"] +"-"+dr1["HKJCHOSTNAME"]+"/"+ dr1["HKJCGUESTNAME"] + " error:" + exp);
+                                Files.WriteError("RunSyncHkjcAndBook3(), foreach " + dr1["EMATCHID"] + "-" + dr1["HKJCHOSTNAME"] + "/" + dr1["HKJCGUESTNAME"] + " error:" + exp);
                                 continue;
                             }
                         }
@@ -670,6 +670,7 @@ namespace DataOfScouts
             }
             return result;
         }
+
         private bool RunSyncHkjcAndBook2(DataTable table)
         {
             bool result = true;
