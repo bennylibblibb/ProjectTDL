@@ -111,8 +111,8 @@
                                         <TD    valign="top" height="1" colspan="5" >   <hr/>    </TD> 
                                   </TR> 
                                     <TR  valign="top">
-                                        <TD vAlign="top" align="left" colSpan="5"  >
-                                            <anthem:DataGrid id="dgRankDetails" runat="server" OnSelectedIndexChanged="dgRankDetails_SelectedIndexChanged" Width="100%"  AlternatingItemStyle-BackColor="#EFEFEF"   AllowPaging="True" AutoGenerateColumns="False"  >
+                                        <TD vAlign="top" align="left" colSpan="5"  ><%--OnSelectedIndexChanged="dgRankDetails_SelectedIndexChanged"--%>
+                                            <anthem:DataGrid id="dgRankDetails" runat="server"   Width="100%"  AlternatingItemStyle-BackColor="#EFEFEF"   AllowPaging="True" AutoGenerateColumns="False"  >
                                                 <PagerStyle Mode="NumericPages"></PagerStyle><HeaderStyle Font-Bold="True"></HeaderStyle><EditItemStyle ></EditItemStyle><ItemStyle Height="34px" CssClass="grid-item"></ItemStyle>
                                                  <SelectedItemStyle   BackColor="#CECB7B"></SelectedItemStyle> 
                                                 <Columns>
@@ -259,7 +259,7 @@
                                                          </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Team Mapping">
                                                         <HeaderStyle Wrap="true" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
-                                                          <a href=# onclick="window.open('TeamMapping.aspx?id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=600,height=280, top=200,left=200')" >																	
+                                                          <a href=# onclick="window.open('TeamMapping.aspx?id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=650,height=280, top=200,left=200')" >																	
 																		<b>    <%# DataBinder.Eval(Container, "DataItem.MAPPING_STATUS")==DBNull.Value? "Mapping" :Convert.ToBoolean(DataBinder.Eval(Container, "DataItem.MAPPING_STATUS"))? "Mapped":"Mapping"  %>  </b>	</a></ItemTemplate>
                                                          </asp:TemplateColumn>
 <ASP:EDITCOMMANDCOLUMN Visible="FALSE" EditText="Edit" CancelText="Cancel" UpdateText="Update" ItemStyle-Font-Bold="True" ButtonType="LinkButton">

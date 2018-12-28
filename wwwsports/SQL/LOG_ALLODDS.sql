@@ -1,0 +1,48 @@
+CREATE GENERATOR LOG_ALLODDS_SEQ_GEN;
+SET GENERATOR LOG_ALLODDS_SEQ_GEN TO 0;
+COMMIT;
+
+create table LOG_ALLODDS
+(
+  ISEQ_NO INTEGER NOT NULL,
+  TIMEFLAG TIMESTAMP NOT NULL,
+  SECTION VARCHAR(6) NOT NULL,
+  LeagueAlias VARCHAR(6) NOT NULL,
+  League VARCHAR(20) NOT NULL,
+  MatchDate VARCHAR(8),
+  MatchTime VARCHAR(4),
+  MatchField VARCHAR(1),
+  Host VARCHAR(8) NOT NULL,
+  Guest VARCHAR(8) NOT NULL,
+  Act VARCHAR(1),
+  Handicap VARCHAR(1),
+  T_HandiOwner VARCHAR(6),
+  M_HandiOwner VARCHAR(6),
+  T_Handi VARCHAR(5),
+  M_Handi VARCHAR(5),
+  T_LiveOdds VARCHAR(6),
+  M_LiveOdds VARCHAR(6),
+  T_Odds VARCHAR(6),
+  M_Odds VARCHAR(6),
+  E_Odds1 VARCHAR(12),
+  E_Odds2 VARCHAR(12),
+  Alert INTEGER,
+  Interval INTEGER,
+  Odds_Trend VARCHAR(4),
+  BATCHJOB VARCHAR(60),
+  CONSTRAINT LOG_ALLODDS_PK PRIMARY KEY (ISEQ_NO, TIMEFLAG)
+);
+grant all on LOG_ALLODDS to public;
+commit;
+
+SET TERM !! ;
+create trigger AUTO_LOG_ALLODDS_SEQ for LOG_ALLODDS
+before insert as
+begin
+new.ISEQ_NO = GEN_ID(LOG_ALLODDS_SEQ_GEN, 1);
+end!!
+SET TERM ;!!
+commit;
+
+Remark: if required
+alter table LOG_ALLODDS add BATCHJOB VARCHAR(60);

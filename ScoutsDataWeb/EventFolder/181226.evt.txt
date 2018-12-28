@@ -1,0 +1,71 @@
+﻿10:27:34 BEN login success.
+10:29:23 BEN login success.
+10:37:06 BEN login success.
+10:39:29 BEN login success.
+10:41:41 BEN login success.
+11:06:45 BEN login success.
+11:10:16 BEN login success.
+11:13:16 BEN login success.
+11:15:58 BEN login success.
+11:18:46 BEN login success.
+11:20:43 BEN login success.
+11:23:59 BEN login success.
+11:25:52 BEN login success.
+11:30:07 (BEN)   Time out ,please re-login.
+11:30:26 (BEN)   Time out ,please re-login.
+11:38:58 BEN login success.
+11:54:46 BEN login success.
+12:03:18 BEN login success.
+12:19:04 BEN login success.
+12:23:47 (BEN)   Time out ,please re-login.
+12:25:09 BEN login success.
+12:26:32 BEN login success.
+12:29:27 BEN login success.
+12:32:19 BEN login success.
+12:33:16 BEN login success.
+12:36:30 BEN login success.
+12:37:17 BEN login success.
+12:40:07 BEN login success.
+12:42:29 BEN login success.
+12:43:53 BEN login success.
+12:44:40 BEN login success.
+12:45:21 BEN login success.
+12:54:15 BEN login success.
+12:56:18 BEN login success.
+13:02:04 BEN login success.
+13:03:22 (BEN)   Time out ,please re-login.
+13:03:25 BEN login success.
+13:04:12 (BEN)   Time out ,please re-login.
+13:05:20 BEN login success.
+13:06:12 BEN login success.
+13:07:07 [Success] Sure [2450237 Kortrijk - Zulte Waregem] on Teams
+13:11:51 BEN login success.
+13:15:32 BEN login success.
+17:08:35 BEN login success.
+17:09:26 [Success] Sure [2445909 Norwich City - Nottingham Forest] on Teams
+17:09:46 [Success] Sure [2445915 Birmingham City - Stoke City] on Teams
+17:10:14 [Success] Sure [2436998 Brighton & Hove - Arsenal] on Teams
+17:10:21 [Success] Sure [2450235 Sporting Lokeren - Club Brugge] on Teams
+17:10:32 [Success] Sure [2436992 Southampton FC - West Ham United] on Teams
+17:14:50 BEN login success.
+17:15:54 [Success] Sure [2439604 St. Mirren - St. Johnstone] on Teams
+17:17:45 [Success] Sure [2504736 Cagliari - Genoa CFC] on Teams
+17:17:52 [Success] Sure [2504735 ACF Fiorentina - Parma] on Teams
+17:18:00 [Success] Sure [2460517 Oxford United - Southend United] on Teams
+17:18:08 [Success] Sure [2460528 Coventry City - Charlton Athletic] on Teams
+17:19:13 [Success] Sure [2436996 Leicester City - Manchester City] on Teams
+17:19:19 [Success] Sure [2445912 Bolton Wanderers - Rotherham United] on Teams
+17:19:46 [Success] Sure [2450242 Sporting Charleroi - Standard Liege] on Teams
+17:19:57 [Success] Sure [2504734 Torino FC - Empoli FC] on Teams
+17:20:35 [Success] Sure [2460524 Fleetwood Town - Doncaster Rovers] on Teams
+17:20:43 [Success] Sure [2460526 Accrington Stanley - Shrewsbury Town] on Teams
+17:20:51 [Success] Sure [2445906 Preston North End - Hull City] on Teams
+17:21:38 [Success] Sure [2436997 Burnley FC - Everton FC] on Teams
+17:21:52 [Success] Sure [2460521 Scunthorpe United - Luton Town] on Teams
+17:25:19 BEN login success.
+17:26:06 BEN login success.
+17:31:56 [Success] Sure [2504733 Frosinone - AC Milan] on Teams
+17:39:14 BEN login success.
+17:40:51 BEN login success.
+17:42:57 BEN login success.
+18:02:58 (BEN)   Time out ,please re-login.

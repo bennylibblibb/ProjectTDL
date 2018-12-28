@@ -9,6 +9,7 @@
 <body>
     <form id="form1" runat="server">
         <anthem:DataGrid id="dgTeams" runat="server" Width="550px"   AllowPaging="false" AutoGenerateColumns="true"></anthem:DataGrid>
+    
     </form>
 </body>
 </html>

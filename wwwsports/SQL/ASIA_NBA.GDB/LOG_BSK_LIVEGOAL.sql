@@ -1,0 +1,47 @@
+CREATE GENERATOR LOG_BSKLVGOAL_SEQ_GEN;
+SET GENERATOR LOG_BSKLVGOAL_SEQ_GEN TO 0;
+COMMIT;
+
+CREATE TABLE LOG_BSK_LIVEGOAL
+(
+  ISEQ_NO	INTEGER NOT NULL,
+  TIMEFLAG	TIMESTAMP NOT NULL,
+  Section	VARCHAR(8) NOT NULL,
+  Act	VARCHAR(1),
+  League	VARCHAR(20),
+  Host	  VARCHAR(16),
+  Guest	  VARCHAR(20),
+  MatchDate	  VARCHAR(8),
+  MatchTime  	VARCHAR(4),
+  LvStatus   VARCHAR(8),
+  Rec_1_Host  VARCHAR(4),
+  Rec_1_Guest  VARCHAR(4),
+  Rec_2_Host  VARCHAR(4),
+  Rec_2_Guest  VARCHAR(4),
+  Rec_3_Host  VARCHAR(4),
+  Rec_3_Guest  VARCHAR(4),
+  Rec_4_Host  VARCHAR(4),
+  Rec_4_Guest  VARCHAR(4),
+  Rec_Ot1_Host  VARCHAR(4),
+  Rec_Ot1_Guest  VARCHAR(4),
+  Rec_Ot2_Host  VARCHAR(4),
+  Rec_Ot2_Guest  VARCHAR(4),
+  Rec_Ot3_Host  VARCHAR(4),
+  Rec_Ot3_Guest  VARCHAR(4),
+  Rec_Ot4_Host  VARCHAR(4),
+  Rec_Ot4_Guest  VARCHAR(4),
+  Alert_Type  VARCHAR(4),
+  Song_ID  VARCHAR(4),
+  Remarks   VARCHAR(20),
+  BATCHJOB	 VARCHAR(60),
+CONSTRAINT LOG_BSK_LVGL_PK PRIMARY KEY (ISEQ_NO, TIMEFLAG)
+);
+
+SET TERM !! ;
+create trigger AUTO_LOG_BSKLVGOAL_SEQ for LOG_BSK_LIVEGOAL
+before insert as
+begin
+new.ISEQ_NO = GEN_ID(LOG_BSKLVGOAL_SEQ_GEN, 1);
+end!!
+SET TERM ;!!
+commit;

@@ -1,0 +1,39 @@
+CREATE GENERATOR LOG_LVPL_SEQ_GEN;
+SET GENERATOR LOG_LVPL_SEQ_GEN TO 0;
+COMMIT;
+
+create table LOG_LIVEPLACE
+(
+  ISEQ_NO INTEGER NOT NULL,
+  TIMEFLAG TIMESTAMP NOT NULL,
+  IITEMSEQ_NO INTEGER,
+  SECTION VARCHAR(12) NOT NULL,
+  RaceDate VARCHAR(8),
+  RaceTime VARCHAR(4),
+  RaceTrack VARCHAR(10),
+  RaceNo INTEGER,
+  RaceClass VARCHAR(8),
+  RaceLength VARCHAR(8),
+  RaceAlert INTEGER,
+  Race_Status VARCHAR(8),
+  Race_1 INTEGER,
+  Race_2 INTEGER,
+  Race_3 INTEGER,
+  Race_4 INTEGER,
+  BATCHJOB VARCHAR(60),
+  CONSTRAINT LOG_LVPL_PK PRIMARY KEY (ISEQ_NO, TIMEFLAG)
+);
+grant all on LOG_LIVEPLACE to public;
+commit;
+
+SET TERM !! ;
+create trigger AUTO_LOG_LVPL_SEQ for LOG_LIVEPLACE
+before insert as
+begin
+new.ISEQ_NO = GEN_ID(LOG_LVPL_SEQ_GEN, 1);
+end!!
+SET TERM ;!!
+commit;
+
+Remark: if required
+alter table LOG_LIVEPLACE add BATCHJOB VARCHAR(60);

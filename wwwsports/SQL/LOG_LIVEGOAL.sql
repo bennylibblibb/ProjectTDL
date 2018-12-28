@@ -1,0 +1,42 @@
+CREATE GENERATOR LOG_LVGOAL_SEQ_GEN;
+SET GENERATOR LOG_LVGOAL_SEQ_GEN TO 0;
+COMMIT;
+
+create table LOG_LIVEGOAL
+(
+  ISEQ_NO INTEGER NOT NULL,
+  TIMEFLAG TIMESTAMP NOT NULL,
+  SECTION VARCHAR(10) NOT NULL,
+  League VARCHAR(20) NOT NULL,
+  Host VARCHAR(8) NOT NULL,
+  Guest VARCHAR(8) NOT NULL,
+  Act VARCHAR(1),
+  MatchDate VARCHAR(8),
+  MatchTime VARCHAR(4),
+  MatchField VARCHAR(1),
+  H_Goal INTEGER,
+  G_Goal INTEGER,
+  H_Confirm INTEGER,
+  G_Confirm INTEGER,
+  SongId VARCHAR(4),
+  Alert INTEGER,
+  Status VARCHAR(4),
+  Comment VARCHAR(20),
+  TimeOfGame  INTEGER,
+  BATCHJOB VARCHAR(60),
+  CONSTRAINT LOG_LVGOAL_PK PRIMARY KEY (ISEQ_NO, TIMEFLAG)
+);
+grant all on LOG_LIVEGOAL to public;
+commit;
+
+SET TERM !! ;
+create trigger AUTO_LOG_LVGOAL_SEQ for LOG_LIVEGOAL
+before insert as
+begin
+new.ISEQ_NO = GEN_ID(LOG_LVGOAL_SEQ_GEN, 1);
+end!!
+SET TERM ;!!
+commit;
+
+Remark: if required
+alter table LOG_LIVEGOAL add BATCHJOB VARCHAR(60);

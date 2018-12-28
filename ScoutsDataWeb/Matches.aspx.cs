@@ -17,8 +17,8 @@
     using System.Text;
     using System.IO;
     using FirebirdSql.Data.FirebirdClient;
-
-    public class Matches : CommonPage
+    using JC_SoccerWeb.UserControl;
+    public class Matches : System.Web.UI.Page
     {
         private IFormatProvider culture = new CultureInfo("zh-HK", true);
         // var culture = new System.Globalization.CultureInfo("zh-HK");
@@ -39,11 +39,15 @@
         protected Anthem.Button btnEdit;
         protected Anthem.Label lbMsg;
         protected Anthem.RadioButtonList cbDay;
-
+      //protected UserControl.MenuTabs MenuTabs1;
 
         protected void dgRankDetails_SelectedIndexChanged(object sender, EventArgs e)
         {
+            DataGridItem item = dgRankDetails.SelectedItem as DataGridItem;
+            string id =((System.Web.UI.WebControls.Label)item.Cells[1].Controls[1]).Text;
             string d = dgRankDetails.SelectedIndex.ToString();
+            MenuTabs control = this.FindControl("MenuTabs1") as MenuTabs;
+            control.EventID = id;
         }
         private void dgRankDetails_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
@@ -155,8 +159,15 @@
             BindMatchesByDate(dplLeague.SelectedValue);
         }
 
+        protected override void OnInit(EventArgs e)
+        {
+            this.InitializeComponent();
+            base.OnInit(e);
+        }
+
         private void InitializeComponent()
         {
+            this.dgRankDetails.SelectedIndexChanged += new EventHandler(dgRankDetails_SelectedIndexChanged);
             this.dgRankDetails.PageIndexChanged += new DataGridPageChangedEventHandler(this.dgSchedule_PageIndexChanged);
             this.dgRankDetails.UpdateCommand += new DataGridCommandEventHandler(this.dgSchedule_UpdateCommand);
             this.dgRankDetails.CancelCommand += new DataGridCommandEventHandler(this.dgSchedule_CancelCommand);
@@ -168,14 +179,7 @@
             this.btnEdit.Click += new EventHandler(this.btnEdit_Click);
 
             base.Load += new EventHandler(this.Page_Load);
-        }
-
-        protected override void OnInit(EventArgs e)
-        {
-            this.InitializeComponent();
-            base.OnInit(e);
-        }
-
+        } 
         private void Page_Load(object sender, EventArgs e)
         {
             if (!base.Request.IsAuthenticated)
@@ -192,7 +196,7 @@
 
             }
         }
-
+         
         private void BindStatuses()
         {
             try

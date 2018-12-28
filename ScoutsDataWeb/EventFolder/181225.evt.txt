@@ -1,0 +1,15 @@
+﻿14:23:57 BEN login success.
+14:33:53 [Success] Cancel Sync [2520187] EMATCHES[WED 1]  Adelaide United - Western Sydney W.
+14:34:25 [Success] Sync [2520187] EMATCHES[WED 1]  Adelaide United - Western Sydney W.
+14:34:25 [Failure] Sync [Adelaide United - Western Sydney W.] on Teams
+14:34:30 [Success] Sure [2520187 Adelaide United - Western Sydney W.] on Teams
+14:38:27 [Success] Sure [2437000 Fulham - Wolverhampton] on Teams
+14:39:00 [Success] Sure [2450241 Royal Antwerp - Mouscron-Peruwelz] on Teams
+14:39:28 [Success] Sure [2446205 Millwall - Reading] on Teams
+14:45:13 [Success] Sure [2446205 Millwall - Reading] on Teams
+14:45:39 [Success] Sure [2445907 Queens Park Rangers - Ipswich Town] on Teams
+14:45:50 [Success] Sure [2445910 Sheffield United - Derby County] on Teams
+14:45:59 [Success] Sure [2445908 Swansea City - Aston Villa] on Teams
+14:46:17 [Success] Sure [2445911 West Bromwich Albion - Wigan Athletic] on Teams
+14:57:44 (BEN)   Time out ,please re-login.
+14:57:44 ()   Time out ,please re-login.

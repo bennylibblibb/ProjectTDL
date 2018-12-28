@@ -1,0 +1,42 @@
+CREATE GENERATOR LOG_GOALDTL_SEQ_GEN;
+SET GENERATOR LOG_GOALDTL_SEQ_GEN TO 0;
+COMMIT;
+
+create table LOG_GOALDETAILS
+(
+  ISEQ_NO INTEGER NOT NULL,
+  TIMEFLAG TIMESTAMP NOT NULL,
+  IITEMSEQ_NO INTEGER,
+  SECTION VARCHAR(6) NOT NULL,
+  League VARCHAR(18) NOT NULL,
+  Host VARCHAR(8) NOT NULL,
+  Guest VARCHAR(8) NOT NULL,
+  Act VARCHAR(1),
+  Alert VARCHAR(1),
+  Current_Status VARCHAR(1),
+  PK_First VARCHAR(8),
+  Score_RedFlag VARCHAR(1),
+  Score_Status VARCHAR(2),
+  Score_Time VARCHAR(3),
+  Score_Host_Goal VARCHAR(2),
+  Score_Guest_Goal VARCHAR(2),
+  Score_Player VARCHAR(40),
+  Score_Host_PK VARCHAR(30),
+  Score_Guest_PK VARCHAR(30),
+  BATCHJOB VARCHAR(60),
+  CONSTRAINT LOG_GOALDTL_PK PRIMARY KEY (ISEQ_NO, TIMEFLAG)
+);
+grant all on LOG_GOALDETAILS to public;
+commit;
+
+SET TERM !! ;
+create trigger AUTO_LOG_GOALDTL_SEQ for LOG_GOALDETAILS
+before insert as
+begin
+new.ISEQ_NO = GEN_ID(LOG_GOALDTL_SEQ_GEN, 1);
+end!!
+SET TERM ;!!
+commit;
+
+Remark: if required
+alter table LOG_GOALDETAILS add BATCHJOB VARCHAR(60);

@@ -18,7 +18,7 @@
     using System.IO;
     using FirebirdSql.Data.FirebirdClient;
 
-    public class Update : CommonPage
+    public class Update : System.Web.UI.Page
     {
         private IFormatProvider culture = new CultureInfo("zh-HK", true);
        // var culture = new System.Globalization.CultureInfo("zh-HK");

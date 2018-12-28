@@ -1,0 +1,152 @@
+/*
+Objective:
+Modify HKJC schedule config
+
+Last updated:
+31 July 2003 by Chapman
+
+C#.NET complier statement:
+csc /t:library /out:..\bin\HKJCSchedule.dll /r:..\bin\DBManager.dll;..\bin\Files.dll HKJCSchedule.cs
+*/
+
+using System;
+using System.Data.OleDb;
+using System.Reflection;
+using System.Text;
+using System.Web;
+using TDL.DB;
+using TDL.IO;
+
+[assembly:AssemblyCompany("TDSL")]
+[assembly:AssemblyCopyright("(c) 2003 TDSL. All rights reserved. Created on 30 July 2003.")]
+[assembly:AssemblyDescription("馬會足球 -> 設定賽程")]
+[assembly:AssemblyProduct("Sports.NET")]
+[assembly:AssemblyTitle("Sports.NET DLL")]
+[assembly:AssemblyVersion("1.1.*")]
+namespace SportsUtil {
+	public class HKJCSchedule {
+		const string LOGFILESUFFIX = "log";
+		DBManager m_SportsDBMgr;
+		Files m_SportsLog;
+		StringBuilder SQLString;
+
+		public HKJCSchedule(string Connection) {
+			m_SportsDBMgr = new DBManager();
+			m_SportsDBMgr.ConnectionString = Connection;
+			m_SportsLog = new Files();
+			SQLString = new StringBuilder();
+		}
+
+		public string Retrieve() {
+			int iDate = 0;
+			OleDbDataReader m_SportsOleReader;
+			StringBuilder HTMLString = new StringBuilder();
+
+			try {
+				SQLString.Remove(0,SQLString.Length);
+				SQLString.Append("select IGEN_DAY_CNT, IPREV_DATA_HK_TM, ICURRENT_DATA_INI_TM from MATCH_SCHEDULE order by IDATE");
+				m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
+				while(m_SportsOleReader.Read()) {
+					iDate++;
+					HTMLString.Append("<tr align=\"center\"><td>");
+					HTMLString.Append(iDate.ToString());
+					HTMLString.Append("</td><td><input name=\"dayOfSchedule\" value=\"");
+					if(!m_SportsOleReader.IsDBNull(0)) HTMLString.Append(m_SportsOleReader.GetInt32(0).ToString());
+					HTMLString.Append("\" maxlength=\"2\" size=\"1\" onChange=\"DateValidity(");
+					HTMLString.Append((iDate-1).ToString());
+					HTMLString.Append(")\"></td><td><input name=\"housekeep\" value=\"");
+					if(!m_SportsOleReader.IsDBNull(1)) HTMLString.Append(m_SportsOleReader.GetInt32(1).ToString());
+					HTMLString.Append("\" maxlength=\"4\" size=\"3\" onChange=\"HousekeepValidity(");
+					HTMLString.Append((iDate-1).ToString());
+					HTMLString.Append(")\"></td><td><input name=\"activate\" value=\"");
+					if(!m_SportsOleReader.IsDBNull(2)) HTMLString.Append(m_SportsOleReader.GetInt32(2).ToString());
+					HTMLString.Append("\" maxlength=\"4\" size=\"3\" onChange=\"ActivateValidity(");
+					HTMLString.Append((iDate-1).ToString());
+					HTMLString.Append(")\"></td></tr>");
+				}
+				m_SportsDBMgr.Close();
+				m_SportsOleReader.Close();
+				m_SportsDBMgr.Dispose();
+			}	catch(Exception ex) {
+				m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
+				m_SportsLog.Open();
+				m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " HKJCSchedule.cs.InitFields(): " + ex.ToString());
+				m_SportsLog.Close();
+				HTMLString.Remove(0,HTMLString.Length);
+				HTMLString.Append((string)HttpContext.Current.Application["accessErrorMsg"]);
+			}
+			return HTMLString.ToString();
+		}
+
+		public int Modify() {
+			int iUpdIndex = 0;
+			int iTotalDays;
+			char[] delimiter = new char[] {','};
+			string[] arrDayOfSchedule;
+			string[] arrHousekeep;
+			string[] arrActivate;
+
+			arrDayOfSchedule = HttpContext.Current.Request.Form["dayOfSchedule"].Split(delimiter);
+			arrHousekeep = HttpContext.Current.Request.Form["housekeep"].Split(delimiter);
+			arrActivate = HttpContext.Current.Request.Form["activate"].Split(delimiter);
+			iTotalDays = arrDayOfSchedule.Length;
+			try {
+				for(iUpdIndex = 0; iUpdIndex < iTotalDays; iUpdIndex++) {
+					SQLString.Remove(0,SQLString.Length);
+					SQLString.Append("update MATCH_SCHEDULE set IGEN_DAY_CNT=");
+					if(arrDayOfSchedule[iUpdIndex] != null) {
+						if(!arrDayOfSchedule[iUpdIndex].Trim().Equals("")) {
+							SQLString.Append(Convert.ToInt32(arrDayOfSchedule[iUpdIndex]).ToString());	//ensure it is integer format
+						} else {
+							SQLString.Append("1");
+						}
+					} else {
+						SQLString.Append("1");
+					}
+					SQLString.Append(", IPREV_DATA_HK_TM=");
+					if(arrHousekeep[iUpdIndex] != null) {
+						if(!arrHousekeep[iUpdIndex].Trim().Equals("")) {
+							SQLString.Append(Convert.ToInt32(arrHousekeep[iUpdIndex]).ToString());	//ensure it is integer format
+						} else {
+							SQLString.Append("null");
+						}
+					} else {
+						SQLString.Append("null");
+					}
+					SQLString.Append(", ICURRENT_DATA_INI_TM=");
+					if(arrActivate[iUpdIndex] != null) {
+						if(!arrActivate[iUpdIndex].Trim().Equals("")) {
+							SQLString.Append(Convert.ToInt32(arrActivate[iUpdIndex]).ToString());	//ensure it is integer format
+						} else {
+							SQLString.Append("null");
+						}
+					} else {
+						SQLString.Append("null");
+					}
+					SQLString.Append(" where IDATE=");
+					SQLString.Append((iUpdIndex+1).ToString());
+					m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
+					m_SportsDBMgr.Close();
+				}
+				m_SportsDBMgr.Dispose();
+
+				//write log
+				m_SportsLog.FilePath = HttpContext.Current.Application["EventFilePath"].ToString();
+				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
+				m_SportsLog.Open();
+				m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " HKJCSchedule.cs: Modify schedule (" + HttpContext.Current.Session["user_name"] + ")");
+				m_SportsLog.Close();
+			} catch(Exception ex) {
+				iUpdIndex = -1;
+				m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
+				m_SportsLog.Open();
+				m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " HKJCSchedule.cs.Modify(): " + ex.ToString());
+				m_SportsLog.Close();
+			}
+
+			return iUpdIndex;
+		}
+	}
+}

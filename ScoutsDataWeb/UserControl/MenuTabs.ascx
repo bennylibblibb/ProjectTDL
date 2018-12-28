@@ -30,7 +30,7 @@
 				</SelectedItemTemplate>
 				<ItemStyle Height="36px" CssClass="admin-tab-inactive"></ItemStyle>
 				<ItemTemplate>
-					<asp:HyperLink   id="hlMenu" runat="server"   Text='<%# ((TabItem) Container.DataItem).Name %>' Target ='<%# ((TabItem) Container.DataItem).Name=="HKJC"&& tabs.SelectedIndex == 0?"_blank":"_self" %>'  NavigateUrl="<%# ((TabItem) Container.DataItem).Path %>"  >
+					<asp:HyperLink   id="hlMenu" runat="server"   Text='<%# ((TabItem) Container.DataItem).Name %>' Target ='<%# (((TabItem) Container.DataItem).Name=="HKJC"&& tabs.SelectedIndex == 0)||((TabItem) Container.DataItem).Name=="陣容"||((TabItem) Container.DataItem).Name=="分析"||((TabItem) Container.DataItem).Name=="數據"||((TabItem) Container.DataItem).Name=="近績"||((TabItem) Container.DataItem).Name=="發送分析"||((TabItem) Container.DataItem).Name=="發送近績"?"_blank":"_self" %>'  NavigateUrl="<%# ((TabItem) Container.DataItem).Path %>"  >
 					 
 					</asp:HyperLink>
 				</ItemTemplate>

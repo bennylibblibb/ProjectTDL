@@ -1,0 +1,38 @@
+CREATE GENERATOR LOG_ANLYBG_GEN;
+SET GENERATOR LOG_ANLYBG_GEN TO 0;
+COMMIT;
+
+create table LOG_ANALYSISBG
+(
+  ISEQ_NO INTEGER NOT NULL,
+  TIMEFLAG TIMESTAMP NOT NULL,
+  SECTION VARCHAR(12) NOT NULL,
+  Act VARCHAR(1),
+  MatchDate VARCHAR(8),
+  League VARCHAR(18) NOT NULL,
+  Host VARCHAR(8) NOT NULL,
+  Guest VARCHAR(8) NOT NULL,
+  MatchField VARCHAR(1),
+  Handicap VARCHAR(1),
+  HostRoot VARCHAR(15),
+  GuestRoot VARCHAR(15),
+  Venue VARCHAR(20),
+  Temperature VARCHAR(8),
+  WeatherStatus VARCHAR(10),
+  BATCHJOB VARCHAR(60),
+  CONSTRAINT LOG_ANALYSISBG_PK PRIMARY KEY (ISEQ_NO, TIMEFLAG)
+);
+grant all on LOG_ANALYSISBG to public;
+commit;
+
+SET TERM !! ;
+create trigger AUTO_LOG_ANLYBG_SEQ for LOG_ANALYSISBG
+before insert as
+begin
+new.ISEQ_NO = GEN_ID(LOG_ANLYBG_GEN, 1);
+end!!
+SET TERM ;!!
+commit;
+
+Remark: if required
+alter table LOG_ANALYSISBG add BATCHJOB VARCHAR(60);

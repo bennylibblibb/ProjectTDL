@@ -1,0 +1,16 @@
+﻿10:28:08 BindTeams(),error: System.NullReferenceException: Object reference not set to an instance of an object.
+   at JC_SoccerWeb.TeamMapping.dgTeams_ItemDataBound(Object sender, DataGridItemEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 28
+   at System.Web.UI.WebControls.DataGrid.OnItemDataBound(DataGridItemEventArgs e)
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.TeamMapping.BindTeams(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 73
+10:30:55 BindTeams(),error: System.NullReferenceException: Object reference not set to an instance of an object.
+   at JC_SoccerWeb.TeamMapping.dgTeams_ItemDataBound(Object sender, DataGridItemEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 28
+   at System.Web.UI.WebControls.DataGrid.OnItemDataBound(DataGridItemEventArgs e)
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.TeamMapping.BindTeams(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 73

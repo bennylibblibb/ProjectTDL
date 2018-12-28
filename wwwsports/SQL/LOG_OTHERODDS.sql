@@ -1,0 +1,43 @@
+CREATE GENERATOR LOG_OTHODDS_SEQ_GEN;
+SET GENERATOR LOG_OTHODDS_SEQ_GEN TO 0;
+COMMIT;
+
+create table LOG_OTHERODDS
+(
+  ISEQ_NO INTEGER NOT NULL,
+  TIMEFLAG TIMESTAMP NOT NULL,
+  SECTION VARCHAR(15) NOT NULL,
+  Company VARCHAR(8) NOT NULL,
+  League VARCHAR(20) NOT NULL,
+  Alias VARCHAR(6) NOT NULL,
+  Host VARCHAR(8) NOT NULL,
+  Guest VARCHAR(8) NOT NULL,
+  MatchDate VARCHAR(8),
+  MatchTime VARCHAR(4),
+  MatchField VARCHAR(1),
+  Act VARCHAR(1),
+  HostHandicap VARCHAR(1),
+  ScoreHandicap VARCHAR(5),
+  Odds_Up VARCHAR(6),
+  Odds_Down VARCHAR(6),
+  Eu_Odds1 VARCHAR(12),
+  Eu_Odds2 VARCHAR(12),
+  Alert INTEGER,
+  LiveStatus VARCHAR(6),
+  BATCHJOB VARCHAR(60),
+  CONSTRAINT LOG_OTHODDS_PK PRIMARY KEY (ISEQ_NO, TIMEFLAG)
+);
+grant all on LOG_OTHERODDS to public;
+commit;
+
+SET TERM !! ;
+create trigger AUTO_LOG_OTHODDS_SEQ for LOG_OTHERODDS
+before insert as
+begin
+new.ISEQ_NO = GEN_ID(LOG_OTHODDS_SEQ_GEN, 1);
+end!!
+SET TERM ;!!
+commit;
+
+Remark: if required
+alter table LOG_OTHERODDS add BATCHJOB VARCHAR(60);

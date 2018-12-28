@@ -1,0 +1,9 @@
+To turn it on (default):
+[HKEY_CLASSES_ROOT\CLSID\{BF4B098D-5A38-11D2-B260-444553540001}]
+@="IBOLEDB"
+"OLEDB_Services"=dword:fffffffb
+
+To turn it off:
+[HKEY_CLASSES_ROOT\CLSID\{BF4B098D-5A38-11D2-B260-444553540001}]
+@="IBOLEDB"
+"OLEDB_Services"=dword:0

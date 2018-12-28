@@ -1,0 +1,57 @@
+CREATE GENERATOR LOG_HKJCODDS_SEQ_GEN;
+SET GENERATOR LOG_HKJCODDS_SEQ_GEN TO 0;
+COMMIT;
+
+create table LOG_HKJCODDS
+(
+  ISEQ_NO INTEGER NOT NULL,
+  TIMEFLAG TIMESTAMP NOT NULL,
+  SECTION VARCHAR(6) NOT NULL,
+  LeagueAlias VARCHAR(6) NOT NULL,
+  League VARCHAR(20) NOT NULL,
+  MatchDate VARCHAR(8),
+  MatchTime VARCHAR(4),
+  MatchField VARCHAR(1),
+  Host VARCHAR(8) NOT NULL,
+  Guest VARCHAR(8) NOT NULL,
+  Act VARCHAR(1),
+  Handicap VARCHAR(1),
+  T_HandiOwner VARCHAR(6),
+  M_HandiOwner VARCHAR(6),
+  T_Handi VARCHAR(5),
+  M_Handi VARCHAR(5),
+  T_LiveOdds VARCHAR(6),
+  M_LiveOdds VARCHAR(6),
+  T_Odds VARCHAR(6),
+  M_Odds VARCHAR(6),
+  Alert INTEGER,
+  Interval INTEGER,
+  MatchDay VARCHAR(5),
+  MatchNo INTEGER,
+  Status VARCHAR(1),
+  E_Odds1 VARCHAR(12),
+  E_Odds2 VARCHAR(12),
+  CRS_0 VARCHAR(25),
+  CRS_1 VARCHAR(25),
+  CRS_2 VARCHAR(25),
+  CRS_3 VARCHAR(25),
+  CRS_4 VARCHAR(25),
+  CRS_5 VARCHAR(25),
+  TTG VARCHAR(55),
+  BATCHJOB VARCHAR(60),
+  CONSTRAINT LOG_HKJCODDS_PK PRIMARY KEY (ISEQ_NO, TIMEFLAG)
+);
+grant all on LOG_HKJCODDS to public;
+commit;
+
+SET TERM !! ;
+create trigger AUTO_LOG_HKJCODDS_SEQ for LOG_HKJCODDS
+before insert as
+begin
+new.ISEQ_NO = GEN_ID(LOG_HKJCODDS_SEQ_GEN, 1);
+end!!
+SET TERM ;!!
+commit;
+
+Remark: if required
+alter table LOG_HKJCODDS add BATCHJOB VARCHAR(60);
