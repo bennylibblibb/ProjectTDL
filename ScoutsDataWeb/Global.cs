@@ -44,6 +44,9 @@ using System.Web;
             string[] msgType;
             string[] RemotingItemsArray;
             string[]   positionItems; ;
+            string[] QueueItemsArray; 
+            string[] NotifyMessageArray;
+
             ArrayList configSetting = new ArrayList();
 
             //Load positionItems Tag
@@ -122,6 +125,38 @@ using System.Web;
             Application["RemotingItems"] = RemotingItemsArray;
             configSetting.Clear();
 
+            //Load QueueInfo Tag
+            configSetting = (ArrayList)ConfigurationSettings.GetConfig("QueueInfo");
+            QueueItemsArray = new string[configSetting.Count];
+            if (configSetting != null)
+            {
+                iIndex = 0;
+                foreach (string s in configSetting)
+                {
+                    QueueItemsArray[iIndex] = s;
+                    iIndex++;
+                }
+            }
+            Application["QueueItems"] = QueueItemsArray;
+            configSetting.Clear();
+
+
+            //Load NotifyMessageType Tag
+            configSetting = (ArrayList)ConfigurationSettings.GetConfig("NotifyMessageType");
+            NotifyMessageArray = new string[configSetting.Count];
+            if (configSetting != null)
+            {
+                iIndex = 0;
+                foreach (string s in configSetting)
+                {
+                    NotifyMessageArray[iIndex] = s;
+                    iIndex++;
+                }
+            }
+            Application["NotifyMessageTypes"] = NotifyMessageArray;
+            configSetting.Clear();
+
+
             //string str = base.Context.Server.MapPath(base.Context.Request.ApplicationPath);
             //string path = Path.Combine(str, "remotingclient.cfg");
             //if (File.Exists(path))
@@ -160,6 +195,10 @@ using System.Web;
               Application["RemotingItems"] = null;
             Application["positionItemsArray"] = null;
             Application["messageType"] = null;
+            Application["QueueItems"] = null; 
+            Application["NotifyMessageTypes"] = null;
+
+
 
             Hashtable hOnline = (Hashtable)Application["Online"];
             if (hOnline!=null&&hOnline[Session.SessionID] != null)

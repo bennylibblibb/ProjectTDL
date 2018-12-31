@@ -338,421 +338,421 @@ namespace SportsUtil {
 				arrSendToPager = new string[0];
 			}
 
-            //try
-            //{
-            //    //copy array element into ArrayList
-            //    iRecordCount = arrMatchCnt.Length;
-            //    for (iIdx = 0; iIdx < iRecordCount; iIdx++)
-            //    {
-            //        matchCnt_AL.Add(arrMatchCnt[iIdx]);
-            //    }
-            //    matchCnt_AL.TrimToSize();
+            try
+            {
+                //copy array element into ArrayList
+                iRecordCount = arrMatchCnt.Length;
+                for (iIdx = 0; iIdx < iRecordCount; iIdx++)
+                {
+                    matchCnt_AL.Add(arrMatchCnt[iIdx]);
+                }
+                matchCnt_AL.TrimToSize();
 
-            //    if (arrSend.Length > 0)
-            //    {
-            //        /*****************************
-            //		 * GoGo Pager2 alert message *
-            //		 *****************************/
-            //        string[] arrQueueNames;
-            //        string[] arrMessageTypes;
-            //        arrQueueNames = (string[])HttpContext.Current.Application["QueueItems"];
-            //        arrMessageTypes = (string[])HttpContext.Current.Application["NotifyMessageTypes"];
-            //        MessageClient msgClt = new MessageClient();
-            //        msgClt.MessageType = arrMessageTypes[0];
-            //        msgClt.MessagePath = arrQueueNames[0];
+                if (arrSend.Length > 0)
+                {
+                    /*****************************
+            		 * GoGo Pager2 alert message *
+            		 *****************************/
+                    string[] arrQueueNames;
+                    string[] arrMessageTypes;
+                    arrQueueNames = (string[])HttpContext.Current.Application["QueueItems"];
+                    arrMessageTypes = (string[])HttpContext.Current.Application["NotifyMessageTypes"];
+                    MessageClient msgClt = new MessageClient();
+                    msgClt.MessageType = arrMessageTypes[0];
+                    msgClt.MessagePath = arrQueueNames[0];
 
 
-            //        string sAction = "";
-            //        string[] arrMsgType;
-            //        arrMsgType = (string[])HttpContext.Current.Application["messageType"];
+                    string sAction = "";
+                    string[] arrMsgType;
+                    arrMsgType = (string[])HttpContext.Current.Application["messageType"];
 
-            //        sCurrentTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //        sBatchJob = DateTime.Now.ToString("yyMMddHHmmss_fffffff") + "." + HttpContext.Current.Session["user_name"].ToString() + "." + arrMsgType[11] + ".ini";
-            //        for (iIdx = 0; iIdx < arrSend.Length; iIdx++)
-            //        {
-            //            //get checked item
-            //            iRecordIdx = matchCnt_AL.IndexOf(arrSend[iIdx]);
+                    sCurrentTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                    sBatchJob = DateTime.Now.ToString("yyMMddHHmmss_fffffff") + "." + HttpContext.Current.Session["user_name"].ToString() + "." + arrMsgType[11] + ".ini";
+                    for (iIdx = 0; iIdx < arrSend.Length; iIdx++)
+                    {
+                        //get checked item
+                        iRecordIdx = matchCnt_AL.IndexOf(arrSend[iIdx]);
 
-            //            //get MatchDate, MatchTime, MatchField, HostHandicap from GAMEINFO
-            //            SQLString.Remove(0, SQLString.Length);
-            //            SQLString.Append("select MATCHDATE, MATCHTIME, FIELD, HOST_HANDI from GAMEINFO where MATCH_CNT=");
-            //            SQLString.Append(arrMatchCnt[iRecordIdx]);
-            //            m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-            //            if (m_SportsOleReader.Read())
-            //            {
-            //                sMatchDate = m_SportsOleReader.GetString(0).Trim();
-            //                sMatchTime = m_SportsOleReader.GetString(1).Trim();
-            //                sMatchField = m_SportsOleReader.GetString(2).Trim();
-            //                sHostHandicap = m_SportsOleReader.GetString(3).Trim();
-            //            }
-            //            else
-            //            {
-            //                sMatchDate = "-1";
-            //                sMatchTime = "-1";
-            //                sMatchField = "-1";
-            //                sHostHandicap = "-1";
-            //            }
-            //            m_SportsOleReader.Close();
-            //            m_SportsDBMgr.Close();
+                        //get MatchDate, MatchTime, MatchField, HostHandicap from GAMEINFO
+                        SQLString.Remove(0, SQLString.Length);
+                        SQLString.Append("select MATCHDATE, MATCHTIME, FIELD, HOST_HANDI from GAMEINFO where MATCH_CNT=");
+                        SQLString.Append(arrMatchCnt[iRecordIdx]);
+                        m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
+                        if (m_SportsOleReader.Read())
+                        {
+                            sMatchDate = m_SportsOleReader.GetString(0).Trim();
+                            sMatchTime = m_SportsOleReader.GetString(1).Trim();
+                            sMatchField = m_SportsOleReader.GetString(2).Trim();
+                            sHostHandicap = m_SportsOleReader.GetString(3).Trim();
+                        }
+                        else
+                        {
+                            sMatchDate = "-1";
+                            sMatchTime = "-1";
+                            sMatchField = "-1";
+                            sHostHandicap = "-1";
+                        }
+                        m_SportsOleReader.Close();
+                        m_SportsDBMgr.Close();
 
-            //            //Update analysis stat info
-            //            SQLString.Remove(0, SQLString.Length);
-            //            SQLString.Append("select count(IMATCH_CNT) from ANALYSIS_STAT_INFO where IMATCH_CNT=");
-            //            SQLString.Append(arrMatchCnt[iRecordIdx]);
-            //            iExisted = m_SportsDBMgr.ExecuteScalar(SQLString.ToString());
-            //            m_SportsDBMgr.Close();
-            //            sAction = arrAction[iRecordIdx];
-            //            if (sAction.Equals("U"))
-            //            {
-            //                SQLString.Remove(0, SQLString.Length);
-            //                if (iExisted > 0)
-            //                {   //update existing record
-            //                    SQLString.Append("update ANALYSIS_STAT_INFO set CACT='U',IHOSTWIN=");
-            //                    SQLString.Append(arrHostWin[iRecordIdx]);
-            //                    SQLString.Append(",IHOSTDRAW=");
-            //                    SQLString.Append(arrHostDraw[iRecordIdx]);
-            //                    SQLString.Append(",IHOSTLOSS=");
-            //                    SQLString.Append(arrHostLoss[iRecordIdx]);
-            //                    SQLString.Append(",IGUESTWIN=");
-            //                    SQLString.Append(arrGuestWin[iRecordIdx]);
-            //                    SQLString.Append(",IGUESTDRAW=");
-            //                    SQLString.Append(arrGuestDraw[iRecordIdx]);
-            //                    SQLString.Append(",IGUESTLOSS=");
-            //                    SQLString.Append(arrGuestLoss[iRecordIdx]);
-            //                    SQLString.Append(" where IMATCH_CNT=");
-            //                    SQLString.Append(arrMatchCnt[iRecordIdx]);
-            //                }
-            //                else
-            //                {   //insert a new record
-            //                    SQLString.Append("insert into ANALYSIS_STAT_INFO values(");
-            //                    SQLString.Append(arrMatchCnt[iRecordIdx]);
-            //                    SQLString.Append(",'U',");
-            //                    SQLString.Append(arrHostWin[iRecordIdx]);
-            //                    SQLString.Append(",");
-            //                    SQLString.Append(arrHostDraw[iRecordIdx]);
-            //                    SQLString.Append(",");
-            //                    SQLString.Append(arrHostLoss[iRecordIdx]);
-            //                    SQLString.Append(",");
-            //                    SQLString.Append(arrGuestWin[iRecordIdx]);
-            //                    SQLString.Append(",");
-            //                    SQLString.Append(arrGuestDraw[iRecordIdx]);
-            //                    SQLString.Append(",");
-            //                    SQLString.Append(arrGuestLoss[iRecordIdx]);
-            //                    SQLString.Append(")");
-            //                }
-            //                m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-            //                m_SportsDBMgr.Close();
+                        //Update analysis stat info
+                        SQLString.Remove(0, SQLString.Length);
+                        SQLString.Append("select count(IMATCH_CNT) from ANALYSIS_STAT_INFO where IMATCH_CNT=");
+                        SQLString.Append(arrMatchCnt[iRecordIdx]);
+                        iExisted = m_SportsDBMgr.ExecuteScalar(SQLString.ToString());
+                        m_SportsDBMgr.Close();
+                        sAction = arrAction[iRecordIdx];
+                        if (sAction.Equals("U"))
+                        {
+                            SQLString.Remove(0, SQLString.Length);
+                            if (iExisted > 0)
+                            {   //update existing record
+                                SQLString.Append("update ANALYSIS_STAT_INFO set CACT='U',IHOSTWIN=");
+                                SQLString.Append(arrHostWin[iRecordIdx]);
+                                SQLString.Append(",IHOSTDRAW=");
+                                SQLString.Append(arrHostDraw[iRecordIdx]);
+                                SQLString.Append(",IHOSTLOSS=");
+                                SQLString.Append(arrHostLoss[iRecordIdx]);
+                                SQLString.Append(",IGUESTWIN=");
+                                SQLString.Append(arrGuestWin[iRecordIdx]);
+                                SQLString.Append(",IGUESTDRAW=");
+                                SQLString.Append(arrGuestDraw[iRecordIdx]);
+                                SQLString.Append(",IGUESTLOSS=");
+                                SQLString.Append(arrGuestLoss[iRecordIdx]);
+                                SQLString.Append(" where IMATCH_CNT=");
+                                SQLString.Append(arrMatchCnt[iRecordIdx]);
+                            }
+                            else
+                            {   //insert a new record
+                                SQLString.Append("insert into ANALYSIS_STAT_INFO values(");
+                                SQLString.Append(arrMatchCnt[iRecordIdx]);
+                                SQLString.Append(",'U',");
+                                SQLString.Append(arrHostWin[iRecordIdx]);
+                                SQLString.Append(",");
+                                SQLString.Append(arrHostDraw[iRecordIdx]);
+                                SQLString.Append(",");
+                                SQLString.Append(arrHostLoss[iRecordIdx]);
+                                SQLString.Append(",");
+                                SQLString.Append(arrGuestWin[iRecordIdx]);
+                                SQLString.Append(",");
+                                SQLString.Append(arrGuestDraw[iRecordIdx]);
+                                SQLString.Append(",");
+                                SQLString.Append(arrGuestLoss[iRecordIdx]);
+                                SQLString.Append(")");
+                            }
+                            m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
+                            m_SportsDBMgr.Close();
 
-            //                if (arrSendToPager.Length > 0)
-            //                {
-            //                    //Insert log into LOG_ANALYSISSTAT
-            //                    LogSQLString.Remove(0, LogSQLString.Length);
-            //                    LogSQLString.Append("insert into LOG_ANALYSISSTAT (TIMEFLAG, SECTION, ACT, LEAGUE, HOST, GUEST, MATCHDATE, MATCHTIME, MATCHFIELD, HOSTHANDICAP, HOSTWIN, HOSTDRAW, HOSTLOSS, GUESTWIN, GUESTDRAW, GUESTLOSS, BATCHJOB) values ('");
-            //                    LogSQLString.Append(sCurrentTimestamp);
-            //                    LogSQLString.Append("','ANALYSISSTAT_','U','");
-            //                    LogSQLString.Append(arrLeague[iRecordIdx]);
-            //                    LogSQLString.Append("','");
-            //                    LogSQLString.Append(arrHost[iRecordIdx]);
-            //                    LogSQLString.Append("','");
-            //                    LogSQLString.Append(arrGuest[iRecordIdx]);
-            //                    LogSQLString.Append("','");
-            //                    LogSQLString.Append(sMatchDate);
-            //                    LogSQLString.Append("','");
-            //                    LogSQLString.Append(sMatchTime);
-            //                    LogSQLString.Append("','");
-            //                    LogSQLString.Append(sMatchField);
-            //                    LogSQLString.Append("','");
-            //                    LogSQLString.Append(sHostHandicap);
-            //                    LogSQLString.Append("',");
-            //                    if (arrHostWin[iRecordIdx] == null)
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else if (arrHostWin[iRecordIdx].Trim().Equals(""))
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else
-            //                    {
-            //                        LogSQLString.Append(arrHostWin[iRecordIdx]);
-            //                    }
-            //                    LogSQLString.Append(",");
-            //                    if (arrHostDraw[iRecordIdx] == null)
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else if (arrHostDraw[iRecordIdx].Trim().Equals(""))
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else
-            //                    {
-            //                        LogSQLString.Append(arrHostDraw[iRecordIdx]);
-            //                    }
-            //                    LogSQLString.Append(",");
-            //                    if (arrHostLoss[iRecordIdx] == null)
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else if (arrHostLoss[iRecordIdx].Trim().Equals(""))
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else
-            //                    {
-            //                        LogSQLString.Append(arrHostLoss[iRecordIdx]);
-            //                    }
-            //                    LogSQLString.Append(",");
-            //                    if (arrGuestWin[iRecordIdx] == null)
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else if (arrGuestWin[iRecordIdx].Trim().Equals(""))
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else
-            //                    {
-            //                        LogSQLString.Append(arrGuestWin[iRecordIdx]);
-            //                    }
-            //                    LogSQLString.Append(",");
-            //                    if (arrGuestDraw[iRecordIdx] == null)
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else if (arrGuestDraw[iRecordIdx].Trim().Equals(""))
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else
-            //                    {
-            //                        LogSQLString.Append(arrGuestDraw[iRecordIdx]);
-            //                    }
-            //                    LogSQLString.Append(",");
-            //                    if (arrGuestLoss[iRecordIdx] == null)
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else if (arrGuestLoss[iRecordIdx].Trim().Equals(""))
-            //                    {
-            //                        LogSQLString.Append("-1");
-            //                    }
-            //                    else
-            //                    {
-            //                        LogSQLString.Append(arrGuestLoss[iRecordIdx]);
-            //                    }
-            //                    LogSQLString.Append(",'");
-            //                    LogSQLString.Append(sBatchJob);
-            //                    LogSQLString.Append("')");
-            //                    logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
-            //                    logDBMgr.Close();
-            //                }
+                            if (arrSendToPager.Length > 0)
+                            {
+                                //Insert log into LOG_ANALYSISSTAT
+                                LogSQLString.Remove(0, LogSQLString.Length);
+                                LogSQLString.Append("insert into LOG_ANALYSISSTAT (TIMEFLAG, SECTION, ACT, LEAGUE, HOST, GUEST, MATCHDATE, MATCHTIME, MATCHFIELD, HOSTHANDICAP, HOSTWIN, HOSTDRAW, HOSTLOSS, GUESTWIN, GUESTDRAW, GUESTLOSS, BATCHJOB) values ('");
+                                LogSQLString.Append(sCurrentTimestamp);
+                                LogSQLString.Append("','ANALYSISSTAT_','U','");
+                                LogSQLString.Append(arrLeague[iRecordIdx]);
+                                LogSQLString.Append("','");
+                                LogSQLString.Append(arrHost[iRecordIdx]);
+                                LogSQLString.Append("','");
+                                LogSQLString.Append(arrGuest[iRecordIdx]);
+                                LogSQLString.Append("','");
+                                LogSQLString.Append(sMatchDate);
+                                LogSQLString.Append("','");
+                                LogSQLString.Append(sMatchTime);
+                                LogSQLString.Append("','");
+                                LogSQLString.Append(sMatchField);
+                                LogSQLString.Append("','");
+                                LogSQLString.Append(sHostHandicap);
+                                LogSQLString.Append("',");
+                                if (arrHostWin[iRecordIdx] == null)
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else if (arrHostWin[iRecordIdx].Trim().Equals(""))
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else
+                                {
+                                    LogSQLString.Append(arrHostWin[iRecordIdx]);
+                                }
+                                LogSQLString.Append(",");
+                                if (arrHostDraw[iRecordIdx] == null)
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else if (arrHostDraw[iRecordIdx].Trim().Equals(""))
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else
+                                {
+                                    LogSQLString.Append(arrHostDraw[iRecordIdx]);
+                                }
+                                LogSQLString.Append(",");
+                                if (arrHostLoss[iRecordIdx] == null)
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else if (arrHostLoss[iRecordIdx].Trim().Equals(""))
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else
+                                {
+                                    LogSQLString.Append(arrHostLoss[iRecordIdx]);
+                                }
+                                LogSQLString.Append(",");
+                                if (arrGuestWin[iRecordIdx] == null)
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else if (arrGuestWin[iRecordIdx].Trim().Equals(""))
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else
+                                {
+                                    LogSQLString.Append(arrGuestWin[iRecordIdx]);
+                                }
+                                LogSQLString.Append(",");
+                                if (arrGuestDraw[iRecordIdx] == null)
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else if (arrGuestDraw[iRecordIdx].Trim().Equals(""))
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else
+                                {
+                                    LogSQLString.Append(arrGuestDraw[iRecordIdx]);
+                                }
+                                LogSQLString.Append(",");
+                                if (arrGuestLoss[iRecordIdx] == null)
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else if (arrGuestLoss[iRecordIdx].Trim().Equals(""))
+                                {
+                                    LogSQLString.Append("-1");
+                                }
+                                else
+                                {
+                                    LogSQLString.Append(arrGuestLoss[iRecordIdx]);
+                                }
+                                LogSQLString.Append(",'");
+                                LogSQLString.Append(sBatchJob);
+                                LogSQLString.Append("')");
+                                logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
+                                logDBMgr.Close();
+                            }
 
-            //                iUpdCnt++;
-            //            }
-            //            else
-            //            {
-            //                if (iExisted > 0)
-            //                {   //mark delete existing record
-            //                    SQLString.Remove(0, SQLString.Length);
-            //                    SQLString.Append("update ANALYSIS_STAT_INFO set CACT='D' where IMATCH_CNT=");
-            //                    SQLString.Append(arrMatchCnt[iRecordIdx]);
-            //                    m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-            //                    m_SportsDBMgr.Close();
+                            iUpdCnt++;
+                        }
+                        else
+                        {
+                            if (iExisted > 0)
+                            {   //mark delete existing record
+                                SQLString.Remove(0, SQLString.Length);
+                                SQLString.Append("update ANALYSIS_STAT_INFO set CACT='D' where IMATCH_CNT=");
+                                SQLString.Append(arrMatchCnt[iRecordIdx]);
+                                m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
+                                m_SportsDBMgr.Close();
 
-            //                    if (arrSendToPager.Length > 0)
-            //                    {
-            //                        //Insert log into LOG_ANALYSISSTAT
-            //                        LogSQLString.Remove(0, LogSQLString.Length);
-            //                        LogSQLString.Append("insert into LOG_ANALYSISSTAT (TIMEFLAG, SECTION, ACT, LEAGUE, HOST, GUEST, MATCHDATE, MATCHTIME, MATCHFIELD, HOSTHANDICAP, HOSTWIN, HOSTDRAW, HOSTLOSS, GUESTWIN, GUESTDRAW, GUESTLOSS, BATCHJOB) values ('");
-            //                        LogSQLString.Append(sCurrentTimestamp);
-            //                        LogSQLString.Append("','ANALYSISSTAT_','D','");
-            //                        LogSQLString.Append(arrLeague[iRecordIdx]);
-            //                        LogSQLString.Append("','");
-            //                        LogSQLString.Append(arrHost[iRecordIdx]);
-            //                        LogSQLString.Append("','");
-            //                        LogSQLString.Append(arrGuest[iRecordIdx]);
-            //                        LogSQLString.Append("','");
-            //                        LogSQLString.Append(sMatchDate);
-            //                        LogSQLString.Append("','");
-            //                        LogSQLString.Append(sMatchTime);
-            //                        LogSQLString.Append("','");
-            //                        LogSQLString.Append(sMatchField);
-            //                        LogSQLString.Append("','");
-            //                        LogSQLString.Append(sHostHandicap);
-            //                        LogSQLString.Append("',");
-            //                        if (arrHostWin[iRecordIdx] == null)
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else if (arrHostWin[iRecordIdx].Trim().Equals(""))
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else
-            //                        {
-            //                            LogSQLString.Append(arrHostWin[iRecordIdx]);
-            //                        }
-            //                        LogSQLString.Append(",");
-            //                        if (arrHostDraw[iRecordIdx] == null)
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else if (arrHostDraw[iRecordIdx].Trim().Equals(""))
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else
-            //                        {
-            //                            LogSQLString.Append(arrHostDraw[iRecordIdx]);
-            //                        }
-            //                        LogSQLString.Append(",");
-            //                        if (arrHostLoss[iRecordIdx] == null)
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else if (arrHostLoss[iRecordIdx].Trim().Equals(""))
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else
-            //                        {
-            //                            LogSQLString.Append(arrHostLoss[iRecordIdx]);
-            //                        }
-            //                        LogSQLString.Append(",");
-            //                        if (arrGuestWin[iRecordIdx] == null)
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else if (arrGuestWin[iRecordIdx].Trim().Equals(""))
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else
-            //                        {
-            //                            LogSQLString.Append(arrGuestWin[iRecordIdx]);
-            //                        }
-            //                        LogSQLString.Append(",");
-            //                        if (arrGuestDraw[iRecordIdx] == null)
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else if (arrGuestDraw[iRecordIdx].Trim().Equals(""))
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else
-            //                        {
-            //                            LogSQLString.Append(arrGuestDraw[iRecordIdx]);
-            //                        }
-            //                        LogSQLString.Append(",");
-            //                        if (arrGuestLoss[iRecordIdx] == null)
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else if (arrGuestLoss[iRecordIdx].Trim().Equals(""))
-            //                        {
-            //                            LogSQLString.Append("-1");
-            //                        }
-            //                        else
-            //                        {
-            //                            LogSQLString.Append(arrGuestLoss[iRecordIdx]);
-            //                        }
-            //                        LogSQLString.Append(",'");
-            //                        LogSQLString.Append(sBatchJob);
-            //                        LogSQLString.Append("')");
-            //                        logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
-            //                        logDBMgr.Close();
-            //                    }
+                                if (arrSendToPager.Length > 0)
+                                {
+                                    //Insert log into LOG_ANALYSISSTAT
+                                    LogSQLString.Remove(0, LogSQLString.Length);
+                                    LogSQLString.Append("insert into LOG_ANALYSISSTAT (TIMEFLAG, SECTION, ACT, LEAGUE, HOST, GUEST, MATCHDATE, MATCHTIME, MATCHFIELD, HOSTHANDICAP, HOSTWIN, HOSTDRAW, HOSTLOSS, GUESTWIN, GUESTDRAW, GUESTLOSS, BATCHJOB) values ('");
+                                    LogSQLString.Append(sCurrentTimestamp);
+                                    LogSQLString.Append("','ANALYSISSTAT_','D','");
+                                    LogSQLString.Append(arrLeague[iRecordIdx]);
+                                    LogSQLString.Append("','");
+                                    LogSQLString.Append(arrHost[iRecordIdx]);
+                                    LogSQLString.Append("','");
+                                    LogSQLString.Append(arrGuest[iRecordIdx]);
+                                    LogSQLString.Append("','");
+                                    LogSQLString.Append(sMatchDate);
+                                    LogSQLString.Append("','");
+                                    LogSQLString.Append(sMatchTime);
+                                    LogSQLString.Append("','");
+                                    LogSQLString.Append(sMatchField);
+                                    LogSQLString.Append("','");
+                                    LogSQLString.Append(sHostHandicap);
+                                    LogSQLString.Append("',");
+                                    if (arrHostWin[iRecordIdx] == null)
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else if (arrHostWin[iRecordIdx].Trim().Equals(""))
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else
+                                    {
+                                        LogSQLString.Append(arrHostWin[iRecordIdx]);
+                                    }
+                                    LogSQLString.Append(",");
+                                    if (arrHostDraw[iRecordIdx] == null)
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else if (arrHostDraw[iRecordIdx].Trim().Equals(""))
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else
+                                    {
+                                        LogSQLString.Append(arrHostDraw[iRecordIdx]);
+                                    }
+                                    LogSQLString.Append(",");
+                                    if (arrHostLoss[iRecordIdx] == null)
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else if (arrHostLoss[iRecordIdx].Trim().Equals(""))
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else
+                                    {
+                                        LogSQLString.Append(arrHostLoss[iRecordIdx]);
+                                    }
+                                    LogSQLString.Append(",");
+                                    if (arrGuestWin[iRecordIdx] == null)
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else if (arrGuestWin[iRecordIdx].Trim().Equals(""))
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else
+                                    {
+                                        LogSQLString.Append(arrGuestWin[iRecordIdx]);
+                                    }
+                                    LogSQLString.Append(",");
+                                    if (arrGuestDraw[iRecordIdx] == null)
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else if (arrGuestDraw[iRecordIdx].Trim().Equals(""))
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else
+                                    {
+                                        LogSQLString.Append(arrGuestDraw[iRecordIdx]);
+                                    }
+                                    LogSQLString.Append(",");
+                                    if (arrGuestLoss[iRecordIdx] == null)
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else if (arrGuestLoss[iRecordIdx].Trim().Equals(""))
+                                    {
+                                        LogSQLString.Append("-1");
+                                    }
+                                    else
+                                    {
+                                        LogSQLString.Append(arrGuestLoss[iRecordIdx]);
+                                    }
+                                    LogSQLString.Append(",'");
+                                    LogSQLString.Append(sBatchJob);
+                                    LogSQLString.Append("')");
+                                    logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
+                                    logDBMgr.Close();
+                                }
 
-            //                    iDelCnt++;
-            //                }
-            //            }
-            //        }
+                                iDelCnt++;
+                            }
+                        }
+                    }
 
-            //        if ((iDelCnt + iUpdCnt) > 0 && arrSendToPager.Length > 0)
-            //        {
-            //            //Modified by Chapman, 19 Feb 2004
-            //            //Send Notify Message
-            //            sptMsg.Body = sBatchJob;
-            //            sptMsg.Timestamp = DateTime.Now.ToString("yyMMddHHmmss");
-            //            sptMsg.AppID = "07";
-            //            sptMsg.MsgID = "11";
-            //            sptMsg.DeviceID = new string[0];
-            //            for (int i = 0; i < arrSendToPager.Length; i++)
-            //            {
-            //                sptMsg.AddDeviceID((string)arrSendToPager[i]);
-            //            }
-            //            try
-            //            {
-            //                //Notify via MSMQ
-            //                msgClt.MessageType = arrMessageTypes[0];
-            //                msgClt.MessagePath = arrQueueNames[0];
-            //                msgClt.SendMessage(sptMsg);
-            //            }
-            //            // catch (System.Messaging.MessageQueueException mqEx)
-            //            catch (InvalidOperationException mqEx)
-            //            {
-            //                try
-            //                {
-            //                    m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-            //                    m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-            //                    m_SportsLog.Open();
-            //                    m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " MSMQ ERROR: Analysis Stat");
-            //                    m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs.Update(): Notify via MSMQ throws MessageQueueException:  " + mqEx.ToString());
-            //                    m_SportsLog.Close();
+                    if ((iDelCnt + iUpdCnt) > 0 && arrSendToPager.Length > 0)
+                    {
+                        //Modified by Chapman, 19 Feb 2004
+                        //Send Notify Message
+                        sptMsg.Body = sBatchJob;
+                        sptMsg.Timestamp = DateTime.Now.ToString("yyMMddHHmmss");
+                        sptMsg.AppID = "07";
+                        sptMsg.MsgID = "11";
+                        sptMsg.DeviceID = new string[0];
+                        for (int i = 0; i < arrSendToPager.Length; i++)
+                        {
+                            sptMsg.AddDeviceID((string)arrSendToPager[i]);
+                        }
+                        try
+                        {
+                            //Notify via MSMQ
+                            msgClt.MessageType = arrMessageTypes[0];
+                            msgClt.MessagePath = arrQueueNames[0];
+                            msgClt.SendMessage(sptMsg);
+                        }
+                        // catch (System.Messaging.MessageQueueException mqEx)
+                        catch (InvalidOperationException mqEx)
+                        {
+                            try
+                            {
+                                m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                                m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                                m_SportsLog.Open();
+                                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " MSMQ ERROR: Analysis Stat");
+                                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs.Update(): Notify via MSMQ throws MessageQueueException:  " + mqEx.ToString());
+                                m_SportsLog.Close();
 
-            //                    //If MSMQ fail, notify via .NET Remoting
-            //                    msgClt.MessageType = arrMessageTypes[1];
-            //                    msgClt.MessagePath = arrRemotingPath[0];
-            //                    if (!msgClt.SendMessage((object)sptMsg))
-            //                    {
-            //                        m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-            //                        m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-            //                        m_SportsLog.Open();
-            //                        m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Stat");
-            //                        m_SportsLog.Close();
-            //                    }
-            //                }
-            //                catch (Exception ex)
-            //                {
-            //                    m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-            //                    m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-            //                    m_SportsLog.Open();
-            //                    m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Stat");
-            //                    m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs.Update(): Notify via .NET Remoting throws exception: " + ex.ToString());
-            //                    m_SportsLog.Close();
-            //                }
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-            //                m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-            //                m_SportsLog.Open();
-            //                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs.Update(): Notify via MSMQ throws exception: " + ex.ToString());
-            //                m_SportsLog.Close();
-            //            }
-            //        }
-            //        m_SportsDBMgr.Dispose();
-            //    }
+                                //If MSMQ fail, notify via .NET Remoting
+                                msgClt.MessageType = arrMessageTypes[1];
+                                msgClt.MessagePath = arrRemotingPath[0];
+                                if (!msgClt.SendMessage((object)sptMsg))
+                                {
+                                    m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                                    m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                                    m_SportsLog.Open();
+                                    m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Stat");
+                                    m_SportsLog.Close();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                                m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                                m_SportsLog.Open();
+                                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Stat");
+                                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs.Update(): Notify via .NET Remoting throws exception: " + ex.ToString());
+                                m_SportsLog.Close();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                            m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                            m_SportsLog.Open();
+                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs.Update(): Notify via MSMQ throws exception: " + ex.ToString());
+                            m_SportsLog.Close();
+                        }
+                    }
+                    m_SportsDBMgr.Dispose();
+                }
 
-            //    //write log
-            //    m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];
-            //    m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-            //    m_SportsLog.Open();
-            //    m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs: Update " + iUpdCnt.ToString() + " and delete " + iDelCnt.ToString() + " statistical data (" + HttpContext.Current.Session["user_name"] + ")");
-            //    m_SportsLog.Close();
-            //}
-            //catch (OleDbException ex)
-            //{
-            //    m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-            //    m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-            //    m_SportsLog.Open();
-            //    m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs.Update(): " + ex.ToString());
-            //    m_SportsLog.Close();
-            //    iUpdCnt = -1;
-            //    iDelCnt = -1;
-            //}
+                //write log
+                m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];
+                m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                m_SportsLog.Open();
+                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs: Update " + iUpdCnt.ToString() + " and delete " + iDelCnt.ToString() + " statistical data (" + HttpContext.Current.Session["user_name"] + ")");
+                m_SportsLog.Close();
+            }
+            catch (OleDbException ex)
+            {
+                m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                m_SportsLog.Open();
+                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisStat.cs.Update(): " + ex.ToString());
+                m_SportsLog.Close();
+                iUpdCnt = -1;
+                iDelCnt = -1;
+            }
             arrRtn[0] = iUpdCnt;
 			arrRtn[1] = iDelCnt;
 			return arrRtn;

@@ -9,6 +9,8 @@
     using System.Web.Security;
     using System.Web.UI;
     using System.Web.UI.WebControls;
+    using SportsUtil;
+    using System.Configuration;
 
     public class SignIn : UserControl
     {
@@ -24,7 +26,29 @@
         protected TextBox txtValidate;
         protected TextBox UserID;
 
-        private void Btnsignin_Click(object sender, EventArgs e)
+        int CustomAuthenticate(string username, string password)
+        {
+            //string[] arrUserInfo;
+            //Authenticator au = new Authenticator(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+            //try
+            //{
+                //arrUserInfo = au.UserAuthenticate(username, password);
+                //if (au.AccessCode > 0)
+                //{
+                    Session["user_id"] = "3";// arrUserInfo[0];
+                    Session["user_role"] = "999";// arrUserInfo[1];
+                    Session["user_name"] = username;
+                    Session["user_sortType"] = "0";
+                //}
+
+            //    return au.AccessCode;
+            //}
+            //catch (Exception)
+            //{
+               return -99;
+            //}
+        }
+            private void Btnsignin_Click(object sender, EventArgs e)
         {
             if (base.Request.Cookies["CheckCode"] == null)
             {
@@ -42,6 +66,7 @@
                 UserData data = new Users().GetUserByUSER_ID(this.UserID.Text.ToUpper(), this.Password.Text.Trim());
                 if (data != null)
                 {
+                    CustomAuthenticate(this.UserID.Text.ToUpper(), "");
                     str = data.Tables[0].Rows[0]["USER_ID"].ToString().ToUpper();
                     Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + str + " login success.");
                     FormsAuthentication.SetAuthCookie(str.ToUpper(), this.RememberCheckbox.Checked);
