@@ -1,11 +1,21 @@
 <%@ Page EnableViewState="false"%>
 
 <%@ Import Namespace="SportsUtil"%>
-
+<%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="~/UserControl/MenuTabs.ascx" %>
 <script language="C#" runat="server">
 	string sAlias;
 
 	void Page_Load(Object sender,EventArgs e) {
+        
+           string sLeagueOption = ""; 
+		SoccerMenuLeague MenuLeague = new SoccerMenuLeague(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+		 try {
+			sLeagueOption = MenuLeague.Show(); 
+			CorrectInformation.InnerHtml = sLeagueOption;
+		} catch(NullReferenceException) {
+		 }
+
+
 		Rank leagRank = new Rank(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
 
 		try {
@@ -88,17 +98,31 @@ function ActionChanged() {
 		RankForm.SendToPager[2].checked = true;
 		//alert('請確定GOGO1,GOGO2及馬會機已選取！');
 	}
-}
+    }
+
+      function goToTeam(selectedTeam) {
+    if (selectedTeam != '' && selectedTeam != '0') {
+        window.location.replace('Rank.aspx?leagID=' + selectedTeam);
+	} 
+	RankForm.soccerCorrectScore.value = '0';
+    }
 </script>
 
 <html>
 <head>
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
-	<LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
+	<LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">
+    <LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
+     <title>球隊排名</title>
 </head>
 <body>
 	<form id="RankForm" method="post" runat="server" onsubmit="DeviceCheck()">
-		<font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
+		   <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
+        <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
+        	<select name="soccerCorrectScore" onChange="goToTeam(RankForm.soccerCorrectScore.value)">
+						<option value="0">請選擇</option>
+						<span id="CorrectInformation" runat="server" />
+					</select>
 		<table border="1" width="50%" style="font: 10pt verdana">
 		<tr style="background-color:#FFD700">
 			<th><select name="action" onChange="ActionChanged()"><option value="U">更新<option value="D">刪除<option value="P">只清除傳呼機</select>&nbsp;<font color="#9932CC"><%=sAlias%></font><font color="#808080">排名</font></th>

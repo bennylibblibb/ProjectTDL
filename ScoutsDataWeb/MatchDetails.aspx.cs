@@ -10,7 +10,7 @@ namespace JC_SoccerWeb
     /// <summary>
     /// MemberofSent ªººK­n´y­z¡C
     /// </summary>
-    public class MatchDetails : CommonPage
+    public class MatchDetails : System.Web.UI.Page
     {
         protected DataGrid eventDetails;
         protected DataGrid dgGoalInfo;

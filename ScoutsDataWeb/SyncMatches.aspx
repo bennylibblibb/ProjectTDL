@@ -1,7 +1,7 @@
 ﻿<%@ Register TagPrefix="anthem" Namespace="Anthem" Assembly="Anthem" %>
 <%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="UserControl/MenuTabs.ascx" %>
 <%@ Page language="c#" Codebehind="Update.aspx.cs" AutoEventWireup="false" Inherits="JC_SoccerWeb.Update" ValidateRequest="false" %>
-<%@ Register TagPrefix="uc1" TagName="SendTabs" Src="UserControl/SendTabs.ascx" %>
+<%--<%@ Register TagPrefix="uc1" TagName="SendTabs" Src="UserControl/SendTabs.ascx" %>--%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 <HEAD>
@@ -107,7 +107,7 @@
             <td class="top_bar02_bg" vAlign="top" height="15">
                 <P align="left">
                     <FONT color="#ffffff">
-                        <IMG height="15" src="resource/spacer.gif" width="15">
+                        <%--<IMG height="15" src="resource/spacer.gif" width="15">--%>
                     </FONT>
                     用戶:&nbsp;<asp:label id="lbUser" runat="server"></asp:label>
                 </P>
@@ -121,7 +121,7 @@
                        width="100%" border="0">
                     <tr>
                         <td class="admin-table" style="HEIGHT: 10px" vAlign="top" height="2">
-                            <IMG height="15" src="resource/spacer.gif" width="15">
+                           <%-- <IMG height="15" src="resource/spacer.gif" width="15">--%>
                         </td>
                         <td   vAlign="top"> 
                                 <uc1:menutabs id="MenuTabs1" runat="server"></uc1:menutabs>
@@ -129,7 +129,7 @@
                     </tr>
                     <TR vAlign="top">
                         <TD vAlign="top" class="left_bar_bg" style="width:2px;height:100%">
-                            <uc1:sendtabs id="SendTabs1" runat="server"></uc1:sendtabs> 
+                            <%--<uc1:sendtabs id="SendTabs1" runat="server"></uc1:sendtabs>--%> 
                         </TD>
                         <TD vAlign="top" class="tan-border02" height="1">
                             <Anthem:panel id="plRankDetails" runat="server">

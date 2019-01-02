@@ -80,7 +80,9 @@ namespace SportsUtil
             string sLeagID;
             StringBuilder HTMLString = new StringBuilder();
 
-            sLeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
+            //sLeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
+            sLeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "001" : HttpContext.Current.Request.QueryString["leagID"].Trim();
+
             try
             {
                 SQLString.Remove(0, SQLString.Length);
@@ -251,8 +253,12 @@ namespace SportsUtil
             string sRecordIndex;
             StringBuilder HTMLString = new StringBuilder();
 
-            m_LeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
-            sTeamID = HttpContext.Current.Request.QueryString["teamID"].Trim();
+            // m_LeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
+            m_LeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "001" : HttpContext.Current.Request.QueryString["leagID"].Trim();
+
+            ////sTeamID = HttpContext.Current.Request.QueryString["teamID"].Trim();
+            sTeamID = (HttpContext.Current.Request.QueryString["teamID"] == null) ? "000" : HttpContext.Current.Request.QueryString["teamID"].Trim();
+
             sRecordIndex = HttpContext.Current.Request.QueryString["RecordIndex"].Trim();
             try
             {

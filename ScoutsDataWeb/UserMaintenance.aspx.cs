@@ -14,7 +14,7 @@ using Label = Anthem.Label;
 using Panel = Anthem.Panel;
  using TextBox = Anthem.TextBox;
 using System .Globalization ;
-    public class UserMaintenance : CommonPage
+    public class UserMaintenance : System.Web.UI.Page
     {
 //        protected Button btnDelete;
 //        protected Button btnNewUser;

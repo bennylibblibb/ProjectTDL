@@ -1,7 +1,7 @@
 <%@ Page EnableViewState="false"%>
 
 <%@ Import Namespace="SportsUtil"%>
-
+<%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="~/UserControl/MenuTabs.ascx" %>
 <script language="C#" runat="server">
     void Page_Load(Object sender,EventArgs e) {
 
@@ -240,11 +240,13 @@ function DeviceCheck() {
 <head>
      <title>近績</title>
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
-	<LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
+	<LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">
+    <LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
 </head>
 <body >
 	<form id="AnalysisRecentForm" method="post" runat="server" onsubmit="DeviceCheck()">
-		<font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
+	   <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
+        <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
        	<select name="AnalysisRecentModify" onChange="goToAnalysisRecent(AnalysisRecentForm.AnalysisRecentModify.value)">
 						<option value="0">請選擇</option>
 						<span id="CorrectScoreInformation" runat="server" />

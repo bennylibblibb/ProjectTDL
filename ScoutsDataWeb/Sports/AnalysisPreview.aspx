@@ -1,26 +1,26 @@
 <%@ Page EnableViewState="false"%>
 
 <%@ Import Namespace="SportsUtil"%>
-
+<%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="~/UserControl/MenuTabs.ascx" %>
 <script language="C#" runat="server">
 	int iRecCount;
 
 	void Page_Load(Object sender,EventArgs e) {
-		AnalysisPreview matchPreview = new AnalysisPreview((string)Application["SoccerDBConnectionString"]);
+		AnalysisPreview matchPreview = new AnalysisPreview(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
 		try {
 			AnalysisPreivewInformation.InnerHtml = matchPreview.PreviewMatches();
 			iRecCount = matchPreview.NumberOfRecords;
-			UpdateHistoryMessage((string)Application["retrieveInfoMsg"] + "賽事分析(" + DateTime.Now.ToString("HH:mm:ss") + ")");
+			UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "賽事分析(" + DateTime.Now.ToString("HH:mm:ss") + ")");
 		} catch(NullReferenceException) {
 			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + (string)Application["sessionExpiredMsg"] + "</a>");
+			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
 		}
 	}
 
 	void onSendAnalysis(Object sender,EventArgs e) {
 		int iUpdated = 0;
 		string sNow;
-		AnalysisPreview previewAnly = new AnalysisPreview((string)Application["SoccerDBConnectionString"]);
+		AnalysisPreview previewAnly = new AnalysisPreview(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
 		sNow = DateTime.Now.ToString("HH:mm:ss");
 		try {
 			iUpdated = previewAnly.Send();
@@ -30,11 +30,11 @@
 			}	else if(iUpdated == 0) {
 				UpdateHistoryMessage("沒有發送賽事分析(" + sNow + ")");
 			} else {
-				UpdateHistoryMessage((string)Application["transErrorMsg"] + "(" + sNow + ")");
+				UpdateHistoryMessage(ConfigurationManager.AppSettings["transErrorMsg"] + "(" + sNow + ")");
 			}
 		}	catch(NullReferenceException nullex) {
 			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + (string)Application["sessionExpiredMsg"] + "</a>");
+			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
 		}
 	}
 
@@ -275,11 +275,14 @@ function OnActionChanged(checkedIdx) {
 <html>
 <head>
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
-	<LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
+	<LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">
+    <LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
+      <title>發送分析</title>
 </head>
 <body>
 	<form id="AnalysisPreviewForm" method="post" runat="server" onsubmit="DeviceCheck()">
-		<font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
+	 <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
+        <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
 
 		<table border="1" width="100%" style="font: 10pt verdana">
 		<tr style="background-color:#2F4F4F" align="center">

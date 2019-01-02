@@ -55,7 +55,9 @@ namespace SportsUtil
             string sLeagID;
             StringBuilder HTMLString = new StringBuilder();
 
-            sLeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
+            ////sLeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
+            sLeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "001" : HttpContext.Current.Request.QueryString["leagID"].Trim();
+
             SQLString.Remove(0, SQLString.Length);
             SQLString.Append("SELECT leag.ALIAS, rank.RANK, team.TEAMNAME, rank.GAMES, rank.SCORE, team.CHKJCSHORTNAME FROM LEAGINFO leag ");
             SQLString.Append("LEFT OUTER JOIN TEAMINFO team ON team.TEAM_ID in (select TEAM_ID from ID_INFO where LEAG_ID='");

@@ -18,6 +18,8 @@
     using System.IO;
     using FirebirdSql.Data.FirebirdClient;
     using JC_SoccerWeb.UserControl;
+
+
     public class Matches : System.Web.UI.Page
     {
         private IFormatProvider culture = new CultureInfo("zh-HK", true);
@@ -39,15 +41,30 @@
         protected Anthem.Button btnEdit;
         protected Anthem.Label lbMsg;
         protected Anthem.RadioButtonList cbDay;
-      //protected UserControl.MenuTabs MenuTabs1;
+        // protected UserControl.MenuTabs MenuTabs1;
+        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder1;
 
         protected void dgRankDetails_SelectedIndexChanged(object sender, EventArgs e)
         {
             DataGridItem item = dgRankDetails.SelectedItem as DataGridItem;
-            string id =((System.Web.UI.WebControls.Label)item.Cells[1].Controls[1]).Text;
+            string id = ((System.Web.UI.WebControls.Label)item.Cells[1].Controls[1]).Text;
             string d = dgRankDetails.SelectedIndex.ToString();
-            MenuTabs control = this.FindControl("MenuTabs1") as MenuTabs;
-            control.EventID = id;
+            Session["eventID"]=id;
+            MenuTabs myControl = (MenuTabs)this.Page.LoadControl("UserControl/MenuTabs.ascx");
+           myControl.ID = "myControl";
+           . myControl.eventID = id;
+            this.PlaceHolder1.Controls.Add(myControl);
+            //MenuTabs control  = this.FindControl("MenuTabs1") as MenuTabs;
+            //Anthem.DataList tabss = control.FindControl("tabs") as Anthem.DataList;
+            //tabss.UpdateAfterCallBack = true;
+            // System.Web.UI.WebControls.PlaceHolder control = this.FindControl("PlaceHolder1") as System.Web.UI.WebControls.PlaceHolder;
+            //   MenuTabs getTextBox = new MenuTabs();
+            //  getTextBox = (MenuTabs)this.PlaceHolder1.FindControl("abc");
+            //System.Web.UI.WebControls.PlaceHolder control3 = this.Page.Master.FindControl("PlaceHolder1") as System.Web.UI.WebControls.PlaceHolder;
+            //     MenuTabs control2 =  control.Controls[0].FindControl("abc") as MenuTabs;
+            // control2.EventID = id;
+            // MenuTabs control3= this.Page.Master.FindControl("PlaceHolder1").FindControl("abc") as MenuTabs;
+            // string s = "";
         }
         private void dgRankDetails_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
@@ -193,8 +210,16 @@
                 this.lbUser.Text = this.Context.User.Identity.Name;
                 //   BindStatuses();
                 BindMatches(dplLeague.SelectedValue);
-
+                MenuTabs myControl = (MenuTabs)this.Page.LoadControl("UserControl/MenuTabs.ascx");
+                myControl.ID = "myControl";
+                this.PlaceHolder1.Controls.Add(myControl);
             }
+            //else if (base.Request.IsAuthenticated)
+            //{
+            //    MenuTabs myControl = (MenuTabs)this.Page.LoadControl("UserControl/MenuTabs.ascx");
+            //    myControl.ID = "abc";
+            //    this.PlaceHolder1.Controls.Add(myControl);
+            //}
         }
          
         private void BindStatuses()

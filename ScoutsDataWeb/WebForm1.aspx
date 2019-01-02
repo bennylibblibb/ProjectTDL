@@ -1,15 +1,17 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="JC_SoccerWeb.WebForm1" %>
+﻿ <%@ Page language="c#" Codebehind="default.aspx.cs" AutoEventWireup="false" Inherits="testascx.WebForm1" %>
+<%@ Register TagPrefix="uc1" TagName="sayhello" Src="sayhello.ascx" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<HTML>
+<HEAD>
+<title>WebForm1</title>
+<meta name="GENERATOR" Content="Microsoft Visual Studio .NET 7.1">
+<meta name="CODE_LANGUAGE" Content="C#">
+<meta name="vs_defaultClientScript" content="JavaScript"> 
+</HEAD>
+<body MS_POSITIONING="GridLayout" leftmargin=0 topmargin=0>
+<form id="Form121" method="post" runat="server">
+<!-- 给属性LabText赋值如下格式 -->
+<uc1:sayhello id="Sayhello1" LabText="我是在html里面的" runat="server"></uc1:sayhello>
+</form>
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div>
-        </div>
-    </form>
-</body>
-</html>
+</HTML>

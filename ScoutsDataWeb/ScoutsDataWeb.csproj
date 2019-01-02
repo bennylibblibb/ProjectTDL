@@ -86,11 +86,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AnalysisModify.aspx" />
-    <Content Include="AnalysisPreview.aspx" />
-    <Content Include="AnalysisRecent.aspx" />
-    <Content Include="AnalysisSinglePreview.aspx" />
-    <Content Include="AnalysisStat.aspx" />
+    <Content Include="Sports\AnalysisModify.aspx" />
+    <Content Include="Sports\AnalysisPreview.aspx" />
+    <Content Include="Sports\AnalysisRecent.aspx" />
+    <Content Include="Sports\AnalysisSinglePreview.aspx" />
+    <Content Include="Sports\AnalysisStat.aspx" />
     <Content Include="JavaScript.js" />
     <Content Include="Lineups.aspx" />
     <Content Include="MatchDetails.aspx" />
@@ -102,8 +102,8 @@
     <Content Include="Global.asax" />
     <Content Include="Logout.aspx" />
     <Content Include="Matches.aspx" />
-    <Content Include="PlayersRetrieval.aspx" />
-    <Content Include="Rank.aspx" />
+    <Content Include="Sports\PlayersRetrieval.aspx" />
+    <Content Include="Sports\Rank.aspx" />
     <Content Include="resource\bars.gif" />
     <Content Include="resource\CentaSmsLogo.JPG" />
     <Content Include="resource\green.bmp" />
@@ -114,9 +114,9 @@
     <Content Include="resource\new_ad2_0725.gif" />
     <Content Include="resource\spacer.gif" />
     <Content Include="resource\yellow.bmp" />
-    <Content Include="Scorers.aspx" />
-    <Content Include="SportNews.aspx" />
-    <Content Include="SportNewsMenu.aspx" />
+    <Content Include="Sports\Scorers.aspx" />
+    <Content Include="Sports\ScorersSelection.aspx" />
+    <Content Include="Sports\SportNews.aspx" />
     <Content Include="SyncMatches.aspx" />
     <Content Include="TeamMapping.aspx" />
     <Content Include="UserControl\GroupTabs.ascx" />
@@ -129,16 +129,16 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="WebForm1.aspx" />
-    <Content Include="WebForm2.aspx" />
-    <Content Include="WebUserControl1.ascx" />
+    <Content Include="sayhello.ascx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalysisModify.cs" />
-    <Compile Include="AnalysisPreview.cs" />
-    <Compile Include="AnalysisRecent.cs" />
-    <Compile Include="AnalysisSinglePreview.cs" />
-    <Compile Include="AnalysisStat.cs" />
-    <Compile Include="Authenticator.cs" />
+    <Compile Include="Sports\SportNewsMenu.cs" />
+    <Compile Include="Sports\AnalysisModify.cs" />
+    <Compile Include="Sports\AnalysisPreview.cs" />
+    <Compile Include="Sports\AnalysisRecent.cs" />
+    <Compile Include="Sports\AnalysisSinglePreview.cs" />
+    <Compile Include="Sports\AnalysisStat.cs" />
+    <Compile Include="Sports\Authenticator.cs" />
     <Compile Include="Lineups.aspx.cs">
       <DependentUpon>Lineups.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -177,14 +177,13 @@
       <DependentUpon>Matches.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Players.cs" />
+    <Compile Include="Sports\Players.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rank.cs" />
-    <Compile Include="Scorers.cs" />
-    <Compile Include="SoccerMenuAnalysis.cs" />
-    <Compile Include="SoccerMenuLeague.cs" />
-    <Compile Include="SportNews.cs" />
-    <Compile Include="SportNewsMenu.cs" />
+    <Compile Include="Sports\Rank.cs" />
+    <Compile Include="Sports\Scorers.cs" />
+    <Compile Include="Sports\SoccerMenuAnalysis.cs" />
+    <Compile Include="Sports\SoccerMenuLeague.cs" />
+    <Compile Include="Sports\SportNews.cs" />
     <Compile Include="TeamMapping.aspx.cs">
       <DependentUpon>TeamMapping.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -218,22 +217,9 @@
       <DependentUpon>WebForm1.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm2.aspx.cs">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
+    <Compile Include="sayhello.ascx.cs">
+      <DependentUpon>sayhello.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm2.aspx.designer.cs">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebUserControl1.ascx.cs">
-      <DependentUpon>WebUserControl1.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebUserControl1.ascx.designer.cs">
-      <DependentUpon>WebUserControl1.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

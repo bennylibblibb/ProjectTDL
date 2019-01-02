@@ -6,26 +6,26 @@
     using System.Collections;
     using System.Web.UI;
     using System.Web.UI.WebControls;
-    using System.Drawing;
+    using System.Drawing; 
 
     public class MenuTabs : UserControl
     {
-        protected DataList tabs;
+        protected Anthem.DataList tabs;
 
         private void InitializeComponent()
         {
-             this.tabs.SelectedIndexChanged += new EventHandler(this.Tabs_SelectedIndexChanged);
+            this.tabs.SelectedIndexChanged += new EventHandler(this.Tabs_SelectedIndexChanged);
             // this.tabs.ItemCommand += new DataListCommandEventHandler( this.tabs_ItemCommand);
-           // this.tabs.ItemCreated += new DataListItemEventHandler(this.tabs_ItemCreated);
-             this.tabs.ItemDataBound += new DataListItemEventHandler(this.tabs_ItemDataBound);
+            // this.tabs.ItemCreated += new DataListItemEventHandler(this.tabs_ItemCreated);
+            this.tabs.ItemDataBound += new DataListItemEventHandler(this.tabs_ItemDataBound);
             this.tabs.Load += new EventHandler(this.Page_Load);
-            base.Load += new EventHandler(this.Page_Load);
+            //base.Load += new EventHandler(this.Page_Load);
         }
 
 
         protected void Tabs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var ddlList = (DataList)sender;
+            var ddlList = (Anthem.DataList)sender;
         }
 
         protected override void OnInit(EventArgs e)
@@ -37,28 +37,28 @@
         private void Page_Load(object sender, EventArgs e)
         {
             //if (!IsPostBack)
-            //{
+            //{ 
             string name = this.Context.User.Identity.Name;
             ArrayList list = new ArrayList();
             list.Add(new TabItem("STATSCORE", Global.GetApplicationPath(base.Request) + "/SyncMatches.aspx?csIndex=" + list.Count));
             list.Add(new TabItem("HKJC", Global.GetApplicationPath(base.Request) + "/Matches.aspx?csIndex=" + list.Count));
             //   if (list.Count==2&&(base.Request["csIndex"] !=null&&base.Request["csIndex"] != "0") ||(list.Count == 2&& base.Request["csIndex"] != "8" && base.Request["csIndex"] != "9"))
-            if (list.Count == 2 && (base.Request["csIndex"] != null && base.Request["csIndex"] != "0" && base.Request["csIndex"] != "8" && base.Request["csIndex"] != "9"))
+            if (list.Count == 2 && (base.Request["csIndex"] == null || base.Request["csIndex"] == "0"))
             {
-                list.Add(new TabItem("陣容", Global.GetApplicationPath(base.Request) + "/PlayersRetrieval.aspx?csIndex=" + list.Count+"&eventid="+eventID));
-                list.Add(new TabItem("分析", Global.GetApplicationPath(base.Request) + "/AnalysisModify.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
-                list.Add(new TabItem("數據", Global.GetApplicationPath(base.Request) + "/AnalysisStat.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
-                list.Add(new TabItem("近績", Global.GetApplicationPath(base.Request) + "/AnalysisRecent.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
-                list.Add(new TabItem("發送分析", Global.GetApplicationPath(base.Request) + "/Lineups.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
-                list.Add(new TabItem("發送近績", Global.GetApplicationPath(base.Request) + "/Lineups.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
+                list.Add(new TabItem("球隊排名", Global.GetApplicationPath(base.Request) + "/sports/Rank.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
+                list.Add(new TabItem("射手榜", Global.GetApplicationPath(base.Request) + "/sports/Scorers.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
+                list.Add(new TabItem("其它資訊", Global.GetApplicationPath(base.Request) + "/sports/SportNews.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
+                list.Add(new TabItem("EnetPlus", "http://" + Common.AppFlag.EnetPlus));
             }
-            if (list.Count == 2 && (base.Request["csIndex"] == null && base.Request["csIndex"] != "1" && base.Request["csIndex"] != "6" && base.Request["csIndex"] != "7"))
+            else if (list.Count == 2 && (base.Request["csIndex"] != null && base.Request["csIndex"] != "0" && base.Request["csIndex"] != "8" && base.Request["csIndex"] != "9"))
             {
-                list.Add(new TabItem("球隊排名", Global.GetApplicationPath(base.Request) + "/Lineups.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
-                list.Add(new TabItem("射手榜", Global.GetApplicationPath(base.Request) + "/Lineups.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
-                list.Add(new TabItem("其它資訊", Global.GetApplicationPath(base.Request) + "/Lineups.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
-                list.Add(new TabItem("EnetPlus", Global.GetApplicationPath(base.Request) + "/Lineups.aspx?csIndex=" + list.Count + "&eventid=" + eventID));
-             }
+                list.Add(new TabItem("陣容", Global.GetApplicationPath(base.Request) + "/sports/PlayersRetrieval.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
+                list.Add(new TabItem("分析", Global.GetApplicationPath(base.Request) + "/sports/AnalysisModify.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
+                list.Add(new TabItem("數據", Global.GetApplicationPath(base.Request) + "/sports/AnalysisStat.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
+                list.Add(new TabItem("近績", Global.GetApplicationPath(base.Request) + "/sports/AnalysisRecent.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
+                list.Add(new TabItem("發送分析", Global.GetApplicationPath(base.Request) + "/sports/AnalysisPreview.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
+                list.Add(new TabItem("發送近績", Global.GetApplicationPath(base.Request) + "/sports/AnalysisSinglePreview.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
+            }  
             //list.Add(new TabItem("組別管理", Global.GetApplicationPath(base.Request) + "/GroupAdmin.aspx?csIndex=" + list.Count));
             if (Users.UserCheck(name))
             {
@@ -81,10 +81,15 @@
 
             }
             list.Add(new TabItem("登出", Global.GetApplicationPath(base.Request) + "/Logout.aspx?csIndex=" + list.Count));
+            //if (Session["eventID"] != null)
+            //{
+            //    list.Add(new TabItem("陣容2", Global.GetApplicationPath(base.Request) + "/sports/PlayersRetrieval.aspx?csIndex=" + list.Count + "&eventid=" + Session["eventID"].ToString()));
+
+            //}
             this.tabs.DataSource = list;
             this.tabs.SelectedIndex = (base.Request["csIndex"] == null) ? 0 : Convert.ToInt32(base.Request["csIndex"]);
             this.tabs.DataBind();
-
+            this.tabs.UpdateAfterCallBack = true;
             //}
         }
 
@@ -108,12 +113,12 @@
         {
             //  if ((e.Item.ItemType == ListItemType.Item))
             //{
-                HyperLink hl = e.Item.FindControl("hlMenu") as HyperLink;
-                if (hl != null)
-                {
-                    hl.Attributes.Add("onclick", "javascript:return CheckUrl('" + hl.Text + "')");
-                }
-           // }
+            HyperLink hl = e.Item.FindControl("hlMenu") as HyperLink;
+            if (hl != null)
+            {
+                hl.Attributes.Add("onclick", "javascript:return CheckUrl('" + hl.Text + "')");
+            }
+            // }
 
 
             //if (tabs.SelectedIndex == 1)
@@ -125,7 +130,7 @@
             //        item.ForeColor = Color.Black;
             //    }
             //}
-           
+
         }
         private void tabs_ItemCreated(object sender, DataListItemEventArgs e)
         {
@@ -140,11 +145,16 @@
             //}
         }
 
-        private string eventID = string.Empty;
-        public string EventID
+
+        private string EventID;
+        public string eventID
         {
-            get { return eventID; }
-            set { eventID = value; }
+            get { return EventID; }
+            set
+            {
+                EventID = value;
+              //  EventID = Session["eventID"] == null ? "0" : Session["eventID"].ToString();
+            }
         }
     }
 }

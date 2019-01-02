@@ -1093,66 +1093,79 @@ namespace SportsUtil {
 					m_SportsLog.Close();
 				}
 
-				////if(bSendToPager) {
-				////	string[] arrQueueNames;
-				////	string[] arrMessageTypes;
-				////	arrQueueNames = (string[])HttpContext.Current.Application["QueueItems"];
-				////	arrMessageTypes = (string[])HttpContext.Current.Application["NotifyMessageTypes"];
-				////	MessageClient msgClt = new MessageClient();
-				////	msgClt.MessageType = arrMessageTypes[0];
-				////	msgClt.MessagePath = arrQueueNames[0];
+                if (bSendToPager)
+                {
+                    string[] arrQueueNames;
+                    string[] arrMessageTypes;
+                    arrQueueNames = (string[])HttpContext.Current.Application["QueueItems"];
+                    arrMessageTypes = (string[])HttpContext.Current.Application["NotifyMessageTypes"];
+                    MessageClient msgClt = new MessageClient();
+                    msgClt.MessageType = arrMessageTypes[0];
+                    msgClt.MessagePath = arrQueueNames[0];
 
-				////	//Send Notify Message
-				////	//Modified by Chapman, 19 Feb 2004
-				////	sptMsg.Body = sBatchJob;
-				////	sptMsg.Timestamp = DateTime.Now.ToString("yyMMddHHmmss");
-				////	sptMsg.AppID = "07";
-				////	sptMsg.MsgID = "12";
-				////	sptMsg.DeviceID = new string[0];
-				////	for(int i = 0; i < arrSendToPager.Length; i++) {
-				////		sptMsg.AddDeviceID((string)arrSendToPager[i]);
-				////	}
-				////	try {
-				////		//Notify via MSMQ
-				////		msgClt.MessageType = arrMessageTypes[0];
-				////		msgClt.MessagePath = arrQueueNames[0];
-				////		msgClt.SendMessage(sptMsg);
-				////	} catch(System.Messaging.MessageQueueException mqEx) {
-				////		try {
-				////			m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-				////			m_SportsLog.SetFileName(0,LOGFILESUFFIX);
-				////			m_SportsLog.Open();
-				////			m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " MSMQ ERROR: Analysis Recent");
-				////			m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisRecent.cs.Update(): Notify via MSMQ throws MessageQueueException:  " + mqEx.ToString());
-				////			m_SportsLog.Close();
+                    //Send Notify Message
+                    //Modified by Chapman, 19 Feb 2004
+                    sptMsg.Body = sBatchJob;
+                    sptMsg.Timestamp = DateTime.Now.ToString("yyMMddHHmmss");
+                    sptMsg.AppID = "07";
+                    sptMsg.MsgID = "12";
+                    sptMsg.DeviceID = new string[0];
+                    for (int i = 0; i < arrSendToPager.Length; i++)
+                    {
+                        sptMsg.AddDeviceID((string)arrSendToPager[i]);
+                    }
+                    try
+                    {
+                        //Notify via MSMQ
+                        msgClt.MessageType = arrMessageTypes[0];
+                        msgClt.MessagePath = arrQueueNames[0];
+                        msgClt.SendMessage(sptMsg);
+                    }
+                    // catch (System.Messaging.MessageQueueException mqEx)
+                    catch (InvalidOperationException mqEx)
+                    {
+                        try
+                        {
+                            m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                            m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                            m_SportsLog.Open();
+                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " MSMQ ERROR: Analysis Recent");
+                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisRecent.cs.Update(): Notify via MSMQ throws MessageQueueException:  " + mqEx.ToString());
+                            m_SportsLog.Close();
 
-				////			//If MSMQ fail, notify via .NET Remoting
-				////			msgClt.MessageType = arrMessageTypes[1];
-				////			msgClt.MessagePath = arrRemotingPath[0];
-				////			if(!msgClt.SendMessage((object)sptMsg)) {
-				////				m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-				////				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
-				////				m_SportsLog.Open();
-				////				m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Recent");
-				////				m_SportsLog.Close();
-				////			}
-				////		}	catch(Exception ex) {
-				////			m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-				////			m_SportsLog.SetFileName(0,LOGFILESUFFIX);
-				////			m_SportsLog.Open();
-				////			m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Recent");
-				////			m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisRecent.cs.Update(): Notify via .NET Remoting throws exception: " + ex.ToString());
-				////			m_SportsLog.Close();
-				////		}							
-				////	}	catch(Exception ex) {
-				////		m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-				////		m_SportsLog.SetFileName(0,LOGFILESUFFIX);
-				////		m_SportsLog.Open();
-				////		m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisRecent.cs.Update(): Notify via MSMQ throws exception: " + ex.ToString());
-				////		m_SportsLog.Close();
-				////	}
-				////}
-			}	catch(Exception ex) {
+                            //If MSMQ fail, notify via .NET Remoting
+                            msgClt.MessageType = arrMessageTypes[1];
+                            msgClt.MessagePath = arrRemotingPath[0];
+                            if (!msgClt.SendMessage((object)sptMsg))
+                            {
+                                m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                                m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                                m_SportsLog.Open();
+                                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Recent");
+                                m_SportsLog.Close();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                            m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                            m_SportsLog.Open();
+                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Recent");
+                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisRecent.cs.Update(): Notify via .NET Remoting throws exception: " + ex.ToString());
+                            m_SportsLog.Close();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                        m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                        m_SportsLog.Open();
+                        m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisRecent.cs.Update(): Notify via MSMQ throws exception: " + ex.ToString());
+                        m_SportsLog.Close();
+                    }
+                }
+            }
+            catch (Exception ex) {
 				iRecNo = -1;
 				m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 				m_SportsLog.SetFileName(0,LOGFILESUFFIX);

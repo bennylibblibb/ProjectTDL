@@ -1,48 +1,59 @@
 <%@ Page EnableViewState="false"%>
 
 <%@ Import Namespace="SportsUtil"%>
-
+<%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="~/UserControl/MenuTabs.ascx" %>
 <script language="C#" runat="server">
-	string sAlias;
+    string sAlias;
 
-	void Page_Load(Object sender,EventArgs e) {
-		Scorers scorer = new Scorers(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-
-		try {
-			ScorersInformation.InnerHtml = scorer.ShowRank();
-			sAlias = scorer.Alias;
-			UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "射手榜(" + DateTime.Now.ToString("HH:mm:ss") + ")");
+    void Page_Load(Object sender,EventArgs e) {
+        
+           string sLeagueOption = ""; 
+		SoccerMenuLeague MenuLeague = new SoccerMenuLeague(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+		 try {
+			sLeagueOption = MenuLeague.Show(); 
+			CorrectInformation.InnerHtml = sLeagueOption;
 		} catch(NullReferenceException) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
-		}
-	}
+		 }
 
-	void SendScorer(Object sender,EventArgs e) {
-		int iUpdated = 0;
-		string sNow;
-		Scorers updRank = new Scorers(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
 
-		sNow = DateTime.Now.ToString("HH:mm:ss");
-		try {
-			iUpdated = updRank.Update();
-			Page_Load(sender,e);
-			if(iUpdated > 0) {
-				UpdateHistoryMessage("成功更新射手榜(" + sNow + ")");
-			}	else if(iUpdated == 0) {
-				UpdateHistoryMessage("沒有更新射手榜");
-			} else {
-				UpdateHistoryMessage("更新射手榜失敗");
-			}
-		} catch(NullReferenceException nullex) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
-		}
-	}
 
-	void UpdateHistoryMessage(string sMsg) {
-		historyMsg.Text = sMsg;
-	}
+        Scorers scorer = new Scorers(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+
+        try {
+            ScorersInformation.InnerHtml = scorer.ShowRank();
+            sAlias = scorer.Alias;
+            UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "射手榜(" + DateTime.Now.ToString("HH:mm:ss") + ")");
+        } catch(NullReferenceException) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
+        }
+    }
+
+    void SendScorer(Object sender,EventArgs e) {
+        int iUpdated = 0;
+        string sNow;
+        Scorers updRank = new Scorers(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+
+        sNow = DateTime.Now.ToString("HH:mm:ss");
+        try {
+            iUpdated = updRank.Update();
+            Page_Load(sender,e);
+            if(iUpdated > 0) {
+                UpdateHistoryMessage("成功更新射手榜(" + sNow + ")");
+            }   else if(iUpdated == 0) {
+                UpdateHistoryMessage("沒有更新射手榜");
+            } else {
+                UpdateHistoryMessage("更新射手榜失敗");
+            }
+        } catch(NullReferenceException nullex) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
+        }
+    }
+
+    void UpdateHistoryMessage(string sMsg) {
+        historyMsg.Text = sMsg;
+    }
 </script>
 
 <script language="JavaScript">
@@ -113,18 +124,32 @@ function LengthOfString(s) {
 		}
 	}
 	return len;
-}
+    }
+
+    function goToTeam(selectedTeam) {
+    if (selectedTeam != '' && selectedTeam != '0') {
+        window.location.replace('Scorers.aspx?leagID=' + selectedTeam);
+	} 
+	ScorersForm.soccerCorrectScore.value = '0';
+    }
+
 </script>
 
 <html>
 <head>
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
-	<LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
+	<LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">
+    <LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
+    <title>射手榜</title>
 </head>
 <body>
 	<form id="ScorersForm" method="post" runat="server" onsubmit="DeviceCheck()">
-		<font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
-
+		   <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
+        <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
+        	<select name="soccerCorrectScore" onChange="goToTeam(ScorersForm.soccerCorrectScore.value)">
+						<option value="0">請選擇</option>
+						<span id="CorrectInformation" runat="server" />
+					</select>
 		<table border="1" width="55%" style="font: 10pt verdana">
 			<tr align="center" style="background-color:#BFDFEF">
 				<th colspan="5">

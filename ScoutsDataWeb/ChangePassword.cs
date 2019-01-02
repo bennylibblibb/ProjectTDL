@@ -8,7 +8,7 @@
     using System.Data;
     using System.Web.UI.WebControls;
 
-    public class ChangePassword : CommonPage
+    public class ChangePassword : System.Web.UI.Page
     {
         protected System.Web.UI.WebControls.CompareValidator cvPW;
         protected System.Web.UI.WebControls.Label lbConfirm;

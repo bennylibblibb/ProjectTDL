@@ -11,6 +11,7 @@ csc /t:library /out:..\bin\AnalysisSinglePreview.dll /r:..\bin\DBManager.dll;..\
 
 using System;
 using System.Collections;
+using System.Configuration;
 using System.Data.OleDb;
 using System.Reflection;
 using System.Text;
@@ -19,12 +20,7 @@ using TDL.DB;
 using TDL.IO;
 using TDL.Message;
 
-[assembly:AssemblyCompany("TDSL")]
-[assembly:AssemblyCopyright("(c) 2003 TDSL. All rights reserved.")]
-[assembly:AssemblyDescription("足球資訊 -> 發送近績")]
-[assembly:AssemblyProduct("Sports.NET")]
-[assembly:AssemblyTitle("Sports.NET DLL")]
-[assembly:AssemblyVersion("3.1.*")]
+ 
 namespace SportsUtil {
 	public class AnalysisSinglePreview {
 		const string LOGFILESUFFIX = "log";
@@ -118,7 +114,7 @@ namespace SportsUtil {
 				m_SportsOleReader.Close();
 				m_SportsDBMgr.Close();
 			} catch(Exception ex) {
-				m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+				m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 				m_SportsLog.Open();
 				m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisSinglePreview.cs.PreviewMatches(): " + ex.ToString());
@@ -293,9 +289,11 @@ namespace SportsUtil {
 							msgClt.MessageType = arrMessageTypes[0];
 							msgClt.MessagePath = arrQueueNames[0];
 							msgClt.SendMessage(sptMsg);
-						} catch(System.Messaging.MessageQueueException mqEx) {
+                        }   // catch (System.Messaging.MessageQueueException mqEx)
+                        catch (InvalidOperationException mqEx)
+                        {
 							try {
-								m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+								m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 								m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 								m_SportsLog.Open();
 								m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " MSMQ ERROR: Analysis Preview");
@@ -306,14 +304,14 @@ namespace SportsUtil {
 								msgClt.MessageType = arrMessageTypes[1];
 								msgClt.MessagePath = arrRemotingPath[0];
 								if(!msgClt.SendMessage((object)sptMsg)) {
-									m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+									m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 									m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 									m_SportsLog.Open();
 									m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Preview");
 									m_SportsLog.Close();
 								}
 							}	catch(Exception ex) {
-								m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+								m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 								m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 								m_SportsLog.Open();
 								m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Analysis Preview");
@@ -321,7 +319,7 @@ namespace SportsUtil {
 								m_SportsLog.Close();
 							}							
 						}	catch(Exception ex) {
-							m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+							m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 							m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 							m_SportsLog.Open();
 							m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisSinglePreview.cs.Send(): Notify via MSMQ throws exception: " + ex.ToString());
@@ -331,7 +329,7 @@ namespace SportsUtil {
 					}
 
 					//write log
-					m_SportsLog.FilePath = HttpContext.Current.Application["EventFilePath"].ToString();
+					m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];
 					m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 					m_SportsLog.Open();
 					m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisSinglePreview.cs: Send " + iRecentCnt.ToString() + " recent (" + HttpContext.Current.Session["user_name"] + ")");
@@ -339,7 +337,7 @@ namespace SportsUtil {
 				}
 			} catch (IndexOutOfRangeException IndexEx) {
 				iRecUpd = -1;
-				m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+				m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 				m_SportsLog.Open();
 				m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisSinglePreview.cs.Send().IndexOutOfRangeException: " + IndexEx.ToString());
@@ -348,7 +346,7 @@ namespace SportsUtil {
 				m_SportsLog.Close();
 			} catch (Exception ex) {
 				iRecUpd = -1;
-				m_SportsLog.FilePath = HttpContext.Current.Application["ErrorFilePath"].ToString();
+				m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 				m_SportsLog.Open();
 				m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " AnalysisSinglePreview.cs.Send().Exception: " + ex.ToString());
