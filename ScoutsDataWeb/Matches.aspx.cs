@@ -52,7 +52,7 @@
             Session["eventID"]=id;
             MenuTabs myControl = (MenuTabs)this.Page.LoadControl("UserControl/MenuTabs.ascx");
            myControl.ID = "myControl";
-           . myControl.eventID = id;
+           myControl.eventID = id;
             this.PlaceHolder1.Controls.Add(myControl);
             //MenuTabs control  = this.FindControl("MenuTabs1") as MenuTabs;
             //Anthem.DataList tabss = control.FindControl("tabs") as Anthem.DataList;
@@ -300,7 +300,7 @@
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
                     //string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
-                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,e.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS,t.NAME, t.MAPPING_STATUS  from EMATCHES E " +
+                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,e.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS,t.NAME, t.MAPPING_STATUS,e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME,e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN  from EMATCHES E " +
                          " LEFT JOIN GOALINFO G ON E.EMATCHID = G.EMATCHID LEFT JOIN EVENTS V ON E.EMATCHID = V.ID   left join  teams t on t.id =v.HOME_ID  " +
                            " WHERE E.CMATCHDATETIME >= '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' and E.CMATCHDATETIME <= '" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'" + (id.ToString() == "-1" ? "" : " and STATUS = '" + dplLeague.SelectedValue+"'") + "   order by  E.CMATCHDATETIME asc";
                     using (FbCommand cmd = new FbCommand(queryString, connection))
@@ -337,7 +337,7 @@
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
                     //string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
-                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,e.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS ,t.NAME, t.MAPPING_STATUS  from EMATCHES E " +
+                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,e.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS ,t.NAME, t.MAPPING_STATUS ,e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME,e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN   from EMATCHES E " +
                          " LEFT JOIN GOALINFO G ON E.EMATCHID = G.EMATCHID LEFT JOIN EVENTS V ON E.EMATCHID = V.ID    left join  teams t on t.id =v.HOME_ID " +
                            " WHERE E.CMATCHDATETIME >= '" + this.txtFrom.Text.Trim ()+ ", 00:00:00.000" + "' and E.CMATCHDATETIME <= '" + this.txtTo.Text.Trim() + ", 23:59:59.000" + "" + "'" + (id.ToString() == "-1" ? "" : " and E.STATUS = '" + dplLeague.SelectedValue+"'") + "   order by  E.CMATCHDATETIME asc";
                     using (FbCommand cmd = new FbCommand(queryString, connection))
@@ -374,7 +374,7 @@
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
                     //string queryString = "SELECT e.* FROM EMATCHES e where  '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME and  e.CMATCHDATETIME <='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "' order by  e.EMATCHID desc ";
-                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,e.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS,t.NAME, t.MAPPING_STATUS  from EMATCHES E " +
+                    string queryString = "select  V.ID ,V.NAME  ,V.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,E.STATUS,e.CTIMESTAMP, E.CMATCHDATETIME,e.MAPPINGSTATUS,t.NAME, t.MAPPING_STATUS ,e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME,e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN   from EMATCHES E " +
                          " LEFT JOIN GOALINFO G ON E.EMATCHID = G.EMATCHID LEFT JOIN EVENTS V ON E.EMATCHID = V.ID  left join  teams t on t.id =v.HOME_ID " +
                            " WHERE E.CMATCHDATETIME >= '" + this.txtFrom.Text.Trim() + ", 00:00:00.000" + "' and E.CMATCHDATETIME <= '" + this.txtTo.Text.Trim() + ", 23:59:59.000" + "" + "'" + (id.ToString() == "-1" ? "" : " and E.STATUS = '" + dplLeague.SelectedValue+"'") + (cbDay.Text == "-1"?"": " AND E.HKJCDAYCODE='" + cbDay.Text + "'")+ " order by  E.HKJCMATCHNO asc";
                     using (FbCommand cmd = new FbCommand(queryString, connection))

@@ -1,0 +1,54 @@
+﻿15:59:04 BEN login success.
+16:15:08 BEN login success.
+16:17:48 BEN login success.
+16:19:57 [Success] Sync [2520194] EMATCHES[MON 1]  Sydney FC - Central Coast M.
+16:19:57Sync [Sydney FC - Central Coast M.] on Teams
+16:22:33 BEN login success.
+16:25:27 BEN login success.
+16:29:10 BEN login success.
+16:29:58 BEN login success.
+16:31:13 BEN login success.
+16:32:54 [Success] Sync [2520194] EMATCHES[FRI 1]  Sydney FC - Central Coast M.
+16:32:54Sync [Sydney FC - Central Coast M.] on Teams
+16:33:34 [Success] Sync [2520194] EMATCHES[FRI 1]  Sydney FC - Central Coast M.
+16:33:34Sync [Sydney FC - Central Coast M.] on Teams
+16:34:40 [Failure] Sync [2520194] EMATCHES[TUE 1]  Sydney FC - Central Coast M.
+16:35:54 BEN login success.
+16:47:31 BEN login success.
+16:47:52 [Success] Sync [2520194] EMATCHES[FRI 1]  Sydney FC - Central Coast M.
+16:47:52Sync [Sydney FC - Central Coast M.] on Teams
+16:48:13 [Success] Sync [2520194] EMATCHES[FRI 1]  Sydney FC - Central Coast M.
+16:48:13Sync [Sydney FC - Central Coast M.] on Teams
+16:48:29 [Failure] Sync [2520194] EMATCHES[WED 1]  Sydney FC - Central Coast M.
+17:09:46 BEN login success.
+17:09:56 [Success] Sync [2520194] EMATCHES[SUN 1]  Sydney FC - Central Coast M.
+17:09:56Sync [Sydney FC - Central Coast M.] on Teams
+17:14:59 [Success] Cancel Sync [2520194] EMATCHES[SUN 1]  Sydney FC - Central Coast M.
+17:15:07 [Success] Sync [2520194] EMATCHES[SUN 1]  Sydney FC - Central Coast M.
+17:15:07Sync [Sydney FC - Central Coast M.] on Teams
+17:15:55 BEN login success.
+17:15:58 [Success] Cancel Sync [2520194] EMATCHES[SUN 1]  Sydney FC - Central Coast M.
+17:21:19 BEN login success.
+17:21:26 [Failure] Sync [2520194] EMATCHES[SUN 1]  Sydney FC - Central Coast M.
+17:21:33 [Failure] Sync [2520194] EMATCHES[SUN 1]  Sydney FC - Central Coast M.
+17:22:16 [Success] Sync [2520197] EMATCHES[SUN 2]  Melbourne City - Newcastle Jets
+17:22:16Sync [Melbourne City - Newcastle Jets] on Teams
+17:25:04 [Success] Sync [2520197] EMATCHES[SUN 1]  Melbourne City - Newcastle Jets
+17:25:04Sync [Melbourne City - Newcastle Jets] on Teams
+17:26:29 [Success] Sync [2520197] EMATCHES[SUN 1]  Melbourne City - Newcastle Jets
+17:26:29Sync [Melbourne City - Newcastle Jets] on Teams
+17:27:00 [Success] Cancel Sync [2520197] EMATCHES[SUN 2]  Melbourne City - Newcastle Jets
+17:27:13 [Success] Sync [2520197] EMATCHES[SUN 2]  Melbourne City - Newcastle Jets
+17:27:13Sync [Melbourne City - Newcastle Jets] on Teams
+17:27:34 [Success] Cancel Sync [2520197] EMATCHES[SUN 2]  Melbourne City - Newcastle Jets
+17:27:43 [Success] Sync [2520198] EMATCHES[SUN 2]  Brisbane Roar - Perth Glory
+17:27:43Sync [Brisbane Roar - Perth Glory] on Teams
+17:28:48 [Success] Sure [2520197 Melbourne City - Newcastle Jets] on Teams
+17:29:02 [Success] Sure [2520194 Sydney FC - Central Coast M.] on Teams
+17:30:53 [Success] Sync [2455011] EMATCHES[MON 1]  China - Kyrgyzstan
+17:30:53Sync [China - Kyrgyzstan] on Teams
+17:31:38 BEN logout success.
+17:44:36 BEN login success.
+17:45:29 BEN login success.
+17:46:11 [Failure] Sync [2520194] EMATCHES[SUN 1]  Sydney FC - Central Coast M.
+17:47:43 [Failure] Sync [2520194] EMATCHES[SUN 1]  Sydney FC - Central Coast M.

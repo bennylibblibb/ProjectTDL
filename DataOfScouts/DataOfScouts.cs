@@ -4443,7 +4443,57 @@ namespace DataOfScouts
                                                         }
                                                         else
                                                         {
-                                                            Files.WriteLog("[" + drs[0]["id"] + "] " + (sevent.participants[0].counter == "1" ? sevent.participants[0].name : sevent.participants[1].name) + "/" + (sevent.participants[0].counter == "2" ? sevent.participants[0].name : sevent.participants[1].name) + "  events existed.");
+                                                            drs[0].Delete();
+                                                            (ds.Tables.Count == 0 ? eventsDs : ds).Tables[0].AcceptChanges();
+                                                            DataRow dr = eventsDs.Tables[0].NewRow();
+                                                            dr[0] = sevent.id;
+                                                            dr[1] = sevent.name;
+                                                            dr[2] = (participants[0].counter == "1") ? participants[0].id : participants[1].id;
+                                                            dr[3] = (participants[1].counter == "2") ? participants[1].id : participants[0].id;
+                                                            dr[4] = sevent.source;
+                                                            dr[5] = sevent.source_dc == "yes" ? true : false;
+                                                            dr[6] = sevent.source_super;
+                                                            dr[7] = sevent.relation_status;
+                                                            dr[8] = Convert.ToDateTime(sevent.start_date);
+                                                            dr[9] = sevent.ft_only == "yes" ? true : false;
+                                                            dr[10] = sevent.coverage_type;
+                                                            dr[11] = sevent.channel_id;
+                                                            dr[12] = sevent.channel_name;
+                                                            dr[13] = sevent.scoutsfeed == "yes" ? true : false;
+                                                            dr[14] = sevent.status_id;
+                                                            dr[15] = sevent.status_name;
+                                                            dr[16] = sevent.status_type;
+                                                            dr[17] = sevent.day;
+                                                            dr[18] = sevent.clock_time;
+                                                            dr[19] = sevent.clock_status;
+                                                            dr[20] = sevent.winner_id;
+                                                            dr[21] = sevent.progress_id;
+                                                            dr[22] = sevent.bet_status;
+                                                            dr[23] = sevent.neutral_venue == "yes" ? true : false;
+                                                            dr[24] = sevent.item_status;
+                                                            dr[25] = sevent.ut;
+                                                            dr[26] = sevent.old_event_id == "" ? "-1" : sevent.old_event_id;
+                                                            dr[27] = sevent.slug;
+                                                            dr[28] = sevent.verified_result == "yes" ? true : false;
+                                                            dr[29] = sevent.is_protocol_verified == "yes" ? true : false;
+                                                            dr[30] = sevent.protocol_verified_by;
+                                                            dr[31] = sevent.protocol_verified_at;
+                                                            dr[32] = sevent.round_id;
+                                                            dr[33] = sevent.round_name;
+                                                            dr[34] = sevent.client_event_id == "" ? "-1" : sevent.client_event_id;
+                                                            dr[35] = DBNull.Value; // sevent.booked == "yes" ? true : false;
+                                                            dr[36] = DBNull.Value;// sevent.booked_by;
+                                                            dr[37] = sevent.inverted_participants == "yes" ? true : false;
+                                                            dr[38] = sevent.venue_id;
+                                                            dr[39] = group.id == "" ? "-1" : group.id;
+                                                            dr[40] = strStage_id;
+                                                            dr[41] = strSeasons_id;
+                                                            dr[42] = strCompetition_id;
+                                                            dr[43] = strArea_id;
+                                                            dr[44] = cTimestamp;
+                                                            eventsDs.Tables[0].Rows.Add(dr);
+
+                                                            Files.WriteLog("[" + sevent.id + "] " + (participants[0].counter == "1" ? participants[0].name : participants[1].name) + "/" + (participants[0].counter == "2" ? participants[0].name : participants[1].name)+".");
                                                         }
                                                         foreach (DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant participant in participants)
                                                         {
@@ -4475,8 +4525,43 @@ namespace DataOfScouts
                                             }
                                         }
                                     }
+                                    string eid = "";
+                                    int retry = 0;
+                                    while (true && eventsDs.Tables[0].Rows.Count > 0 && retry < eventsDs.Tables[0].Rows.Count)
+                                    {
+                                        try
+                                        {
+                                            retry++;
+                                            count = adapter.Update(eventsDs);
+                                            break;
+                                        }
+                                        catch (FbException fex)
+                                        {
+                                            if (fex.InnerException.Message.IndexOf(" = ") > 0)
+                                            {
 
-                                    count = adapter.Update(eventsDs);
+                                                eid = fex.InnerException.Message.Substring(fex.InnerException.Message.IndexOf(" = ") + 3, fex.InnerException.Message.Length - fex.InnerException.Message.IndexOf(" = ") - 4);
+                                                //  eventsDs.AcceptChanges();
+                                                DataRow dr = eventsDs.Tables[0].Select("id=" + eid)[0];
+                                                using (FbCommand cmd2 = new FbCommand())
+                                                {
+                                                    cmd2.CommandText = "DeleteEvent_ByID";
+                                                    cmd2.CommandType = CommandType.StoredProcedure;
+                                                    cmd2.Connection = connection;
+                                                    cmd2.Parameters.Add("@ID", eid);
+                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                }
+                                                Files.WriteLog("[" + dr["id"] + "] " + dr["name"] + "  events existed.");
+                                                //  /dr.Delete();
+                                                ////  eventsDs.Tables[0].Rows.Remove(dr);
+                                                //  eventsDs.AcceptChanges();
+                                            }
+                                        }
+                                        catch (Exception exp)
+                                        {
+                                            break;
+                                        }
+                                    }
 
                                     ds.Merge(eventsDs, true, MissingSchemaAction.AddWithKey);
                                     eventsDs.Clear();
@@ -5473,6 +5558,8 @@ namespace DataOfScouts
                                         cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
                                         cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_OUTPUT_NAME"]);
                                         cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_OUTPUT_NAME"]);
+                                        cmd2.Parameters.Add("@CLEAGUE_OUTPUT_NAME", dr1["CLEAGUE_OUTPUT_NAME"]);
+                                        cmd2.Parameters.Add("@CLEAGUEALIAS_OUTPUT_NAME", dr1["CLEAGUEALIAS_OUTPUT_NAME"]);
                                         cmd2.Parameters.Add("@STATUS", dr1["ISTATUS"]);
                                         cmd2.Parameters.Add("@MAPPINGSTATUS", null);
                                         cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
@@ -5851,6 +5938,8 @@ namespace DataOfScouts
                                 cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
                                   cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_OUTPUT_NAME"]);
                                         cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_OUTPUT_NAME"]);
+                                cmd2.Parameters.Add("@CLEAGUE_OUTPUT_NAME", dr1["CLEAGUE_OUTPUT_NAME"]);
+                                cmd2.Parameters.Add("@CLEAGUEALIAS_OUTPUT_NAME", dr1["CLEAGUEALIAS_OUTPUT_NAME"]);
                                 cmd2.Parameters.Add("@STATUS", dr1["ISTATUS"]);
                                 cmd2.Parameters.Add("@MAPPINGSTATUS", null);
                                 cmd2.Parameters.Add("@CTIMESTAMP", Convert.ToDateTime(dr1["CTIMESTAMP"]).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
@@ -5858,8 +5947,7 @@ namespace DataOfScouts
                                 Files.WriteLog((id == 0 ? " [Success] Insert EMATCHES " : "Match exist ") + "[" + dr1["IMATCH_NO"] + " " + dr1["CMATCH_DAY_CODE"] + "] " + " " + dr1["CHOME_TEAM_ENG_NAME"] + "/" + dr1["CAWAY_TEAM_ENG_NAME"]);
                             }
                         }
-                        // connection.Close();
-
+                        // connection.Close(); 
                         string queryString = "SELECT r.id, r.NAME, r.START_DATE,e.ematchid, e.HKJCDAYCODE,e.HKJCMATCHNO,e.HKJCHOSTNAME,e.HKJCGUESTNAME,e.MAPPINGSTATUS,e.CMATCHDATETIME FROM ematches e left join events r on r.id=e.ematchid  where '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME  and e.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'  and (e.EMATCHID<1 or e.EMATCHID is null) or ( e.MAPPINGSTATUS is null AND e.EMATCHID>0 ) order by e.CMATCHDATETIME desc";
                         if (AppFlag.TestMode) Files.WriteTestLog("Test", "HKjcMatch " + queryString);
                         using (FbCommand cmd = new FbCommand(queryString, connection))

@@ -543,6 +543,7 @@
                 //    ((Anthem.DropDownList)e.Item.Cells[13].Controls[1]).SelectedValue = ((Anthem.Label)e.Item.Cells[13].Controls[3]).Text;
                 //}
                 // ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbDAYCODE")).Text;
                 System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[19].Controls[0];
                 string sID = ((System.Web.UI.WebControls.Label)e.Item.FindControl("lbID")).Text;
                 lbtnEdit.CausesValidation = true;
@@ -573,7 +574,7 @@
                   //   ((System.Web.UI.WebControls.Button)e.Item.FindControl("btnAlert")).Attributes.Add("onclick", "return confirm('Are you sure?');");
 
                     // string df = "";
-                    //  ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text;
+                    //  ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbDAYCODE")).Text;
                     ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                     //((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtISCORE")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                 }
@@ -613,6 +614,8 @@
             string start_date= ((Anthem.Label)e.Item.FindControl("lbSTART_DATE")).Text;
             string sUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff");
             string eventName= ((Anthem.Label)e.Item.FindControl("lbNAME")).Text;
+            //string oldDayCODE = ((Anthem.Label)e.Item.FindControl("lbDAYCODE")).Text;
+            //string oldMatchNo = ((Anthem.Label)e.Item.FindControl("lbMATCHNO")).Text;
             int id = 0;
             try
             {
@@ -625,10 +628,12 @@
                         cmd2.CommandType = CommandType.StoredProcedure;
                         cmd2.Connection = connection;
                         cmd2.Parameters.Add("@EMATCHID", eventId);
+                        //cmd2.Parameters.Add("@OLDHKJCDAYCODE", oldDayCODE);
+                        //cmd2.Parameters.Add("@OLDHKJCMATCHNO", oldMatchNo);
                         cmd2.Parameters.Add("@HKJCDAYCODE", dayCODE);
                         cmd2.Parameters.Add("@HKJCMATCHNO", matchNo);
                         cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(start_date).AddHours (-AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                        cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddDays(AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddHours(AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                           id = Convert.ToInt32(cmd2.ExecuteScalar());
                         Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName);
                         this.dgRankDetails.EditItemIndex = -1;
@@ -739,10 +744,11 @@
                         cmd2.Parameters.Add("@EMATCHID", eventID);
                         cmd2.Parameters.Add("@HKJCDAYCODE", dayCode);
                         cmd2.Parameters.Add("@HKJCMATCHNO", MatchNo);
-                        cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(startDate).AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                        cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(startDate).AddDays(1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(startDate).AddHours(-AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(startDate).AddHours(AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                         int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventName + "] on Teams");
+                        //  Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventName + "] on Teams");
+                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + "") + " Sync [" + eventName + "] on Teams");
                     }
                     connection.Close();
                 }
@@ -801,7 +807,7 @@
             {
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {//(r.caction !='delete' or r.caction is null) and 
-                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS "
+                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS ,e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN "
                        + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID"
                        + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'"+ (id.ToString ()=="-1"?"": " and STATUS_ID ="+dplLeague.SelectedValue) +  " order by r.START_DATE ASC  ";
                     using (FbCommand cmd = new FbCommand(queryString))
