@@ -9,6 +9,7 @@ C#.NET complier statement:
 csc /t:library /out:..\bin\AnalysisSinglePreview.dll /r:..\bin\DBManager.dll;..\bin\Files.dll;..\bin\MessageClient.dll;..\bin\SportsMessage.dll AnalysisSinglePreview.cs
 */
 
+using FirebirdSql.Data.FirebirdClient;
 using System;
 using System.Collections;
 using System.Configuration;
@@ -32,14 +33,21 @@ namespace SportsUtil {
 		StringBuilder SQLString;
 		string[] arrFields;
 
-		public AnalysisSinglePreview(string Connection) {
+        public string m_Title = "";
+        DBManagerFB m_SportsDBMgrFb;
+        FbDataReader m_SportsOleReaderFb;
+
+        public AnalysisSinglePreview(string Connection) {
 			m_SportsDBMgr = new DBManager();
 			m_SportsDBMgr.ConnectionString = Connection;
 			m_SportsLog = new Files();
 			m_Big5Encoded = Encoding.GetEncoding(950);
 			SQLString = new StringBuilder();
 			arrFields = (string[])HttpContext.Current.Application["fieldItemsArray"];
-		}
+
+            m_SportsDBMgrFb = new DBManagerFB();
+            m_SportsDBMgrFb.ConnectionString = JC_SoccerWeb.Common.AppFlag.ScoutsDBConn;
+        }
 
 		public int NumberOfRecords {
 			get {
@@ -53,46 +61,82 @@ namespace SportsUtil {
 			string sMatchTime = "";
 			string uid;
 			StringBuilder HTMLString = new StringBuilder();
+            string sEventID;
+            string sDayCode = "";
 
-			try {
-				uid = HttpContext.Current.Session["user_id"].ToString();
-				SQLString.Remove(0,SQLString.Length);
-				SQLString.Append("select distinct gameinfo.matchdate, gameinfo.matchtime, gameinfo.leaglong, gameinfo.league, gameinfo.host, gameinfo.guest, gameinfo.match_cnt, leaginfo.leaguetype from gameinfo, leaginfo, analysis_recent_info where gameinfo.match_cnt=analysis_recent_info.imatch_cnt and analysis_recent_info.cact='U' and gameinfo.league=leaginfo.alias and leaginfo.leag_id in (select cleag_id from userprofile_info where iuser_id=");
-				SQLString.Append(uid);
-				SQLString.Append(") order by leaginfo.leag_order, gameinfo.matchdate, gameinfo.matchtime");
-				m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-				while(m_SportsOleReader.Read()) {
-					sMatchDate = m_SportsOleReader.GetString(0).Trim();
-					sMatchTime = m_SportsOleReader.GetString(1).Trim();
-					sMatchDate = sMatchDate.Insert(4,"/");
-					sMatchDate = sMatchDate.Insert(7,"/");
-					sMatchTime = sMatchTime.Insert(2,":");
+            try
+            {
+
+                sEventID = (HttpContext.Current.Request.QueryString["eventid"] == null) ? "" : HttpContext.Current.Request.QueryString["eventid"].Trim();
+
+                SQLString.Remove(0, SQLString.Length);
+                ////SQLString.Append("select gameinfo.matchdate, gameinfo.matchtime, gameinfo.leaglong, gameinfo.league, gameinfo.host, gameinfo.guest, gameinfo.match_cnt, leaginfo.LEAGUETYPE from gameinfo, leaginfo, analysis_bg_info where gameinfo.match_cnt=analysis_bg_info.imatch_cnt and gameinfo.league=leaginfo.alias and analysis_bg_info.cact='U' and leaginfo.leag_id in (select cleag_id from userprofile_info where iuser_id=");
+                ////SQLString.Append(uid);
+                ////SQLString.Append(") order by leaginfo.leag_order, gameinfo.matchdate, gameinfo.matchtime");
+                SQLString.Append("select cast(cast(r.CMATCHDATETIME as date) as varchar(10)), cast(r.CMATCHDATETIME as time),r.CLEAGUEALIAS_OUTPUT_NAME , r.CLEAGUE_OUTPUT_NAME,   r.HKJCHOSTNAME_CN, r.HKJCGUESTNAME_CN,  e.id , '' sLeagType , R.HKJCDAYCODE, ");
+                SQLString.Append(" (select a.NAME from TEAMS t inner join  AREAS a on t.AREA_ID=a.id  where t.ID=E.HOME_ID) , (select a.name from TEAMS t inner join  AREAS a on t.AREA_ID=a.id  where t.ID=E.HOME_ID) ,");
+                SQLString.Append(" (select b2.NAME from AREAS B inner join AREAS b2 on b2.id=b.PARENT_AREA_ID where B.ID =(select AREA_ID from TEAMS where ID=e.HOME_ID)),");
+                SQLString.Append(" (select  a.NAME from TEAMS t inner join  AREAS a on t.AREA_ID=a.id  where t.ID=E.GUEST_ID) ,  (select  a.NAME from TEAMS t inner join  AREAS a on t.AREA_ID=a.id  where t.ID=E.GUEST_ID) ,");
+                SQLString.Append(" (select b2.NAME from AREAS B inner join AREAS b2 on b2.id=b.PARENT_AREA_ID  where B.ID =(select AREA_ID from TEAMS where ID=e.GUEST_ID)), x.name from  EMATCHES r inner join  events e on e.id =r.EMATCHID  inner join  AREAS x on x.id =e.AREA_ID  ");
+                // SQLString.Append(" WHERE r.HKJCDAYCODE = (SELECT HKJCDAYCODE FROM EMATCHES WHERE EMATCHID ="+sEventID+ "  )  AND cast(cast(r.CMATCHDATETIME as date) as varchar(10))= (SELECT cast(cast(CMATCHDATETIME as date) as varchar(10)) FROM EMATCHES WHERE EMATCHID = " + sEventID + "   )");
+                //  --and r.CMATCHDATETIME + 1 > (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID = 2455014   ) and r.CMATCHDATETIME - 1 < (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID = 2455014   )  
+                //  SQLString.Append(" WHERE r.HKJCDAYCODE = (SELECT HKJCDAYCODE FROM EMATCHES WHERE EMATCHID =" + sEventID + "  ) and r.CMATCHDATETIME < (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " )+1 and r.CMATCHDATETIME > (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " ) -1 ");
+                if (sEventID != "")
+                {
+                    SQLString.Append(" WHERE r.HKJCDAYCODE = (SELECT HKJCDAYCODE FROM EMATCHES WHERE EMATCHID =" + sEventID + "  ) and r.CMATCHDATETIME < (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " )+1 and r.CMATCHDATETIME > (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " ) -1 ");
+                }
+                else
+                {
+                    SQLString.Append("   WHERE r.HKJCDAYCODE = (SELECT first 1 HKJCDAYCODE FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   ) ");
+                    SQLString.Append("  and r.CMATCHDATETIME < (SELECT first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   )+1 and r.CMATCHDATETIME > (SELECT  first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   ) -1 ");
+                }
+                //uid = HttpContext.Current.Session["user_id"].ToString();
+                //SQLString.Remove(0,SQLString.Length);
+                //SQLString.Append("select distinct gameinfo.matchdate, gameinfo.matchtime, gameinfo.leaglong, gameinfo.league, gameinfo.host, gameinfo.guest, gameinfo.match_cnt, leaginfo.leaguetype from gameinfo, leaginfo, analysis_recent_info where gameinfo.match_cnt=analysis_recent_info.imatch_cnt and analysis_recent_info.cact='U' and gameinfo.league=leaginfo.alias and leaginfo.leag_id in (select cleag_id from userprofile_info where iuser_id=");
+                //SQLString.Append(uid);
+                //SQLString.Append(") order by leaginfo.leag_order, gameinfo.matchdate, gameinfo.matchtime");
+                m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+				while(m_SportsOleReaderFb.Read()) {
+                    sDayCode = m_SportsOleReaderFb.GetString(8).Trim();
+                    m_Title = "(" + sDayCode + ")" + "發送近績";
+                    SQLString.Remove(0, SQLString.Length);
+                    SQLString.Append("select count(IMATCH_CNT) from analysis_recent_info where CACT='U' and IMATCH_CNT=");
+                    SQLString.Append(m_SportsOleReaderFb.GetString(6).Trim());
+                    int iCount = m_SportsDBMgr.ExecuteScalar(SQLString.ToString());
+                    m_SportsDBMgr.Close();
+                    if (iCount == 0) { continue; }
+                   // sDayCode = m_SportsOleReaderFb.GetString(8).Trim();
+                    sMatchDate = m_SportsOleReaderFb.GetString(0).Trim();
+					sMatchTime = m_SportsOleReaderFb.GetString(1).Trim();
+					//sMatchDate = sMatchDate.Insert(4,"/");
+					//sMatchDate = sMatchDate.Insert(7,"/");
+					//sMatchTime = sMatchTime.Insert(2,":");
 
 					HTMLString.Append("<tr align=\"center\"><td>");
 					HTMLString.Append(sMatchDate);
 					HTMLString.Append("&nbsp;");
 					HTMLString.Append(sMatchTime);
 					HTMLString.Append("</td><td><input type=\"hidden\" name=\"league\" value=\"");
-					HTMLString.Append(m_SportsOleReader.GetString(2).Trim());
+					HTMLString.Append(m_SportsOleReaderFb.GetString(2).Trim());
 					HTMLString.Append("\">");
-					HTMLString.Append(m_SportsOleReader.GetString(3).Trim());
+					HTMLString.Append(m_SportsOleReaderFb.GetString(3).Trim());
 					HTMLString.Append("</td><td><input type=\"hidden\" name=\"host\" value=\"");
-					HTMLString.Append(m_SportsOleReader.GetString(4).Trim());
+					HTMLString.Append(m_SportsOleReaderFb.GetString(4).Trim());
 					HTMLString.Append("\">");
-					HTMLString.Append(m_SportsOleReader.GetString(4).Trim());
+					HTMLString.Append(m_SportsOleReaderFb.GetString(4).Trim());
 					HTMLString.Append("</td><td><input type=\"hidden\" name=\"guest\" value=\"");
-					HTMLString.Append(m_SportsOleReader.GetString(5).Trim());
+					HTMLString.Append(m_SportsOleReaderFb.GetString(5).Trim());
 					HTMLString.Append("\">");
-					HTMLString.Append(m_SportsOleReader.GetString(5).Trim());
+					HTMLString.Append(m_SportsOleReaderFb.GetString(5).Trim());
 					HTMLString.Append("</td><td><select name=\"Action\" onChange=\"OnActionChanged(");
 					HTMLString.Append(iRecordsInPage.ToString());
 					HTMLString.Append(")\"><option value=\"U\">發送<option value=\"D\">刪除</select></td>");
 
-					iMatchCnt = m_SportsOleReader.GetInt32(6);
+					iMatchCnt = m_SportsOleReaderFb.GetInt32(6);
 					HTMLString.Append("<td><input type=\"hidden\" name=\"matchcount\" value=\"");
 					HTMLString.Append(iMatchCnt.ToString());
 					HTMLString.Append("\"><input type=\"hidden\" name=\"leaguetype\" value=\"");
-					HTMLString.Append(m_SportsOleReader.GetString(7).Trim());
+					HTMLString.Append(m_SportsOleReaderFb.GetString(7).Trim());
 /*
 					HTMLString.Append("\"><input type=\"checkbox\" name=\"analysis_bg\" value=\"");
 					HTMLString.Append(iMatchCnt.ToString());
@@ -111,9 +155,10 @@ namespace SportsUtil {
 					HTMLString.Append(")\">所有項目</td></tr>");
 					iRecordsInPage++;
 				}
-				m_SportsOleReader.Close();
-				m_SportsDBMgr.Close();
-			} catch(Exception ex) {
+                m_SportsOleReaderFb.Close();
+				m_SportsDBMgrFb.Close();
+            
+            } catch(Exception ex) {
 				m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
 				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 				m_SportsLog.Open();

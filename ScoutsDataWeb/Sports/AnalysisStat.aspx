@@ -3,83 +3,84 @@
 <%@ Import Namespace="SportsUtil"%>
 <%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="~/UserControl/MenuTabs.ascx" %>
 <script language="C#" runat="server">
-	int iRecCount;
+    int iRecCount;
 
-	void Page_Load(Object sender,EventArgs e) {
-        
-        //string sLeagueOption = "";
-        string sAnalysisOption = "";
-        //SoccerMenuLeague MenuLeague = new SoccerMenuLeague(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-        SoccerMenuAnalysis MenuAnalysis = new SoccerMenuAnalysis(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+    void Page_Load(Object sender,EventArgs e) {
+
+        ////string sLeagueOption = "";
+        //string sAnalysisOption = "";
+        ////SoccerMenuLeague MenuLeague = new SoccerMenuLeague(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        //SoccerMenuAnalysis MenuAnalysis = new SoccerMenuAnalysis(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        //try {
+
+        //   // sLeagueOption = MenuLeague.Show();
+        //    //RankInformation.InnerHtml = sLeagueOption;
+        //    //ScorersInformation.InnerHtml = sLeagueOption;
+        //    //PlayerInformation.InnerHtml = sLeagueOption;
+        //    ////JCComboPlayerInformation.InnerHtml = sLeagueOption;
+
+        //    sAnalysisOption = MenuAnalysis.Show();
+        //    //AnalysisModifyInformation.InnerHtml = sAnalysisOption;
+        //    CorrectScoreInformation.InnerHtml = sAnalysisOption;
+        //    //AnalysisRecentInformation.InnerHtml = sAnalysisOption;
+
+        //} catch(NullReferenceException) {
+        //}
+
+        AnalysisStat matchStat = new AnalysisStat(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+
         try {
-
-           // sLeagueOption = MenuLeague.Show();
-            //RankInformation.InnerHtml = sLeagueOption;
-            //ScorersInformation.InnerHtml = sLeagueOption;
-            //PlayerInformation.InnerHtml = sLeagueOption;
-            ////JCComboPlayerInformation.InnerHtml = sLeagueOption;
-
-            sAnalysisOption = MenuAnalysis.Show();
-            //AnalysisModifyInformation.InnerHtml = sAnalysisOption;
-            CorrectScoreInformation.InnerHtml = sAnalysisOption;
-            //AnalysisRecentInformation.InnerHtml = sAnalysisOption;
-
+            AnalysisStatInformation.InnerHtml = matchStat.GetStat();
+              this.Title =matchStat.m_Title;
+            iRecCount = matchStat.NumberOfRecords;
+            UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "賽事數據(" + DateTime.Now.ToString("HH:mm:ss") + ")");
         } catch(NullReferenceException) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
         }
+    }
 
-		AnalysisStat matchStat = new AnalysisStat(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+    void onSendMatchStat(Object sender,EventArgs e) {
+        int[] iUpdated;
+        string sNow;
+        AnalysisStat statAnly = new AnalysisStat(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        sNow = DateTime.Now.ToString("HH:mm:ss");
+        try {
+            iUpdated = statAnly.Update();
+            Page_Load(sender,e);
+            if((iUpdated[0] > 0) || (iUpdated[1] > 0)) {
+                UpdateHistoryMessage("成功修改" + iUpdated[0] + "及刪除" + iUpdated[1] + "場賽事數據(" + sNow + ")");
+            }   else {
+                UpdateHistoryMessage("沒有修改賽事數據(" + sNow + ")");
+            }
+        }   catch(NullReferenceException nullex) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
+        }
+    }
 
-		try {
-			AnalysisStatInformation.InnerHtml = matchStat.GetStat();
-			iRecCount = matchStat.NumberOfRecords;
-			UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "賽事數據(" + DateTime.Now.ToString("HH:mm:ss") + ")");
-		} catch(NullReferenceException) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
-		}
-	}
+    void onSaveMatchStat(Object sender,EventArgs e) {
+        int[] iUpdated;
+        string sNow;
+        AnalysisStat statAnly = new AnalysisStat(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        sNow = DateTime.Now.ToString("HH:mm:ss");
+        try {
+            iUpdated = statAnly.SaveRecord();
+            Page_Load(sender,e);
+            if (iUpdated[0] > 0) {
+                UpdateHistoryMessage("成功儲存" + iUpdated[0] + "場賽事數據(" + sNow + ")");
+            }   else {
+                UpdateHistoryMessage("沒有儲存某場賽事數據(" + sNow + ")");
+            }
+        }   catch(NullReferenceException nullex) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
+        }
+    }
 
-	void onSendMatchStat(Object sender,EventArgs e) {
-		int[] iUpdated;
-		string sNow;
-		AnalysisStat statAnly = new AnalysisStat(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-		sNow = DateTime.Now.ToString("HH:mm:ss");
-		try {
-			iUpdated = statAnly.Update();
-			Page_Load(sender,e);
-			if((iUpdated[0] > 0) || (iUpdated[1] > 0)) {
-				UpdateHistoryMessage("成功修改" + iUpdated[0] + "及刪除" + iUpdated[1] + "場賽事數據(" + sNow + ")");
-			}	else {
-				UpdateHistoryMessage("沒有修改賽事數據(" + sNow + ")");
-			}
-		}	catch(NullReferenceException nullex) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
-		}
-	}
-	
-	void onSaveMatchStat(Object sender,EventArgs e) {
-		int[] iUpdated;
-		string sNow;
-		AnalysisStat statAnly = new AnalysisStat(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-		sNow = DateTime.Now.ToString("HH:mm:ss");
-		try {
-			iUpdated = statAnly.SaveRecord();
-			Page_Load(sender,e);
-			if (iUpdated[0] > 0) {
-				UpdateHistoryMessage("成功儲存" + iUpdated[0] + "場賽事數據(" + sNow + ")");
-			}	else {
-				UpdateHistoryMessage("沒有儲存某場賽事數據(" + sNow + ")");
-			}
-		}	catch(NullReferenceException nullex) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
-		}
-	}
-
-	void UpdateHistoryMessage(string sMsg) {
-		historyMsg.Text = sMsg;
-	}
+    void UpdateHistoryMessage(string sMsg) {
+        historyMsg.Text = sMsg;
+    }
 </script>
 
 <script language="JavaScript">
@@ -344,7 +345,7 @@ function actionChange(index) {
 </script>
 
 <html>
-<head>
+<head runat="server">
      <title>數據</title>
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
 	<LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
@@ -355,10 +356,10 @@ function actionChange(index) {
 	<form id="AnalysisStatForm" method="post" runat="server" onsubmit="DeviceCheck()">
 		   <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
         <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
-         	<select name="soccerCorrectScore" onChange="goToCorrectScore(AnalysisStatForm.soccerCorrectScore.value)">
+        <%-- 	<select name="soccerCorrectScore" onChange="goToCorrectScore(AnalysisStatForm.soccerCorrectScore.value)">
 						<option value="0">請選擇</option>
 						<span id="CorrectScoreInformation" runat="server" />
-					</select>
+					</select>--%>
 		<table border="1" width="100%" style="font: 10pt verdana">
 		<tr style="background-color:#87CEEB" align="center">
 			<th>聯賽</th>

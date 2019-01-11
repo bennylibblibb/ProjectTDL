@@ -132,6 +132,7 @@
     <Content Include="sayhello.ascx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DBManager.cs" />
     <Compile Include="Sports\SportNewsMenu.cs" />
     <Compile Include="Sports\AnalysisModify.cs" />
     <Compile Include="Sports\AnalysisPreview.cs" />

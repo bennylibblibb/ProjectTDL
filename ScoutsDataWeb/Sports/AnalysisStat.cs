@@ -10,6 +10,7 @@ C#.NET complier statement:
 csc /t:library /out:..\bin\AnalysisStat.dll /r:..\bin\DBManager.dll;..\bin\Files.dll;..\bin\MessageClient.dll;..\bin\SportsMessage.dll AnalysisStat.cs
 */
 
+using FirebirdSql.Data.FirebirdClient;
 using System;
 using System.Collections;
 using System.Configuration;
@@ -32,13 +33,19 @@ namespace SportsUtil {
 		Encoding m_Big5Encoded;
 		StringBuilder SQLString;
 
-		public AnalysisStat(string Connection) {
+        public string m_Title = "";
+        DBManagerFB m_SportsDBMgrFb;
+        FbDataReader m_SportsOleReaderFb;
+
+        public AnalysisStat(string Connection) {
 			m_SportsDBMgr = new DBManager();
 			m_SportsDBMgr.ConnectionString = Connection;
 			m_SportsLog = new Files();
 			m_Big5Encoded = Encoding.GetEncoding(950);
 			SQLString = new StringBuilder();
-		}
+            m_SportsDBMgrFb = new DBManagerFB();
+            m_SportsDBMgrFb.ConnectionString = JC_SoccerWeb.Common.AppFlag.ScoutsDBConn;
+        }
 
 		public int NumberOfRecords {
 			get {
@@ -48,10 +55,14 @@ namespace SportsUtil {
 
 		public string GetStat() {
 			string uid;
-			StringBuilder HTMLString = new StringBuilder();
+            string sEventID;
+            string sDayCode="";
+            StringBuilder HTMLString = new StringBuilder();
 
 			try {
-				bool bExisted = false;
+                sEventID = (HttpContext.Current.Request.QueryString["eventid"] == null) ? "" : HttpContext.Current.Request.QueryString["eventid"].Trim();
+
+                bool bExisted = false;
 				int iIdx = 1, iSubIdx = 0, iRecordCount = 0;
 				ArrayList matchCntAL, leagueAL, hostAL, guestAL, anlyMatchCntAL, hostWinAL, hostDrawAL, hostLossAL, guestWinAL, guestDrawAL, guestLossAL;
 				matchCntAL = new ArrayList();
@@ -69,26 +80,39 @@ namespace SportsUtil {
 				uid = HttpContext.Current.Session["user_id"]==null?"3":HttpContext.Current.Session["user_id"].ToString();
 				//retrieve league, host, guest and match count
 				SQLString.Remove(0,SQLString.Length);
-				SQLString.Append("select gameinfo.leaglong, gameinfo.host, gameinfo.guest, gameinfo.match_cnt from gameinfo, leaginfo where gameinfo.league=leaginfo.alias and gameinfo.act='U' and leaginfo.leag_id in (select cleag_id from userprofile_info where iuser_id=");
-				SQLString.Append(uid);
-				SQLString.Append(") order by leaginfo.leag_order, gameinfo.MATCHDATE, gameinfo.MATCHTIME");
-				m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-				while(m_SportsOleReader.Read()) {
-					leagueAL.Add(m_SportsOleReader.GetString(0).Trim());
-					hostAL.Add(m_SportsOleReader.GetString(1).Trim());
-					guestAL.Add(m_SportsOleReader.GetString(2).Trim());
-					matchCntAL.Add(m_SportsOleReader.GetInt32(3));
-					iRecordCount++;
+                ////SQLString.Append("select gameinfo.leaglong, gameinfo.host, gameinfo.guest, gameinfo.match_cnt from gameinfo, leaginfo where gameinfo.league=leaginfo.alias and gameinfo.act='U' and leaginfo.leag_id in (select cleag_id from userprofile_info where iuser_id=");
+                ////SQLString.Append(uid);
+                ////SQLString.Append(") order by leaginfo.leag_order, gameinfo.MATCHDATE, gameinfo.MATCHTIME");
+                SQLString.Append("select E.CLEAGUE_OUTPUT_NAME,  E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN, E.EMATCHID,E.HKJCDAYCODE,E.HKJCMATCHNO from EMATCHES E ");
+                //SQLString.Append(" WHERE E.HKJCDAYCODE = (SELECT HKJCDAYCODE FROM EMATCHES WHERE EMATCHID = '"+ sEventID + "'  ) ");
+                //SQLString.Append(" AND cast(cast(e.CMATCHDATETIME as date) as varchar(10))= (SELECT cast(cast(CMATCHDATETIME as date) as varchar(10)) FROM EMATCHES WHERE EMATCHID = '"+ sEventID + "'  ) ");
+                if (sEventID != ""&& sEventID!="-1" && sEventID != "0")
+                {
+                    SQLString.Append(" WHERE e.HKJCDAYCODE = (SELECT HKJCDAYCODE FROM EMATCHES WHERE EMATCHID =" + sEventID + "  ) and e.CMATCHDATETIME < (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " )+1 and e.CMATCHDATETIME > (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " ) -1 ");
+                }
+                else
+                {
+                    SQLString.Append("   WHERE e.HKJCDAYCODE = (SELECT first 1 HKJCDAYCODE FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   ) ");
+                    SQLString.Append("  and e.CMATCHDATETIME < (SELECT first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   )+1 and e.CMATCHDATETIME > (SELECT  first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   ) -1 ");
+                }
+                m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+				while(m_SportsOleReaderFb.Read()) {
+					leagueAL.Add(m_SportsOleReaderFb.GetString(0).Trim());
+					hostAL.Add(m_SportsOleReaderFb.GetString(1).Trim());
+					guestAL.Add(m_SportsOleReaderFb.GetString(2).Trim());
+					matchCntAL.Add(m_SportsOleReaderFb.GetInt32(3));
+                    sDayCode = m_SportsOleReaderFb.GetString(4);
+                    iRecordCount++;
 				}
-				m_SportsDBMgr.Close();
-				m_SportsOleReader.Close();
+                m_SportsDBMgrFb.Close();
+                m_SportsOleReaderFb.Close();
 				leagueAL.TrimToSize();
 				hostAL.TrimToSize();
 				guestAL.TrimToSize();
 				matchCntAL.TrimToSize();
-
-				//retrieve analysis stat
-				if(iRecordCount>0) {
+                m_Title ="("+ sDayCode + ")"+ "¼Æ¾Ú";
+                //retrieve analysis stat
+                if (iRecordCount>0) {
 					SQLString.Remove(0,SQLString.Length);
 					SQLString.Append("select IMATCH_CNT,IHOSTWIN,IHOSTDRAW,IHOSTLOSS,IGUESTWIN,IGUESTDRAW,IGUESTLOSS from ANALYSIS_STAT_INFO where CACT='U' and IMATCH_CNT in (");
 					SQLString.Append(matchCntAL[0]);

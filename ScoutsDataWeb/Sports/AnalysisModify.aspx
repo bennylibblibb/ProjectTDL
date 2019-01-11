@@ -3,56 +3,57 @@
 <%@ Import Namespace="SportsUtil"%>
 <%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="~/UserControl/MenuTabs.ascx" %>
 <script language="C#" runat="server">
-	void Page_Load(Object sender,EventArgs e) {
-	 
-		string sAnalysisOption = "";
-		 SoccerMenuAnalysis MenuAnalysis = new SoccerMenuAnalysis(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-		 try {  
-			sAnalysisOption = MenuAnalysis.Show();
-			AnalysisModifyInformation2.InnerHtml = sAnalysisOption; 
+    void Page_Load(Object sender,EventArgs e) {
 
-		} catch(NullReferenceException) {
-		 }
+        //string sAnalysisOption = "";
+        //SoccerMenuAnalysis MenuAnalysis = new SoccerMenuAnalysis(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        //try {
+        //    sAnalysisOption = MenuAnalysis.Show();
+        //    AnalysisModifyInformation2.InnerHtml = sAnalysisOption;
 
-        
+        //} catch(NullReferenceException) {
+        //}
+
+
         //AnalysisModify matchAnalysis = new AnalysisModify(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-       AnalysisModify matchAnalysis = new AnalysisModify(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-		try {
-			AnalysisModifyInformation.InnerHtml = matchAnalysis.GetMatches();
-			UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "賽事分析(" + DateTime.Now.ToString("HH:mm:ss") + ")");
-		} catch(NullReferenceException) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
-		}
-	}
+        AnalysisModify matchAnalysis = new AnalysisModify(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        try {
+            AnalysisModifyInformation.InnerHtml = matchAnalysis.GetMatches();
+            UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "賽事分析(" + DateTime.Now.ToString("HH:mm:ss") + ")");
+            this.Title =matchAnalysis.m_Title;
+        } catch(NullReferenceException) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
+        }
+    }
 
-	void onSaveMatchAnalysis(Object sender,EventArgs e) {
-		int iUpdated = 0;
-		string sNow;
-		//AnalysisModify modifyAnly = new AnalysisModify(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+    void onSaveMatchAnalysis(Object sender,EventArgs e) {
+        int iUpdated = 0;
+        string sNow;
+        //AnalysisModify modifyAnly = new AnalysisModify(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
         AnalysisModify modifyAnly = new AnalysisModify(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-		sNow = DateTime.Now.ToString("HH:mm:ss");
-		try {
-			iUpdated = modifyAnly.Modify();
-			Page_Load(sender,e);
-			if(iUpdated > 0) {
-				UpdateHistoryMessage("成功修改賽事分析(" + sNow + ")");
-			}	else if(iUpdated == 0) {
-				UpdateHistoryMessage("沒有修改賽事分析(" + sNow + ")");
-			}	else {
-				UpdateHistoryMessage(ConfigurationManager.AppSettings["transErrorMsg"] + "(" + sNow + ")");
-			}
-		} catch(NullReferenceException nullex) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
-		}
-	}
+        sNow = DateTime.Now.ToString("HH:mm:ss");
+        try {
+            iUpdated = modifyAnly.Modify();
+            Page_Load(sender,e);
+            if(iUpdated > 0) {
+                UpdateHistoryMessage("成功修改賽事分析(" + sNow + ")");
+            }   else if(iUpdated == 0) {
+                UpdateHistoryMessage("沒有修改賽事分析(" + sNow + ")");
+            }   else {
+                UpdateHistoryMessage(ConfigurationManager.AppSettings["transErrorMsg"] + "(" + sNow + ")");
+            }
+        } catch(NullReferenceException nullex) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
+        }
+    }
 
-	void UpdateHistoryMessage(string sMsg) {
-		historyMsg.Text = sMsg;
-	}
+    void UpdateHistoryMessage(string sMsg) {
+        historyMsg.Text = sMsg;
+    }
 
-     
+
 </script>
 
 <script language="JavaScript">
@@ -108,7 +109,7 @@ function onGuestScoreChanged(validate_index) {
 </script>
 
 <html>
-<head>
+<head  runat="server">
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
 	<LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">
     <LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
@@ -117,12 +118,11 @@ function onGuestScoreChanged(validate_index) {
 <body>
 	<form id="AnalysisModifyForm" method="post" runat="server">
 		   <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
-        <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
-       
-					<select name="soccerMenuAnalysisModify" onChange="goToAnalysisModify(AnalysisModifyForm.soccerMenuAnalysisModify.value)">
+        <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>       
+				<%--	<select name="soccerMenuAnalysisModify" onChange="goToAnalysisModify(AnalysisModifyForm.soccerMenuAnalysisModify.value)">
 						<option value="0">請選擇</option>
 						<span id="AnalysisModifyInformation2" runat="server" />
-					</select>
+					</select>--%>
 		<table border="1" width="70%" style="font: 10pt verdana">
 		<span id="AnalysisModifyInformation" runat="server" />
 		<tr>

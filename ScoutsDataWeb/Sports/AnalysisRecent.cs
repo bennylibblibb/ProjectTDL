@@ -10,6 +10,7 @@ C#.NET complier statement:
 csc /t:library /out:..\bin\AnalysisRecent.dll /r:..\bin\DBManager.dll;..\bin\Files.dll;..\bin\MessageClient.dll;..\bin\SportsMessage.dll AnalysisRecent.cs
 */
 
+using FirebirdSql.Data.FirebirdClient;
 using System;
 using System.Collections;
 using System.Configuration;
@@ -32,21 +33,27 @@ namespace SportsUtil {
 		Files m_SportsLog;
 		Encoding m_Big5Encoded;
 		StringBuilder SQLString;
+        public string m_Title = "";
+        DBManagerFB m_SportsDBMgrFb;
+        FbDataReader m_SportsOleReaderFb;
 
-		public AnalysisRecent(string Connection) {
+        public AnalysisRecent(string Connection) {
 			m_SportsDBMgr = new DBManager();
 			m_SportsDBMgr.ConnectionString = Connection;
 			m_SportsLog = new Files();
 			m_Big5Encoded = Encoding.GetEncoding(950);
 			SQLString = new StringBuilder();
 			arrFields = (string[])HttpContext.Current.Application["fieldItemsArray"];
-		}
+            m_SportsDBMgrFb = new DBManagerFB();
+            m_SportsDBMgrFb.ConnectionString = JC_SoccerWeb.Common.AppFlag.ScoutsDBConn;
+        }
 
 		public string GetRecent() {
 			int iItemIdx = 0;
 			int iRecordCount = 0;
-			string sMatchCnt = "";
-			string sLeague = "";
+            ////string sMatchCnt = "";
+            string sEventID = "";
+            string sLeague = "";
 			string sHost = "";
 			string sGuest = "";
 			string sMatchDate = "";
@@ -57,32 +64,36 @@ namespace SportsUtil {
 			StringBuilder TempHTMLString = new StringBuilder();
 			ArrayList HostRecentHTMLList = new ArrayList(5);
 			ArrayList GuestRecentHTMLList = new ArrayList(5);
-            for (int xx = 1; xx < 100; xx++)
-            {
+            //for (int xx = 1; xx < 100; xx++)
+            //{
                 try
                 {
 
-                    sMatchCnt = HttpContext.Current.Request.QueryString["matchcnt"] == null ? xx.ToString() : HttpContext.Current.Request.QueryString["matchcnt"];
+                    ////  sMatchCnt = HttpContext.Current.Request.QueryString["matchcnt"] == null ? xx.ToString() : HttpContext.Current.Request.QueryString["matchcnt"];
+                    sEventID = (HttpContext.Current.Request.QueryString["eventid"] == null) ? "" : HttpContext.Current.Request.QueryString["eventid"].Trim();
 
                     //get league, host, guest from gameinfo
                     SQLString.Remove(0, SQLString.Length);
-                    SQLString.Append("select leaglong, host, guest, MATCHDATE, MATCHTIME, FIELD, HOST_HANDI from gameinfo where match_cnt=");
-                    SQLString.Append(sMatchCnt);
-                    m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                    if (m_SportsOleReader.Read())
+                //// SQLString.Append("select leaglong, host, guest, MATCHDATE, MATCHTIME, FIELD, HOST_HANDI from gameinfo where match_cnt=");
+                SQLString.Append("select r.CLEAGUE_OUTPUT_NAME,   r.HKJCHOSTNAME_CN,  r.HKJCGUESTNAME_CN, cast(cast(r.CMATCHDATETIME as date) as varchar(10)), cast(r.CMATCHDATETIME as time),");
+                SQLString.Append("'H', '1'  from EMATCHES r  where r.ematchid = ");
+                ////SQLString.Append(sMatchCnt);
+                 SQLString.Append(sEventID);
+                    m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                    if (m_SportsOleReaderFb.Read())
                     {
-                        sLeague = m_SportsOleReader.GetString(0).Trim();
-                        sHost = m_SportsOleReader.GetString(1).Trim();
-                        sGuest = m_SportsOleReader.GetString(2).Trim();
-                        sMatchDate = m_SportsOleReader.GetString(3).Trim();
-                        sMatchTime = m_SportsOleReader.GetString(4).Trim();
-                        sMatchField = m_SportsOleReader.GetString(5).Trim();
-                        sHostHandicap = m_SportsOleReader.GetString(6).Trim();
+                        sLeague = m_SportsOleReaderFb.GetString(0).Trim();
+                        sHost = m_SportsOleReaderFb.GetString(1).Trim();
+                        sGuest = m_SportsOleReaderFb.GetString(2).Trim();
+                        sMatchDate = m_SportsOleReaderFb.GetString(3).Trim();
+                        sMatchTime = m_SportsOleReaderFb.GetString(4).Trim();
+                        sMatchField = m_SportsOleReaderFb.GetString(5).Trim();
+                        sHostHandicap = m_SportsOleReaderFb.GetString(6).Trim();
                     }
-                    m_SportsDBMgr.Close();
-                    m_SportsOleReader.Close();
-
-                    HTMLString.Append("<tr style=\"background-color:#FFDAB9\"><th><select name=\"Action\" onChange=\"OnActionChanged()\"><option value=\"U\">更新<option value=\"D\">刪除&nbsp;<input type=\"hidden\" name=\"league\" value=\"");
+                  m_SportsDBMgrFb.Close();
+                  m_SportsOleReaderFb.Close();
+                  m_Title = sHost + "/" + sGuest + "-近績";
+                HTMLString.Append("<tr style=\"background-color:#FFDAB9\"><th><select name=\"Action\" onChange=\"OnActionChanged()\"><option value=\"U\">更新<option value=\"D\">刪除&nbsp;<input type=\"hidden\" name=\"league\" value=\"");
                     HTMLString.Append(sLeague);
                     HTMLString.Append("\">");
                     HTMLString.Append(sLeague);
@@ -94,8 +105,10 @@ namespace SportsUtil {
                     HTMLString.Append(sGuest);
                     HTMLString.Append("\">");
                     HTMLString.Append(sGuest);
-                    HTMLString.Append("<input type=\"hidden\" name=\"matchcount\" value=\"");
-                    HTMLString.Append(sMatchCnt);
+                ////  HTMLString.Append("<input type=\"hidden\" name=\"matchcount\" value=\"");
+                HTMLString.Append("<input type=\"hidden\" name=\"eventid\" value=\"");
+                ////HTMLString.Append(sMatchCnt);
+                HTMLString.Append(sEventID);
                     HTMLString.Append("\"><input type=\"hidden\" name=\"matchdate\" value=\"");
                     HTMLString.Append(sMatchDate);
                     HTMLString.Append("\"><input type=\"hidden\" name=\"matchtime\" value=\"");
@@ -110,7 +123,8 @@ namespace SportsUtil {
                     HTMLString.Append("<th><select name=\"HNextMatchField\">");
                     SQLString.Remove(0, SQLString.Length);
                     SQLString.Append("select IMATCHSTATUS, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='H' AND IHOSTSCORE= -1 AND IGUESTSCORE =-1 AND IMATCH_CNT=");
-                    SQLString.Append(sMatchCnt);
+                ////SQLString.Append(sMatchCnt);
+                    SQLString.Append(sEventID);
                     m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
                     if (m_SportsOleReader.Read())
                     {
@@ -206,7 +220,8 @@ namespace SportsUtil {
                     HTMLString.Append("<th><select name=\"GNextMatchField\">");
                     SQLString.Remove(0, SQLString.Length);
                     SQLString.Append("select IMATCHSTATUS, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='G' AND IHOSTSCORE= -1 AND IGUESTSCORE =-1 AND IMATCH_CNT=");
-                    SQLString.Append(sMatchCnt);
+                ////  SQLString.Append(sMatchCnt);
+                SQLString.Append(sEventID);
                     m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
                     if (m_SportsOleReader.Read())
                     {
@@ -302,7 +317,8 @@ namespace SportsUtil {
                     iRecordCount = 0;
                     SQLString.Remove(0, SQLString.Length);
                     SQLString.Append("select IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='H' AND IHOSTSCORE<>-1 AND IGUESTSCORE<>-1 AND IMATCH_CNT=");
-                    SQLString.Append(sMatchCnt);
+                //// SQLString.Append(sMatchCnt);
+                SQLString.Append(sEventID);
                     SQLString.Append(" order by IREC");
                     m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
                     while (m_SportsOleReader.Read())
@@ -387,7 +403,8 @@ namespace SportsUtil {
                     iRecordCount = 0;
                     SQLString.Remove(0, SQLString.Length);
                     SQLString.Append("select IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='G' AND IHOSTSCORE<>-1 AND IGUESTSCORE<>-1 AND IMATCH_CNT=");
-                    SQLString.Append(sMatchCnt);
+                ////  SQLString.Append(sMatchCnt);
+                SQLString.Append(sEventID);
                     SQLString.Append(" order by IREC");
                     m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
                     while (m_SportsOleReader.Read())
@@ -482,7 +499,7 @@ namespace SportsUtil {
                         HTMLString.Append(GuestRecentHTMLList[iItemIdx]);
                         HTMLString.Append("</tr>");
                     }
-                    return HTMLString.ToString();
+                    //return HTMLString.ToString();
                 }
                 catch (Exception ex)
                 {
@@ -494,7 +511,7 @@ namespace SportsUtil {
                     HTMLString.Remove(0, HTMLString.Length);
                     HTMLString.Append(ConfigurationManager.AppSettings["accessErrorMsg"]);
                 }
-            }
+            //}
 
 			return HTMLString.ToString();
 		}
@@ -504,8 +521,9 @@ namespace SportsUtil {
 			int iItemIdx = 0;
 			//int iINIIdx = 0;
 			char[] delimiter = new char[] {','};
-			string sMatchCnt;
-			string sLeague;
+            ////string sMatchCnt;
+            string sEventID;
+            string sLeague;
 			string sHost;
 			string sGuest;
 			string sMatchDate;
@@ -528,9 +546,10 @@ namespace SportsUtil {
 			string[] arrGRecentGScore;
 			string[] arrGRecentChallenger;
 			string[] arrGRecentLeague;
-			
-			sMatchCnt = HttpContext.Current.Request.Form["matchcount"];
-			sLeague = HttpContext.Current.Request.Form["league"];
+
+            ////sMatchCnt = HttpContext.Current.Request.Form["matchcount"];
+            sEventID = HttpContext.Current.Request.Form["eventid"];
+            sLeague = HttpContext.Current.Request.Form["league"];
 			sHost = HttpContext.Current.Request.Form["host"];
 			sGuest = HttpContext.Current.Request.Form["guest"];
 			sMatchDate = HttpContext.Current.Request.Form["matchdate"];
@@ -557,8 +576,9 @@ namespace SportsUtil {
 			try {
 				SQLString.Remove(0,SQLString.Length);
 				SQLString.Append("delete from ANALYSIS_RECENT_INFO where IMATCH_CNT=");
-				SQLString.Append(sMatchCnt);
-				m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
+                ///SQLString.Append(sMatchCnt); 
+                SQLString.Append(sEventID);
+                m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
 				m_SportsDBMgr.Close();
 				
 				if(!sHNextMatchField.Equals("-1")) {
@@ -568,8 +588,9 @@ namespace SportsUtil {
 							iRecNo++;
 							SQLString.Remove(0,SQLString.Length);
 							SQLString.Append("insert into ANALYSIS_RECENT_INFO values(");
-							SQLString.Append(sMatchCnt);
-							SQLString.Append(",");
+                            ///SQLString.Append(sMatchCnt); 
+                            SQLString.Append(sEventID);  
+                            SQLString.Append(",");
 							SQLString.Append(iRecNo.ToString());
 							SQLString.Append(",'H','U','");
 							SQLString.Append(sHNextLeague.Trim());
@@ -591,8 +612,9 @@ namespace SportsUtil {
 						iRecNo++;
 						SQLString.Remove(0,SQLString.Length);
 						SQLString.Append("insert into ANALYSIS_RECENT_INFO values(");
-						SQLString.Append(sMatchCnt);
-						SQLString.Append(",");
+                        ///SQLString.Append(sMatchCnt); 
+                        SQLString.Append(sEventID);
+                        SQLString.Append(",");
 						SQLString.Append(iRecNo.ToString());
 						SQLString.Append(",'H','U','");
 						SQLString.Append(arrHRecentLeague[iItemIdx].Trim());
@@ -618,8 +640,9 @@ namespace SportsUtil {
 							iRecNo++;
 							SQLString.Remove(0,SQLString.Length);
 							SQLString.Append("insert into ANALYSIS_RECENT_INFO values(");
-							SQLString.Append(sMatchCnt);
-							SQLString.Append(",");
+                            ///SQLString.Append(sMatchCnt); 
+                            SQLString.Append(sEventID);
+                            SQLString.Append(",");
 							SQLString.Append(iRecNo.ToString());
 							SQLString.Append(",'G','U','");
 							SQLString.Append(sGNextLeague.Trim());
@@ -641,8 +664,9 @@ namespace SportsUtil {
 						iRecNo++;
 						SQLString.Remove(0,SQLString.Length);
 						SQLString.Append("insert into ANALYSIS_RECENT_INFO values(");
-						SQLString.Append(sMatchCnt);
-						SQLString.Append(",");
+                        ///SQLString.Append(sMatchCnt); 
+                        SQLString.Append(sEventID);
+                        SQLString.Append(",");
 						SQLString.Append(iRecNo.ToString());
 						SQLString.Append(",'G','U','");
 						SQLString.Append(arrGRecentLeague[iItemIdx].Trim());
@@ -681,8 +705,9 @@ namespace SportsUtil {
 			int iINIIdx = 0;
 			char[] delimiter = new char[] {','};
 			string sAction;
-			string sMatchCnt;
-			string sLeague;
+            //string sMatchCnt;
+            string sEventID;
+            string sLeague;
 			string sHost;
 			string sGuest;
 			string sMatchDate;
@@ -725,8 +750,10 @@ namespace SportsUtil {
 			if(arrSendToPager.Length>0) bSendToPager = true;
 			arrMsgType = (string[])HttpContext.Current.Application["messageType"];
 			sAction = HttpContext.Current.Request.Form["Action"];
-			sMatchCnt = HttpContext.Current.Request.Form["matchcount"];
-			sLeague = HttpContext.Current.Request.Form["league"];
+            ////sMatchCnt = HttpContext.Current.Request.Form["matchcount"];
+            sEventID = HttpContext.Current.Request.Form["matchcount"];
+            
+            sLeague = HttpContext.Current.Request.Form["league"];
 			sHost = HttpContext.Current.Request.Form["host"];
 			sGuest = HttpContext.Current.Request.Form["guest"];
 			sMatchDate = HttpContext.Current.Request.Form["matchdate"];
@@ -757,8 +784,9 @@ namespace SportsUtil {
 					//clear existing records first
 					SQLString.Remove(0,SQLString.Length);
 					SQLString.Append("delete from ANALYSIS_RECENT_INFO where IMATCH_CNT=");
-					SQLString.Append(sMatchCnt);
-					m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
+                    ///SQLString.Append(sMatchCnt); 
+                    SQLString.Append(sEventID);
+                    m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
 					m_SportsDBMgr.Close();
 
 					/*******************
@@ -797,8 +825,9 @@ namespace SportsUtil {
 								iRecNo++;
 								SQLString.Remove(0,SQLString.Length);
 								SQLString.Append("insert into ANALYSIS_RECENT_INFO values(");
-								SQLString.Append(sMatchCnt);
-								SQLString.Append(",");
+                                ///SQLString.Append(sMatchCnt); 
+                                SQLString.Append(sEventID);
+                                SQLString.Append(",");
 								SQLString.Append(iRecNo.ToString());
 								SQLString.Append(",'H','U','");
 								SQLString.Append(sHNextLeague.Trim());
@@ -841,8 +870,9 @@ namespace SportsUtil {
 							iRecNo++;
 							SQLString.Remove(0,SQLString.Length);
 							SQLString.Append("insert into ANALYSIS_RECENT_INFO values(");
-							SQLString.Append(sMatchCnt);
-							SQLString.Append(",");
+                            ///SQLString.Append(sMatchCnt); 
+                            SQLString.Append(sEventID);
+                            SQLString.Append(",");
 							SQLString.Append(iRecNo.ToString());
 							SQLString.Append(",'H','U','");
 							SQLString.Append(arrHRecentLeague[iItemIdx].Trim());
@@ -938,8 +968,9 @@ namespace SportsUtil {
 								iRecNo++;
 								SQLString.Remove(0,SQLString.Length);
 								SQLString.Append("insert into ANALYSIS_RECENT_INFO values(");
-								SQLString.Append(sMatchCnt);
-								SQLString.Append(",");
+                                ///SQLString.Append(sMatchCnt); 
+                                SQLString.Append(sEventID);
+                                SQLString.Append(",");
 								SQLString.Append(iRecNo.ToString());
 								SQLString.Append(",'G','U','");
 								SQLString.Append(sGNextLeague.Trim());
@@ -982,8 +1013,9 @@ namespace SportsUtil {
 							iRecNo++;
 							SQLString.Remove(0,SQLString.Length);
 							SQLString.Append("insert into ANALYSIS_RECENT_INFO values(");
-							SQLString.Append(sMatchCnt);
-							SQLString.Append(",");
+                            ///SQLString.Append(sMatchCnt); 
+                            SQLString.Append(sEventID);
+                            SQLString.Append(",");
 							SQLString.Append(iRecNo.ToString());
 							SQLString.Append(",'G','U','");
 							SQLString.Append(arrGRecentLeague[iItemIdx].Trim());
@@ -1052,8 +1084,9 @@ namespace SportsUtil {
 				} else {
 					SQLString.Remove(0,SQLString.Length);
 					SQLString.Append("update ANALYSIS_RECENT_INFO set CACT='D' where imatch_cnt=");
-					SQLString.Append(sMatchCnt);
-					m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
+                    ///SQLString.Append(sMatchCnt); 
+                    SQLString.Append(sEventID);
+                    m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
 					m_SportsDBMgr.Close();
 
 					LogSQLString.Remove(0,LogSQLString.Length);

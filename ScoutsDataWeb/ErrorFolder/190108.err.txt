@@ -1,0 +1,2 @@
+﻿18:41:34   dgSchedule_PageIndexChanged()  System.NullReferenceException: Object reference not set to an instance of an object.
+   at JC_SoccerWeb.Matches.dgSchedule_PageIndexChanged(Object source, DataGridPageChangedEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Matches.aspx.cs:line 143

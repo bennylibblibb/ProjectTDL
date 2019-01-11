@@ -3,44 +3,45 @@
 <%@ Import Namespace="SportsUtil"%>
 <%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="~/UserControl/MenuTabs.ascx" %>
 <script language="C#" runat="server">
-	int iRecCount;
+    int iRecCount;
 
-	void Page_Load(Object sender,EventArgs e) {
-		AnalysisSinglePreview matchPreview = new AnalysisSinglePreview(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-		try {
-			AnalysisSinglePreivewInformation.InnerHtml = matchPreview.PreviewMatches();
-			iRecCount = matchPreview.NumberOfRecords;
-			UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "賽事分析(" + DateTime.Now.ToString("HH:mm:ss") + ")");
-		} catch(NullReferenceException) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
-		}
-	}
+    void Page_Load(Object sender,EventArgs e) {
+        AnalysisSinglePreview matchPreview = new AnalysisSinglePreview(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        try {
+            AnalysisSinglePreivewInformation.InnerHtml = matchPreview.PreviewMatches();
+            iRecCount = matchPreview.NumberOfRecords;
+            UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "賽事分析(" + DateTime.Now.ToString("HH:mm:ss") + ")");
+            this.Title =matchPreview.m_Title;
+        } catch(NullReferenceException) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
+        }
+    }
 
-	void onSendAnalysis(Object sender,EventArgs e) {
-		int iUpdated = 0;
-		string sNow;
-		AnalysisSinglePreview previewAnly = new AnalysisSinglePreview(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-		sNow = DateTime.Now.ToString("HH:mm:ss");
-		try {
-			iUpdated = previewAnly.Send();
-			Page_Load(sender,e);
-			if(iUpdated > 0) {
-				UpdateHistoryMessage("成功發送賽事分析(" + sNow + ")");
-			}	else if(iUpdated == 0) {
-				UpdateHistoryMessage("沒有發送賽事分析(" + sNow + ")");
-			} else {
-				UpdateHistoryMessage(ConfigurationManager.AppSettings["transErrorMsg"] + "(" + sNow + ")");
-			}
-		}	catch(NullReferenceException nullex) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
-		}
-	}
+    void onSendAnalysis(Object sender,EventArgs e) {
+        int iUpdated = 0;
+        string sNow;
+        AnalysisSinglePreview previewAnly = new AnalysisSinglePreview(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        sNow = DateTime.Now.ToString("HH:mm:ss");
+        try {
+            iUpdated = previewAnly.Send();
+            Page_Load(sender,e);
+            if(iUpdated > 0) {
+                UpdateHistoryMessage("成功發送賽事分析(" + sNow + ")");
+            }   else if(iUpdated == 0) {
+                UpdateHistoryMessage("沒有發送賽事分析(" + sNow + ")");
+            } else {
+                UpdateHistoryMessage(ConfigurationManager.AppSettings["transErrorMsg"] + "(" + sNow + ")");
+            }
+        }   catch(NullReferenceException nullex) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
+        }
+    }
 
-	void UpdateHistoryMessage(string sMsg) {
-		historyMsg.Text = sMsg;
-	}
+    void UpdateHistoryMessage(string sMsg) {
+        historyMsg.Text = sMsg;
+    }
 </script>
 
 <script language="JavaScript">
@@ -311,7 +312,7 @@ function OnActionChanged(checkedIdx) {
 </script>
 
 <html>
-<head>
+<head runat="server">
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
 	<LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">  
     <LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">

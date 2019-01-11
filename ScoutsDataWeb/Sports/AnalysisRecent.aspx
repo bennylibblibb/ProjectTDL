@@ -6,31 +6,32 @@
     void Page_Load(Object sender,EventArgs e) {
 
 
-        //string sLeagueOption = "";
-        string sAnalysisOption = "";
-        //SoccerMenuLeague MenuLeague = new SoccerMenuLeague(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-        SoccerMenuAnalysis MenuAnalysis = new SoccerMenuAnalysis(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-        try {
+        //////string sLeagueOption = "";
+        ////string sAnalysisOption = "";
+        //////SoccerMenuLeague MenuLeague = new SoccerMenuLeague(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        ////SoccerMenuAnalysis MenuAnalysis = new SoccerMenuAnalysis(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        ////try {
 
-           // sLeagueOption = MenuLeague.Show();
-            //RankInformation.InnerHtml = sLeagueOption;
-            //ScorersInformation.InnerHtml = sLeagueOption;
-            //PlayerInformation.InnerHtml = sLeagueOption;
-            ////JCComboPlayerInformation.InnerHtml = sLeagueOption;
+        ////   // sLeagueOption = MenuLeague.Show();
+        ////    //RankInformation.InnerHtml = sLeagueOption;
+        ////    //ScorersInformation.InnerHtml = sLeagueOption;
+        ////    //PlayerInformation.InnerHtml = sLeagueOption;
+        ////    ////JCComboPlayerInformation.InnerHtml = sLeagueOption;
 
-            sAnalysisOption = MenuAnalysis.Show();
-            //AnalysisModifyInformation.InnerHtml = sAnalysisOption;
-            CorrectScoreInformation.InnerHtml = sAnalysisOption;
-            //AnalysisRecentInformation.InnerHtml = sAnalysisOption;
+        ////    sAnalysisOption = MenuAnalysis.Show();
+        ////    //AnalysisModifyInformation.InnerHtml = sAnalysisOption;
+        ////    CorrectScoreInformation.InnerHtml = sAnalysisOption;
+        ////    //AnalysisRecentInformation.InnerHtml = sAnalysisOption;
 
-        } catch(NullReferenceException) {
-        }
+        ////} catch(NullReferenceException) {
+        ////}
 
 
         AnalysisRecent matchRecent = new AnalysisRecent(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
 
         try {
             AnalysisRecentInformation.InnerHtml = matchRecent.GetRecent();
+              this.Title =matchRecent.m_Title;
             UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "隊伍近績(" + DateTime.Now.ToString("HH:mm:ss") + ")");
         } catch(NullReferenceException) {
             FormsAuthentication.SignOut();
@@ -237,7 +238,7 @@ function DeviceCheck() {
 </script>
 
 <html>
-<head>
+<head runat="server">
      <title>近績</title>
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
 	<LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">
@@ -247,10 +248,10 @@ function DeviceCheck() {
 	<form id="AnalysisRecentForm" method="post" runat="server" onsubmit="DeviceCheck()">
 	   <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
         <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
-       	<select name="AnalysisRecentModify" onChange="goToAnalysisRecent(AnalysisRecentForm.AnalysisRecentModify.value)">
+     <%--  	<select name="AnalysisRecentModify" onChange="goToAnalysisRecent(AnalysisRecentForm.AnalysisRecentModify.value)">
 						<option value="0">請選擇</option>
 						<span id="CorrectScoreInformation" runat="server" />
-					</select>
+					</select>--%>
 				 
 					<%--<select name="RankDetails" onChange="goToRank(SoccerMenuForm.RankDetails.value)">
 						<option value="0">請選擇</option>
