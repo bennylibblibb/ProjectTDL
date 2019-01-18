@@ -479,6 +479,8 @@
            // string start_date = ((Anthem.Label)e.Item.FindControl("lbSTART_DATE")).Text;
            // string sUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff");
             string eventName = ((Anthem.Label)e.Item.FindControl("lbNAME")).Text;
+            string lbHKJCHOSTNAME = ((Anthem.Label)e.Item.FindControl("lbHKJCHOSTNAME")).Text;
+            string lbHKJCGUESTNAME = ((Anthem.Label)e.Item.FindControl("lbHKJCGUESTNAME")).Text;
             int id = 0;
             try
             {
@@ -496,7 +498,7 @@
                        // cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(start_date).AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                      //   cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddDays(1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                         id = Convert.ToInt32(cmd2.ExecuteScalar());
-                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Cancel Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName);
+                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Cancel Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " (" + eventName+") "  +lbHKJCHOSTNAME + "/" + lbHKJCGUESTNAME);
                         this.dgRankDetails.EditItemIndex = -1;
                     }
                     connection.Close();
@@ -505,6 +507,8 @@
                 {
                     this.lbMsg.Visible = true;
                     this.lbMsg.Text = "[Success] Cancel [" + eventId + "][" + dayCODE + " " + matchNo + "] " + " " + eventName;
+                    this.lbMsg.Text = "[Success] Cancel [" + eventId + "][" + dayCODE + " " + matchNo + "] "  + lbHKJCHOSTNAME + "/" + lbHKJCGUESTNAME;
+
                     this.lbMsg.UpdateAfterCallBack = true;
 
                 }

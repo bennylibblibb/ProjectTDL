@@ -88,6 +88,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AMQP\IMQContextFactory.cs" />
+    <Compile Include="AMQP\IReceiver.cs" />
+    <Compile Include="AMQP\MQContext.Consumer.cs" />
+    <Compile Include="AMQP\MQContext.cs" />
+    <Compile Include="AMQP\MQContext.Producer.cs" />
+    <Compile Include="AMQP\MQContextFactory.cs" />
+    <Compile Include="AMQP\MQReceiverParam.cs" />
+    <Compile Include="AMQP\Receiver.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="DataOfScouts.cs">
       <SubType>Form</SubType>

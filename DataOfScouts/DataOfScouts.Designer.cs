@@ -158,11 +158,14 @@ namespace DataOfScouts
             // 
             // lstStatus
             // 
+            this.lstStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstStatus.FormattingEnabled = true;
             this.lstStatus.ItemHeight = 20;
             this.lstStatus.Location = new System.Drawing.Point(3, 3);
             this.lstStatus.Name = "lstStatus";
-            this.lstStatus.Size = new System.Drawing.Size(737, 484);
+            this.lstStatus.Size = new System.Drawing.Size(941, 484);
             this.lstStatus.TabIndex = 1;
             // 
             // gbAuthorization
@@ -767,8 +770,7 @@ namespace DataOfScouts
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DataOfScouts";
-            this.Text = "D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\Data" +
-    "OfScouts";
+            this.Text = Directory.GetCurrentDirectory() + @"\DataOfScouts";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DataOfScouts_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DataOfScouts_FormClosed);
             this.Load += new System.EventHandler(this.DataOfScouts_Load);
