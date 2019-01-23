@@ -100,8 +100,8 @@ namespace Ecostar.MQConsumer.Core
                                  Thread.Sleep(10);
 
                                 // 未能?理完成的?，?消息重新放入?列?
-                                _context.ReceiveChannel.BasicReject(e.DeliveryTag, true);
-                                _mqActionLogFunc("Message rejet to queues!");
+                              //// _context.ReceiveChannel.BasicReject(e.DeliveryTag, true);
+                              ////  _mqActionLogFunc("Message rejet to queues!");
                             }
                             else if (!_context.ReceiveChannel.IsClosed)
                             {
@@ -118,7 +118,8 @@ namespace Ecostar.MQConsumer.Core
                         if (!isAutoAck)
                         {
                             //// ?消息重新放入?列?
-                             _context.ReceiveChannel.BasicReject(e.DeliveryTag, true);
+                            //// _context.ReceiveChannel.BasicReject(e.DeliveryTag, true);
+                            ////_mqActionLogFunc("Message rejet to queues!");
                         }
 
                         // _mqActionLogFunc("RabbitMQ error, " + ex.Message+ex.StackTrace );

@@ -19,7 +19,7 @@ namespace DataOfScouts
         public static string SyncHkjcDateTime = ConfigurationSettings.AppSettings["SyncHkjcDateTime"];
         public static bool JsonType = ConfigurationSettings.AppSettings["JsonType"].ToLower ()=="all"?false:true;
         public static string GetTime = ConfigurationSettings.AppSettings["GetTime"];
-        public static bool AutoBooked = ConfigurationSettings.AppSettings["AutoBooked"].ToLower() == "yes" ? false : true;
+        public static bool AutoBooked = ConfigurationSettings.AppSettings["AutoBooked"].ToLower() == "no" ? false : true;
         internal static readonly int MarginOfDeviation = Convert.ToInt32(ConfigurationSettings.AppSettings["MarginOfDeviation"]);
         internal static string lpString = ConfigurationSettings.AppSettings["lpString"];   
         internal static readonly int LIVEGOALS = Convert.ToInt32(ConfigurationSettings.AppSettings["LIVEGOALS"]);
