@@ -34,6 +34,9 @@ namespace DataOfScouts
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataOfScouts));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpAuthorization = new System.Windows.Forms.TabPage();
+            this.txtXmlFileUrl = new System.Windows.Forms.TextBox();
+            this.btnXmlParser = new System.Windows.Forms.Button();
+            this.btnSelectFile = new System.Windows.Forms.Button();
             this.lstStatus = new System.Windows.Forms.ListBox();
             this.gbAuthorization = new System.Windows.Forms.GroupBox();
             this.lbResults = new System.Windows.Forms.Label();
@@ -147,6 +150,9 @@ namespace DataOfScouts
             // 
             // tpAuthorization
             // 
+            this.tpAuthorization.Controls.Add(this.txtXmlFileUrl);
+            this.tpAuthorization.Controls.Add(this.btnXmlParser);
+            this.tpAuthorization.Controls.Add(this.btnSelectFile);
             this.tpAuthorization.Controls.Add(this.lstStatus);
             this.tpAuthorization.Controls.Add(this.gbAuthorization);
             this.tpAuthorization.Location = new System.Drawing.Point(4, 29);
@@ -155,6 +161,33 @@ namespace DataOfScouts
             this.tpAuthorization.TabIndex = 5;
             this.tpAuthorization.Text = "Authorization";
             this.tpAuthorization.UseVisualStyleBackColor = true;
+            // 
+            // txtXmlFileUrl
+            // 
+            this.txtXmlFileUrl.Location = new System.Drawing.Point(886, 3);
+            this.txtXmlFileUrl.Name = "txtXmlFileUrl";
+            this.txtXmlFileUrl.Size = new System.Drawing.Size(75, 26);
+            this.txtXmlFileUrl.TabIndex = 4;
+            // 
+            // btnXmlParser
+            // 
+            this.btnXmlParser.Location = new System.Drawing.Point(886, 64);
+            this.btnXmlParser.Name = "btnXmlParser";
+            this.btnXmlParser.Size = new System.Drawing.Size(75, 31);
+            this.btnXmlParser.TabIndex = 3;
+            this.btnXmlParser.Text = "Done";
+            this.btnXmlParser.UseVisualStyleBackColor = true;
+            this.btnXmlParser.Click += new System.EventHandler(this.btnXmlParser_Click);
+            // 
+            // btnSelectFile
+            // 
+            this.btnSelectFile.Location = new System.Drawing.Point(886, 29);
+            this.btnSelectFile.Name = "btnSelectFile";
+            this.btnSelectFile.Size = new System.Drawing.Size(75, 29);
+            this.btnSelectFile.TabIndex = 2;
+            this.btnSelectFile.Text = "Select";
+            this.btnSelectFile.UseVisualStyleBackColor = true;
+            this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
             // 
             // lstStatus
             // 
@@ -165,7 +198,7 @@ namespace DataOfScouts
             this.lstStatus.ItemHeight = 20;
             this.lstStatus.Location = new System.Drawing.Point(3, 3);
             this.lstStatus.Name = "lstStatus";
-            this.lstStatus.Size = new System.Drawing.Size(941, 484);
+            this.lstStatus.Size = new System.Drawing.Size(877, 484);
             this.lstStatus.TabIndex = 1;
             // 
             // gbAuthorization
@@ -771,11 +804,13 @@ namespace DataOfScouts
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DataOfScouts";
             this.Text = Directory.GetCurrentDirectory() + @"\DataOfScouts";
+
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DataOfScouts_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DataOfScouts_FormClosed);
             this.Load += new System.EventHandler(this.DataOfScouts_Load);
             this.tabControl1.ResumeLayout(false);
             this.tpAuthorization.ResumeLayout(false);
+            this.tpAuthorization.PerformLayout();
             this.gbAuthorization.ResumeLayout(false);
             this.tpAreas.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAreas)).EndInit();
@@ -872,6 +907,9 @@ namespace DataOfScouts
         private System.Windows.Forms.ContextMenuStrip cmsBooked;
         private System.Windows.Forms.ToolStripMenuItem miBook;
         private System.Windows.Forms.ListBox lstStatus;
+        private System.Windows.Forms.TextBox txtXmlFileUrl;
+        private System.Windows.Forms.Button btnXmlParser;
+        private System.Windows.Forms.Button btnSelectFile;
     }
 }
 
