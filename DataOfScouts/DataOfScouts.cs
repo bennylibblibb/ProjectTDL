@@ -7162,7 +7162,7 @@ namespace DataOfScouts
                             }
                         }
                         // connection.Close(); 
-                        string queryString = "SELECT r.id, r.NAME, r.START_DATE,e.ematchid, e.HKJCDAYCODE,e.HKJCMATCHNO,e.HKJCHOSTNAME,e.HKJCGUESTNAME,e.MAPPINGSTATUS,e.CMATCHDATETIME FROM ematches e left join events r on r.id=e.ematchid  where '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME  and e.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'  and (e.EMATCHID<1 or e.EMATCHID is null) or ( e.MAPPINGSTATUS is null AND e.EMATCHID>0 ) order by e.CMATCHDATETIME desc";
+                        string queryString = "SELECT r.id, r.NAME, r.START_DATE,e.ematchid, e.HKJCDAYCODE,e.HKJCMATCHNO,e.HKJCHOSTNAME,e.HKJCGUESTNAME,e.MAPPINGSTATUS,e.CMATCHDATETIME FROM ematches e left join events r on r.id=e.ematchid  where '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME  and e.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'  and (e.EMATCHID<1 or e.EMATCHID is null) "+ (AppFlag.AutoBooked?" or ( e.MAPPINGSTATUS is null AND e.EMATCHID>0 ) ":"")+" order by e.CMATCHDATETIME desc";
                         if (AppFlag.TestMode) Files.WriteTestLog("Test", "HKjcMatch " + queryString);
                         using (FbCommand cmd = new FbCommand(queryString, connection))
                         {
