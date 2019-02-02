@@ -90,7 +90,7 @@ namespace Ecostar.MQConsumer.Core
                         // ±µ¨ü?Õu?²z?? e.Body
                         string message = Encoding.UTF8.GetString(e.Body);
                         var result = _processFunction(message);
-                        if (AppFlag.TestMode) Files.WriteTestLog("Queue", count.ToString() + " " + (message.Length > 35 ? message.Substring(0, 35) + "     " : "                  ---") + e.DeliveryTag);
+                        if (AppFlag.TestMode) Files.WriteTestLog("Queue", count.ToString() + " " + (message.Length > 63 ? message.Substring(0, 63) + "     " : message+ "                  ---") + e.DeliveryTag);
                         ///  var result = _processFunction((s.Length > 15 ? s.Substring(0, 15) : "received msg") +"---"+ e.DeliveryTag);
 
                         if (!isAutoAck)

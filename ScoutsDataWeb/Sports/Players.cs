@@ -46,6 +46,7 @@ namespace SportsUtil {
 		}
         public string GetTeamPlayers()
         {
+            string log = "log";
             int iIdx = 0, iRec = 0;
             string retrieveQuery,sEventID, sLeagID="-1", sTeamID="", sLeague = "", sAlias = "",sEventName="", sRtn = "";
             string[] arrPos;
@@ -58,13 +59,13 @@ namespace SportsUtil {
             sEventID = (HttpContext.Current.Request.QueryString["eventid"] == null) ? "" : HttpContext.Current.Request.QueryString["eventid"].Trim();
 
             arrPos = (string[])HttpContext.Current.Application["positionItemsArray"];
-
+              log += ":";
             try
             {
                 //retrieve teams w.r.t. leag id
                 // retrieveQuery = "select team.team_id, team.teamname, leag.leagname from teaminfo team, leaginfo leag, id_info id ";
                 ///retrieveQuery = "select team.HKJC_ID, team.HKJC_NAME_CN, m.CLEAGUE_OUTPUT_NAME,m.HKJCHOSTNAME_CN||'/'||m.HKJCGUESTNAME_CN,m.CLEAGUEALIAS_OUTPUT_NAME, team.HKJC_NAME,  e.id  from teams team ";
-               retrieveQuery = "select team.id, team.HKJC_NAME_CN, m.CLEAGUE_OUTPUT_NAME,m.HKJCHOSTNAME_CN||'/'||m.HKJCGUESTNAME_CN,m.CLEAGUEALIAS_OUTPUT_NAME, team.HKJC_NAME,  e.id  from teams team ";
+               retrieveQuery = "select distinct team.id, team.HKJC_NAME_CN, m.CLEAGUE_OUTPUT_NAME,m.HKJCHOSTNAME_CN||'/'||m.HKJCGUESTNAME_CN,m.CLEAGUEALIAS_OUTPUT_NAME, team.HKJC_NAME,  e.id  from teams team ";
                 retrieveQuery += "inner join events e on e.HOME_ID = team.id or e.GUEST_ID = team.id inner join EMATCHES m on e.id=m.EMATCHID  " +
                     " where e.id = '"+ sEventID + "'";
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(retrieveQuery);
@@ -80,7 +81,7 @@ namespace SportsUtil {
                 }
                 m_SportsOleReaderFb.Close();
                 m_SportsDBMgrFb.Close();
-
+                log +=" sql 1 / ";
                 //assign team id if it is default value
                 if (sTeamID.Equals(DEFAULTTEAMID)) sTeamID = teamNVC.GetKey(0);
                 sAlias = teamNVC[sTeamID];
@@ -108,10 +109,10 @@ namespace SportsUtil {
                 sRtn += "<th><font color=\"#808080\">國家</font></th>";
                 sRtn += "<th><font color=\"#808080\">出場</font></th>";
                 sRtn += "<th><font color=\"#808080\">刪除</font></th></tr>";
-
+                log += " f2  / ";
                 //retrieve player information w.r.t. team id
                 iRec = 0;
-                retrieveQuery = "select IPLAYER_NO, IPOS, CPLAYER_NAME, CENGNAME, CCOUNTRY, IROSTER from PLAYERS_INFO where TEAM_ID=" + sTeamID + " order by IPLAYER_NO, IPOS, CPLAYER_NAME";
+                retrieveQuery = "select IPLAYER_NO, IPOS, CPLAYER_NAME, CENGNAME, CCOUNTRY, IROSTER,PLAYER_ID from PLAYERS_INFO where TEAM_ID=" + sTeamID + " order by IPLAYER_NO, IPOS, CPLAYER_NAME";
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(retrieveQuery);
                 while (m_SportsOleReaderFb.Read())
                 {
@@ -124,6 +125,7 @@ namespace SportsUtil {
 
                     sRtn += "<td><select name=\"player_pos\">";
                     sRtn += "<option value=\"" + m_SportsOleReaderFb.GetInt32(1).ToString() + "\">" + arrPos[m_SportsOleReaderFb.GetInt32(1)];
+                  ///  sRtn += (m_SportsOleReaderFb.GetInt32(0) == -1) ? "<option value=\"" + "5" + "\">" + arrPos[5] : "<option value=\"" + m_SportsOleReaderFb.GetInt32(1).ToString() + "\">" + arrPos[m_SportsOleReaderFb.GetInt32(1)];
                     for (iIdx = 0; iIdx < arrPos.Length; iIdx++)
                     {
                         if (m_SportsOleReaderFb.GetInt32(1) != iIdx)
@@ -141,7 +143,7 @@ namespace SportsUtil {
                     {
                         sRtn += m_SportsOleReaderFb.GetString(3).Trim();
                     }
-                    sRtn += "\" size=20 maxlength=50></td>";
+                    sRtn += "\" size=20 maxlength=50 readonly=\"readonly\" ></td>";
 
                     sRtn += "<td><input type=\"text\" name=\"player_country\" value=\"";
                     if (!m_SportsOleReaderFb.IsDBNull(4))
@@ -155,13 +157,15 @@ namespace SportsUtil {
                     {
                         sRtn += "checked";
                     }
-                    sRtn += "></td><td><input type=\"checkbox\" name=\"player_delete\" value=\"" + m_SportsOleReaderFb.GetString(2).Trim() + "\"></td></tr>";
-
+                    sRtn += "></td><td><input type=\"checkbox\" name=\"player_delete\" value=\"" + m_SportsOleReaderFb.GetString(2).Trim() + "\"></td>";
+                    sRtn += "<td  style=\"display:none\"><input type=\"text\" name=\"player_id\" value=\"";
+                    sRtn += m_SportsOleReaderFb.GetString(6).Trim();
+                    sRtn += "\" size=6 maxlength=5 ></td></tr>";
                     iRec++;
                 }
                 m_SportsOleReaderFb.Close();
                 m_SportsDBMgrFb.Close();
-
+                log += " f3  / ";
                 for (iIdx = iRec; iIdx < TOTALRECORDS; iIdx++)
                 {
                     sRtn += "<tr align=\"center\"><td><input type=\"text\" name=\"player_no\" value=\"\" size=1 maxlength=2 onChange=\"onPosChanged(" + iIdx.ToString() + ")\"></td>";
@@ -173,19 +177,21 @@ namespace SportsUtil {
                     sRtn += "</td>";
 
                     sRtn += "<td><input type=\"text\" name=\"player_name\" value=\"\" size=6 maxlength=5></td>";
-                    sRtn += "<td><input type=\"text\" name=\"player_engname\" value=\"\" size=20 maxlength=50></td>";
+                    sRtn += "<td><input type=\"text\" name=\"player_engname\" value=\"\" size=20 maxlength=50 ></td>";
                     sRtn += "<td><input type=\"text\" name=\"player_country\" value=\"\" size=6 maxlength=5></td>";
                     sRtn += "<td><input type=\"checkbox\" name=\"player_roster\" value=\"" + iIdx.ToString() + "\"></td>";
-                    sRtn += "<td><input type=\"checkbox\" name=\"player_delete\" value=\"-1\"></td></tr>";
+                    sRtn += "<td><input type=\"checkbox\" name=\"player_delete\" value=\"-1\"></td>";
+                    sRtn += "<td  style=\"display:none\"><input type=\"text\" name=\"player_id\" value=\"0\" size=6 maxlength=5></td></tr>";
                 }
                 sRtn += "<input type=\"hidden\" name=\"team_id\" value=\"" + sTeamID + "\">";
+                log += " e3  / ";
             }
             catch (Exception ex)
             {
                 m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
                 m_SportsLog.SetFileName(0, LOGFILESUFFIX);
                 m_SportsLog.Open();
-                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Players.cs.GetTeamPlayers(): " + ex.ToString());
+                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Players.cs.GetTeamPlayers(): " + ex.ToString()+"\r\n "+ log);
                 m_SportsLog.Close();
                 sRtn = ConfigurationManager.AppSettings["accessErrorMsg"];
             }
@@ -346,61 +352,104 @@ namespace SportsUtil {
 				case "MOD":	//case: modify players information
 					int iIdx = 0;
 					const string sNULL = "null";
-					string[] arrNum, arrPos, arrName, arrEngName, arrCountry, arrRoster;
+					string[] arrNum, arrPos, arrName, arrEngName, arrCountry, arrPlay_ID, arrRoster;
 
 					arrNum = HttpContext.Current.Request.Form["player_no"].Split(delimiter);
 					arrPos = HttpContext.Current.Request.Form["player_pos"].Split(delimiter);
 					arrName = HttpContext.Current.Request.Form["player_name"].Split(delimiter);
 					arrEngName = HttpContext.Current.Request.Form["player_engname"].Split(delimiter);
 					arrCountry = HttpContext.Current.Request.Form["player_country"].Split(delimiter);
-					try {	//get player roster
+                    arrPlay_ID = HttpContext.Current.Request.Form["player_id"].Split(delimiter);
+                    try {	//get player roster
 						arrRoster = HttpContext.Current.Request.Form["player_roster"].Split(delimiter);
 					}	catch(Exception) {
 						arrRoster = new string[0];
 					}
 
 					try {
-						//reset table reocrds first w.r.t. team id
-						playerQuery = "delete from PLAYERS_INFO where TEAM_ID=" + sTeamID;
-						m_SportsDBMgrFb.ExecuteNonQuery(playerQuery);
-                        m_SportsDBMgrFb.Close();
+						//////reset table reocrds first w.r.t. team id
+						////playerQuery = "delete from PLAYERS_INFO where TEAM_ID=" + sTeamID;
+						////m_SportsDBMgrFb.ExecuteNonQuery(playerQuery);
+      ////                  m_SportsDBMgrFb.Close();
 
 						//insert into table
-						string sPlayerName = "", sTemp, sRoster = "0";
-						for(iIdx=0;iIdx<arrName.Length;iIdx++) {
-							sPlayerName = arrName[iIdx].Trim();
-							if(!sPlayerName.Equals("")) {
-								playerQuery = "insert into PLAYERS_INFO values(" + sTeamID + ",";
+						string sPlayerName = "",sPlayID="-1", sTemp, sRoster = "0";
+                        for (iIdx = 0; iIdx < arrName.Length; iIdx++)
+                        {
+                            sPlayerName = arrName[iIdx].Trim();
+                            sPlayID = arrPlay_ID[iIdx]; 
+                            if (!sPlayerName.Equals(""))
+                            {
+                                if (sPlayID == "0")
+                                {
+                                    playerQuery = "insert into PLAYERS_INFO values(" + sTeamID + "," + new Random().Next(100000,1000000) +",";
 
-								sTemp = arrNum[iIdx];
-								if(!sTemp.Equals("")) playerQuery += sTemp;
-								else playerQuery += sNULL;
-								playerQuery += "," + arrPos[iIdx] + ",'" + sPlayerName + "',";
+                                    sTemp = arrNum[iIdx];
+                                    if (!sTemp.Equals("")) playerQuery += sTemp;
+                                    else playerQuery += sNULL;
+                                    playerQuery += "," + arrPos[iIdx] + ",'" + sPlayerName + "',";
 
-								sTemp = arrCountry[iIdx];
-								if(!sTemp.Equals("")) playerQuery += "'" + sTemp.Trim() + "'";
-								else playerQuery += sNULL;
-								playerQuery += ",";
+                                    sTemp = arrCountry[iIdx];
+                                    if (!sTemp.Equals("")) playerQuery += "'" + sTemp.Trim() + "'";
+                                    else playerQuery += sNULL;
+                                    playerQuery += ",";
 
-								sRoster = "0";
-								for(int iRoster=0;iRoster<arrRoster.Length;iRoster++) {
-									if(arrRoster[iRoster] == iIdx.ToString()) {
-										sRoster = "1";
-										break;
-									}
-								}
-								playerQuery += sRoster + ",";
+                                    sRoster = "0";
+                                    for (int iRoster = 0; iRoster < arrRoster.Length; iRoster++)
+                                    {
+                                        if (arrRoster[iRoster] == iIdx.ToString())
+                                        {
+                                            sRoster = "1";
+                                            break;
+                                        }
+                                    }
+                                    playerQuery += sRoster + ",";
 
-								if(arrEngName[iIdx].Trim().Equals("")) playerQuery += "null";
-								else playerQuery += "'" + arrEngName[iIdx].Trim() + "'";
-								playerQuery += ")";
+                                    if (arrEngName[iIdx].Trim().Equals("")) playerQuery += "null";
+                                    else playerQuery += "'" + arrEngName[iIdx].Trim() + "'";
+                                    playerQuery += ",'";
+                                    playerQuery += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
+                                    playerQuery += "'";
+                                    playerQuery += ")";
+                                }
+                                else
+                                {
+                                    playerQuery = "update  PLAYERS_INFO set IPLAYER_NO=";
+                                    sTemp = arrNum[iIdx];
+                                    if (!sTemp.Equals("")) playerQuery += sTemp;
+                                    else playerQuery += sNULL;
+                                    playerQuery += ", IPOS=" + arrPos[iIdx] + ", CPLAYER_NAME='" + sPlayerName + "', CCOUNTRY=";
+
+                                    sTemp = arrCountry[iIdx];
+                                    if (!sTemp.Equals("")) playerQuery += "'" + sTemp.Trim() + "'";
+                                    else playerQuery += sNULL;
+                                    playerQuery += ", IROSTER=";
+
+                                    sRoster = "0";
+                                    for (int iRoster = 0; iRoster < arrRoster.Length; iRoster++)
+                                    {
+                                        if (arrRoster[iRoster] == iIdx.ToString())
+                                        {
+                                            sRoster = "1";
+                                            break;
+                                        }
+                                    }
+                                    playerQuery += sRoster + ", CTIMESTAMP='";
+
+                                    playerQuery += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
+                                    playerQuery += "'";
+
+                                    playerQuery += " where TEAM_ID=" + sTeamID + " and  PLAYER_ID=" + sPlayID + "";
+                                }
                                 m_SportsDBMgrFb.ExecuteNonQuery(playerQuery);
                                 m_SportsDBMgrFb.Close();
-								iRecUpd++;
-							}	else {
-								break;
-							}
-						}
+                                iRecUpd++;
+                            }
+                            else
+                            {
+                              //  break;
+                            }
+                        }
 
 						//write log
 						m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];

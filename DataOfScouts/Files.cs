@@ -169,7 +169,6 @@ namespace FileLog
             }
             catch (Exception exp)
             {
-                Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss fff ") + exp.Message);
             }
         }
 
