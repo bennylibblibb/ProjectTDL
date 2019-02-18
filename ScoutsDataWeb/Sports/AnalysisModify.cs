@@ -97,17 +97,19 @@ namespace SportsUtil {
                     SQLString.Append(" (select  a.NAME from TEAMS t inner join  AREAS a on t.AREA_ID=a.id  where t.ID=E.GUEST_ID) , ");
                     SQLString.Append("(select  a.NAME from TEAMS t inner join  AREAS a on t.AREA_ID=a.id  where t.ID=E.GUEST_ID) ,");
                     SQLString.Append("(select b2.NAME from AREAS B inner join AREAS b2 on b2.id=b.PARENT_AREA_ID where B.ID =(select AREA_ID from TEAMS where ID=e.GUEST_ID)),");
-                    SQLString.Append(" e.id ,x.name from  EMATCHES r inner join  events e on e.id =r.EMATCHID  inner join  AREAS x on x.id =e.AREA_ID   where r.ematchid=");
+                    SQLString.Append(" e.id ,x.name ,e.HOME_ID,e.GUEST_ID from  EMATCHES r inner join  events e on e.id =r.EMATCHID  inner join  AREAS x on x.id =e.AREA_ID   where r.ematchid=");
                     SQLString.Append(sEventID);
                     m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
                     while (m_SportsOleReaderFb.Read())
                     {
                         sLeague = m_SportsOleReaderFb.GetString(0).Trim();
                         sHost = m_SportsOleReaderFb.GetString(1).Trim();
-                        sHostID = m_SportsOleReaderFb.GetInt32(2).ToString();
-                        sGuest = m_SportsOleReaderFb.GetString(3).Trim();
-                        sGuestID = m_SportsOleReaderFb.GetInt32(4).ToString();
-                        sMatchDate = m_SportsOleReaderFb.GetString(5).Trim();
+                    /// 20190215 event host/guest id sHostID = m_SportsOleReaderFb.GetInt32(2).ToString();
+                       sHostID = m_SportsOleReaderFb.GetInt32(17).ToString();
+                       sGuest = m_SportsOleReaderFb.GetString(3).Trim();
+                    ///  sGuestID = m_SportsOleReaderFb.GetInt32(4).ToString();
+                    sGuestID = m_SportsOleReaderFb.GetInt32(18).ToString();
+                    sMatchDate = m_SportsOleReaderFb.GetString(5).Trim();
                         sMatchTime = m_SportsOleReaderFb.GetString(6).Trim();
                         ////  sLeagType = m_SportsOleReaderFb.GetString(7).Trim();
                         m_Title= sHost+"/"+ sGuest+ "-¤ÀªR";

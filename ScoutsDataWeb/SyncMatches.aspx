@@ -302,15 +302,15 @@
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     
-                                                       <asp:TemplateColumn HeaderText="Booked">
+                                                       <asp:TemplateColumn HeaderText="Booked" Visible="false">
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbBooked" runat="server" Width="40px" Text='<%# DataBinder.Eval(Container, "DataItem.booked") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
-                                                      <asp:TemplateColumn HeaderText="Detail">
+                                                      <asp:TemplateColumn HeaderText="Goals">
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
                                                           <a href=# onclick="window.open('MatchDetails.aspx?Type=SCOUT&ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=900,height=400, top=200,left=200')" >																	
-																		<b>Detail</b>	</a></ItemTemplate>
+																		<b>Goals</b>	</a></ItemTemplate>
                                                          </asp:TemplateColumn>
                                                      <asp:TemplateColumn HeaderText="Team Mapping">
                                                         <HeaderStyle Wrap="true" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>

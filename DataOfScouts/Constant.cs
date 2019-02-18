@@ -30,6 +30,7 @@ namespace DataOfScouts
         internal static bool TestMode = ConfigurationSettings.AppSettings["TestMode"].ToLower() == "yes" ? true : false;
         internal static bool Important_for_trader = ConfigurationSettings.AppSettings["Important_for_trader"].ToLower() == "yes" ? true : false;
         internal static bool ManualGet = ConfigurationSettings.AppSettings["ManualGet"].ToLower() == "yes" ? true : false;
+       /// public static int AutoBookTime = Convert.ToInt32(ConfigurationSettings.AppSettings["AutoBookTime"]);
     }
 
     public enum InformationType
