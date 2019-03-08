@@ -30,8 +30,9 @@
 				</SelectedItemTemplate>
 				<ItemStyle Height="36px" CssClass="admin-tab-inactive"></ItemStyle>
 				<ItemTemplate>
-					<asp:HyperLink   id="hlMenu" runat="server"   Text='<%# ((TabItem) Container.DataItem).Name %>' Target ='<%# (((TabItem) Container.DataItem).Name=="HKJC"&& tabs.SelectedIndex == 0)||((TabItem) Container.DataItem).Name=="陣容"||((TabItem) Container.DataItem).Name=="分析"||((TabItem) Container.DataItem).Name=="數據"||((TabItem) Container.DataItem).Name=="近績"||((TabItem) Container.DataItem).Name=="發送分析"||((TabItem) Container.DataItem).Name=="發送近績"
-                            ||((TabItem) Container.DataItem).Name=="球隊排名"
+					<asp:HyperLink   id="hlMenu" runat="server"   Text='<%# ((TabItem) Container.DataItem).Name %>' Target ='<%# (((TabItem) Container.DataItem).Name=="HKJC"&& tabs.SelectedIndex == 0)||((TabItem) Container.DataItem).Name=="陣容"||((TabItem) Container.DataItem).Name=="分析"||((TabItem) Container.DataItem).Name=="數據"||((TabItem) Container.DataItem).Name=="近績"||((TabItem) Container.DataItem).Name=="即場"||((TabItem) Container.DataItem).Name=="發送分析"||((TabItem) Container.DataItem).Name=="發送近績"
+                        //  ||((TabItem) Container.DataItem).Name=="賽程"
+                          ||((TabItem) Container.DataItem).Name=="球隊排名"
                             ||((TabItem) Container.DataItem).Name=="射手榜"
                             ||((TabItem) Container.DataItem).Name=="其它資訊"
                             ||((TabItem) Container.DataItem).Name=="EnetPlus"

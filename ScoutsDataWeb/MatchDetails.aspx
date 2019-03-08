@@ -20,7 +20,8 @@
 					<TD align="left" style="height:30px"> </TD>
 				</TR>
 				<TR align="center">
-					<TD align="center">
+					<TD align="left">
+                       <anthem:Label ID="lbAction" runat="server"  Width="500px"  >  </anthem:Label> 
                        <anthem:DataGrid id="eventDetails" runat="server" Width="800px"   AllowPaging="false" AutoGenerateColumns="false">
                             <PagerStyle Mode="NumericPages"></PagerStyle>
                            <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center"  Wrap="false" Height="30px" CssClass="grid-header" ></HeaderStyle>
@@ -53,6 +54,34 @@
                            <ItemTemplate>
 				<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>
 				</ItemTemplate>  </asp:TemplateColumn> 
+		</Columns>	</anthem:DataGrid>
+                         <anthem:DataGrid id="totalDetails" runat="server" Width="800px"   AllowPaging="false" AutoGenerateColumns="false">
+                            <PagerStyle Mode="NumericPages"></PagerStyle>
+                           <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center"  Wrap="false" Height="30px" CssClass="grid-header" ></HeaderStyle>
+                           <ItemStyle Height="34px"  Wrap="false"  CssClass="grid-item"></ItemStyle>
+                          <Columns>   
+                              <asp:TemplateColumn HeaderText=" " Visible ="true" >  <HeaderStyle  CssClass="grid-header" />
+                                     <ItemTemplate >
+                                       <%#DataBinder.Eval(Container, "DataItem.TEAMTYPE") %> 
+                                     </ItemTemplate> </asp:TemplateColumn>
+                              <asp:TemplateColumn HeaderText="Team" Visible ="true" >  <HeaderStyle  CssClass="grid-header" />
+                                     <ItemTemplate >
+                                       <%#DataBinder.Eval(Container, "DataItem.HKJC_NAME_CN") %> 
+                                     </ItemTemplate> </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Goal"  >  <HeaderStyle  CssClass="grid-header" />
+                           <ItemTemplate>    <%#DataBinder.Eval(Container, "DataItem.Goal") %> 
+                                                          </ItemTemplate> </asp:TemplateColumn>
+                            <asp:TemplateColumn HeaderText="Yellow card">  <HeaderStyle  CssClass="grid-header" />
+                           <ItemTemplate>  <%#DataBinder.Eval(Container, "DataItem.Yellowcard") %>  
+                           </ItemTemplate> </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Red card">  <HeaderStyle  CssClass="grid-header" />
+                           <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.Redcard") %>
+				</ItemTemplate> </asp:TemplateColumn>
+                                                    <asp:TemplateColumn HeaderText="Substitution" >  <HeaderStyle  CssClass="grid-header" />
+                           <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.Substitution") %>
+				</ItemTemplate> </asp:TemplateColumn> 
 		</Columns>	</anthem:DataGrid>
 					</TD>
 				</TR>

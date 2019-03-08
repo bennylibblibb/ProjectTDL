@@ -43,11 +43,12 @@
             list.Add(new TabItem("STATSCORE", Global.GetApplicationPath(base.Request) + "/SyncMatches.aspx?csIndex=" + list.Count));
             list.Add(new TabItem("HKJC", Global.GetApplicationPath(base.Request) + "/Matches.aspx?csIndex=" + list.Count));
             //   if (list.Count==2&&(base.Request["csIndex"] !=null&&base.Request["csIndex"] != "0") ||(list.Count == 2&& base.Request["csIndex"] != "8" && base.Request["csIndex"] != "9"))
-            if (list.Count == 2 && (base.Request["csIndex"] == null || base.Request["csIndex"] == "0"))
-            {
-                list.Add(new TabItem("球隊排名", Global.GetApplicationPath(base.Request) + "/sports/Rank.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
-                list.Add(new TabItem("射手榜", Global.GetApplicationPath(base.Request) + "/sports/Scorers.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
-                list.Add(new TabItem("其它資訊", Global.GetApplicationPath(base.Request) + "/sports/SportNews.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
+            if (list.Count == 2 && (base.Request["csIndex"] == null || base.Request["csIndex"] == "0"|| base.Request["csIndex"] == "2"))
+            { 
+               list.Add(new TabItem("賽程", Global.GetApplicationPath(base.Request) + "/Fixtures.aspx?csIndex=" + list.Count));
+                list.Add(new TabItem("球隊排名", Global.GetApplicationPath(base.Request) + "/sports/Rank.aspx?csIndex=" + list.Count));
+                list.Add(new TabItem("射手榜", Global.GetApplicationPath(base.Request) + "/sports/Scorers.aspx?csIndex=" + list.Count ));
+                list.Add(new TabItem("其它資訊", Global.GetApplicationPath(base.Request) + "/sports/SportNews.aspx?csIndex=" + list.Count));
                 list.Add(new TabItem("EnetPlus", "http://" + Common.AppFlag.EnetPlus));
             }
             else if (list.Count == 2 && (base.Request["csIndex"] != null && base.Request["csIndex"] != "0" && base.Request["csIndex"] != "8" && base.Request["csIndex"] != "9"))
@@ -56,6 +57,7 @@
                 list.Add(new TabItem("分析", Global.GetApplicationPath(base.Request) + "/sports/AnalysisModify.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
                 list.Add(new TabItem("數據", Global.GetApplicationPath(base.Request) + "/sports/AnalysisStat.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
                 list.Add(new TabItem("近績", Global.GetApplicationPath(base.Request) + "/sports/AnalysisRecent.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
+                list.Add(new TabItem("即場", Global.GetApplicationPath(base.Request) + "/MatchDetails.aspx?csIndex=" + list.Count + "&Type=Live&ID=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
                 list.Add(new TabItem("發送分析", Global.GetApplicationPath(base.Request) + "/sports/AnalysisPreview.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
                 list.Add(new TabItem("發送近績", Global.GetApplicationPath(base.Request) + "/sports/AnalysisSinglePreview.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
             }  

@@ -274,40 +274,41 @@ namespace SportsUtil {
                     //Retrieve league from table
                     ArrayList LeagueAL = new ArrayList();
                     SQLString.Remove(0, SQLString.Length);
-                    SQLString.Append("select ALIAS from LEAGINFO order by LEAG_ORDER, ALIAS");
-                    m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                    while (m_SportsOleReader.Read())
+                // SQLString.Append("select ALIAS from LEAGINFO order by LEAG_ORDER, ALIAS");
+                SQLString.Append("SELECT R.CLEAGUE_ALIAS_NAME FROM LEAGUE_INFO r order by CLEAGUE_ALIAS_NAME, COUNTRY_CHI_NAME");
+                m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                    while (m_SportsOleReaderFb.Read())
                     {
-                        LeagueAL.Add(m_SportsOleReader.GetString(0).Trim());
+                        LeagueAL.Add(m_SportsOleReaderFb.GetString(0).Trim());
                     }
-                    m_SportsOleReader.Close();
-                    m_SportsDBMgr.Close();
+                m_SportsOleReaderFb.Close();
+                    m_SportsDBMgrFb.Close();
                     LeagueAL.TrimToSize();
 
                     //Retrieve records from ANALYSIS_HISTORY_INFO
                     iIdx = 0;
                     MatchHistory[] History = new MatchHistory[4];
                     SQLString.Remove(0, SQLString.Length);
-                    SQLString.Append("select CLEAGUEALIAS, IMATCHMONTH, IMATCHYEAR, IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE from ANALYSIS_HISTORY_INFO where CACT='U' and IMATCH_CNT=");
+                    SQLString.Append("select  first 4 c.alias, IMATCHMONTH, IMATCHYEAR, IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE from ANALYSIS_HISTORY_INFO inner join COMPETITIONS c on c.id=LEAGUEALIASID where CACT='U' and IMATCH_CNT=");
                     ////SQLString.Append(sMatchCount);
                     SQLString.Append(sEventID);
                     SQLString.Append(" order by IREC");
-                    m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                    while (m_SportsOleReader.Read())
+                    m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                    while (m_SportsOleReaderFb.Read())
                     {
-                        if (!(m_SportsOleReader.IsDBNull(0) || m_SportsOleReader.IsDBNull(4) || m_SportsOleReader.IsDBNull(5)))
+                        if (!(m_SportsOleReaderFb.IsDBNull(0) || m_SportsOleReaderFb.IsDBNull(4) || m_SportsOleReaderFb.IsDBNull(5)))
                         {
-                            History[iIdx].sAlias = m_SportsOleReader.GetString(0).Trim();
-                            History[iIdx].iMonth = m_SportsOleReader.GetInt32(1);
-                            History[iIdx].iYear = m_SportsOleReader.GetInt32(2);
-                            History[iIdx].iStatus = m_SportsOleReader.GetInt32(3);
-                            History[iIdx].iHostScore = m_SportsOleReader.GetInt32(4);
-                            History[iIdx].iGuestScore = m_SportsOleReader.GetInt32(5);
+                            History[iIdx].sAlias = m_SportsOleReaderFb.GetString(0).Trim();
+                            History[iIdx].iMonth = m_SportsOleReaderFb.GetInt32(2);
+                            History[iIdx].iYear = m_SportsOleReaderFb.GetInt32(1);
+                            History[iIdx].iStatus = m_SportsOleReaderFb.GetInt32(3);
+                            History[iIdx].iHostScore = m_SportsOleReaderFb.GetInt32(4);
+                            History[iIdx].iGuestScore = m_SportsOleReaderFb.GetInt32(5);
                             iIdx++;
                         }
                     }
-                    m_SportsOleReader.Close();
-                    m_SportsDBMgr.Close();
+                m_SportsOleReaderFb.Close();
+                    m_SportsDBMgrFb.Close();
 
                     int iYear, iMonth, iNewValue = 0, iNoOfOpt = 0, iYrDiff;
                     const int iYY = 20, iMM = 12;
@@ -1185,8 +1186,8 @@ namespace SportsUtil {
 				SQLString.Remove(0,SQLString.Length);
 				SQLString.Append("delete from ANALYSIS_HISTORY_INFO where IMATCH_CNT=");
 				SQLString.Append(sMatchCount);
-				m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-				m_SportsDBMgr.Close();
+				m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+                m_SportsDBMgrFb.Close();
 				for(iIdx=0;iIdx<HISTORYCOUNT;iIdx++) {
 					if(!(arrMonth[iIdx].Equals("0") || arrYear[iIdx].Equals("0"))) {
 						if(arrHostScore[iIdx].Equals("")) arrHostScore[iIdx] = "0";
@@ -1211,8 +1212,8 @@ namespace SportsUtil {
 						SQLString.Append(",");
 						SQLString.Append(arrGuestScore[iIdx]);
 						SQLString.Append(")");
-						m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-						m_SportsDBMgr.Close();
+                        m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+                        m_SportsDBMgrFb.Close();
 					}	else {
 						break;
 					}

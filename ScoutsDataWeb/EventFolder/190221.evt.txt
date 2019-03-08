@@ -1,0 +1,4 @@
+﻿11:30:52 BEN login success.
+11:52:12 [Success] Sync [2684820] EMATCHES[THU 16]  Liverpool (URU) - Bahia-BA
+11:52:12 [Success]  Sync [Liverpool (URU) - Bahia-BA] on Teams
+16:36:04 BEN login success.

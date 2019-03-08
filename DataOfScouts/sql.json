@@ -1,0 +1,8 @@
+﻿SELECT r.EVENTID, r.PARTICIPANT_ID, r.PARTICIPANT_NAME,
+  r.TEAMTYPE, sum(case when r.INCIDENT_NAME= 'Goal' or r.INCIDENT_ID= 421 then 1 else 0 end ) as Goal ,
+   r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Yellow card' then 1 else 0 end ) as Yellow card,
+     r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Red card' then 1 else 0 end ) as Red card
+      r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Substitution in' then 1 else 0 end ) as Substitution
+ FROM INCIDENTS r where r.EVENTID='2439656'  and r.TEAMTYPE !=''  GROUP BY r.EVENTID, r.TEAMTYPE, r.PARTICIPANT_ID, r.PARTICIPANT_NAME
+
+      update teams t  set t.GENDER = case when t.MAPPING_STATUS is null then  false  else  true end

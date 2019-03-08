@@ -14,7 +14,7 @@ using FirebirdSql.Data.FirebirdClient;
 using System;
 using System.Collections;
 using System.Configuration;
-using System.Data.OleDb;
+//using System.Data.OleDb;
 using System.Reflection;
 using System.Text;
 using System.Web;
@@ -28,8 +28,8 @@ namespace SportsUtil {
 		const int TOTALRECENTCOUNT = 5;
 		const string LOGFILESUFFIX = "log";
 		string[] arrFields;
-		OleDbDataReader m_SportsOleReader;
-		DBManager m_SportsDBMgr;
+		//OleDbDataReader m_SportsOleReader;
+		//DBManager m_SportsDBMgr;
 		Files m_SportsLog;
 		Encoding m_Big5Encoded;
 		StringBuilder SQLString;
@@ -38,8 +38,8 @@ namespace SportsUtil {
         FbDataReader m_SportsOleReaderFb;
 
         public AnalysisRecent(string Connection) {
-			m_SportsDBMgr = new DBManager();
-			m_SportsDBMgr.ConnectionString = Connection;
+			//m_SportsDBMgrFb = new DBManager();
+			//m_SportsDBMgrFb.ConnectionString = Connection;
 			m_SportsLog = new Files();
 			m_Big5Encoded = Encoding.GetEncoding(950);
 			SQLString = new StringBuilder();
@@ -122,24 +122,25 @@ namespace SportsUtil {
                     //Next game for Host
                     HTMLString.Append("<th><select name=\"HNextMatchField\">");
                     SQLString.Remove(0, SQLString.Length);
-                    SQLString.Append("select IMATCHSTATUS, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='H' AND IHOSTSCORE= -1 AND IGUESTSCORE =-1 AND IMATCH_CNT=");
+                ///   SQLString.Append("select IMATCHSTATUS, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='H' AND IHOSTSCORE= -1 AND IGUESTSCORE =-1 AND IMATCH_CNT=");
+                SQLString.Append("select IMATCHSTATUS, CCHALLENGER, LEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='H' AND IHOSTSCORE= -1 AND IGUESTSCORE =-1 AND IMATCH_CNT=");
                 ////SQLString.Append(sMatchCnt);
-                    SQLString.Append(sEventID);
-                    m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                    if (m_SportsOleReader.Read())
+                SQLString.Append(sEventID);
+                    m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                    if (m_SportsOleReaderFb.Read())
                     {
                         //Match Field
-                        if (!m_SportsOleReader.IsDBNull(0))
+                        if (!m_SportsOleReaderFb.IsDBNull(0))
                         {
-                            if (m_SportsOleReader.GetInt32(0) != -1)
+                            if (m_SportsOleReaderFb.GetInt32(0) != -1)
                             {
                                 HTMLString.Append("<option value=");
-                                HTMLString.Append(m_SportsOleReader.GetInt32(0).ToString());
+                                HTMLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
                                 HTMLString.Append(" selected>");
-                                HTMLString.Append(arrFields[m_SportsOleReader.GetInt32(0)]);
+                                HTMLString.Append(arrFields[m_SportsOleReaderFb.GetInt32(0)]);
                                 for (iItemIdx = 0; iItemIdx < arrFields.Length; iItemIdx++)
                                 {
-                                    if (iItemIdx != m_SportsOleReader.GetInt32(0))
+                                    if (iItemIdx != m_SportsOleReaderFb.GetInt32(0))
                                     {
                                         HTMLString.Append("<option value=");
                                         HTMLString.Append(iItemIdx.ToString());
@@ -178,22 +179,22 @@ namespace SportsUtil {
 
                         //Challenger
                         HTMLString.Append("&nbsp;隊伍:<input name=\"HNextChallenger\" maxlength=\"4\" size=\"3\" value=\"");
-                        if (!m_SportsOleReader.IsDBNull(1))
+                        if (!m_SportsOleReaderFb.IsDBNull(1))
                         {
-                            if (!m_SportsOleReader.GetString(1).Trim().Equals("-1"))
+                            if (!m_SportsOleReaderFb.GetString(1).Trim().Equals("-1"))
                             {
-                                HTMLString.Append(m_SportsOleReader.GetString(1).Trim());
+                                HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
                             }
                         }
                         HTMLString.Append("\" onChange=\"checkHNextChallengerLength()\">");
 
                         //Match League
                         HTMLString.Append("&nbsp;聯賽:<input name=\"HNextLeague\" maxlength=\"4\" size=\"3\" value=\"");
-                        if (!m_SportsOleReader.IsDBNull(2))
+                        if (!m_SportsOleReaderFb.IsDBNull(2))
                         {
-                            if (!m_SportsOleReader.GetString(2).Trim().Equals("-1"))
+                            if (!m_SportsOleReaderFb.GetString(2).Trim().Equals("-1"))
                             {
-                                HTMLString.Append(m_SportsOleReader.GetString(2).Trim());
+                                HTMLString.Append(m_SportsOleReaderFb.GetString(2).Trim());
                             }
                         }
                         HTMLString.Append("\" onChange=\"checkHNextLeagueLength()\">");
@@ -212,31 +213,32 @@ namespace SportsUtil {
                         HTMLString.Append("&nbsp;隊伍:<input name=\"HNextChallenger\" maxlength=\"4\" size=\"3\" value=\"\" onChange=\"checkHNextChallengerLength()\">");
                         HTMLString.Append("&nbsp;聯賽:<input name=\"HNextLeague\" maxlength=\"4\" size=\"3\" value=\"\" onChange=\"checkHNextLeagueLength()\">");
                     }
-                    m_SportsOleReader.Close();
-                    m_SportsDBMgr.Close();
+                    m_SportsOleReaderFb.Close();
+                    m_SportsDBMgrFb.Close();
                     HTMLString.Append("</th>");
 
                     //Next game for Guest
                     HTMLString.Append("<th><select name=\"GNextMatchField\">");
                     SQLString.Remove(0, SQLString.Length);
-                    SQLString.Append("select IMATCHSTATUS, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='G' AND IHOSTSCORE= -1 AND IGUESTSCORE =-1 AND IMATCH_CNT=");
+                //  SQLString.Append("select IMATCHSTATUS, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='G' AND IHOSTSCORE= -1 AND IGUESTSCORE =-1 AND IMATCH_CNT=");
+                SQLString.Append("select IMATCHSTATUS, CCHALLENGER, LEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='G' AND IHOSTSCORE= -1 AND IGUESTSCORE =-1 AND IMATCH_CNT=");
                 ////  SQLString.Append(sMatchCnt);
                 SQLString.Append(sEventID);
-                    m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                    if (m_SportsOleReader.Read())
+                    m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                    if (m_SportsOleReaderFb.Read())
                     {
                         //Match Field
-                        if (!m_SportsOleReader.IsDBNull(0))
+                        if (!m_SportsOleReaderFb.IsDBNull(0))
                         {
-                            if (m_SportsOleReader.GetInt32(0) != -1)
+                            if (m_SportsOleReaderFb.GetInt32(0) != -1)
                             {
                                 HTMLString.Append("<option value=");
-                                HTMLString.Append(m_SportsOleReader.GetInt32(0).ToString());
+                                HTMLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
                                 HTMLString.Append(" selected>");
-                                HTMLString.Append(arrFields[m_SportsOleReader.GetInt32(0)]);
+                                HTMLString.Append(arrFields[m_SportsOleReaderFb.GetInt32(0)]);
                                 for (iItemIdx = 0; iItemIdx < arrFields.Length; iItemIdx++)
                                 {
-                                    if (iItemIdx != m_SportsOleReader.GetInt32(0))
+                                    if (iItemIdx != m_SportsOleReaderFb.GetInt32(0))
                                     {
                                         HTMLString.Append("<option value=");
                                         HTMLString.Append(iItemIdx.ToString());
@@ -275,22 +277,22 @@ namespace SportsUtil {
 
                         //Challenger
                         HTMLString.Append("&nbsp;隊伍:<input name=\"GNextChallenger\" maxlength=\"4\" size=\"3\" value=\"");
-                        if (!m_SportsOleReader.IsDBNull(1))
+                        if (!m_SportsOleReaderFb.IsDBNull(1))
                         {
-                            if (!m_SportsOleReader.GetString(1).Trim().Equals("-1"))
+                            if (!m_SportsOleReaderFb.GetString(1).Trim().Equals("-1"))
                             {
-                                HTMLString.Append(m_SportsOleReader.GetString(1).Trim());
+                                HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
                             }
                         }
                         HTMLString.Append("\" onChange=\"checkGNextChallengerLength()\">");
 
                         //Match League
                         HTMLString.Append("&nbsp;聯賽:<input name=\"GNextLeague\" maxlength=\"4\" size=\"3\" value=\"");
-                        if (!m_SportsOleReader.IsDBNull(2))
+                        if (!m_SportsOleReaderFb.IsDBNull(2))
                         {
-                            if (!m_SportsOleReader.GetString(2).Trim().Equals("-1"))
+                            if (!m_SportsOleReaderFb.GetString(2).Trim().Equals("-1"))
                             {
-                                HTMLString.Append(m_SportsOleReader.GetString(2).Trim());
+                                HTMLString.Append(m_SportsOleReaderFb.GetString(2).Trim());
                             }
                         }
                         HTMLString.Append("\" onChange=\"checkGNextLeagueLength()\">");
@@ -309,29 +311,29 @@ namespace SportsUtil {
                         HTMLString.Append("&nbsp;隊伍:<input name=\"GNextChallenger\" maxlength=\"4\" size=\"3\" value=\"\" onChange=\"checkGNextChallengerLength()\">");
                         HTMLString.Append("&nbsp;聯賽:<input name=\"GNextLeague\" maxlength=\"4\" size=\"3\" value=\"\" onChange=\"checkGNextLeagueLength()\">");
                     }
-                    m_SportsOleReader.Close();
-                    m_SportsDBMgr.Close();
+                    m_SportsOleReaderFb.Close();
+                    m_SportsDBMgrFb.Close();
                     HTMLString.Append("</th>");
 
                     //Host recent result
                     iRecordCount = 0;
                     SQLString.Remove(0, SQLString.Length);
-                    SQLString.Append("select IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='H' AND IHOSTSCORE<>-1 AND IGUESTSCORE<>-1 AND IMATCH_CNT=");
+                    SQLString.Append("select IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE, CCHALLENGER, LEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='H' AND IHOSTSCORE<>-1 AND IGUESTSCORE<>-1 AND IMATCH_CNT=");
                 //// SQLString.Append(sMatchCnt);
                 SQLString.Append(sEventID);
                     SQLString.Append(" order by IREC");
-                    m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                    while (m_SportsOleReader.Read())
+                    m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                    while (m_SportsOleReaderFb.Read())
                     {
                         TempHTMLString.Remove(0, TempHTMLString.Length);
                         TempHTMLString.Append("<th><select name=\"HRecentMatchField\">");
                         TempHTMLString.Append("<option value=");
-                        TempHTMLString.Append(m_SportsOleReader.GetInt32(0).ToString());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
                         TempHTMLString.Append(" selected>");
-                        TempHTMLString.Append(arrFields[m_SportsOleReader.GetInt32(0)]);
+                        TempHTMLString.Append(arrFields[m_SportsOleReaderFb.GetInt32(0)]);
                         for (iItemIdx = 0; iItemIdx < arrFields.Length; iItemIdx++)
                         {
-                            if (iItemIdx != m_SportsOleReader.GetInt32(0))
+                            if (iItemIdx != m_SportsOleReaderFb.GetInt32(0))
                             {
                                 TempHTMLString.Append("<option value=");
                                 TempHTMLString.Append(iItemIdx.ToString());
@@ -343,28 +345,28 @@ namespace SportsUtil {
 
                         //Host Score
                         TempHTMLString.Append("<input name=\"HRecentHScore\" maxlength=\"2\" size=\"1\" value=\"");
-                        TempHTMLString.Append(m_SportsOleReader.GetInt32(1).ToString());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetInt32(1).ToString());
                         TempHTMLString.Append("\" onChange=\"checkHRecentHScoreFormat(");
                         TempHTMLString.Append(iRecordCount.ToString());
                         TempHTMLString.Append(")\">:");
 
                         //Guest Score
                         TempHTMLString.Append("<input name=\"HRecentGScore\" maxlength=\"2\" size=\"1\" value=\"");
-                        TempHTMLString.Append(m_SportsOleReader.GetInt32(2).ToString());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetInt32(2).ToString());
                         TempHTMLString.Append("\" onChange=\"checkHRecentGScoreFormat(");
                         TempHTMLString.Append(iRecordCount.ToString());
                         TempHTMLString.Append(")\">");
 
                         //Challenger
                         TempHTMLString.Append("&nbsp;隊伍:<input name=\"HRecentChallenger\" maxlength=\"4\" size=\"3\" value=\"");
-                        TempHTMLString.Append(m_SportsOleReader.GetString(3).Trim());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetString(3).Trim());
                         TempHTMLString.Append("\" onChange=\"checkHRecentChallengerLength(");
                         TempHTMLString.Append(iRecordCount.ToString());
                         TempHTMLString.Append(")\">");
 
                         //Match League
                         TempHTMLString.Append("&nbsp;聯賽:<input name=\"HRecentLeague\" maxlength=\"4\" size=\"3\" value=\"");
-                        TempHTMLString.Append(m_SportsOleReader.GetString(4).Trim());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetString(4).Trim());
                         TempHTMLString.Append("\" onChange=\"checkHRecentLeagueLength(");
                         TempHTMLString.Append(iRecordCount.ToString());
                         TempHTMLString.Append(")\">");
@@ -373,8 +375,8 @@ namespace SportsUtil {
                         HostRecentHTMLList.Add(TempHTMLString.ToString());
                         iRecordCount++;
                     }
-                    m_SportsOleReader.Close();
-                    m_SportsDBMgr.Close();
+                    m_SportsOleReaderFb.Close();
+                    m_SportsDBMgrFb.Close();
                     while (iRecordCount < TOTALRECENTCOUNT)
                     {
                         TempHTMLString.Remove(0, TempHTMLString.Length);
@@ -402,22 +404,22 @@ namespace SportsUtil {
                     //Guest recent result
                     iRecordCount = 0;
                     SQLString.Remove(0, SQLString.Length);
-                    SQLString.Append("select IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE, CCHALLENGER, CLEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='G' AND IHOSTSCORE<>-1 AND IGUESTSCORE<>-1 AND IMATCH_CNT=");
+                    SQLString.Append("select IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE, CCHALLENGER, LEAGUEALIAS from ANALYSIS_RECENT_INFO where CACT='U' AND CTEAMFLAG='G' AND IHOSTSCORE<>-1 AND IGUESTSCORE<>-1 AND IMATCH_CNT=");
                 ////  SQLString.Append(sMatchCnt);
                 SQLString.Append(sEventID);
                     SQLString.Append(" order by IREC");
-                    m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                    while (m_SportsOleReader.Read())
+                    m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                    while (m_SportsOleReaderFb.Read())
                     {
                         TempHTMLString.Remove(0, TempHTMLString.Length);
                         TempHTMLString.Append("<th><select name=\"GRecentMatchField\">");
                         TempHTMLString.Append("<option value=");
-                        TempHTMLString.Append(m_SportsOleReader.GetInt32(0).ToString());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
                         TempHTMLString.Append(" selected>");
-                        TempHTMLString.Append(arrFields[m_SportsOleReader.GetInt32(0)]);
+                        TempHTMLString.Append(arrFields[m_SportsOleReaderFb.GetInt32(0)]);
                         for (iItemIdx = 0; iItemIdx < arrFields.Length; iItemIdx++)
                         {
-                            if (iItemIdx != m_SportsOleReader.GetInt32(0))
+                            if (iItemIdx != m_SportsOleReaderFb.GetInt32(0))
                             {
                                 TempHTMLString.Append("<option value=");
                                 TempHTMLString.Append(iItemIdx.ToString());
@@ -429,28 +431,28 @@ namespace SportsUtil {
 
                         //Host Score
                         TempHTMLString.Append("<input name=\"GRecentHScore\" maxlength=\"2\" size=\"1\" value=\"");
-                        TempHTMLString.Append(m_SportsOleReader.GetInt32(1).ToString());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetInt32(1).ToString());
                         TempHTMLString.Append("\" onChange=\"checkGRecentHScoreFormat(");
                         TempHTMLString.Append(iRecordCount.ToString());
                         TempHTMLString.Append(")\">:");
 
                         //Guest Score
                         TempHTMLString.Append("<input name=\"GRecentGScore\" maxlength=\"2\" size=\"1\" value=\"");
-                        TempHTMLString.Append(m_SportsOleReader.GetInt32(2).ToString());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetInt32(2).ToString());
                         TempHTMLString.Append("\" onChange=\"checkGRecentGScoreFormat(");
                         TempHTMLString.Append(iRecordCount.ToString());
                         TempHTMLString.Append(")\">");
 
                         //Challenger
                         TempHTMLString.Append("&nbsp;隊伍:<input name=\"GRecentChallenger\" maxlength=\"4\" size=\"3\" value=\"");
-                        TempHTMLString.Append(m_SportsOleReader.GetString(3).Trim());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetString(3).Trim());
                         TempHTMLString.Append("\" onChange=\"checkGRecentChallengerLength(");
                         TempHTMLString.Append(iRecordCount.ToString());
                         TempHTMLString.Append(")\">");
 
                         //Match League
                         TempHTMLString.Append("&nbsp;聯賽:<input name=\"GRecentLeague\" maxlength=\"4\" size=\"3\" value=\"");
-                        TempHTMLString.Append(m_SportsOleReader.GetString(4).Trim());
+                        TempHTMLString.Append(m_SportsOleReaderFb.GetString(4).Trim());
                         TempHTMLString.Append("\" onChange=\"checkGRecentLeagueLength(");
                         TempHTMLString.Append(iRecordCount.ToString());
                         TempHTMLString.Append(")\">");
@@ -459,9 +461,9 @@ namespace SportsUtil {
                         GuestRecentHTMLList.Add(TempHTMLString.ToString());
                         iRecordCount++;
                     }
-                    m_SportsOleReader.Close();
-                    m_SportsDBMgr.Close();
-                    m_SportsDBMgr.Dispose();
+                    m_SportsOleReaderFb.Close();
+                    m_SportsDBMgrFb.Close();
+                    m_SportsDBMgrFb.Dispose();
                     while (iRecordCount < TOTALRECENTCOUNT)
                     {
                         TempHTMLString.Remove(0, TempHTMLString.Length);
@@ -578,8 +580,8 @@ namespace SportsUtil {
 				SQLString.Append("delete from ANALYSIS_RECENT_INFO where IMATCH_CNT=");
                 ///SQLString.Append(sMatchCnt); 
                 SQLString.Append(sEventID);
-                m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-				m_SportsDBMgr.Close();
+                m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+				m_SportsDBMgrFb.Close();
 				
 				if(!sHNextMatchField.Equals("-1")) {
 					if((sHNextChallenger != null) && (sHNextLeague != null)) {
@@ -599,8 +601,8 @@ namespace SportsUtil {
 							SQLString.Append("',");
 							SQLString.Append(sHNextMatchField);
 							SQLString.Append(",-1,-1)");
-							m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-							m_SportsDBMgr.Close();
+							m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+							m_SportsDBMgrFb.Close();
 						}
 					}
 				}
@@ -627,8 +629,8 @@ namespace SportsUtil {
 						SQLString.Append(",");
 						SQLString.Append(arrHRecentGScore[iItemIdx].Trim());
 						SQLString.Append(")");
-						m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-						m_SportsDBMgr.Close();
+						m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+						m_SportsDBMgrFb.Close();
 						//iINIIdx++;
 					}
 					iItemIdx++;
@@ -651,8 +653,8 @@ namespace SportsUtil {
 							SQLString.Append("',");
 							SQLString.Append(sGNextMatchField);
 							SQLString.Append(",-1,-1)");
-							m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-							m_SportsDBMgr.Close();
+							m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+							m_SportsDBMgrFb.Close();
 						}
 					}
 				}
@@ -679,8 +681,8 @@ namespace SportsUtil {
 						SQLString.Append(",");
 						SQLString.Append(arrGRecentGScore[iItemIdx].Trim());
 						SQLString.Append(")");
-						m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-						m_SportsDBMgr.Close();
+						m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+						m_SportsDBMgrFb.Close();
 						//iINIIdx++;
 					}
 					iItemIdx++;
@@ -739,7 +741,7 @@ namespace SportsUtil {
 			SportsMessage sptMsg = new SportsMessage();
 			StringBuilder LogSQLString = new StringBuilder();
 			DBManager logDBMgr = new DBManager();
-			logDBMgr.ConnectionString = m_SportsDBMgr.ConnectionString;
+			logDBMgr.ConnectionString = m_SportsDBMgrFb.ConnectionString;
 			arrRemotingPath = (string[])HttpContext.Current.Application["RemotingItems"];
 
 			try {
@@ -786,8 +788,8 @@ namespace SportsUtil {
 					SQLString.Append("delete from ANALYSIS_RECENT_INFO where IMATCH_CNT=");
                     ///SQLString.Append(sMatchCnt); 
                     SQLString.Append(sEventID);
-                    m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-					m_SportsDBMgr.Close();
+                    m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+					m_SportsDBMgrFb.Close();
 
 					/*******************
 					 * Update for Host *
@@ -836,8 +838,8 @@ namespace SportsUtil {
 								SQLString.Append("',");
 								SQLString.Append(sHNextMatchField);
 								SQLString.Append(",-1,-1)");
-								m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-								m_SportsDBMgr.Close();
+								m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+								m_SportsDBMgrFb.Close();
 								bNextExisted = true;
 							}
 						}
@@ -885,8 +887,8 @@ namespace SportsUtil {
 							SQLString.Append(",");
 							SQLString.Append(arrHRecentGScore[iItemIdx].Trim());
 							SQLString.Append(")");
-							m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-							m_SportsDBMgr.Close();
+							m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+							m_SportsDBMgrFb.Close();
 
 							iSubItemIdx++;
 							LogSQLString.Remove(0,LogSQLString.Length);
@@ -979,8 +981,8 @@ namespace SportsUtil {
 								SQLString.Append("',");
 								SQLString.Append(sGNextMatchField);
 								SQLString.Append(",-1,-1)");
-								m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-								m_SportsDBMgr.Close();
+								m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+								m_SportsDBMgrFb.Close();
 								bNextExisted = true;
 							}
 						}
@@ -1028,8 +1030,8 @@ namespace SportsUtil {
 							SQLString.Append(",");
 							SQLString.Append(arrGRecentGScore[iItemIdx].Trim());
 							SQLString.Append(")");
-							m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-							m_SportsDBMgr.Close();
+							m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+							m_SportsDBMgrFb.Close();
 
 							iSubItemIdx++;
 							LogSQLString.Remove(0,LogSQLString.Length);
@@ -1086,8 +1088,8 @@ namespace SportsUtil {
 					SQLString.Append("update ANALYSIS_RECENT_INFO set CACT='D' where imatch_cnt=");
                     ///SQLString.Append(sMatchCnt); 
                     SQLString.Append(sEventID);
-                    m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-					m_SportsDBMgr.Close();
+                    m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+					m_SportsDBMgrFb.Close();
 
 					LogSQLString.Remove(0,LogSQLString.Length);
 					LogSQLString.Append("insert into LOG_ANALYSISRECENT (TIMEFLAG, IITEMSEQ_NO, SECTION, ACT, LEAGUE, HOST, GUEST, MATCHDATE, MATCHTIME, MATCHFIELD, HOSTHANDICAP, RECENTTYPE, RECENTALIAS, RECENTCHALLENGER, RECENTFIELD, RECENTHOSTSCORE, RECENTGUESTSCORE, BATCHJOB) values ('");

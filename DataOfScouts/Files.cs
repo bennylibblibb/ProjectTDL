@@ -237,7 +237,8 @@ namespace FileLog
                     {
                         files.FileName = name + ".txt";
                         files.Open();
-                        files.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss fff ") + sEventMsg);
+                        /// files.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss fff ") + sEventMsg);
+                         files.Write(sEventMsg);
                         files.Close();
                     }
                 }

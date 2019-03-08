@@ -1,0 +1,30 @@
+﻿10:40:17 BEN login success.
+11:16:00 [Success] Cancel Sync [2520238] EMATCHES[FRI 1]  (Central Coast M. - Brisbane Roar) Central Coast Mariners/Brisbane Roar
+11:16:35 [Success] Cancel Sync [2701269] EMATCHES[FRI 2]  (Cerezo Osaka - Vissel Kobe) Cerezo Osaka/Vissel Kobe
+11:17:44 [Success] Cancel Sync [2456248] EMATCHES[FRI 3]  (Union Berlin - Arminia Bielefeld) Union Berlin/Bielefeld
+11:17:46 [Success] Cancel Sync [2456247] EMATCHES[FRI 4]  (Greuther Furth - Heidenheim) Greuther Furth/Heidenheim
+11:17:47 [Success] Cancel Sync [2439348] EMATCHES[FRI 5]  (Dijon FCO - AS Saint-Etienne) Dijon/St. Etienne
+11:29:08 [Success] Cancel Sync [2520238] EMATCHES[FRI 1]  (Central Coast M. - Brisbane Roar) Central Coast Mariners/Brisbane Roar
+11:29:12 [Success] Cancel Sync [2701269] EMATCHES[FRI 2]  (Cerezo Osaka - Vissel Kobe) Cerezo Osaka/Vissel Kobe
+11:29:22 [Success] Cancel Sync [2456248] EMATCHES[FRI 3]  (Union Berlin - Arminia Bielefeld) Union Berlin/Bielefeld
+11:29:23 [Success] Cancel Sync [2456247] EMATCHES[FRI 4]  (Greuther Furth - Heidenheim) Greuther Furth/Heidenheim
+11:29:24 [Success] Cancel Sync [2439348] EMATCHES[FRI 5]  (Dijon FCO - AS Saint-Etienne) Dijon/St. Etienne
+12:13:07 [Success] Cancel Sync [2520238] EMATCHES[FRI 1]  (Central Coast M. - Brisbane Roar) Central Coast Mariners/Brisbane Roar
+12:13:12 [Success] Cancel Sync [2701269] EMATCHES[FRI 2]  (Cerezo Osaka - Vissel Kobe) Cerezo Osaka/Vissel Kobe
+12:13:21 [Success] Cancel Sync [2456248] EMATCHES[FRI 3]  (Union Berlin - Arminia Bielefeld) Union Berlin/Bielefeld
+12:13:22 [Success] Cancel Sync [2456247] EMATCHES[FRI 4]  (Greuther Furth - Heidenheim) Greuther Furth/Heidenheim
+12:13:23 [Success] Cancel Sync [2439348] EMATCHES[FRI 5]  (Dijon FCO - AS Saint-Etienne) Dijon/St. Etienne
+12:23:53 [Success] Cancel Sync [2701269] EMATCHES[FRI 2]  (Cerezo Osaka - Vissel Kobe) Cerezo Osaka/Vissel Kobe
+12:23:58 [Success] Cancel Sync [2520238] EMATCHES[FRI 1]  (Central Coast M. - Brisbane Roar) Central Coast Mariners/Brisbane Roar
+12:24:09 [Success] Cancel Sync [2456248] EMATCHES[FRI 3]  (Union Berlin - Arminia Bielefeld) Union Berlin/Bielefeld
+12:24:09 [Success] Cancel Sync [2456247] EMATCHES[FRI 4]  (Greuther Furth - Heidenheim) Greuther Furth/Heidenheim
+12:24:10 [Success] Cancel Sync [2439348] EMATCHES[FRI 5]  (Dijon FCO - AS Saint-Etienne) Dijon/St. Etienne
+12:40:09 [Success] Cancel Sync [2456248] EMATCHES[FRI 3]  (Union Berlin - Arminia Bielefeld) Union Berlin/Bielefeld
+12:40:10 [Success] Cancel Sync [2456247] EMATCHES[FRI 4]  (Greuther Furth - Heidenheim) Greuther Furth/Heidenheim
+12:40:11 [Success] Cancel Sync [2439348] EMATCHES[FRI 5]  (Dijon FCO - AS Saint-Etienne) Dijon/St. Etienne
+13:02:58 [Success] Cancel Sync [2456248] EMATCHES[FRI 3]  (Union Berlin - Arminia Bielefeld) Union Berlin/Bielefeld
+13:02:59 [Success] Cancel Sync [2456247] EMATCHES[FRI 4]  (Greuther Furth - Heidenheim) Greuther Furth/Heidenheim
+13:03:00 [Success] Cancel Sync [2439348] EMATCHES[FRI 5]  (Dijon FCO - AS Saint-Etienne) Dijon/St. Etienne
+15:51:59 BEN login success.
+15:56:55 BEN login success.
+17:38:20 BEN login success.

@@ -86,6 +86,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Fixtures.aspx" />
     <Content Include="Sports\AnalysisModify.aspx" />
     <Content Include="Sports\AnalysisPreview.aspx" />
     <Content Include="Sports\AnalysisRecent.aspx" />
@@ -133,6 +134,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DBManager.cs" />
+    <Compile Include="Fixtures.aspx.cs">
+      <DependentUpon>Fixtures.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Sports\SportNewsMenu.cs" />
     <Compile Include="Sports\AnalysisModify.cs" />
     <Compile Include="Sports\AnalysisPreview.cs" />
@@ -254,6 +259,8 @@
           <DevelopmentServerPort>64240</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:64240/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:64240/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

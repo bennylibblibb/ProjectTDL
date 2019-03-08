@@ -140,7 +140,7 @@ namespace JC_SoccerWeb
             {
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {
-                    string queryString = "Select  e.id eid ,t.id,e.NAME ,t.id,t.name TNAME,t.SHORT_NAME, t.HKJC_ID , t.HKJC_NAME, t.HKJC_NAME_CN,t.MAPPING_STATUS from teams t  inner  join  events e  on e.HOME_ID=t.ID or e.GUEST_ID=t.id  where e.id ='" + id + "' order by t.MAPPING_STATUS";
+                    string queryString = "Select  e.id eid ,t.id,e.NAME ,t.id,t.name TNAME,t.SHORT_NAME, t.HKJC_ID , t.HKJC_NAME, t.HKJC_NAME_CN,t.MAPPING_STATUS from teams t  inner  join  events e  on e.HOME_ID=t.ID or e.GUEST_ID=t.id  where e.id ='" + id + "'  order by t.MAPPING_STATUS";
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())
@@ -156,19 +156,20 @@ namespace JC_SoccerWeb
                                 dgTeams.DataBind();
                                 dgTeams.UpdateAfterCallBack = true;
                                 lbEvent.Text = data.Tables["Teams"].Rows[0]["eid"].ToString() + " " + data.Tables["Teams"].Rows[0]["name"].ToString();
-                                this.Page.Title = data.Tables["Teams"].Rows[0]["name"].ToString()+" Team Mapping";
+                                this.Page.Title = data.Tables["Teams"].Rows[0]["name"].ToString() + " Team Mapping";
 
                                 //if (!(data.Tables["Teams"].Rows[0]["MAPPING_STATUS"] is DBNull)&& Convert.ToBoolean(data.Tables["Teams"].Rows[0]["MAPPING_STATUS"]) && !(data.Tables["Teams"].Rows[1]["MAPPING_STATUS"] is DBNull)&& Convert.ToBoolean(data.Tables["Teams"].Rows[1]["MAPPING_STATUS"]))
                                 //{
                                 //    btnSave.Visible = false;
                                 //    btnSave.UpdateAfterCallBack = true;
                                 //}
-                                if(data.Tables["Teams"].Rows[0]["MAPPING_STATUS"] is DBNull|| !(Convert.ToBoolean(data.Tables["Teams"].Rows[0]["MAPPING_STATUS"])))
+                                if (data.Tables["Teams"].Rows.Count==2&&((data.Tables["Teams"].Rows[0]["MAPPING_STATUS"] is DBNull || !(Convert.ToBoolean(data.Tables["Teams"].Rows[0]["MAPPING_STATUS"])))
+                                    || (data.Tables["Teams"].Rows[1]["MAPPING_STATUS"] is DBNull || !(Convert.ToBoolean(data.Tables["Teams"].Rows[1]["MAPPING_STATUS"])))))
                                 {
                                     btnSave.Text = "Save";
-                                     btnSave.UpdateAfterCallBack = true;
+                                    btnSave.UpdateAfterCallBack = true;
                                 }
-                               else if (Convert.ToBoolean(data.Tables["Teams"].Rows[0]["MAPPING_STATUS"]))
+                                else if (data.Tables["Teams"].Rows.Count == 2 && (Convert.ToBoolean(data.Tables["Teams"].Rows[0]["MAPPING_STATUS"])|| Convert.ToBoolean(data.Tables["Teams"].Rows[1]["MAPPING_STATUS"])))
                                 {
                                     btnSave.Text = "Update";
                                     btnSave.UpdateAfterCallBack = true;

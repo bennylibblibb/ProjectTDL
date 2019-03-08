@@ -112,7 +112,8 @@ namespace SportsUtil {
                 log += " f2  / ";
                 //retrieve player information w.r.t. team id
                 iRec = 0;
-                retrieveQuery = "select IPLAYER_NO, IPOS, CPLAYER_NAME, CENGNAME, CCOUNTRY, IROSTER,PLAYER_ID from PLAYERS_INFO where TEAM_ID=" + sTeamID + " order by IPLAYER_NO, IPOS, CPLAYER_NAME";
+                //retrieveQuery = "select IPLAYER_NO, IPOS, CPLAYER_NAME, CENGNAME, CCOUNTRY, IROSTER,PLAYER_ID from PLAYERS_INFO where TEAM_ID=" + sTeamID + " order by IPLAYER_NO, IPOS, CPLAYER_NAME";
+                retrieveQuery = "select IPLAYER_NO, IPOS, CPLAYER_NAME, CENGNAME, CCOUNTRY, IROSTER,PLAYER_ID from PLAYERS_INFO where TEAM_ID=" + sTeamID + " order by  IROSTER desc,IPOS asc, CPLAYER_NAME desc   ";
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(retrieveQuery);
                 while (m_SportsOleReaderFb.Read())
                 {

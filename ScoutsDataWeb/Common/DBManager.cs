@@ -134,7 +134,8 @@
             this.m_DBCmd.CommandText = sSQL;
             this.m_DBCmd.Connection = this.m_DBConn;
             this.m_DBConn.Open();
-            int num = (int) this.m_DBCmd.ExecuteScalar();
+            //int num = (int) this.m_DBCmd.ExecuteScalar();
+            int num =Convert.ToInt32(this.m_DBCmd.ExecuteScalar());
             this.m_DBConn.Close();
             return num;
         }
