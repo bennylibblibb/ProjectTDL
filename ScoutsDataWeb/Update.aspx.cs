@@ -811,9 +811,10 @@
             {
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                 {//(r.caction !='delete' or r.caction is null) and 
-                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS ,e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN "
-                       + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID"
-                       + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'"+ (id.ToString ()=="-1"?"": " and STATUS_ID ="+dplLeague.SelectedValue) +  " order by r.START_DATE ASC  ";
+                 //string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS ,e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN "
+                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS , (select first 1 hkjc_name_cn from teams where id=r.home_id and r.id=e.EMATCHID) HKJCHOSTNAME_CN,(select first 1 hkjc_name_cn from teams where id= r.guest_id and r.id=e.EMATCHID) HKJCGUESTNAME_CN  "
+                    + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID"
+                       + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'"+ (id.ToString ()=="-1"?"": " and STATUS_ID ="+dplLeague.SelectedValue) +  " order by r.START_DATE , r.id ASC  ";
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())

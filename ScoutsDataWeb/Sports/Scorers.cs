@@ -13,13 +13,14 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
-using System.Data.OleDb;
+//using System.Data.OleDb;
 using System.Reflection;
 using System.Text;
 using System.Web;
 using TDL.DB;
 using TDL.IO;
 using TDL.Message;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace SportsUtil
 {
@@ -30,16 +31,20 @@ namespace SportsUtil
         string m_Alias;
         string m_Team;
         string m_LeagID;
-        DBManager m_SportsDBMgr;
-        Files m_SportsLog;
-        OleDbDataReader m_SportsOleReader;
+        // DBManager m_SportsDBMgr;
+        DBManagerFB m_SportsDBMgrFb;
+         Files m_SportsLog;
+        // OleDbDataReader m_SportsOleReader;
+        FbDataReader m_SportsOleReaderFb;
         StringBuilder SQLString;
         SortedList m_TeamList;
 
         public Scorers(string Connection)
         {
-            m_SportsDBMgr = new DBManager();
-            m_SportsDBMgr.ConnectionString = Connection;
+            //m_SportsDBMgr = new DBManager();
+            //m_SportsDBMgrFb.ConnectionString = Connection;
+            m_SportsDBMgrFb = new DBManagerFB();
+            m_SportsDBMgrFb.ConnectionString = JC_SoccerWeb.Common.AppFlag.ScoutsDBConn;
             m_SportsLog = new Files();
             SQLString = new StringBuilder();
             m_Alias = "";
@@ -81,35 +86,47 @@ namespace SportsUtil
             StringBuilder HTMLString = new StringBuilder();
 
             //sLeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
-            sLeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "001" : HttpContext.Current.Request.QueryString["leagID"].Trim();
+            sLeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "2191" : HttpContext.Current.Request.QueryString["leagID"].Trim();
 
             try
             {
                 SQLString.Remove(0, SQLString.Length);
-                SQLString.Append("SELECT ALIAS FROM LEAGINFO WHERE LEAG_ID='");
+                // SQLString.Append("SELECT ALIAS FROM LEAGINFO WHERE LEAG_ID='");
+                //SQLString.Append("SELECT  aLIAS FROM COMPETITIONS where id= ");
+                SQLString.Append("SELECT  l.LEAGUE_CHI_NAME FROM COMPETITIONS c  inner join  LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME=c.aLIAS  where c.id= ");
                 SQLString.Append(sLeagID);
-                SQLString.Append("'");
-                m_Alias = m_SportsDBMgr.ExecuteQueryString(SQLString.ToString());
-                m_SportsDBMgr.Close();
+                 SQLString.Append("");
+                m_Alias = m_SportsDBMgrFb.ExecuteQueryString(SQLString.ToString());
+                m_SportsDBMgrFb.Close();
 
                 SQLString.Remove(0, SQLString.Length);
-                SQLString.Append("SELECT team.TEAM_ID, team.TEAMNAME FROM TEAMINFO team, ID_INFO id WHERE id.TEAM_ID=team.TEAM_ID AND id.LEAG_ID='");
+                //SQLString.Append("SELECT team.TEAM_ID, team.TEAMNAME FROM TEAMINFO team, ID_INFO id WHERE id.TEAM_ID=team.TEAM_ID AND id.LEAG_ID='");
+                SQLString.Append(" select distinct   t.id,t.HKJC_NAME_CN from events e inner join  teams t on e.HOME_ID = t.id or e.GUEST_ID = t.id where e.COMPETITION_ID =");
                 SQLString.Append(sLeagID);
-                SQLString.Append("' ORDER BY team.TEAM_ID");
-                m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                while (m_SportsOleReader.Read())
+               // SQLString.Append("' ORDER BY team.TEAM_ID");
+                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                while (m_SportsOleReaderFb.Read())
                 {
-                    m_TeamList.Add(m_SportsOleReader.GetInt32(0).ToString(), m_SportsOleReader.GetString(1).Trim());
+                    m_TeamList.Add(m_SportsOleReaderFb.GetInt32(0).ToString(), m_SportsOleReaderFb.GetString(1).Trim());
                 }
-                m_SportsOleReader.Close();
-                m_SportsDBMgr.Close();
+                m_SportsOleReaderFb.Close();
+                m_SportsDBMgrFb.Close();
 
                 SQLString.Remove(0, SQLString.Length);
-                SQLString.Append("SELECT TEAM_ID, CTEAM_ABBR, CPLAYER_NAME, IRANK, IGOALS FROM SCORERS_INFO WHERE CLEAG_ID='");
+                //SQLString.Append("SELECT TEAM_ID, CTEAM_ABBR, CPLAYER_NAME, IRANK, IGOALS FROM SCORERS_INFO WHERE CLEAG_ID='");
+                //SQLString.Append(sLeagID);
+                //SQLString.Append("' AND CACT='U' ORDER BY IRANK, IRID, CPLAYER_NAME");
+                //SQLString.Append("SELECT  distinct SCORERS_INFO.TEAM_ID, CTEAM_ABBR,SCORERS_INFO. CPLAYER_NAME , IRANK, IGOALS ,PLAYERS_INFO.CPLAYER_NAME b FROM SCORERS_INFO inner join PLAYERS_INFO on SCORERS_INFO.PLAYER_ID=PLAYERS_INFO.PLAYER_ID  WHERE CLEAG_ID=");
+                //SQLString.Append(sLeagID);
+                //SQLString.Append(" AND CACT='U'    ORDER BY IRANK, IRID, SCORERS_INFO. CPLAYER_NAME");
+                //SQLString.Append(" select first 15 s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b  from  SCORERS_INFO s  inner join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
+                //SQLString.Append(sLeagID);
+                //SQLString.Append(" AND CACT='U' ORDER BY s.IRANK, s.IRID, s.CPLAYER_NAME");
+                SQLString.Append(" select first 15 s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b  from  SCORERS_INFO s  inner join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
                 SQLString.Append(sLeagID);
-                SQLString.Append("' AND CACT='U' ORDER BY IRANK, IRID, CPLAYER_NAME");
-                m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                while (m_SportsOleReader.Read())
+                SQLString.Append(" AND CACT='U' ORDER BY s.IRANK, s.IRID, s.CPLAYER_NAME");
+                m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                while (m_SportsOleReaderFb.Read())
                 {
                     //Team Reference
                     HTMLString.Append("<tr align=\"center\"><td><select name=\"teamref\" onchange=\"GetPlayer(ScorersForm.LeagID.value, ScorersForm.teamref[");
@@ -128,32 +145,32 @@ namespace SportsUtil
 
                     //Team and its ID
                     HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"team\" maxlength=\"3\" size=\"4\" value=\"");
-                    HTMLString.Append(m_TeamList[m_SportsOleReader.GetInt32(0).ToString()]);
+                    HTMLString.Append(m_TeamList[m_SportsOleReaderFb.GetInt32(0).ToString()]);
                     HTMLString.Append("\" readonly=\"true\"><input type=\"hidden\" name=\"teamid\" value=\"");
-                    HTMLString.Append(m_SportsOleReader.GetInt32(0).ToString());
+                    HTMLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
                     HTMLString.Append("\">");
 
                     //Team abbr.
                     HTMLString.Append("(<input name=\"abbr\" maxlength=\"4\" size=\"2\" value=\"");
-                    if (!m_SportsOleReader.IsDBNull(1))
+                    if (!m_SportsOleReaderFb.IsDBNull(1))
                     {
-                        HTMLString.Append(m_SportsOleReader.GetString(1).Trim());
+                        HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
                     }
                     HTMLString.Append("\" onchange=\"AbbrChange(");
                     HTMLString.Append(iRecordCount.ToString());
                     HTMLString.Append(")\">)</td>");
 
                     //Player Label
-                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"player\" maxlength=\"5\" size=\"6\" value=\"");
-                    HTMLString.Append(m_SportsOleReader.GetString(2).Trim());
+                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"player\" maxlength=\"5\" size=\"12\" value=\"");
+                    HTMLString.Append(m_SportsOleReaderFb.GetString(5).Trim()==""? m_SportsOleReaderFb.GetString(2).Trim(): m_SportsOleReaderFb.GetString(5).Trim());
                     HTMLString.Append("\" readonly=\"true\"></td>");
 
                     iTabIndex++;
                     //Rank
                     HTMLString.Append("<td><input name=\"rank\" maxlength=\"2\" size=\"1\" value=\"");
-                    if (!m_SportsOleReader.IsDBNull(3))
+                    if (!m_SportsOleReaderFb.IsDBNull(3))
                     {
-                        HTMLString.Append(m_SportsOleReader.GetInt32(3).ToString());
+                        HTMLString.Append(m_SportsOleReaderFb.GetInt32(3).ToString());
                     }
                     HTMLString.Append("\" onchange=\"RankValidity(");
                     HTMLString.Append(iRecordCount.ToString());
@@ -164,9 +181,9 @@ namespace SportsUtil
                     iTabIndex++;
                     //Goals
                     HTMLString.Append("<td><input name=\"goals\" maxlength=\"2\" size=\"1\" value=\"");
-                    if (!m_SportsOleReader.IsDBNull(4))
+                    if (!m_SportsOleReaderFb.IsDBNull(4))
                     {
-                        HTMLString.Append(m_SportsOleReader.GetInt32(4).ToString());
+                        HTMLString.Append(m_SportsOleReaderFb.GetInt32(4).ToString());
                     }
                     HTMLString.Append("\" onchange=\"GoalsValidity(");
                     HTMLString.Append(iRecordCount.ToString());
@@ -176,8 +193,8 @@ namespace SportsUtil
 
                     iRecordCount++;
                 }
-                m_SportsOleReader.Close();
-                m_SportsDBMgr.Close();
+                m_SportsOleReaderFb.Close();
+                m_SportsDBMgrFb.Close();
 
                 while (iRecordCount < TOTALRECORDS)
                 {
@@ -254,7 +271,7 @@ namespace SportsUtil
             StringBuilder HTMLString = new StringBuilder();
 
             // m_LeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
-            m_LeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "001" : HttpContext.Current.Request.QueryString["leagID"].Trim();
+            m_LeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "2191" : HttpContext.Current.Request.QueryString["leagID"].Trim();
 
             ////sTeamID = HttpContext.Current.Request.QueryString["teamID"].Trim();
             sTeamID = (HttpContext.Current.Request.QueryString["teamID"] == null) ? "000" : HttpContext.Current.Request.QueryString["teamID"].Trim();
@@ -263,25 +280,29 @@ namespace SportsUtil
             try
             {
                 SQLString.Remove(0, SQLString.Length);
-                SQLString.Append("SELECT team.TEAMNAME, player.CPLAYER_NAME FROM PLAYERS_INFO player, TEAMINFO team WHERE team.TEAM_ID=player.TEAM_ID and player.TEAM_ID=");
+                //SQLString.Append("SELECT team.TEAMNAME, player.CPLAYER_NAME FROM PLAYERS_INFO player, TEAMINFO team WHERE team.TEAM_ID=player.TEAM_ID and player.TEAM_ID=");
+                //SQLString.Append(sTeamID);
+                //SQLString.Append(" order by player.IPOS, player.IPLAYER_NO");
+                SQLString.Append("SELECT team.HKJC_NAME_CN, player.CPLAYER_NAME FROM PLAYERS_INFO player, TEAMS team WHERE team.ID=player.TEAM_ID and player.TEAM_ID=");
                 SQLString.Append(sTeamID);
                 SQLString.Append(" order by player.IPOS, player.IPLAYER_NO");
-                m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
+
+                m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
                 HTMLString.Append("<tr align=\"center\"><td><select name=\"player\">");
-                while (m_SportsOleReader.Read())
+                while (m_SportsOleReaderFb.Read())
                 {
-                    if (!m_Team.Equals(m_SportsOleReader.GetString(0).Trim()))
+                    if (!m_Team.Equals(m_SportsOleReaderFb.GetString(0).Trim()))
                     {
-                        m_Team = m_SportsOleReader.GetString(0).Trim();
+                        m_Team = m_SportsOleReaderFb.GetString(0).Trim();
                     }
                     HTMLString.Append("<option value=\"");
-                    HTMLString.Append(m_SportsOleReader.GetString(1).Trim());
+                    HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
                     HTMLString.Append("\">");
-                    HTMLString.Append(m_SportsOleReader.GetString(1).Trim());
+                    HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
                     iExisted++;
                 }
-                m_SportsOleReader.Close();
-                m_SportsDBMgr.Close();
+                m_SportsOleReaderFb.Close();
+                m_SportsDBMgrFb.Close();
 
                 if (iExisted == 0)
                 {
@@ -337,7 +358,7 @@ namespace SportsUtil
             SportsMessage sptMsg = new SportsMessage();
             StringBuilder LogSQLString = new StringBuilder();
             DBManager logDBMgr = new DBManager();
-            logDBMgr.ConnectionString = m_SportsDBMgr.ConnectionString;
+            logDBMgr.ConnectionString = m_SportsDBMgrFb.ConnectionString;
 
             try
             {
@@ -378,8 +399,8 @@ namespace SportsUtil
                     SQLString.Append("DELETE FROM SCORERS_INFO where CLEAG_ID='");
                     SQLString.Append(sLeagID);
                     SQLString.Append("'");
-                    m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-                    m_SportsDBMgr.Close();
+                    m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+                    m_SportsDBMgrFb.Close();
                 }
 
                 if (sAction.Equals("U"))
@@ -407,8 +428,8 @@ namespace SportsUtil
                             if (arrGoals[iUpdIndex].Trim().Equals("")) SQLString.Append("null");
                             else SQLString.Append(arrGoals[iUpdIndex].Trim());
                             SQLString.Append(")");
-                            m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-                            m_SportsDBMgr.Close();
+                            m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+                            m_SportsDBMgrFb.Close();
                             iRecUpd++;
                         }
                     }
@@ -429,8 +450,8 @@ namespace SportsUtil
                         SQLString.Append("SELECT IRANK, CTEAM_ABBR, CPLAYER_NAME, IGOALS FROM SCORERS_INFO WHERE CLEAG_ID='");
                         SQLString.Append(sLeagID);
                         SQLString.Append("' AND CACT='U' ORDER BY IRANK, IRID, CPLAYER_NAME");
-                        m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
-                        while (m_SportsOleReader.Read())
+                        m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                        while (m_SportsOleReaderFb.Read())
                         {
                             iSubKeyIndex++;
                             LogSQLString.Remove(0, LogSQLString.Length);
@@ -443,23 +464,23 @@ namespace SportsUtil
                             LogSQLString.Append("',");
                             LogSQLString.Append(iSubKeyIndex.ToString());
                             LogSQLString.Append(",");
-                            if (!m_SportsOleReader.IsDBNull(0)) LogSQLString.Append(m_SportsOleReader.GetInt32(0).ToString());
+                            if (!m_SportsOleReaderFb.IsDBNull(0)) LogSQLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
                             else LogSQLString.Append("-1");
                             LogSQLString.Append(",'");
-                            if (!m_SportsOleReader.IsDBNull(1))
+                            if (!m_SportsOleReaderFb.IsDBNull(1))
                             {
-                                if (m_SportsOleReader.GetString(1).Trim().Equals("")) LogSQLString.Append("-1");
-                                else LogSQLString.Append(m_SportsOleReader.GetString(1).Trim());
+                                if (m_SportsOleReaderFb.GetString(1).Trim().Equals("")) LogSQLString.Append("-1");
+                                else LogSQLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
                             }
                             else
                             {
                                 LogSQLString.Append("-1");
                             }
                             LogSQLString.Append("','");
-                            if (!m_SportsOleReader.IsDBNull(2)) LogSQLString.Append(m_SportsOleReader.GetString(2).Trim());
+                            if (!m_SportsOleReaderFb.IsDBNull(2)) LogSQLString.Append(m_SportsOleReaderFb.GetString(2).Trim());
                             else LogSQLString.Append("-1");
                             LogSQLString.Append("',");
-                            if (!m_SportsOleReader.IsDBNull(3)) LogSQLString.Append(m_SportsOleReader.GetInt32(3).ToString());
+                            if (!m_SportsOleReaderFb.IsDBNull(3)) LogSQLString.Append(m_SportsOleReaderFb.GetInt32(3).ToString());
                             else LogSQLString.Append("-1");
                             LogSQLString.Append(",'");
                             LogSQLString.Append(sBatchJob);
@@ -467,8 +488,8 @@ namespace SportsUtil
                             logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
                             logDBMgr.Close();
                         }
-                        m_SportsDBMgr.Close();
-                        m_SportsOleReader.Close();
+                        m_SportsDBMgrFb.Close();
+                        m_SportsOleReaderFb.Close();
                     }
                     else
                     {

@@ -55,34 +55,76 @@
 				<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>
 				</ItemTemplate>  </asp:TemplateColumn> 
 		</Columns>	</anthem:DataGrid>
-                         <anthem:DataGrid id="totalDetails" runat="server" Width="800px"   AllowPaging="false" AutoGenerateColumns="false">
+                         <anthem:DataGrid id="totalDetails" runat="server" Width="300px"   AllowPaging="false" AutoGenerateColumns="FALSE">
                             <PagerStyle Mode="NumericPages"></PagerStyle>
-                           <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center"  Wrap="false" Height="30px" CssClass="grid-header" ></HeaderStyle>
-                           <ItemStyle Height="34px"  Wrap="false"  CssClass="grid-item"></ItemStyle>
+                           <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center" Wrap="false" Height="34px" CssClass="grid-header" ></HeaderStyle>
+                           <ItemStyle Height="30px"    Wrap="false" CssClass="grid-item"></ItemStyle>
                           <Columns>   
-                              <asp:TemplateColumn HeaderText=" " Visible ="true" >  <HeaderStyle  CssClass="grid-header" />
-                                     <ItemTemplate >
-                                       <%#DataBinder.Eval(Container, "DataItem.TEAMTYPE") %> 
+                              <asp:TemplateColumn  Visible ="true" >  <HeaderStyle  Width="160px" CssClass="grid-header" />
+                                     <ItemTemplate  >
+                                       <%#DataBinder.Eval(Container, "DataItem.Type") %> 
                                      </ItemTemplate> </asp:TemplateColumn>
-                              <asp:TemplateColumn HeaderText="Team" Visible ="true" >  <HeaderStyle  CssClass="grid-header" />
+                              <asp:TemplateColumn   Visible ="true" >  <HeaderStyle Width="70px" CssClass="grid-header" />
                                      <ItemTemplate >
-                                       <%#DataBinder.Eval(Container, "DataItem.HKJC_NAME_CN") %> 
+                                       <%#DataBinder.Eval(Container, "DataItem.H") %> 
                                      </ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Goal"  >  <HeaderStyle  CssClass="grid-header" />
-                           <ItemTemplate>    <%#DataBinder.Eval(Container, "DataItem.Goal") %> 
+                              <asp:TemplateColumn   Visible ="true" >  <HeaderStyle Width="70px"  CssClass="grid-header" />
+                                     <ItemTemplate >
+                                       <%#DataBinder.Eval(Container, "DataItem.G") %> 
+                                     </ItemTemplate> </asp:TemplateColumn>
+
+                         <%--  <asp:TemplateColumn HeaderText="Shots"  >  <HeaderStyle  CssClass="grid-header" />
+                           <ItemTemplate>    <%#DataBinder.Eval(Container, "DataItem.CSHOTS") %> 
                                                           </ItemTemplate> </asp:TemplateColumn>
-                            <asp:TemplateColumn HeaderText="Yellow card">  <HeaderStyle  CssClass="grid-header" />
-                           <ItemTemplate>  <%#DataBinder.Eval(Container, "DataItem.Yellowcard") %>  
+                            <asp:TemplateColumn HeaderText="Fouls">  <HeaderStyle  CssClass="grid-header" />
+                           <ItemTemplate>  <%#DataBinder.Eval(Container, "DataItem.CFOULS") %>  
                            </ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Red card">  <HeaderStyle  CssClass="grid-header" />
+                            <asp:TemplateColumn HeaderText="Corner">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.Redcard") %>
+				<%# DataBinder.Eval(Container, "DataItem.CCORNER_KICKS") %>
 				</ItemTemplate> </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="Substitution" >  <HeaderStyle  CssClass="grid-header" />
-                           <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.Substitution") %>
-				</ItemTemplate> </asp:TemplateColumn> 
-		</Columns>	</anthem:DataGrid>
+                 <asp:TemplateColumn HeaderText="Offside" >  <HeaderStyle  CssClass="grid-header" />
+                 <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.COFFSIDES") %>
+				</ItemTemplate> 
+                 </asp:TemplateColumn>  
+                                <asp:TemplateColumn HeaderText="Yellow Card" >  <HeaderStyle  CssClass="grid-header" />
+                 <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.CYELLOW_CARDS") %>
+				</ItemTemplate> 
+                 </asp:TemplateColumn> 
+                                <asp:TemplateColumn HeaderText="Red Card" >  <HeaderStyle  CssClass="grid-header" />
+                 <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.CRED_CARDS") %>
+				</ItemTemplate> 
+                 </asp:TemplateColumn> 
+                                <asp:TemplateColumn HeaderText="Attacks" >  <HeaderStyle  CssClass="grid-header" />
+                 <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.CATTACKS") %>
+				</ItemTemplate> 
+                 </asp:TemplateColumn> 
+                                <asp:TemplateColumn HeaderText="Substitution" >  <HeaderStyle  CssClass="grid-header" />
+                 <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.CSUBSTITUTIONS") %>
+				</ItemTemplate> 
+                 </asp:TemplateColumn> 
+                                <asp:TemplateColumn HeaderText="Throw-ins" >  <HeaderStyle  CssClass="grid-header" />
+                 <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.CTHROWINS") %>
+				</ItemTemplate> 
+                 </asp:TemplateColumn> 
+                                <asp:TemplateColumn HeaderText="Goal Kicks" >  <HeaderStyle  CssClass="grid-header" />
+                 <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.CGOALKICKS") %>
+				</ItemTemplate> 
+                 </asp:TemplateColumn> 
+                 <asp:TemplateColumn HeaderText="Possession" >  <HeaderStyle  CssClass="grid-header" />
+                 <ItemTemplate>
+				<%# DataBinder.Eval(Container, "DataItem.CPOSSESSION") %>
+				</ItemTemplate> 
+                 </asp:TemplateColumn> --%>
+		</Columns> 
+                         </anthem:DataGrid>
 					</TD>
 				</TR>
                 <tr style="height:10px"><td >  </td></tr>

@@ -22,6 +22,7 @@
         try {
             ScorersInformation.InnerHtml = scorer.ShowRank();
             sAlias = scorer.Alias;
+               this.Title = "射手榜- "+sAlias;
             UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "射手榜(" + DateTime.Now.ToString("HH:mm:ss") + ")");
         } catch(NullReferenceException) {
             FormsAuthentication.SignOut();
@@ -136,7 +137,7 @@ function LengthOfString(s) {
 </script>
 
 <html>
-<head>
+<head  runat="server">
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
 	<LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">
     <LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
@@ -146,10 +147,7 @@ function LengthOfString(s) {
 	<form id="ScorersForm" method="post" runat="server" onsubmit="DeviceCheck()">
 		   <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
         <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
-        	<select name="soccerCorrectScore" onChange="goToTeam(ScorersForm.soccerCorrectScore.value)">
-						<option value="0">請選擇</option>
-						<span id="CorrectInformation" runat="server" />
-					</select>
+        	 
 		<table border="1" width="55%" style="font: 10pt verdana">
 			<tr align="center" style="background-color:#BFDFEF">
 				<th colspan="5">
@@ -157,7 +155,12 @@ function LengthOfString(s) {
 				</th>
 			</tr>
 			<tr align="left" style="background-color:#3A6A7E; color=#FFFFFF">
-				<th colspan="3"><font color="#F0FFF0"><%=sAlias%></font>射手榜</th>
+				<th colspan="3">
+                    <select name="soccerCorrectScore" onChange="goToTeam(ScorersForm.soccerCorrectScore.value)">
+						<option value="0">請選擇</option>
+						<span id="CorrectInformation" runat="server" />
+					</select> 
+                    <font color="#F0FFF0"><%=sAlias%></font>射手榜</th>
 				<th colspan="2">執行動作:<select name="action" onChange="ActionChanged()"><option value="U">更新<option value="D">刪除<option value="P">只清除傳呼機</select></th>
 			</tr>
 			<tr align="center" style="background-color:#3A6A7E; color=#FFFFFF">

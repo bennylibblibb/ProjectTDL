@@ -1,0 +1,124 @@
+﻿10:35:02   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbTransaction.Dispose(Boolean disposing) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbTransaction.cs:line 96
+   at System.Data.Common.DbTransaction.Dispose()
+   at FirebirdSql.Data.FirebirdClient.FbCommand.RollbackImplicitTransaction() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 742
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 506
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 828
+10:45:11   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbTransaction.Dispose(Boolean disposing) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbTransaction.cs:line 96
+   at System.Data.Common.DbTransaction.Dispose()
+   at FirebirdSql.Data.FirebirdClient.FbCommand.RollbackImplicitTransaction() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 742
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 506
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 828
+10:45:17   BindStatus()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindLeague() in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 785
+10:45:17   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 828
+10:45:19   BindMatches()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Matches.BindMatches(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Matches.aspx.cs:line 315
+10:47:21   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbTransaction.Dispose(Boolean disposing) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbTransaction.cs:line 96
+   at System.Data.Common.DbTransaction.Dispose()
+   at FirebirdSql.Data.FirebirdClient.FbCommand.RollbackImplicitTransaction() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 742
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 506
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 828
+10:53:18   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbTransaction.Dispose(Boolean disposing) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbTransaction.cs:line 96
+   at System.Data.Common.DbTransaction.Dispose()
+   at FirebirdSql.Data.FirebirdClient.FbCommand.RollbackImplicitTransaction() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 742
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 506
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 828
+10:53:21   BindStatus()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindLeague() in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 785
+10:53:21   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 828
+10:53:22   BindStatus()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindLeague() in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 785
+10:53:22   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 828
+10:53:22   BindStatus()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindLeague() in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 785
+10:53:22   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 828
+10:53:23   BindMatches()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): internal Firebird consistency check (can't continue after bugcheck) ---> internal Firebird consistency check (can't continue after bugcheck)
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Matches.BindMatches(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Matches.aspx.cs:line 315

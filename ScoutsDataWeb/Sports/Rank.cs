@@ -11,6 +11,7 @@ csc /t:library /out:..\bin\Rank.dll /r:..\bin\DBManager.dll;..\bin\Files.dll;..\
 
 using System;
 using System.Configuration;
+
 using System.Data.OleDb;
 using System.Reflection;
 using System.Text;
@@ -18,6 +19,7 @@ using System.Web;
 using TDL.DB;
 using TDL.IO;
 using TDL.Message;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace SportsUtil
 {
@@ -25,16 +27,19 @@ namespace SportsUtil
     {
         const string LOGFILESUFFIX = "log";
         string m_Alias;
-        DBManager m_SportsDBMgr;
+        // DBManager m_SportsDBMgr
+        DBManagerFB m_SportsDBMgr;
         Files m_SportsLog;
-        OleDbDataReader m_SportsOleReader;
+        //  OleDbDataReader m_SportsOleReader;
+        FbDataReader m_SportsOleReader;
         Encoding m_Big5Encoded;
-        StringBuilder SQLString;
+        StringBuilder SQLString; 
 
         public Rank(string Connection)
         {
-            m_SportsDBMgr = new DBManager();
-            m_SportsDBMgr.ConnectionString = Connection;
+            //m_SportsDBMgr = new DBManager(); 
+            m_SportsDBMgr = new DBManagerFB();
+            m_SportsDBMgr.ConnectionString = JC_SoccerWeb.Common.AppFlag.ScoutsDBConn; ;
             m_SportsLog = new Files();
             m_Big5Encoded = Encoding.GetEncoding(950);
             SQLString = new StringBuilder();
@@ -56,22 +61,26 @@ namespace SportsUtil
             StringBuilder HTMLString = new StringBuilder();
 
             ////sLeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
-            sLeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "001" : HttpContext.Current.Request.QueryString["leagID"].Trim();
+            sLeagID = (HttpContext.Current.Request.QueryString["leagID"] == null) ? "2191" : HttpContext.Current.Request.QueryString["leagID"].Trim();
 
             SQLString.Remove(0, SQLString.Length);
-            SQLString.Append("SELECT leag.ALIAS, rank.RANK, team.TEAMNAME, rank.GAMES, rank.SCORE, team.CHKJCSHORTNAME FROM LEAGINFO leag ");
-            SQLString.Append("LEFT OUTER JOIN TEAMINFO team ON team.TEAM_ID in (select TEAM_ID from ID_INFO where LEAG_ID='");
+            //SQLString.Append("SELECT leag.ALIAS, rank.RANK, team.TEAMNAME, rank.GAMES, rank.SCORE, team.CHKJCSHORTNAME FROM LEAGINFO leag ");
+            //SQLString.Append("LEFT OUTER JOIN TEAMINFO team ON team.TEAM_ID in (select TEAM_ID from ID_INFO where LEAG_ID='");
+            //SQLString.Append(sLeagID);
+            //SQLString.Append("') LEFT OUTER JOIN LEAGRANKINFO rank ON rank.LEAG_ID=leag.LEAG_ID and rank.LEAG_ID='");
+            //SQLString.Append("SELECT r.CLEAG_ALIAS,r.RANK, R.TEAM,r.GAMES, r.SCORE, t.HKJC_NAME_CN FROM LEAGRANKINFO r inner join teams t on t.id = r.TEAM_ID WHERE LEAG_ID=");
+            //SQLString.Append(sLeagID);
+            //SQLString.Append(" ORDER BY RANK");
+            /// SQLString.Append("sELECT r.CLEAG_ALIAS,r.RANK, R.TEAM,r.GAMES, r.SCORE, t.HKJC_NAME_CN,R.IWON,R.IDRAW,R.ILOST, r.SEASON_ID FROM LEAGRANKINFO r inner join teams t on t.id = r.TEAM_ID where r.SEASON_ID in (select first 1 max(SEASON_ID) from LEAGRANKINFO  where LEAG_ID = "+ sLeagID + " group by SEASON_ID order by SEASON_ID desc) and r.LEAG_ID =");
+            SQLString.Append("sELECT l.LEAGUE_CHI_NAME ,r.RANK, R.TEAM,r.GAMES, r.SCORE, t.HKJC_NAME_CN,R.IWON,R.IDRAW,R.ILOST, r.SEASON_ID FROM LEAGRANKINFO r inner join LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME=r.CLEAG_ALIAS inner join teams t on t.id = r.TEAM_ID where r.SEASON_ID in (select first 1 max(SEASON_ID) from LEAGRANKINFO  where LEAG_ID = " + sLeagID + " group by SEASON_ID order by SEASON_ID desc) and r.LEAG_ID =");
             SQLString.Append(sLeagID);
-            SQLString.Append("') LEFT OUTER JOIN LEAGRANKINFO rank ON rank.LEAG_ID=leag.LEAG_ID and rank.LEAG_ID='");
-            SQLString.Append(sLeagID);
-            SQLString.Append("' and rank.TEAM=team.TEAMNAME ORDER BY rank.RANK");
+            SQLString.Append(" ORDER BY r.RANK");
             try
             {
                 m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());
                 while (m_SportsOleReader.Read())
                 {
-                    if (!m_SportsOleReader.IsDBNull(0)) m_Alias = m_SportsOleReader.GetString(0).Trim();
-
+                    if (!m_SportsOleReader.IsDBNull(0)) m_Alias = m_SportsOleReader.GetString(0).Trim(); 
                     //rank
                     HTMLString.Append("<tr align=\"center\"><td><input name=\"rank\" maxlength=\"2\" size=\"1\" value=\"");
                     if (!m_SportsOleReader.IsDBNull(1)) HTMLString.Append(m_SportsOleReader.GetInt32(1).ToString());
@@ -104,6 +113,27 @@ namespace SportsUtil
                     HTMLString.Append("<td><input name=\"score\" maxlength=\"3\" size=\"1\" value=\"");
                     if (!m_SportsOleReader.IsDBNull(4)) HTMLString.Append(m_SportsOleReader.GetInt32(4).ToString());
                     HTMLString.Append("\" onChange=\"ScoreValidity(");
+                    HTMLString.Append(iIndex.ToString());
+                    HTMLString.Append(")\"></td>");
+
+                    //iwon
+                    HTMLString.Append("<td><input name=\"won\" maxlength=\"2\" size=\"1\" value=\"");
+                    if (!m_SportsOleReader.IsDBNull(6)) HTMLString.Append(m_SportsOleReader.GetInt32(6).ToString());
+                    HTMLString.Append("\" onChange=\"GamesValidity(");
+                    HTMLString.Append(iIndex.ToString());
+                    HTMLString.Append(")\"></td>");
+
+                    //idraw
+                    HTMLString.Append("<td><input name=\"draw\" maxlength=\"2\" size=\"1\" value=\"");
+                    if (!m_SportsOleReader.IsDBNull(7)) HTMLString.Append(m_SportsOleReader.GetInt32(7).ToString());
+                    HTMLString.Append("\" onChange=\"GamesValidity(");
+                    HTMLString.Append(iIndex.ToString());
+                    HTMLString.Append(")\"></td>");
+
+                    //ILOST
+                    HTMLString.Append("<td><input name=\"lost\" maxlength=\"2\" size=\"1\" value=\"");
+                    if (!m_SportsOleReader.IsDBNull(8)) HTMLString.Append(m_SportsOleReader.GetInt32(8).ToString());
+                    HTMLString.Append("\" onChange=\"GamesValidity(");
                     HTMLString.Append(iIndex.ToString());
                     HTMLString.Append(")\"></td></tr>");
                     iIndex++;
@@ -146,9 +176,23 @@ namespace SportsUtil
                         HTMLString.Append("<td><input name=\"games\" maxlength=\"2\" size=\"1\" value=\"\" onChange=\"GamesValidity(");
                         HTMLString.Append(iIndex.ToString());
                         HTMLString.Append(")\"></td>");
-
                         //score
                         HTMLString.Append("<td><input name=\"score\" maxlength=\"3\" size=\"1\" value=\"\" onChange=\"ScoreValidity(");
+                        HTMLString.Append(iIndex.ToString());
+                        HTMLString.Append(")\"></td>"); 
+
+                        //iwon
+                        HTMLString.Append("<td><input name=\"won\" maxlength=\"2\" size=\"1\" value=\"\" onChange=\"GamesValidity(");
+                        HTMLString.Append(iIndex.ToString());
+                        HTMLString.Append(")\"></td>");
+
+                        //idraw
+                        HTMLString.Append("<td><input name=\"draw\" maxlength=\"2\" size=\"1\" value=\"\" onChange=\"GamesValidity(");
+                        HTMLString.Append(iIndex.ToString());
+                        HTMLString.Append(")\"></td>");
+
+                        //ilost
+                        HTMLString.Append("<td><input name=\"lost\" maxlength=\"2\" size=\"1\" value=\"\" onChange=\"GamesValidity(");
                         HTMLString.Append(iIndex.ToString());
                         HTMLString.Append(")\"></td></tr>");
                         iIndex++;
@@ -198,6 +242,9 @@ namespace SportsUtil
             string[] arrMsgType;
             string[] arrSendToPager;
             string[] arrRemotingPath;
+            string[] arrWon;
+            string[] arrDraw;
+            string[] arrLost;
 
             //SportsMessage object message
             SportsMessage sptMsg = new SportsMessage();
@@ -223,6 +270,9 @@ namespace SportsUtil
             arrHKJCTeam = HttpContext.Current.Request.Form["hkjcteam"].Split(delimiter);
             arrGames = HttpContext.Current.Request.Form["games"].Split(delimiter);
             arrScore = HttpContext.Current.Request.Form["score"].Split(delimiter);
+            arrWon = HttpContext.Current.Request.Form["won"].Split(delimiter);
+            arrDraw = HttpContext.Current.Request.Form["draw"].Split(delimiter);
+            arrLost = HttpContext.Current.Request.Form["lost"].Split(delimiter);
             try
             {
                 /*****************************

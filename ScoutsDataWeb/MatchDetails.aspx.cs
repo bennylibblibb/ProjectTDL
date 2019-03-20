@@ -220,16 +220,21 @@ namespace JC_SoccerWeb
                 {   string queryString = (Type == "Live") ?
                                 "SELECT a.TEAMTYPE HG, a.EVENTID EMATCHID, a.SUBPARTICIPANT_NAME PLAYER, a.INCIDENT_NAME CTYPE, a.SUBPARTICIPANT_ID PARTICIPANTID, '' PLAYERCHI, t.NAME_CN  , cast(SUBSTRING(a.EVENT_TIME FROM 1 FOR 2) as integer)+1 ELAPSED,  a.CTIMESTAMP LASTTIME," +
                                "a.PARTICIPANT_ID TEAM_ID FROM INCIDENTS a left JOIN players T ON CAST(T.ID AS varchar(12)) = a.PARTICIPANT_ID  where a.EVENTID = '" + id + "'  and a.PARTICIPANT_ID !='' order by a.EVENT_TIME asc" :
-                              "select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.NAME_CN , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  players T  ON CAST(T.ID AS varchar(12)) = I.PARTICIPANTID  WHERE i.EMATCHID = '" + id + "' and (i.ctype='ycard' or i.ctype='ycard'  or i.ctype='goal' ) order by i.ELAPSED asc";
+                    //   "select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.NAME_CN , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  players T  ON CAST(T.ID AS varchar(12)) = I.PARTICIPANTID  WHERE i.EMATCHID = '" + id + "' and (i.ctype='ycard' or i.ctype='ycard'  or i.ctype='goal' ) order by i.ELAPSED asc";
+                    "select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.CPLAYER_NAME , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  PLAYERS_INFO T  ON CAST(T.PLAYER_ID AS varchar(12)) = I.PARTICIPANTID  WHERE i.EMATCHID = '" + id + "' and (i.ctype='ycard' or i.ctype='ycard'  or i.ctype='goal' ) order by i.ELAPSED asc";
                     if (Type == "Live")
                     {
                         this.dgGoalInfo.Visible = false;
-                        queryString = "SELECT  r.EVENTID,r.PARTICIPANT_ID,e.HKJC_NAME_CN, r.TEAMTYPE," +
-                            "sum(case when r.INCIDENT_NAME='Goal' or r.INCIDENT_ID=421 then 1 else 0 end ) as Goal ," +
-                            "sum(case when r.INCIDENT_NAME='Yellow card' then 1 else 0 end ) as Yellowcard ," +
-                            "sum(case when r.INCIDENT_NAME='Red card' then 1 else 0 end ) as Redcard ," +
-                            "sum(case when r.INCIDENT_NAME='Substitution in' then 1 else 0 end ) as Substitution " +
-                            " FROM INCIDENTS r inner join teams e on e.id= cast (r.PARTICIPANT_ID as integer) where r.EVENTID=" + id + " and  r.TEAMTYPE !=''  GROUP BY r.EVENTID, r.TEAMTYPE,r.PARTICIPANT_ID,e.HKJC_NAME_CN";
+                        //queryString = "SELECT  r.EVENTID,r.PARTICIPANT_ID,e.HKJC_NAME_CN, r.TEAMTYPE," +
+                        //    "sum(case when r.INCIDENT_NAME='Goal' or r.INCIDENT_ID=421 then 1 else 0 end ) as Goal ," +
+                        //    "sum(case when r.INCIDENT_NAME='Yellow card' then 1 else 0 end ) as Yellowcard ," +
+                        //    "sum(case when r.INCIDENT_NAME='Red card' then 1 else 0 end ) as Redcard ," +
+                        //    "sum(case when r.INCIDENT_NAME='Substitution in' then 1 else 0 end ) as Substitution " +
+                        //    " FROM INCIDENTS r inner join teams e on e.id= cast (r.PARTICIPANT_ID as integer) where r.EVENTID=" + id + " and  r.TEAMTYPE !=''  GROUP BY r.EVENTID, r.TEAMTYPE,r.PARTICIPANT_ID,e.HKJC_NAME_CN";
+                        ///  queryString = "SELECT  * FROM ANALYSIS_OTHERS r WHERE R.EVENTID=" + id+ " ORDER BY R.CTEAMTYPE DESC ";
+                         queryString = "SELECT t.HKJC_NAME_CN, r.ID, r.EVENTID, r.PARTICIPANTID, r.SOT_20  \"Shot On\", r.SOT_21 \"Shot Off\", r.ATTACKS_10 \"Attacks\",    r.DA_11 \"Dangerous attacks\", r.CORNERS_13 \"Corners\", r.YELLOW_CARDS_8 \"Yellow cards\", r.RED_CARDS_9 \"Red cards\", r.TOTAL_SHOTS_19 \"Total shots\" ,    r.FOULS_22 \"Fouls\", r.OFFSIDES_24 \"Offsides\", r.PS_14 \"Penalties scored\", r.PM_15 \"Penalties missed\", r.PG_16 \"Penalties given\", r.FK_25 \"Free kicks\", r.DFK_26 \"Dangerous free kicks\"," +
+                                     "r.FKG_18 \"Free kick goals\" , r.SW_27 \"Shots woodwork\", r.SB_28 \"Shots blocked\" , r.GS_29 \"Goalkeeper saves\", r.GK_30 \"Goal kicks\", r.TI_32 \"Throw-ins\" , r.SUBSTITUTIONS_31 \"Substitutions\",    r.GOALS_40, r.MP_34, r.OWN_GOALS_17, r.ADW_33, r.FORM_716, r.SKIN_718,    r.PS_639, r.PU_697, r.GOALS115_772, r.GOALS1630_773, r.GOALS3145_774,    r.GOALS4660_775, r.GOALS6175_776, r.GOALS7690_777, r.MPG_778, r.MPS_779," +
+                                      " r.CTIMESTAMP, r.CACTION, r.TEAMTYPE   FROM PARTICIPANT_STATS r inner join  teams t on t.id =r.PARTICIPANTID where r.EVENTID=" + id + " ORDER BY R.TEAMTYPE DESC ";
                         using (FbCommand cmd = new FbCommand(queryString))
                         {
                             using (FbDataAdapter fda = new FbDataAdapter())
@@ -241,8 +246,31 @@ namespace JC_SoccerWeb
                                 {
                                     data.Tables.Add(new DataTable("lEVENT_DETAILS"));
                                     fda.Fill(data.Tables["lEVENT_DETAILS"]);
-                                    totalDetails.DataSource = data.Tables[0].DefaultView;
-                                    totalDetails.DataBind();
+
+                                    DataTable tb = new DataTable();
+                                    DataColumn[] cols = new DataColumn[3];
+                                    cols[0] = new DataColumn("Type", typeof(String));
+                                    cols[1] = new DataColumn("H", typeof(String));
+                                    cols[2] = new DataColumn("G", typeof(String));
+                                    tb.Columns.AddRange(cols);
+                                    DataRow tbDr ;
+                                    //foreach (DataRow dr in data.Tables[0].Rows)
+                                    //{
+                                    for (int i = 4; i < 26; i++)
+                                    {
+                                        tbDr = tb.NewRow();
+                                        tbDr[0] = data.Tables[0].Columns[i].ColumnName;
+                                        tbDr[1] = data.Tables[0].Rows[0][i];
+                                        tbDr[2] = data.Tables[0].Rows[1][i];
+                                        tb.Rows.Add(tbDr);
+                                    }
+                                    //}
+                                    // totalDetails.DataSource = data.Tables[0].DefaultView; 
+                                    totalDetails.DataSource =tb.DefaultView;
+                                    totalDetails.Columns[0].HeaderText = "Type";
+                                    totalDetails.Columns[1].HeaderText = data.Tables[0].Rows[0]["HKJC_NAME_CN"].ToString()+"(¥D)";
+                                    totalDetails.Columns[2].HeaderText = data.Tables[0].Rows[1]["HKJC_NAME_CN"].ToString() + "(«È)";
+                                    totalDetails.DataBind(); 
                                     totalDetails.UpdateAfterCallBack = true;
                                     btnSave.Visible = false;
                                     btnSave.UpdateAfterCallBack = true;

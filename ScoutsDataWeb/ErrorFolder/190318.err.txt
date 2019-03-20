@@ -1,0 +1,54 @@
+﻿10:02:07 BindGoalInfo(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.CTEAMTYPE
+At line 1, column 131 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.CTEAMTYPE
+At line 1, column 131
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindGoalInfo(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 245
+10:03:59 BindGoalInfo(),error: System.IndexOutOfRangeException: Cannot find column 0.
+   at System.Data.DataColumnCollection.get_Item(Int32 index)
+   at System.Data.DataRow.set_Item(Int32 columnIndex, Object value)
+   at JC_SoccerWeb.MatchDetails.BindGoalInfo(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 253
+10:04:32 BindGoalInfo(),error: System.IndexOutOfRangeException: Cannot find column 0.
+   at System.Data.DataColumnCollection.get_Item(Int32 index)
+   at System.Data.DataRow.set_Item(Int32 columnIndex, Object value)
+   at JC_SoccerWeb.MatchDetails.BindGoalInfo(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 253
+10:05:47 BindGoalInfo(),error: System.ArgumentException: Input string was not in a correct format.Couldn't store <岡薩多> in H Column.  Expected type is Int32. ---> System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Data.Common.Int32Storage.Set(Int32 record, Object value)
+   at System.Data.DataColumn.set_Item(Int32 record, Object value)
+   --- End of inner exception stack trace ---
+   at System.Data.DataColumn.set_Item(Int32 record, Object value)
+   at System.Data.DataRow.set_Item(DataColumn column, Object value)
+   at System.Data.DataRow.set_Item(Int32 columnIndex, Object value)
+   at JC_SoccerWeb.MatchDetails.BindGoalInfo(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 255
+10:12:05 BindGoalInfo(),error: System.Web.HttpException (0x80004005): DataBinding: 'System.Data.DataRowView' does not contain a property with the name 'OtherType'.
+   at System.Web.UI.DataBinder.GetPropertyValue(Object container, String propName)
+   at System.Web.UI.DataBinder.Eval(Object container, String[] expressionParts)
+   at System.Web.UI.DataBinder.Eval(Object container, String expression)
+   at ASP.matchdetails_aspx.__DataBind__control50(Object sender, EventArgs e) in e:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx:line 65
+   at System.Web.UI.Control.OnDataBinding(EventArgs e)
+   at System.Web.UI.Control.DataBind(Boolean raiseOnDataBinding)
+   at System.Web.UI.Control.DataBind()
+   at System.Web.UI.Control.DataBindChildren()
+   at System.Web.UI.Control.DataBind(Boolean raiseOnDataBinding)
+   at System.Web.UI.Control.DataBind()
+   at System.Web.UI.Control.DataBindChildren()
+   at System.Web.UI.Control.DataBind(Boolean raiseOnDataBinding)
+   at System.Web.UI.Control.DataBind()
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.MatchDetails.BindGoalInfo(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 267

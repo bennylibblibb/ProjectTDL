@@ -57,7 +57,9 @@ namespace Ecostar.MQConsumer.Core.Infrastructure
 
                     // ?取?接
                     context.SendConnection = CreateConnection(mqUri);
+#pragma warning disable CS0618 // 'IConnection.AutoClose' is obsolete: 'Please explicitly close connections instead.'
                     context.SendConnection.AutoClose = false;
+#pragma warning restore CS0618 // 'IConnection.AutoClose' is obsolete: 'Please explicitly close connections instead.'
                   ////  context.SendConnection.ConnectionShutdown += (o, e) =>  Console.WriteLine("RabbitMQ error,connection is closed!" + e.ReplyText);
                    /// Console.WriteLine(logHeader + "   ?建?接完?", LogLevel.Trace);
 

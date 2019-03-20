@@ -130,6 +130,8 @@ namespace DataOfScouts
                period: dueTimes.AddDays(1).Subtract(dueTimes));
                 //  RunGetEventCompare("2726703");
                 // InsertData("events.show3", true, "2737999", true);
+                //InsertData("events", true, this.bnAreas.Items[17].Text + "2019-03-19 00:00:00", this.bnAreas.Items[19].Text + "2019-03-31 23:59:59");
+                 InsertData("standings", true);
                 this.Receiver = new Receiver();
             }
             catch (Exception exp)
@@ -1728,7 +1730,9 @@ namespace DataOfScouts
                     }
 
                 }
+#pragma warning disable CS0168 // The variable 'exp' is declared but never used
                 catch (Exception exp)
+#pragma warning restore CS0168 // The variable 'exp' is declared but never used
                 {
                     result = false;
                 }
@@ -5925,6 +5929,7 @@ namespace DataOfScouts
                                                         //    Files.WriteLog("ds " + ds.Tables[0].Rows.Count.ToString());
                                                         //}
                                                         DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant[] participants = sevent.participants;
+                                                        if (participants == null|| participants.Count()<2) continue;
                                                         if (drs.Length == 0)
                                                         {
                                                             /// DOSEvents.apiDataCompetitionSeasonStageGroupEventParticipant[] participants = sevent.participants;
@@ -6132,7 +6137,9 @@ namespace DataOfScouts
                                                 //  eventsDs.AcceptChanges();
                                             }
                                         }
+#pragma warning disable CS0168 // The variable 'exp' is declared but never used
                                         catch (Exception exp)
+#pragma warning restore CS0168 // The variable 'exp' is declared but never used
                                         {
                                             break;
                                         }
@@ -6797,6 +6804,253 @@ namespace DataOfScouts
                                     }
                                 }
                             }
+                            connection.Close();
+                        }
+                        break;
+                    }
+                case "standings":
+                    {
+                        //string m_Comp_ID = "", m_Comp_Name = "", m_Comp_Name_cn = "";
+                        ds = new DataSet();
+                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                        {
+                            connection.Open();
+                            // queryString = "SELECT r.ID, r.COMPETITION_ID,   r.UT FROM STANDINGS_INFO r";
+                            // queryString = "SELECT c.id cid,c.alias, s2.id  sid, s.ID ssid,  r.* from STANDINGS_INFO r " +
+                            //queryString = "select   c.id cid,c.alias, s2.id  sid, s.ID ssid ,r.id from (SELECT    r.* from STANDINGS_INFO   r where    R.TYPE_NAME='Top scorers') r " +
+                            //    "inner join   STAGES s   on r.OBJECT_ID =s.id  " +
+                            //    "inner join   SEASONS s2 on s2.ID=s.SEASON_ID " +
+                            //    "right join  COMPETITIONS c on c.id =s2.COMPETITION_ID " +
+                            //    "where c.ALIAS is not null  order by r.id desc";
+                            queryString = "select c.id cid,c.alias, s2.id  sid, r.id  from (SELECT r.id,r.OBJECT_TYPE,r.SEASON_ID from STANDINGS_INFO   r where    R.TYPE_NAME='Top scorers') r  "+
+                            " inner join   SEASONS s2 on s2.ID = r.SEASON_ID and(s2.SYEAR = '2019' or s2.SYEAR = '2018/19')   right join  COMPETITIONS c on c.id = s2.COMPETITION_ID "+
+                            " where c.ALIAS is not null order by c.ALIAS desc";
+                            using (FbCommand cmd = new FbCommand(queryString))
+                            {
+                                using (FbDataAdapter fda = new FbDataAdapter())
+                                {
+                                    cmd.Connection = connection;
+                                    fda.SelectCommand = cmd;
+                                    using (DataSet data = new DataSet())
+                                    {
+                                        data.Tables.Add(new DataTable("standings"));
+                                        fda.Fill(data.Tables["standings"]);
+                                        ds = data;
+                                    }
+                                }
+                            }
+
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+                                if (dr["id"] is DBNull)
+                                {
+                                    var responseValue = clientTest.GetAccessData(strToken, "standings", "TopSoccer", dr["cid"]);
+                                    var strResponseValue = responseValue.Result;
+                                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\XmlFolder20180920\\standings.xml");
+                                    //var strResponseValue = document.ToString();
+
+                                    if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
+                                    string strName = "standingSorer-" + dr["ALIAS"] + DateTime.Now.ToString("HHmmssfff");
+                                    Files.WriteXml(strName, strResponseValue);
+
+                                    DOSStandings.api apis = XmlUtil.Deserialize(typeof(DOSStandings.api), strResponseValue) as DOSStandings.api;
+                                    if (apis == null) break;
+                                    DOSStandings.apiDataStandings_listStandings[] list = (apis.data == null || apis.data.Length == 0) ? null : apis.data[0];
+                                    if (list != null)
+                                    {
+                                        foreach (DOSStandings.apiDataStandings_listStandings c in list)
+                                        {
+                                            if (c.item_status == "deleted") continue;
+                                            using (FbCommand cmd1 = new FbCommand())
+                                            {
+                                                cmd1.CommandText = "ADD_STANDINGS";
+                                                cmd1.CommandType = CommandType.StoredProcedure;
+                                                cmd1.Connection = connection;
+                                                cmd1.Parameters.Add("@ID", c.id);
+                                                cmd1.Parameters.Add("@Competition_ID", dr["cid"].ToString());
+                                                cmd1.Parameters.Add("@CCompName", c.name.Length > 99 ? c.name.Substring(0, 99) : c.name);
+                                                cmd1.Parameters.Add("@object_id", c.object_id);
+                                                cmd1.Parameters.Add("@object_name", c.object_name);
+                                                cmd1.Parameters.Add("@object_type", c.object_type);
+                                                cmd1.Parameters.Add("@subtype", c.subtype);
+                                                cmd1.Parameters.Add("@type_name", c.type_name);
+                                                cmd1.Parameters.Add("@ut", c.ut);
+                                                cmd1.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                int id = Convert.ToInt32(cmd1.ExecuteScalar());
+                                            }
+                                        }
+
+                                    }
+                                }
+                                if (dr["id"] is DBNull) continue;
+                                var responseValue2 = clientTest.GetAccessData(strToken, "standings.TopSorers", dr["id"]);
+                                var strResponseValue2 = responseValue2.Result;
+                                //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\36571.xml");
+                                //var strResponseValue2 = document.ToString();
+
+                                if (strResponseValue2 == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
+                                string strName2 = "TopSorers-" + dr["ALIAS"].ToString() + DateTime.Now.ToString("HHmmss");
+                                Files.WriteXml(strName2, strResponseValue2);
+
+                                DOSTopScorers.api apis2 = XmlUtil.Deserialize(typeof(DOSTopScorers.api), strResponseValue2) as DOSTopScorers.api;
+                                if (apis2 == null) break;
+                                DOSTopScorers.apiDataStandings apistanding = (apis2.data == null || apis2.data.Length == 0) ? null : apis2.data[0];
+                                if (apistanding == null) break;
+                                DOSTopScorers.apiDataStandingsGroupsGroup[] apiGroups = apistanding.groups;
+                                if (apiGroups == null) break;
+                                foreach (DOSTopScorers.apiDataStandingsGroupsGroup c in apiGroups)
+                                {
+                                    if (c == null) continue;
+                                    DOSTopScorers.apiDataStandingsGroupsGroupParticipantsParticipant[] apiPants = c.participants;
+                                    if (apiPants == null) break;
+                                    foreach (DOSTopScorers.apiDataStandingsGroupsGroupParticipantsParticipant p in apiPants)
+                                    {
+                                        if (p == null) continue;
+                                        DOSTopScorers.apiDataStandingsGroupsGroupParticipantsParticipantColumnsColumn[] apim = p.columns;
+                                        using (FbCommand cmd1 = new FbCommand())
+                                        {
+                                            cmd1.CommandText = "ADD_SCORERS_INFO";
+                                            cmd1.CommandType = CommandType.StoredProcedure;
+                                            cmd1.Connection = connection;
+                                            cmd1.Parameters.Add("@CLEAG_ID", dr["cid"].ToString());
+                                            cmd1.Parameters.Add("@CLEAG_ALIAS", dr["ALIAS"].ToString());
+                                            cmd1.Parameters.Add("@SEASON_ID", dr["sid"].ToString());
+                                            cmd1.Parameters.Add("@TEAM_ID", p.subparticipant_id);
+                                            cmd1.Parameters.Add("@PLAYER_ID", p.id);
+                                            cmd1.Parameters.Add("@CPLAYER_NAME", p.name);
+                                            cmd1.Parameters.Add("@CTEAM_ABBR", "");
+                                            cmd1.Parameters.Add("@CACT", "U");
+                                            cmd1.Parameters.Add("@IRID", "-1");
+                                            cmd1.Parameters.Add("@IRANK", p.rank);
+                                            cmd1.Parameters.Add("@IGOALS", apim.Length > 1 ? apim[0].value : "0");
+                                            cmd1.Parameters.Add("@ut", c.ut);
+                                            cmd1.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                            int id = Convert.ToInt32(cmd1.ExecuteScalar());
+                                        }
+
+                                    }
+                                }
+
+                            }
+
+                            // RANK
+                            //queryString = "select   c.id cid,c.alias, s2.id  sid, s.ID ssid ,r.id from (SELECT    r.* from STANDINGS_INFO   r where    R.TYPE_NAME='Wide standings') r " +
+                            //"inner join   STAGES s   on r.OBJECT_ID =s.id  " +
+                            //"inner join   SEASONS s2 on s2.ID=s.SEASON_ID " +
+                            //"right join  COMPETITIONS c on c.id =s2.COMPETITION_ID " +
+                            //"where c.ALIAS is not null order by r.id desc";
+                            queryString = "select c.id cid,c.alias, s2.id  sid, r.id  from (SELECT r.id,r.OBJECT_TYPE,r.SEASON_ID from STANDINGS_INFO   r where    R.TYPE_NAME='Wide standings') r  " +
+                          " inner join   SEASONS s2 on s2.ID = r.SEASON_ID and(s2.SYEAR = '2019' or s2.SYEAR = '2018/19')   right join  COMPETITIONS c on c.id = s2.COMPETITION_ID " +
+                          " where c.ALIAS is not null order by c.ALIAS desc";
+                            using (FbCommand cmd = new FbCommand(queryString))
+                            {
+                                using (FbDataAdapter fda = new FbDataAdapter())
+                                {
+                                    cmd.Connection = connection;
+                                    fda.SelectCommand = cmd;
+                                    using (DataSet data = new DataSet())
+                                    {
+                                        data.Tables.Add(new DataTable("standings"));
+                                        fda.Fill(data.Tables["standings"]);
+                                        ds = data;
+                                    }
+                                }
+                            }
+
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+                                if (dr["id"] is DBNull)
+                                {
+                                    var responseValue = clientTest.GetAccessData(strToken, "standings", "Rank", dr["cid"]);
+                                    var strResponseValue = responseValue.Result;
+                                    //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\XmlFolder20180920\\standings.xml");
+                                    //var strResponseValue = document.ToString();
+
+                                    if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
+                                    string strName = "standingRank-" + dr["ALIAS"] + DateTime.Now.ToString("HHmmssfff");
+                                    Files.WriteXml(strName, strResponseValue);
+
+                                    DOSStandings.api apis = XmlUtil.Deserialize(typeof(DOSStandings.api), strResponseValue) as DOSStandings.api;
+                                    if (apis == null) break;
+                                    DOSStandings.apiDataStandings_listStandings[] list = (apis.data == null || apis.data.Length == 0) ? null : apis.data[0];
+                                    if (list != null)
+                                    {
+                                        foreach (DOSStandings.apiDataStandings_listStandings c in list)
+                                        {
+                                            if (c.item_status == "deleted") continue;
+                                            using (FbCommand cmd1 = new FbCommand())
+                                            {
+                                                cmd1.CommandText = "ADD_STANDINGS";
+                                                cmd1.CommandType = CommandType.StoredProcedure;
+                                                cmd1.Connection = connection;
+                                                cmd1.Parameters.Add("@ID", c.id);
+                                                cmd1.Parameters.Add("@Competition_ID", dr["cid"].ToString());
+                                                cmd1.Parameters.Add("@CCompName", c.name.Length > 99 ? c.name.Substring(0, 99) : c.name);
+                                                cmd1.Parameters.Add("@object_id", c.object_id);
+                                                cmd1.Parameters.Add("@object_name", c.object_name);
+                                                cmd1.Parameters.Add("@object_type", c.object_type);
+                                                cmd1.Parameters.Add("@subtype", c.subtype);
+                                                cmd1.Parameters.Add("@type_name", c.type_name);
+                                                cmd1.Parameters.Add("@ut", c.ut);
+                                                cmd1.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                int id = Convert.ToInt32(cmd1.ExecuteScalar());
+                                            }
+                                        }
+
+                                    }
+                                }
+                                if (dr["id"] is DBNull) continue;
+                                var responseValue2 = clientTest.GetAccessData(strToken, "standings.Rank", dr["id"]);
+                                var strResponseValue2 = responseValue2.Result;
+                                //XDocument document = XDocument.Load("E:\\Project\\AppProject\\DataOfScouts\\DataOfScouts\\bin\\Debug\\New folder\\47798.xml");
+                                //var strResponseValue3 = document.ToString();
+
+                                if (strResponseValue2 == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
+                                string strName2 = "Rank-" + dr["ALIAS"].ToString() + DateTime.Now.ToString("HHmmss");
+                                Files.WriteXml(strName2, strResponseValue2);
+
+                                DOSRank.api apis2 = XmlUtil.Deserialize(typeof(DOSRank.api), strResponseValue2) as DOSRank.api;
+                                if (apis2 == null) break;
+                                DOSRank.apiDataStandings apistanding = (apis2.data == null || apis2.data.Length == 0) ? null : apis2.data[0];
+                                if (apistanding == null) break;
+                                DOSRank.apiDataStandingsGroupsGroup[] apiGroups = apistanding.groups;
+                                if (apiGroups == null) break;
+                                foreach (DOSRank.apiDataStandingsGroupsGroup c in apiGroups)
+                                {
+                                    if (c == null) continue;
+                                    DOSRank.apiDataStandingsGroupsGroupParticipantsParticipant[] apiPants = c.participants;
+                                    if (apiPants == null) break;
+                                    foreach (DOSRank.apiDataStandingsGroupsGroupParticipantsParticipant p in apiPants)
+                                    {
+                                        if (p == null) continue;
+                                        DOSRank.apiDataStandingsGroupsGroupParticipantsParticipantColumnsColumn[] apim = p.columns;
+                                        using (FbCommand cmd1 = new FbCommand())
+                                        {
+                                            cmd1.CommandText = "ADD_RANK_INFO";
+                                            cmd1.CommandType = CommandType.StoredProcedure;
+                                            cmd1.Connection = connection;
+                                            cmd1.Parameters.Add("@LEAG_ID", dr["cid"].ToString());
+                                            cmd1.Parameters.Add("@CLEAG_ALIAS", dr["ALIAS"].ToString());
+                                            cmd1.Parameters.Add("@SEASON_ID", dr["sid"].ToString());
+                                            cmd1.Parameters.Add("@TEAM_ID", p.id);
+                                            cmd1.Parameters.Add("@TEAM", p.name);
+                                            cmd1.Parameters.Add("@HKJC_TEAM", "");
+                                            cmd1.Parameters.Add("@SCORE", p.columns.FirstOrDefault(x => x.id == "8").value);
+                                            cmd1.Parameters.Add("@RANK", p.rank);
+                                            cmd1.Parameters.Add("@FLAG", "0");
+                                            cmd1.Parameters.Add("@GAMES", p.columns.FirstOrDefault(x => x.id == "1").value);// apim.Length > 1 ? apim[0].value : "0");
+                                            cmd1.Parameters.Add("@IWON", p.columns.FirstOrDefault(x => x.id == "2").value);
+                                            cmd1.Parameters.Add("@IDRAW", p.columns.FirstOrDefault(x => x.id == "3").value);
+                                            cmd1.Parameters.Add("@ILOST", p.columns.FirstOrDefault(x => x.id == "4").value);
+                                            cmd1.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                            int id = Convert.ToInt32(cmd1.ExecuteScalar());
+                                        }
+
+                                    }
+                                }
+
+                            }
+
                             connection.Close();
                         }
                         break;
@@ -7561,7 +7815,9 @@ namespace DataOfScouts
                         //    id = a["HKJCMATCHNO"],
                         //    name = a["HKJCDAYCODE"]
                         //}).ToList();
+#pragma warning disable CS0219 // The variable 'sd' is assigned but its value is never used
                         string sd = "";
+#pragma warning restore CS0219 // The variable 'sd' is assigned but its value is never used
                         // var query = (from x in ls1 select new { A = x["HKJCMATCHNO"], B = x["HKJCDAYCODE"] }).Concat(from y in ls2 select new { A = y["IMATCH_NO"], B = y["CMATCH_DAY_CODE"] });
 
                         //var db1 = (from a in ds1.Tables["matches1"] select a).ToList();
@@ -7819,8 +8075,10 @@ namespace DataOfScouts
                                 cmd2.Parameters.Add("@HKJCGUESTID", dr1["IAWAY_TEAM_CODE"]);
                                 cmd2.Parameters.Add("@HKJCHOSTNAME", dr1["CHOME_TEAM_ENG_NAME"]);
                                 cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
-                                cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_OUTPUT_NAME"]);
-                                cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_OUTPUT_NAME"]);
+                                //cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_OUTPUT_NAME"]);
+                                //cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_OUTPUT_NAME"]);
+                                cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_HKJC_NAME"].ToString ().Substring(0, dr1["CHOME_TEAM_HKJC_NAME"].ToString().IndexOf("/")));
+                                cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_HKJC_NAME"].ToString().Substring(0, dr1["CAWAY_TEAM_HKJC_NAME"].ToString().IndexOf("/")));
                                 cmd2.Parameters.Add("@CLEAGUE_HKJC_NAME", dr1["CLEAGUE_HKJC_NAME"]);
                                 cmd2.Parameters.Add("@CLEAGUE_OUTPUT_NAME", dr1["CLEAGUE_OUTPUT_NAME"]);
                                 cmd2.Parameters.Add("@CLEAGUEALIAS_OUTPUT_NAME", dr1["CLEAGUEALIAS_OUTPUT_NAME"]);
@@ -9780,6 +10038,8 @@ namespace DataOfScouts
 
                 ClientAuthorize();
                 InsertData("events", true, DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") + " 00:00:00", DateTime.Now.AddDays(AppFlag.iQueryDays).ToString("yyyy-MM-dd") + " 23:59:59");
+                 InsertData("standings", true);
+
                 ///    AutoRunSync();
                 //var state = timerState as TimerState;
             }
@@ -9825,12 +10085,16 @@ namespace DataOfScouts
                         //  channel.QueueDeclare("telecom-digital-data-limited", true, false, false, null);
 
                         ////输入1，那如果接收一个消息，但是没有应答，则客户端不会收到下一个消息
+#pragma warning disable CS0219 // The variable 'ack' is assigned but its value is never used
                         channel.BasicQos(0, 3, false);
+#pragma warning restore CS0219 // The variable 'ack' is assigned but its value is never used
                         bool ack = false;
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             connection.Open();
+#pragma warning disable CS0618 // 'QueueingBasicConsumer' is obsolete: 'Deprecated. Use EventingBasicConsumer or a different consumer interface implementation instead'
                             var consumer = new QueueingBasicConsumer(channel);
+#pragma warning restore CS0618 // 'QueueingBasicConsumer' is obsolete: 'Deprecated. Use EventingBasicConsumer or a different consumer interface implementation instead'
                             //// channel.BasicConsume("telecom-digital-data-limited", true, consumer); disable autoack 20190111
                             var consumerTag = channel.BasicConsume("telecom-digital-data-limited", false, consumer);
                             if (AppFlag.TestMode) Files.WriteTestLog("Queue", " Listening--------" + consumerTag);
@@ -10504,7 +10768,22 @@ namespace DataOfScouts
                 }
                 Files.WriteLog("GET participants " + strUrl);
             }
-
+            else if (type=="standings")
+            {   //https://api.statscore.com/v2/standings.xml?token=2664ad198dce4b5007648f071cbb433b&sport_id=5&subtype=standings&type_id=6&client_id=262&%20object_type=competition&object_id=1610
+                string typeid= (arr[0].ToString() == "TopSoccer")? "6" : (arr[0].ToString() == "Rank")?"1": ""; 
+                strUrl = $"/v2/standings.xml?token=" + token + "&sport_id=5&subtype=standings&type_id="+ typeid + "&client_id=262&%20object_type=competition&object_id="+ arr[1].ToString();
+                Files.WriteLog("GET standings " + strUrl);
+            }
+            else if (type == "standings.TopSorers")
+            {
+                strUrl = $"/v2/standings/"+ arr[0].ToString() + ".xml?token=" + token;
+                Files.WriteLog("GET "+ arr[0].ToString() + " TopSoccer standings  " + strUrl);
+            }
+            else if (type == "standings.Rank")
+            {
+                strUrl = $"/v2/standings/" + arr[0].ToString() + ".xml?token=" + token;
+                Files.WriteLog("GET " + arr[0].ToString() + " Rank standings  " + strUrl);
+            }
             var response = await _httpClient.GetAsync(strUrl).ConfigureAwait(false);
             var responseValue = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (response.StatusCode == System.Net.HttpStatusCode.OK || response.StatusCode == System.Net.HttpStatusCode.Forbidden)

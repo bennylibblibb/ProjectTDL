@@ -167,7 +167,9 @@ namespace FileLog
                     files.Close();
                 }
             }
+#pragma warning disable CS0168 // The variable 'exp' is declared but never used
             catch (Exception exp)
+#pragma warning restore CS0168 // The variable 'exp' is declared but never used
             {
             }
         }
@@ -232,7 +234,8 @@ namespace FileLog
                         Directory.CreateDirectory(files.FilePath);
                          
                     }
-                    if ((!File.Exists(files.FilePath + name + ".txt") && done)||!done)
+                    //if ((!File.Exists(files.FilePath + name + ".txt") && done)||!done)
+                      if ((!File.Exists(files.FilePath + (name.IndexOf("_old")>-1? name.Substring(0, name.IndexOf("_old")) : name) + ".txt") && done)||!done)
                     // files.SetFileName(0, AppFlag.Eventlog); 
                     {
                         files.FileName = name + ".txt";

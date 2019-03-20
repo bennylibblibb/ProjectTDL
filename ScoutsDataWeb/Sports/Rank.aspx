@@ -3,56 +3,57 @@
 <%@ Import Namespace="SportsUtil"%>
 <%@ Register TagPrefix="uc1" TagName="MenuTabs" Src="~/UserControl/MenuTabs.ascx" %>
 <script language="C#" runat="server">
-	string sAlias;
+    string sAlias;
 
-	void Page_Load(Object sender,EventArgs e) {
-        
-           string sLeagueOption = ""; 
-		SoccerMenuLeague MenuLeague = new SoccerMenuLeague(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
-		 try {
-			sLeagueOption = MenuLeague.Show(); 
-			CorrectInformation.InnerHtml = sLeagueOption;
-		} catch(NullReferenceException) {
-		 }
+    void Page_Load(Object sender,EventArgs e) {
+
+        string sLeagueOption = "";
+        SoccerMenuLeague MenuLeague = new SoccerMenuLeague(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        try {
+            sLeagueOption = MenuLeague.Show();
+            CorrectInformation.InnerHtml = sLeagueOption;
+        } catch(NullReferenceException) {
+        }
 
 
-		Rank leagRank = new Rank(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+        Rank leagRank = new Rank(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
 
-		try {
-			RankInformation.InnerHtml = leagRank.ShowRank();
-			sAlias = leagRank.Alias;
-			UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "聯賽排名(" + DateTime.Now.ToString("HH:mm:ss") + ")");
-		} catch(NullReferenceException) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
-		}
-	}
+        try {
+            RankInformation.InnerHtml = leagRank.ShowRank();
+            sAlias = leagRank.Alias;
+            this.Title = "球隊排名- "+sAlias;
+            UpdateHistoryMessage(ConfigurationManager.AppSettings["retrieveInfoMsg"] + "聯賽排名(" + DateTime.Now.ToString("HH:mm:ss") + ")");
+        } catch(NullReferenceException) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
+        }
+    }
 
-	void SendRank(Object sender,EventArgs e) {
-		int iUpdated = 0;
-		string sNow;
-		Rank updRank = new Rank(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
+    void SendRank(Object sender,EventArgs e) {
+        int iUpdated = 0;
+        string sNow;
+        Rank updRank = new Rank(ConfigurationManager.AppSettings["SoccerDBConnectionString"]);
 
-		sNow = DateTime.Now.ToString("HH:mm:ss");
-		try {
-			iUpdated = updRank.Update();
-			Page_Load(sender,e);
-			if(iUpdated > 0) {
-				UpdateHistoryMessage("成功更新" + iUpdated.ToString() + "隊排名(" + sNow + ")");
-			}	else if(iUpdated == 0) {
-				UpdateHistoryMessage("沒有更新排名");
-			} else {
-				UpdateHistoryMessage("更新排名失敗");
-			}
-		} catch(NullReferenceException nullex) {
-			FormsAuthentication.SignOut();
-			UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
-		}
-	}
+        sNow = DateTime.Now.ToString("HH:mm:ss");
+        try {
+            iUpdated = updRank.Update();
+            Page_Load(sender,e);
+            if(iUpdated > 0) {
+                UpdateHistoryMessage("成功更新" + iUpdated.ToString() + "隊排名(" + sNow + ")");
+            }   else if(iUpdated == 0) {
+                UpdateHistoryMessage("沒有更新排名");
+            } else {
+                UpdateHistoryMessage("更新排名失敗");
+            }
+        } catch(NullReferenceException nullex) {
+            FormsAuthentication.SignOut();
+            UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"] + "</a>");
+        }
+    }
 
-	void UpdateHistoryMessage(string sMsg) {
-		historyMsg.Text = sMsg;
-	}
+    void UpdateHistoryMessage(string sMsg) {
+        historyMsg.Text = sMsg;
+    }
 </script>
 
 <script language="JavaScript">
@@ -109,7 +110,7 @@ function ActionChanged() {
 </script>
 
 <html>
-<head>
+<head  runat="server">
 	<META http-equiv="Content-Type" content="text/html; charset=big5">
 	<LINK href="../CentaSmsStyle.css" type="text/css" rel="stylesheet">
     <LINK REL="stylesheet" HREF="/sportStyle.css" TYPE="text/css">
@@ -119,25 +120,30 @@ function ActionChanged() {
 	<form id="RankForm" method="post" runat="server" onsubmit="DeviceCheck()">
 		   <uc1:menutabs id="MenuTabs1" runat="server" Visible="false" ></uc1:menutabs>
         <font size="2"><b>上次行動:</b><asp:Label id="historyMsg" runat="server" /></font><br>
-        	<select name="soccerCorrectScore" onChange="goToTeam(RankForm.soccerCorrectScore.value)">
+        	 
+		<table border="1" width="50%" style="font: 10pt verdana">
+		<tr style="background-color:#FFD700">
+			<th>  <select name="soccerCorrectScore" onChange="goToTeam(RankForm.soccerCorrectScore.value)">
 						<option value="0">請選擇</option>
 						<span id="CorrectInformation" runat="server" />
 					</select>
-		<table border="1" width="50%" style="font: 10pt verdana">
-		<tr style="background-color:#FFD700">
-			<th><select name="action" onChange="ActionChanged()"><option value="U">更新<option value="D">刪除<option value="P">只清除傳呼機</select>&nbsp;<font color="#9932CC"><%=sAlias%></font><font color="#808080">排名</font></th>
-			<th colspan="4">若是神射手榜，請在積分一欄輸入入球數字</th>
+                <font color="#9932CC"><%=sAlias%></font><font color="#808080">排名</font></th>
+			<th colspan="7">若是神射手榜，請在積分一欄輸入入球數字 <select name="action" onChange="ActionChanged()"><option value="U">更新<option value="D">刪除<option value="P">只清除傳呼機</select>&nbsp;
+         </th>       
 		</tr>
 		<tr style="background-color:#FFD700">
 			<th>名次</th>
-			<th>亞洲隊伍</th>
+			<th>Name</th>
 			<th>馬會隊伍</th>
 			<th>場數</th>
 			<th>積分</th>
+            <th>勝</th>
+            <th>和</th>
+            <th>負</th>
 		</tr>
 		<span id="RankInformation" runat="server" />
 		<tr>
-			<td colspan="4" align="right">
+			<td colspan="8" align="right">
 				<!--
 					Value of SendToPager is Device ID defined in DEVICE_TYPE
 				-->
@@ -150,7 +156,7 @@ function ActionChanged() {
 			</td>
 		</tr>
 		<tr>
-			<td colspan="4" align="left">
+			<td colspan="8" align="left">
 				如執行動作是<font color="blue">只清除傳呼機</font>，只有傳呼機數據會被刪除。
 			</td>
 		</table>

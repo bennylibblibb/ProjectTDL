@@ -104,6 +104,8 @@
       <DependentUpon>DataOfScouts.cs</DependentUpon>
     </Compile>
     <Compile Include="Files.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="XmlType\DOSRank.cs" />
     <Compile Include="XmlType\DOSCompare.cs" />
     <Compile Include="XmlType\DOSIncidentJson.cs" />
     <Compile Include="JsonUtil.cs" />
@@ -124,6 +126,8 @@
     <Compile Include="XmlType\DOSSeasons.cs" />
     <Compile Include="XmlType\DOSStages .cs" />
     <Compile Include="XmlType\Participants.cs" />
+    <Compile Include="XmlType\DOSTopScorers.cs" />
+    <Compile Include="XmlType\DOSStandings.cs" />
     <Compile Include="XmlUtil.cs" />
     <EmbeddedResource Include="DataOfScouts.resx">
       <DependentUpon>DataOfScouts.cs</DependentUpon>
