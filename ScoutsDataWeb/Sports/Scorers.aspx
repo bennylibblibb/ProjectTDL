@@ -150,22 +150,24 @@ function LengthOfString(s) {
         	 
 		<table border="1" width="55%" style="font: 10pt verdana">
 			<tr align="center" style="background-color:#BFDFEF">
-				<th colspan="5">
+				<th colspan="6">
 					請先了解射手榜的<a href="javascript:InputHelp()">輸入說明</a>
 				</th>
 			</tr>
-			<tr align="left" style="background-color:#3A6A7E; color=#FFFFFF">
+			<tr align="left" style="background-color:#3A6A7E; color:black">
 				<th colspan="3">
                     <select name="soccerCorrectScore" onChange="goToTeam(ScorersForm.soccerCorrectScore.value)">
 						<option value="0">請選擇</option>
 						<span id="CorrectInformation" runat="server" />
 					</select> 
                     <font color="#F0FFF0"><%=sAlias%></font>射手榜</th>
-				<th colspan="2">執行動作:<select name="action" onChange="ActionChanged()"><option value="U">更新<option value="D">刪除<option value="P">只清除傳呼機</select></th>
+				<th colspan="3">執行動作:<select name="action" onChange="ActionChanged()"><option value="U">更新<option value="D">刪除<option value="P">只清除傳呼機</select></th>
 			</tr>
-			<tr align="center" style="background-color:#3A6A7E; color=#FFFFFF">
+			<tr align="center" style="background-color:#3A6A7E; color:gainsboro">
 				<th></th>
-				<th>球會(簡稱)</th>
+				<%--<th>球會(簡稱)</th>--%>
+                <th>球會</th>
+                <th>Name</th>
 				<th>球員</th>
 				<th>排名</th>
 				<th>入球</th>
@@ -174,7 +176,7 @@ function LengthOfString(s) {
 			<span id="ScorersInformation" runat="server" />
 
 			<tr align="right">
-				<td colspan="5">
+				<td colspan="6">
 					<!--
 						Value of SendToPager is Device ID defined in DEVICE_TYPE
 					-->

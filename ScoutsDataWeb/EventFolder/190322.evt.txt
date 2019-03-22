@@ -1,0 +1,8 @@
+﻿11:56:44 BEN login success.
+12:02:04 [Success] Cancel Sync [2651496] EMATCHES[THU 6]  (Netherlands - Belarus) Netherlands/Belarus
+12:02:29 [Success] Sync [2651496] EMATCHES[THU 6]  Netherlands - Belarus
+12:02:30 [Success]  Sync [Netherlands - Belarus] on Teams
+12:03:11 [Success] Sure [2651496 Netherlands - Belarus] on Teams
+12:03:18 [Success] Cancel Sync [2651497] EMATCHES[THU 10]  (Northern Ireland - Estonia) Northern Ireland/Estonia
+12:03:35 [Success] Sync [2651497] EMATCHES[THU 10]  Northern Ireland - Estonia
+12:03:35 [Success]  Sync [Northern Ireland - Estonia] on Teams

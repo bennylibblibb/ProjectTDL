@@ -58,12 +58,18 @@ function GetAbbr(team) {
 
 function UpdateMainWin() {
 	team = document.ScorersSelectionForm.teamname.value;
-	if(team != '') {
+    if (team != '') {
+        var strName = document.ScorersSelectionForm.player.value;   
+        var indexStr = document.ScorersSelectionForm.player.value.indexOf('|');
+        var planycnname = strName.substring(0, indexStr);  
+        var planyenname = strName.substring(indexStr+1, strName.length); 
+       // alert(planycnname + ' ' + planyenname);
 		abbr = GetAbbr(team);
 		window.opener.document.ScorersForm.abbr[Number(document.ScorersSelectionForm.RecordIndex.value)].value = abbr;
 		window.opener.document.ScorersForm.team[Number(document.ScorersSelectionForm.RecordIndex.value)].value = team;
-		window.opener.document.ScorersForm.teamid[Number(document.ScorersSelectionForm.RecordIndex.value)].value = document.ScorersSelectionForm.teamID.value;
-		window.opener.document.ScorersForm.player[Number(document.ScorersSelectionForm.RecordIndex.value)].value = document.ScorersSelectionForm.player.value;
+        window.opener.document.ScorersForm.teamid[Number(document.ScorersSelectionForm.RecordIndex.value)].value = document.ScorersSelectionForm.teamID.value;
+        window.opener.document.ScorersForm.playerenname[Number(document.ScorersSelectionForm.RecordIndex.value)].value = planyenname;
+        window.opener.document.ScorersForm.player[Number(document.ScorersSelectionForm.RecordIndex.value)].value = planycnname;
 	}
 	window.close();
 }

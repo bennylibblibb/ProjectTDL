@@ -307,12 +307,15 @@
                                                             <anthem:Label id="lbBooked" runat="server" Width="40px" Text='<%# DataBinder.Eval(Container, "DataItem.booked") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
-                                                      <asp:TemplateColumn HeaderText="Goals">
+                                                      <asp:TemplateColumn HeaderText="Action">
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
                                                           <a href=# onclick="window.open('MatchDetails.aspx?Type=SCOUT&ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=900,height=400, top=200,left=200')" >																	
-																		<b>Goals</b>	</a></ItemTemplate>
+																		<b>Goals</b>	</a>
+                                                              <a href=# onclick="window.open('TeamMapping.aspx?id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=650,height=280, top=200,left=200')" >																	
+																		<b><%# DataBinder.Eval(Container, "DataItem.MAPPING_STATUS")==DBNull.Value? "Mapping" :Convert.ToBoolean(DataBinder.Eval(Container, "DataItem.MAPPING_STATUS"))? "Mapped":"Mapping"  %> </b>	</a>
+                                                                                                                                                                                                                              </ItemTemplate>
                                                          </asp:TemplateColumn>
-                                                     <asp:TemplateColumn HeaderText="Team Mapping">
+                                                     <asp:TemplateColumn HeaderText="Team Mapping" Visible="false">
                                                         <HeaderStyle Wrap="true" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
                                                           <a href=# onclick="window.open('TeamMapping.aspx?id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=650,height=280, top=200,left=200')" >																	
 																		<b><%# DataBinder.Eval(Container, "DataItem.MAPPING_STATUS")==DBNull.Value? "Mapping" :Convert.ToBoolean(DataBinder.Eval(Container, "DataItem.MAPPING_STATUS"))? "Mapped":"Mapping"  %> </b>	</a></ItemTemplate>

@@ -131,7 +131,7 @@ namespace DataOfScouts
                 //  RunGetEventCompare("2726703");
                 // InsertData("events.show3", true, "2737999", true);
                 //InsertData("events", true, this.bnAreas.Items[17].Text + "2019-03-19 00:00:00", this.bnAreas.Items[19].Text + "2019-03-31 23:59:59");
-                 InsertData("standings", true);
+                // InsertData("standings", true);
                 this.Receiver = new Receiver();
             }
             catch (Exception exp)
@@ -143,16 +143,16 @@ namespace DataOfScouts
             //{
             //    bool done = false;
             //    string strName = "";
-            //    string message = (File.ReadAllText("D:\\Users\\Administrator\\Desktop\\2504787_33_034604750.json"));
+            //    string message = (File.ReadAllText("D:\\Users\\Administrator\\Desktop\\2740247_11_160244768.json"));
             //    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
             //    {
             //        connection.Open();
             //        DOSEventJson.EventJson api = JsonUtil.Deserialize(typeof(DOSEventJson.EventJson), message) as DOSEventJson.EventJson;
             //        if (api != null && api.type == "event" && (AppFlag.JsonType ? api.data.@event.sport_id == 5 : api.data.@event.sport_id != -1))
-            //        { 
+            //        {
             //            int id = -2;
             //            strName = api.data.@event.id + "_" + (api.data.@event.status_id) + "_" + DateTime.Now.ToString("HHmmssfff");
-            //            Files.WriteJson(strName, message); 
+            //            Files.WriteJson(strName, message);
             //            if (api.data.@event.details.Count() > 0)
             //            {
             //                using (FbCommand cmd2 = new FbCommand())
@@ -171,9 +171,9 @@ namespace DataOfScouts
             //                    cmd2.Parameters.Add("@ATT_141", api.data.@event.details.FirstOrDefault(c => c.id == 141).value);
             //                    cmd2.Parameters.Add("@FHSD_19", api.data.@event.details.FirstOrDefault(c => c.id == 19).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 19).value).AddHours(8));
             //                    cmd2.Parameters.Add("@SHSD_20", api.data.@event.details.FirstOrDefault(c => c.id == 20).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 20).value).AddHours(8));
-            //                    cmd2.Parameters.Add("@FEHSD_44", api.data.@event.details.FirstOrDefault(c => c.id == 44).value);
-            //                    cmd2.Parameters.Add("@SEHSD_45", api.data.@event.details.FirstOrDefault(c => c.id == 45).value);
-            //                    cmd2.Parameters.Add("@PSSD_150", api.data.@event.details.FirstOrDefault(c => c.id == 150).value);
+            //                    cmd2.Parameters.Add("@FEHSD_44", api.data.@event.details.FirstOrDefault(c => c.id == 44).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 44).value).AddHours(8));
+            //                    cmd2.Parameters.Add("@SEHSD_45", api.data.@event.details.FirstOrDefault(c => c.id == 45).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 45).value).AddHours(8));
+            //                    cmd2.Parameters.Add("@PSSD_150", api.data.@event.details.FirstOrDefault(c => c.id == 150).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 150).value).AddHours(8));
             //                    cmd2.Parameters.Add("@FHIT_201", api.data.@event.details.FirstOrDefault(c => c.id == 201).value);
             //                    cmd2.Parameters.Add("@SHIT_202", api.data.@event.details.FirstOrDefault(c => c.id == 202).value);
             //                    cmd2.Parameters.Add("@FEHIT_203", api.data.@event.details.FirstOrDefault(c => c.id == 203).value);
@@ -375,7 +375,7 @@ namespace DataOfScouts
 
             //                SendAlertMsg(AppFlag.LIVEGOALS);
             //                done = false;
-            //            } 
+            //            }
             //        }
             //    }
             //}
@@ -878,9 +878,12 @@ namespace DataOfScouts
                                         cmd2.Parameters.Add("@ATT_141", api.data.@event.details.FirstOrDefault(c => c.id == 141).value);
                                         cmd2.Parameters.Add("@FHSD_19", api.data.@event.details.FirstOrDefault(c => c.id == 19).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 19).value).AddHours(8));
                                         cmd2.Parameters.Add("@SHSD_20", api.data.@event.details.FirstOrDefault(c => c.id == 20).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 20).value).AddHours(8));
-                                        cmd2.Parameters.Add("@FEHSD_44", api.data.@event.details.FirstOrDefault(c => c.id == 44).value);
-                                        cmd2.Parameters.Add("@SEHSD_45", api.data.@event.details.FirstOrDefault(c => c.id == 45).value);
-                                        cmd2.Parameters.Add("@PSSD_150", api.data.@event.details.FirstOrDefault(c => c.id == 150).value);
+                                        //cmd2.Parameters.Add("@FEHSD_44", api.data.@event.details.FirstOrDefault(c => c.id == 44).value);
+                                        //cmd2.Parameters.Add("@SEHSD_45", api.data.@event.details.FirstOrDefault(c => c.id == 45).value);
+                                        //cmd2.Parameters.Add("@PSSD_150", api.data.@event.details.FirstOrDefault(c => c.id == 150).value); 
+                                        cmd2.Parameters.Add("@FEHSD_44", api.data.@event.details.FirstOrDefault(c => c.id == 44).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 44).value).AddHours(8));
+                                        cmd2.Parameters.Add("@SEHSD_45", api.data.@event.details.FirstOrDefault(c => c.id == 45).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 45).value).AddHours(8));
+                                        cmd2.Parameters.Add("@PSSD_150", api.data.@event.details.FirstOrDefault(c => c.id == 150).value == null ? DateTime.MinValue : Convert.ToDateTime(api.data.@event.details.FirstOrDefault(c => c.id == 150).value).AddHours(8));
                                         cmd2.Parameters.Add("@FHIT_201", api.data.@event.details.FirstOrDefault(c => c.id == 201).value);
                                         cmd2.Parameters.Add("@SHIT_202", api.data.@event.details.FirstOrDefault(c => c.id == 202).value);
                                         cmd2.Parameters.Add("@FEHIT_203", api.data.@event.details.FirstOrDefault(c => c.id == 203).value);
@@ -7616,8 +7619,10 @@ namespace DataOfScouts
                                         cmd2.Parameters.Add("@HKJCGUESTID", dr1["IAWAY_TEAM_CODE"]);
                                         cmd2.Parameters.Add("@HKJCHOSTNAME", dr1["CHOME_TEAM_ENG_NAME"]);
                                         cmd2.Parameters.Add("@HKJCGUESTNAME", dr1["CAWAY_TEAM_ENG_NAME"]);
-                                        cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_OUTPUT_NAME"]);
-                                        cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_OUTPUT_NAME"]);
+                                        //cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_OUTPUT_NAME"]);
+                                        //cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_OUTPUT_NAME"]); 
+                                        cmd2.Parameters.Add("@HKJCHOSTNAME_CN", dr1["CHOME_TEAM_HKJC_NAME"].ToString().Substring(0, dr1["CHOME_TEAM_HKJC_NAME"].ToString().IndexOf("/")));
+                                        cmd2.Parameters.Add("@HKJCGUESTNAME_CN", dr1["CAWAY_TEAM_HKJC_NAME"].ToString().Substring(0, dr1["CAWAY_TEAM_HKJC_NAME"].ToString().IndexOf("/")));
                                         cmd2.Parameters.Add("@CLEAGUE_HKJC_NAME", dr1["CLEAGUE_HKJC_NAME"]);
                                         cmd2.Parameters.Add("@CLEAGUE_OUTPUT_NAME", dr1["CLEAGUE_OUTPUT_NAME"]);
                                         cmd2.Parameters.Add("@CLEAGUEALIAS_OUTPUT_NAME", dr1["CLEAGUEALIAS_OUTPUT_NAME"]);

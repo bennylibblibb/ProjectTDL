@@ -26,7 +26,7 @@ namespace SportsUtil
 {
     public class Scorers
     {
-        const int TOTALRECORDS = 10;
+        const int TOTALRECORDS = 15;
         const string LOGFILESUFFIX = "log";
         string m_Alias;
         string m_Team;
@@ -144,25 +144,34 @@ namespace SportsUtil
                     HTMLString.Append("</select></td>");
 
                     //Team and its ID
-                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"team\" maxlength=\"3\" size=\"4\" value=\"");
+                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"team\" maxlength=\"3\" size=\"8\" value=\"");
                     HTMLString.Append(m_TeamList[m_SportsOleReaderFb.GetInt32(0).ToString()]);
                     HTMLString.Append("\" readonly=\"true\"><input type=\"hidden\" name=\"teamid\" value=\"");
                     HTMLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
                     HTMLString.Append("\">");
 
-                    //Team abbr.
-                    HTMLString.Append("(<input name=\"abbr\" maxlength=\"4\" size=\"2\" value=\"");
+                    //Team abbr.  style=\"displayer:none\" 
+                    //  HTMLString.Append("(<input  style=\"display:none\"  name=\"abbr\" maxlength=\"4\" size=\"2\" value=\"");
+                    HTMLString.Append("<input  style=\"display:none\"  name=\"abbr\" maxlength=\"4\" size=\"2\" value=\"");
                     if (!m_SportsOleReaderFb.IsDBNull(1))
                     {
                         HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
                     }
                     HTMLString.Append("\" onchange=\"AbbrChange(");
                     HTMLString.Append(iRecordCount.ToString());
-                    HTMLString.Append(")\">)</td>");
+                    //HTMLString.Append(")\">)</td>");
+                    HTMLString.Append(")\"></td>");
+                    //Eng name
+                    ///  HTMLString.Append("</td>"); 
+                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"playerenname\" maxlength=\"50\" size=\"12\" value=\"");
+                     HTMLString.Append(m_SportsOleReaderFb.GetString(2).Trim());
+                    HTMLString.Append("\" readonly=\"true\"></td>");
+
 
                     //Player Label
                     HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"player\" maxlength=\"5\" size=\"12\" value=\"");
-                    HTMLString.Append(m_SportsOleReaderFb.GetString(5).Trim()==""? m_SportsOleReaderFb.GetString(2).Trim(): m_SportsOleReaderFb.GetString(5).Trim());
+                    // HTMLString.Append(m_SportsOleReaderFb.GetString(5).Trim()==""? m_SportsOleReaderFb.GetString(2).Trim(): m_SportsOleReaderFb.GetString(5).Trim());
+                    HTMLString.Append(m_SportsOleReaderFb.GetString(5).Trim());
                     HTMLString.Append("\" readonly=\"true\"></td>");
 
                     iTabIndex++;
@@ -214,15 +223,20 @@ namespace SportsUtil
                     HTMLString.Append("</select></td>");
 
                     //Team and its ID
-                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"team\" maxlength=\"3\" size=\"4\" value=\"\" readonly=\"true\"><input type=\"hidden\" name=\"teamid\" value=\"\">");
+                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"team\" maxlength=\"3\" size=\"8\" value=\"\" readonly=\"true\"><input type=\"hidden\" name=\"teamid\" value=\"\">");
 
-                    //Team abbr.
-                    HTMLString.Append("(<input name=\"abbr\" maxlength=\"4\" size=\"2\" value=\"\" onchange=\"AbbrChange(");
-                    HTMLString.Append(iRecordCount.ToString());
-                    HTMLString.Append(")\">)</td>");
+                    ////Team abbr.
+                    //HTMLString.Append("(<input name=\"abbr\" maxlength=\"4\" size=\"2\" value=\"\" onchange=\"AbbrChange(");
+                    //HTMLString.Append(iRecordCount.ToString());
+                    //HTMLString.Append(")\">)</td>");
+
+                    //Eng name
+                    HTMLString.Append("</td>");
+                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"playerenname\" maxlength=\"50\" size=\"12\" value=\"\" readonly=\"true\"></td>");
+
 
                     //Player
-                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"player\" maxlength=\"5\" size=\"6\" value=\"\" readonly=\"true\"></td>");
+                    HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"player\" maxlength=\"5\" size=\"12\" value=\"\" readonly=\"true\"></td>");
 
                     iTabIndex++;
                     //Rank
@@ -283,7 +297,7 @@ namespace SportsUtil
                 //SQLString.Append("SELECT team.TEAMNAME, player.CPLAYER_NAME FROM PLAYERS_INFO player, TEAMINFO team WHERE team.TEAM_ID=player.TEAM_ID and player.TEAM_ID=");
                 //SQLString.Append(sTeamID);
                 //SQLString.Append(" order by player.IPOS, player.IPLAYER_NO");
-                SQLString.Append("SELECT team.HKJC_NAME_CN, player.CPLAYER_NAME FROM PLAYERS_INFO player, TEAMS team WHERE team.ID=player.TEAM_ID and player.TEAM_ID=");
+                SQLString.Append("SELECT team.HKJC_NAME_CN, player.CPLAYER_NAME||'|'||player.CENGNAME  FROM PLAYERS_INFO player, TEAMS team WHERE team.ID=player.TEAM_ID and player.TEAM_ID=");
                 SQLString.Append(sTeamID);
                 SQLString.Append(" order by player.IPOS, player.IPLAYER_NO");
 
@@ -298,7 +312,7 @@ namespace SportsUtil
                     HTMLString.Append("<option value=\"");
                     HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
                     HTMLString.Append("\">");
-                    HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
+                    HTMLString.Append(m_SportsOleReaderFb.GetString(1).Trim().Substring(0, m_SportsOleReaderFb.GetString(1).Trim().IndexOf("|")));
                     iExisted++;
                 }
                 m_SportsOleReaderFb.Close();
