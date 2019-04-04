@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Configuration;
-using System.Runtime.InteropServices; 
+using System.Runtime.InteropServices;
 using System.Net;
-using System.Net.Sockets; 
+using System.Net.Sockets;
 using System.Net.NetworkInformation;
 
 namespace DataOfScouts
 {
     internal struct AppFlag
-    { 
+    {
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
         public static string ScoutsDBConn = ConfigurationSettings.AppSettings["ScoutsDBConn"];
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
@@ -25,7 +25,7 @@ namespace DataOfScouts
         public static string ScoutsUrl = ConfigurationSettings.AppSettings["ScoutsUrl"];
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
-        public static int iPageSize =Convert .ToInt32(ConfigurationSettings.AppSettings["PageSize"]);
+        public static int iPageSize = Convert.ToInt32(ConfigurationSettings.AppSettings["PageSize"]);
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
         public static int iQueryDays = Convert.ToInt32(ConfigurationSettings.AppSettings["QueryDays"]);
@@ -34,7 +34,7 @@ namespace DataOfScouts
         public static string SyncHkjcDateTime = ConfigurationSettings.AppSettings["SyncHkjcDateTime"];
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
-        public static bool JsonType = ConfigurationSettings.AppSettings["JsonType"].ToLower ()=="all"?false:true;
+        public static bool JsonType = ConfigurationSettings.AppSettings["JsonType"].ToLower() == "all" ? false : true;
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
         public static string GetTime = ConfigurationSettings.AppSettings["GetTime"];
@@ -46,13 +46,13 @@ namespace DataOfScouts
         internal static readonly int MarginOfDeviation = Convert.ToInt32(ConfigurationSettings.AppSettings["MarginOfDeviation"]);
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
-        internal static string lpString = ConfigurationSettings.AppSettings["lpString"];   
+        internal static string lpString = ConfigurationSettings.AppSettings["lpString"];
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
         internal static readonly int LIVEGOALS = Convert.ToInt32(ConfigurationSettings.AppSettings["LIVEGOALS"]);
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
-        internal static readonly int GOALDETAILS = Convert.ToInt32(ConfigurationSettings.AppSettings["GOALDETAILS"]);  
+        internal static readonly int GOALDETAILS = Convert.ToInt32(ConfigurationSettings.AppSettings["GOALDETAILS"]);
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
         internal static readonly int IntervalSync = Convert.ToInt32(ConfigurationSettings.AppSettings["IntervalSync"]);
@@ -77,12 +77,14 @@ namespace DataOfScouts
         internal static readonly int IntervalGetPlayer = Convert.ToInt32(ConfigurationSettings.AppSettings["IntervalGetPlayer"]);
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
 #pragma warning disable CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
-        internal static bool GetEventShow = ConfigurationSettings.AppSettings["GetEventShow"].ToLower() == "yes" ? true : false;   
+        internal static bool GetEventShow = ConfigurationSettings.AppSettings["GetEventShow"].ToLower() == "yes" ? true : false;
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
+        internal static string NotifyApplication = ConfigurationManager.AppSettings["NotifyApplication"];
+        internal static string SkSvrNotify = ConfigurationManager.AppSettings["SkSvrNotify"];
     }
 
     public enum InformationType
-    { 
+    {
         HeartBeat = 98,
         LastPacketBeforeServerShutdown = 99
     }

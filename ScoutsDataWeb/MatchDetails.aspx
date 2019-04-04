@@ -17,11 +17,15 @@
 		<FORM id="Form1" method="post" runat="server">
 			<TABLE align="center">
 				 <TR>
-					<TD align="left" style="height:30px"> </TD>
+					<TD align="left" colspan="2" style="height:10px"> </TD>
 				</TR>
 				<TR align="center">
-					<TD align="left">
+					<TD align="left"  >
                        <anthem:Label ID="lbAction" runat="server"  Width="500px"  >  </anthem:Label> 
+                         <anthem:Label ID="lbEventid" runat="server" Visible="false"   >  </anthem:Label> 
+                         <anthem:Label ID="lbHomeid" runat="server"  Visible="false"  >  </anthem:Label> 
+                         <anthem:Label ID="lbGuestid" runat="server"    Visible="false"  >  </anthem:Label> 
+                        <hr/> 
                        <anthem:DataGrid id="eventDetails" runat="server" Width="800px"   AllowPaging="false" AutoGenerateColumns="false">
                             <PagerStyle Mode="NumericPages"></PagerStyle>
                            <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center"  Wrap="false" Height="30px" CssClass="grid-header" ></HeaderStyle>
@@ -55,23 +59,25 @@
 				<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>
 				</ItemTemplate>  </asp:TemplateColumn> 
 		</Columns>	</anthem:DataGrid>
-                         <anthem:DataGrid id="totalDetails" runat="server" Width="300px"   AllowPaging="false" AutoGenerateColumns="FALSE">
+                       <anthem:DataGrid id="totalDetails" runat="server" Width="300px"   AllowPaging="false" AutoGenerateColumns="FALSE">
                             <PagerStyle Mode="NumericPages"></PagerStyle>
                            <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center" Wrap="false" Height="34px" CssClass="grid-header" ></HeaderStyle>
                            <ItemStyle Height="30px"    Wrap="false" CssClass="grid-item"></ItemStyle>
                           <Columns>   
                               <asp:TemplateColumn  Visible ="true" >  <HeaderStyle  Width="160px" CssClass="grid-header" />
-                                     <ItemTemplate  >
-                                       <%#DataBinder.Eval(Container, "DataItem.Type") %> 
-                                     </ItemTemplate> </asp:TemplateColumn>
+                                     <ItemTemplate  > 
+                                           <asp:Label ID="lbType"   Visible="true" runat="server" Width="120px" text='<%#DataBinder.Eval(Container, "DataItem.Type") %>'></asp:Label> 
+                                      </ItemTemplate> </asp:TemplateColumn>
                               <asp:TemplateColumn   Visible ="true" >  <HeaderStyle Width="70px" CssClass="grid-header" />
                                      <ItemTemplate >
-                                       <%#DataBinder.Eval(Container, "DataItem.H") %> 
-                                     </ItemTemplate> </asp:TemplateColumn>
+                                             <asp:TextBox ID="txtHValue"  Enabled="false" runat="server" Width="80px" text='<%#DataBinder.Eval(Container, "DataItem.H") %>'></asp:TextBox>
+                                               <asp:Label ID="lbHValue"   Visible="false" runat="server" Width="80px" text='<%#DataBinder.Eval(Container, "DataItem.H") %>'></asp:Label>     
+                                                                       </ItemTemplate> </asp:TemplateColumn>
                               <asp:TemplateColumn   Visible ="true" >  <HeaderStyle Width="70px"  CssClass="grid-header" />
                                      <ItemTemplate >
-                                       <%#DataBinder.Eval(Container, "DataItem.G") %> 
-                                     </ItemTemplate> </asp:TemplateColumn>
+                                         <asp:TextBox ID="txtGValue"  Enabled="false" runat="server" Width="80px" text='<%#DataBinder.Eval(Container, "DataItem.G") %>'></asp:TextBox>
+                                          <asp:Label ID="lbGValue"   Visible="false" runat="server" Width="80px" text='<%#DataBinder.Eval(Container, "DataItem.G") %>'></asp:Label>     
+                                         </ItemTemplate> </asp:TemplateColumn>
 
                          <%--  <asp:TemplateColumn HeaderText="Shots"  >  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>    <%#DataBinder.Eval(Container, "DataItem.CSHOTS") %> 
@@ -126,12 +132,11 @@
 		</Columns> 
                          </anthem:DataGrid>
 					</TD>
-				</TR>
-                <tr style="height:10px"><td >  </td></tr>
-                  <tr><td> <hr/></td></tr>
-                   <tr style="height:05px"><td >  </td></tr>
+                    <td align="left" valign="bottom">  </td>
+				</TR> 
+                <tr style="height:10px"> <td  colspan="2" >  </td></tr>
 				 <TR>
-					<TD >
+					<TD colspan="2"  >
    <anthem:DataGrid id="dgGoalInfo" runat="server" Width="800px"   AllowPaging="false" AutoGenerateColumns="false">  
                            <HeaderStyle Font-Bold="True"    HorizontalAlign ="Center" Wrap="false" Height="30px" CssClass="grid-header" ></HeaderStyle>
                            <ItemStyle Height="34px"    Wrap="false" CssClass="grid-item"></ItemStyle>
@@ -179,9 +184,15 @@
                           </Columns>	</anthem:DataGrid>
 					</TD>
 				</TR>
-                <tr style="height:20px" align="right"><td>   <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="500px"  >  </anthem:Label>  </strong></td></tr>
-				 <tr><td align="right"> <anthem:Button  ID="btnSave" runat="server" Text="Edit" />  
-				     </td></tr>
+                <tr style="height:20px" align="right">
+                    <td>   <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="500px"  >  </anthem:Label>  </strong></td>
+                    <td><anthem:Button  ID="btnSave" runat="server" Text="Edit" />  
+			   	<anthem:Button  ID="btnLiveEdit" runat="server" Text="Edit" />  </td> 
+                </tr>
+				 <tr>
+                 <td align="right" colspan="2" >
+                 </td></tr>
+                 <tr style="height:10px" ><td colspan="2" ><hr />  </td></tr>
 			</TABLE>
 		</FORM>
 	</body>

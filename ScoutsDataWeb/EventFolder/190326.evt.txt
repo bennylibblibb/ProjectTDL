@@ -1,0 +1,34 @@
+﻿10:22:34 login failure.
+10:22:45 BEN login success.
+10:30:01 BEN login success.
+10:32:32 BEN login success.
+10:33:52 BEN login success.
+10:35:59 BEN login success.
+10:36:50 BEN login success.
+10:39:27 BEN login success.
+10:51:25 BEN login success.
+10:53:45 BEN login success.
+10:56:58 BEN login success.
+11:00:09 BEN login success.
+11:01:28 BEN login success.
+11:02:21 BEN login success.
+11:09:45 [Success] Cancel Sync [2439362] EMATCHES[SAT 62]  (SM Caen - Paris Saint-Germain) Caen/Paris Saint Germain
+11:10:36 [Success] Sync [2439362] EMATCHES[SAT 62]  SM Caen - Paris Saint-Germain
+11:10:36 [Success]  Sync [SM Caen - Paris Saint-Germain] on Teams
+11:11:00 [Success] Cancel Sync [2439362] EMATCHES[SAT 62]  (SM Caen - Paris Saint-Germain) Caen/Paris Saint Germain
+11:12:47 BEN login success.
+11:13:50 BEN login success.
+11:14:18 [Success] Sync [2439362] EMATCHES[SAT 62]  SM Caen - Paris Saint-Germain
+11:14:19 [Success]  Sync [SM Caen - Paris Saint-Germain] on Teams
+11:14:31 [Success] Cancel Sync [2451794] EMATCHES[SAT 63]  (Rubin Kazan - Akhmat Grozny) Rubin Kazan/Akhmat Grozny
+11:14:49 [Failure] Cancel Sync [2451794] EMATCHES[SAT 63]  (Rubin Kazan - Akhmat Grozny) Rubin Kazan/Akhmat Grozny
+11:15:00 [Failure] Cancel Sync [2451794] EMATCHES[SAT 63]  (Rubin Kazan - Akhmat Grozny) Rubin Kazan/Akhmat Grozny
+11:15:37 [Success] Sync [2451794] EMATCHES[SAT 63]  Rubin Kazan - Akhmat Grozny
+11:15:37 [Success]  Sync [Rubin Kazan - Akhmat Grozny] on Teams
+11:15:54 [Success] Sure [2451794 Rubin Kazan - Akhmat Grozny] on Teams
+11:15:59 [Success] Sure [2439362 SM Caen - Paris Saint-Germain] on Teams
+11:19:50 BEN login success.
+11:22:42 BEN login success.
+11:44:57 BEN login success.
+14:56:07 BEN login success.
+15:02:53 BEN login success.

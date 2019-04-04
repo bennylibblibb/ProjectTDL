@@ -66,7 +66,7 @@ namespace SportsUtil {
                 // retrieveQuery = "select team.team_id, team.teamname, leag.leagname from teaminfo team, leaginfo leag, id_info id ";
                 ///retrieveQuery = "select team.HKJC_ID, team.HKJC_NAME_CN, m.CLEAGUE_OUTPUT_NAME,m.HKJCHOSTNAME_CN||'/'||m.HKJCGUESTNAME_CN,m.CLEAGUEALIAS_OUTPUT_NAME, team.HKJC_NAME,  e.id  from teams team ";
                retrieveQuery = "select distinct team.id, team.HKJC_NAME_CN, m.CLEAGUE_OUTPUT_NAME,m.HKJCHOSTNAME_CN||'/'||m.HKJCGUESTNAME_CN,m.CLEAGUEALIAS_OUTPUT_NAME, team.HKJC_NAME,  e.id  from teams team ";
-                retrieveQuery += "inner join events e on e.HOME_ID = team.id or e.GUEST_ID = team.id inner join EMATCHES m on e.id=m.EMATCHID  " +
+                retrieveQuery += "inner join events e on e.HOME_ID = team.id or e.GUEST_ID = team.id inner join EMATCHES m on e.id=m.EMATCHID  and e.START_DATE =m.CMATCHDATETIME  " +
                     " where e.id = '"+ sEventID + "'";
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(retrieveQuery);
                 while (m_SportsOleReaderFb.Read())
@@ -113,7 +113,15 @@ namespace SportsUtil {
                 //retrieve player information w.r.t. team id
                 iRec = 0;
                 //retrieveQuery = "select IPLAYER_NO, IPOS, CPLAYER_NAME, CENGNAME, CCOUNTRY, IROSTER,PLAYER_ID from PLAYERS_INFO where TEAM_ID=" + sTeamID + " order by IPLAYER_NO, IPOS, CPLAYER_NAME";
-                retrieveQuery = "select IPLAYER_NO, IPOS, CPLAYER_NAME, CENGNAME, CCOUNTRY, IROSTER,PLAYER_ID from PLAYERS_INFO where TEAM_ID=" + sTeamID + " order by  IROSTER desc,IPOS asc, CPLAYER_NAME desc   ";
+                // retrieveQuery = "select IPLAYER_NO, IPOS, CPLAYER_NAME, CENGNAME, CCOUNTRY, IROSTER,PLAYER_ID from PLAYERS_INFO where TEAM_ID=" + sTeamID + " order by  IROSTER desc,IPOS asc, CPLAYER_NAME desc   ";
+
+                retrieveQuery = "select distinct x.IPLAYER_NO,  x.IPOS,  x.CPLAYER_NAME,  x.CENGNAME,  x.CCOUNTRY, x.IROSTER, x.PLAYER_ID from PLAYERS_INFO x " +
+                    "inner join  PLAYERS p on p.TEAM_ID =x.TEAM_ID  and p.id=PLAYER_ID " + " inner join events e on e.SEASON_ID = p.SEASON_ID " +
+                    "where  x.TEAM_ID=" + sTeamID + " and e.id=" + sEventID + " order by   x.IROSTER desc, x.IPOS asc,  x.CPLAYER_NAME desc   ";
+                // retrieveQuery = "select x.IPLAYER_NO,  x.IPOS,  x.CPLAYER_NAME,  x.CENGNAME,  x.CCOUNTRY, x.IROSTER, x.PLAYER_ID from PLAYERS_INFO x " +
+                ////   "inner join  PLAYERS p on p.TEAM_ID =x.TEAM_ID  and p.id=PLAYER_ID " 
+                //    " inner join events e on e.SEASON_ID = X.SEASON_ID " +
+                //   "where  x.TEAM_ID=" + sTeamID + " and e.id=" + sEventID + " order by   x.IROSTER desc, x.IPOS asc,  x.CPLAYER_NAME desc   ";
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(retrieveQuery);
                 while (m_SportsOleReaderFb.Read())
                 {

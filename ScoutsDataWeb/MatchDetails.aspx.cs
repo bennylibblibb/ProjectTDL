@@ -4,6 +4,7 @@ using System.Web.UI;
 using Anthem;
 using FirebirdSql.Data.FirebirdClient;
 using JC_SoccerWeb.Common;
+using System.Collections;
 
 namespace JC_SoccerWeb
 {
@@ -17,6 +18,10 @@ namespace JC_SoccerWeb
         protected Button btnSave;
         protected Anthem.Label lbMsg;
         protected Anthem.Label lbAction;
+        protected Anthem.Label lbHomeid;
+        protected Anthem.Label lbGuestid;
+        protected Anthem.Label lbEventid;
+        protected Button btnLiveEdit;
         private void Page_Load(object sender, EventArgs e)
         {
             if (Request.IsAuthenticated)
@@ -25,6 +30,7 @@ namespace JC_SoccerWeb
                 {
                     string sID = this.Request.QueryString["ID"].ToString().Trim();
                     string sType = this.Request.QueryString["Type"].ToString().Trim();
+                    this.lbEventid.Text = sID;
                     if (sType != "HKJC")
                     {
                         btnSave.Visible = false;
@@ -39,9 +45,11 @@ namespace JC_SoccerWeb
                         //btnSave.Visible = false;
                         //btnSave.UpdateAfterCallBack = true;
                         BindGoalInfo("Live", sID == "" ? "-1" : sID);
-                        lbAction.Text = "上次行動:擷取即場數據("+ DateTime.Now.ToString ("HH: mm:ss")+")";
-                        lbAction.UpdateAfterCallBack = true;
+                        //lbAction.Text = "上次行動:擷取即場數據("+ DateTime.Now.ToString ("HH: mm:ss")+")";
+                        //lbAction.UpdateAfterCallBack = true;
                     }
+                    lbAction.Text = "上次行動:擷取即場數據(" + DateTime.Now.ToString("HH: mm:ss") + ")";
+                    lbAction.UpdateAfterCallBack = true;
                 }
             }
         }
@@ -64,6 +72,7 @@ namespace JC_SoccerWeb
         private void InitializeComponent()
         {
             this.btnSave.Click += new EventHandler(this.btnSave_Click);
+            this.btnLiveEdit.Click += new EventHandler(this.btnLiveEdit_Click);
             this.Load += new System.EventHandler(this.Page_Load);
 
         }
@@ -155,6 +164,111 @@ namespace JC_SoccerWeb
             this.dgGoalInfo.UpdateAfterCallBack = true;
         }
 
+        private void btnLiveEdit_Click(object sender, EventArgs e)
+        {
+            if (btnLiveEdit.Text == "Edit")
+            {
+                for (int i = 0; i < this.totalDetails.Items.Count; i++)
+                {
+                    ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].FindControl("txtHValue")).Enabled = true;
+                    ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].Cells[2].Controls[1]).Enabled = true;
+                }
+                this.btnLiveEdit.Text = "Save";
+                this.lbMsg.Text = "";
+            }
+            else if (btnLiveEdit.Text == "Save")
+            {
+                bool results = false;
+                ArrayList ar = new ArrayList();
+                ArrayList aI = new ArrayList();
+                ArrayList aH = new ArrayList();
+                ArrayList aG = new ArrayList();
+                int id = -1;
+                string strResults = "";
+                string sType = "";
+                string sH = "", sH2 = "";
+                string sG = "", sG2 = "";
+                for (int i = 0; i < this.totalDetails.Items.Count; i++)
+                {
+                    sType = ((System.Web.UI.WebControls.Label)this.totalDetails.Items[i].Cells[0].Controls[1]).Text;
+                    sH = ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].FindControl("txtHValue")).Text;
+                    sG = ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].Cells[2].Controls[1]).Text;
+                    sH2 = ((System.Web.UI.WebControls.Label)this.totalDetails.Items[i].FindControl("lbHValue")).Text;
+                    sG2 = ((System.Web.UI.WebControls.Label)this.totalDetails.Items[i].Cells[2].Controls[3]).Text;
+                    if (sH != sH2 || sG != sG2)
+                    {
+                        aI.Add(i);
+                        aH.Add(sH);
+                        aG.Add(sG);
+                        ar.Add(sType + "," + sH + "," + sG);
+                        results = true;
+                        strResults += sType + "," + sH + "," + sG+" / ";
+                    }
+
+                }
+                if (results)
+                {
+                    try
+                    {
+                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                        {
+                            connection.Open();
+                            string queryString = "SELECT  r.SOT_20  \"Shot On\", r.SOT_21 \"Shot Off\", r.ATTACKS_10 \"Attacks\",    r.DA_11 \"Dangerous attacks\", r.CORNERS_13 \"Corners\", r.YELLOW_CARDS_8 \"Yellow cards\", r.RED_CARDS_9 \"Red cards\", r.TOTAL_SHOTS_19 \"Total shots\" ,    r.FOULS_22 \"Fouls\", r.OFFSIDES_24 \"Offsides\", r.PS_14 \"Penalties scored\", r.PM_15 \"Penalties missed\", r.PG_16 \"Penalties given\", r.FK_25 \"Free kicks\", r.DFK_26 \"Dangerous free kicks\"," +
+                                        "r.FKG_18 \"Free kick goals\" , r.SW_27 \"Shots woodwork\", r.SB_28 \"Shots blocked\" , r.GS_29 \"Goalkeeper saves\", r.GK_30 \"Goal kicks\", r.TI_32 \"Throw-ins\" , r.SUBSTITUTIONS_31 \"Substitutions\",    r.GOALS_40, r.MP_34, r.OWN_GOALS_17, r.ADW_33, r.FORM_716, r.SKIN_718,    r.PS_639, r.PU_697, r.GOALS115_772, r.GOALS1630_773, r.GOALS3145_774,    r.GOALS4660_775, r.GOALS6175_776, r.GOALS7690_777, r.MPG_778, r.MPS_779," +
+                                         " r.CTIMESTAMP, r.CACTION, r.TEAMTYPE, r.PARTICIPANTID   FROM PARTICIPANT_STATS r  where r.EVENTID=" + this.lbEventid.Text + " ORDER BY R.TEAMTYPE DESC ";
+                            using (FbCommand cmd = new FbCommand(queryString, connection))
+                            {
+                                using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                {
+                                    using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
+                                    {
+                                        using (DataSet data = new DataSet())
+                                        {
+                                            data.Tables.Add(new DataTable("liveOdds"));
+                                            fda.Fill(data.Tables["liveOdds"]);
+                                            for (int i = 0; i < aI.Count; i++)
+                                            {
+                                                data.Tables[0].Rows[0][Convert.ToInt32(aI[i])] = aH[i];
+                                                data.Tables[0].Rows[1][Convert.ToInt32(aI[i])] = aG[i];
+                                            }
+                                            fda.Update(data.Tables["liveOdds"]);
+                                        }
+                                    }
+                                }
+                            }
+                            connection.Close();
+                        }
+
+                        Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Update ["+ this.lbEventid.Text+"]"+this.totalDetails.Columns[1].HeaderText+"/"+this.totalDetails.Columns[2].HeaderText + " : " + strResults);
+
+                        for (int i = 0; i < this.totalDetails.Items.Count; i++)
+                        {
+                            ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].Cells[1].Controls[1]).Enabled = false;
+                            ((System.Web.UI.WebControls.Label)this.totalDetails.Items[i].FindControl("lbHValue")).Text = ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].Cells[1].Controls[1]).Text;
+                             ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].Cells[2].Controls[1]).Enabled = false;
+                            ((System.Web.UI.WebControls.Label)this.totalDetails.Items[i].Cells[2].Controls[3]).Text = ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].Cells[2].Controls[1]).Text;
+                        }
+                    }
+                    catch (Exception exp)
+                    {
+                        results = false;
+                        string exps = exp.ToString();
+                        Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + " btnLiveEdit_Click(),error: " + exps);
+                    } 
+                }
+                else
+                {
+
+                }
+                this.btnLiveEdit.Text = results&& strResults != "" ? "Edit" : "Save";
+                this.lbMsg.Text = results && strResults != "" ? "[Success]" : strResults == ""?"": "[Failure]";
+            }
+            this.lbMsg.UpdateAfterCallBack = true;
+            this.btnLiveEdit.UpdateAfterCallBack = true;
+            this.totalDetails.UpdateAfterCallBack = true;
+        }
+
+
         private void BindResults(string Type, string id)
         {
             //id = "2459871";
@@ -221,10 +335,12 @@ namespace JC_SoccerWeb
                                 "SELECT a.TEAMTYPE HG, a.EVENTID EMATCHID, a.SUBPARTICIPANT_NAME PLAYER, a.INCIDENT_NAME CTYPE, a.SUBPARTICIPANT_ID PARTICIPANTID, '' PLAYERCHI, t.NAME_CN  , cast(SUBSTRING(a.EVENT_TIME FROM 1 FOR 2) as integer)+1 ELAPSED,  a.CTIMESTAMP LASTTIME," +
                                "a.PARTICIPANT_ID TEAM_ID FROM INCIDENTS a left JOIN players T ON CAST(T.ID AS varchar(12)) = a.PARTICIPANT_ID  where a.EVENTID = '" + id + "'  and a.PARTICIPANT_ID !='' order by a.EVENT_TIME asc" :
                     //"select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.NAME_CN , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  players T  ON CAST(T.ID AS varchar(12)) = I.PARTICIPANTID  WHERE i.EMATCHID = '" + id + "' and (i.ctype='ycard' or i.ctype='ycard'  or i.ctype='goal' ) order by i.ELAPSED asc";
-                    "select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.CPLAYER_NAME , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  PLAYERS_INFO T  ON CAST(T.PLAYER_ID AS varchar(12)) = I.PARTICIPANTID AND I.team_id=T.TEAM_ID  WHERE i.EMATCHID = '" + id + "' and (i.ctype='ycard' or i.ctype='ycard'  or i.ctype='goal' ) order by i.ELAPSED asc";
+                    "select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.CPLAYER_NAME , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  PLAYERS_INFO T  ON CAST(T.PLAYER_ID AS varchar(12)) = I.PARTICIPANTID AND I.team_id=T.TEAM_ID  WHERE i.EMATCHID = '" + id + "' and (i.ctype='rcard' or i.ctype='ycard'  or i.ctype='goal' ) and (i.N !=0 or i.n is null) order by i.ELAPSED asc";// and I.PLAYER !='' order by i.ELAPSED asc";
                     if (Type == "Live")
                     {
                         this.dgGoalInfo.Visible = false;
+                        this.btnSave.Visible = false;
+                        
                         //queryString = "SELECT  r.EVENTID,r.PARTICIPANT_ID,e.HKJC_NAME_CN, r.TEAMTYPE," +
                         //    "sum(case when r.INCIDENT_NAME='Goal' or r.INCIDENT_ID=421 then 1 else 0 end ) as Goal ," +
                         //    "sum(case when r.INCIDENT_NAME='Yellow card' then 1 else 0 end ) as Yellowcard ," +
@@ -286,6 +402,7 @@ namespace JC_SoccerWeb
                     else
                     {
                         this.totalDetails.Visible = false;
+                        this.btnLiveEdit.Visible = false;
                         using (FbCommand cmd = new FbCommand(queryString))
                         {
                             using (FbDataAdapter fda = new FbDataAdapter())

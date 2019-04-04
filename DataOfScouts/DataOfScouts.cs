@@ -11,7 +11,7 @@ using FirebirdSql.Data.FirebirdClient;
 using System.Drawing;
 using System.Collections;
 using Microsoft.VisualBasic.CompilerServices;
-using System.Xml.Linq;
+using System.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
 using System.ComponentModel;
@@ -37,6 +37,15 @@ namespace DataOfScouts
         private static extern int GetLastError();
         private static readonly uint uiSkSvrNotify = RegisterWindowMessage(AppFlag.lpString);
         private static readonly IntPtr HWND_BROADCAST = new IntPtr(0xFFFF);
+
+
+        [DllImport("user32.dll", EntryPoint = "FindWindow")]
+          public static extern int FindWindow(string lpClassName, string lpWindowName);
+        //public static extern int FindWindow(String text, String class_name);
+        private const int SUCCESS_CODE = 100000;
+        private static readonly uint uiSkSvrNotify2 = RegisterWindowMessage(AppFlag.SkSvrNotify); 
+
+
         public IReceiver Receiver { get; set; }
         public DataOfScouts()
         {
@@ -133,6 +142,8 @@ namespace DataOfScouts
                 //InsertData("events", true, this.bnAreas.Items[17].Text + "2019-03-19 00:00:00", this.bnAreas.Items[19].Text + "2019-03-31 23:59:59");
                 // InsertData("standings", true);
                 this.Receiver = new Receiver();
+
+                SendAlertMsg(123,"d");
             }
             catch (Exception exp)
             {
@@ -1673,6 +1684,38 @@ namespace DataOfScouts
             {
                 SUCCESS_CODE = false;
                 Files.WriteError("SendAlertMsg(),error:" + ex.ToString());
+            }
+            return SUCCESS_CODE;
+        }
+
+        public static bool SendAlertMsg(int sBroadcast, string sType)
+        {
+            bool SUCCESS_CODE = false;
+            int iResultCode = 0;
+            try
+            {
+                int WINDOW_HANDLER = FindWindow(null,Directory.GetCurrentDirectory() + @"\ScoutDBProvider\ScoutDBProvider");
+                if (WINDOW_HANDLER != 0)
+                {
+                    Files.WriteLog(" [Success] found " + Directory.GetCurrentDirectory() + @"\ScoutDBProvider\ScoutDBProvider");
+                    IntPtr handle = PostMessage(HWND_BROADCAST, uiSkSvrNotify2, new Random().Next(), sBroadcast);
+                    iResultCode = (int)handle;
+                }
+                if (iResultCode != 0)
+                {
+                    SUCCESS_CODE = true;
+                    Files.WriteLog(" [Success] Send2 "+ uiSkSvrNotify2+"--" + sBroadcast.ToString());
+                }
+                else
+                {
+                    iResultCode = GetLastError();
+                    throw (new Exception("GetLastError2()"));
+                }
+            }
+            catch (Exception ex)
+            {
+                SUCCESS_CODE = false;
+                Files.WriteError("SendAlertMsg2(),error:" + ex.ToString());
             }
             return SUCCESS_CODE;
         }
@@ -5534,6 +5577,17 @@ namespace DataOfScouts
 
                                                     sPlayers += (participant.lineups == null || participant.lineups.Count() == 0) ? "" : "\r\n" + (participant.counter == "1" ? "Host\r\n" : "Guest\r\n");
 
+                                                    if ((participant.lineups == null || participant.lineups.Count() == 0)) continue;
+                                                    using (FbCommand cmd2 = new FbCommand())
+                                                    {
+                                                        cmd2.CommandText = "DELETE_PlayerInfo_ByEventID";
+                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                        cmd2.Connection = connection;
+                                                        cmd2.Parameters.Add("@ID", sevent.id);
+                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                    }
+                                                    Files.WriteLog("Delete PlayerInfo [" + sevent.id + "]");
+
                                                     foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup lineup in participant.lineups)
                                                     {
                                                         if (lineup == null) continue;
@@ -5606,6 +5660,17 @@ namespace DataOfScouts
                                                 }
                                                 DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident[] events_incidents = sevent.events_incidents;
                                                 if (events_incidents == null || events_incidents.Count() == 0) continue;
+
+                                                using (FbCommand cmd2 = new FbCommand())
+                                                {
+                                                    cmd2.CommandText = "DELETE_INCIDENTS_ByEventID";
+                                                    cmd2.CommandType = CommandType.StoredProcedure;
+                                                    cmd2.Connection = connection;
+                                                    cmd2.Parameters.Add("@ID", sevent.id);
+                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                }
+                                                Files.WriteLog("Delete INCIDENTS [" + sevent.id + "]");
+
                                                 foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident Event_incident in sevent.events_incidents)
                                                 {
                                                     if (Event_incident == null) continue;

@@ -1,0 +1,18 @@
+﻿15:27:21 BEN login success.
+15:27:48 [Success] Cancel Sync [2520253] EMATCHES[FRI 1]  (Brisbane Roar - Sydney FC) Brisbane Roar/Sydney FC
+15:28:33 [Success] Sync [2520253] Brisbane Roar - Sydney FC to [FRI 1] -
+15:28:33 [Success]  Sync [Brisbane Roar - Sydney FC] on Teams
+15:28:38 [Success] Sure [2520253 Brisbane Roar - Sydney FC] on Teams
+15:34:41 [Success] Sync [2520253] EMATCHES[FRI 1] / (Brisbane Roar - Sydney FC)
+15:34:41 Sync [Brisbane Roar - Sydney FC] on Teams
+15:34:47 [Success] Sync [2520253] EMATCHES[FRI 1] / (Brisbane Roar - Sydney FC)
+15:34:47 Sync [Brisbane Roar - Sydney FC] on Teams
+15:34:50 [Success] Cancel Sync [2520253] EMATCHES[FRI 1] Brisbane Roar/Sydney FC (Brisbane Roar - Sydney FC)
+15:35:43 [Success] Sync [2520253] EMATCHES[FRI 1] / (Brisbane Roar - Sydney FC)
+15:35:43 [Success]  Sync [Brisbane Roar - Sydney FC] on Teams
+15:35:47 [Success] Sure [2520253 Brisbane Roar - Sydney FC] on Teams
+15:38:46 BEN login success.
+15:38:57 [Success] Cancel Sync [2520253] EMATCHES[FRI 1] Brisbane Roar/Sydney FC (Brisbane Roar - Sydney FC)
+15:39:04 [Failure] Cancel Sync [2520253] EMATCHES[FRI 1] Brisbane Roar/Sydney FC (Brisbane Roar - Sydney FC)
+15:52:04 BEN login success.
+17:40:16 BEN login success.

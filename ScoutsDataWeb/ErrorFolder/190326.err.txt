@@ -1,0 +1,130 @@
+﻿10:32:38   BindEvents()  System.NullReferenceException: Object reference not set to an instance of an object.
+   at JC_SoccerWeb.Update.dgSchedule_ItemDataBound(Object sender, DataGridItemEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 556
+   at System.Web.UI.WebControls.DataGrid.OnItemDataBound(DataGridItemEventArgs e)
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 847
+10:32:56   BindEvents()  System.NullReferenceException: Object reference not set to an instance of an object.
+   at JC_SoccerWeb.Update.dgSchedule_ItemDataBound(Object sender, DataGridItemEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 556
+   at System.Web.UI.WebControls.DataGrid.OnItemDataBound(DataGridItemEventArgs e)
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 847
+10:33:22   BindEvents()  System.NullReferenceException: Object reference not set to an instance of an object.
+   at JC_SoccerWeb.Update.dgSchedule_ItemDataBound(Object sender, DataGridItemEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 556
+   at System.Web.UI.WebControls.DataGrid.OnItemDataBound(DataGridItemEventArgs e)
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 847
+10:34:08   BindEvents()  System.NullReferenceException: Object reference not set to an instance of an object.
+   at JC_SoccerWeb.Update.dgSchedule_ItemDataBound(Object sender, DataGridItemEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 556
+   at System.Web.UI.WebControls.DataGrid.OnItemDataBound(DataGridItemEventArgs e)
+   at System.Web.UI.WebControls.DataGrid.CreateItem(Int32 itemIndex, Int32 dataSourceIndex, ListItemType itemType, Boolean dataBind, Object dataItem, DataGridColumn[] columns, TableRowCollection rows, PagedDataSource pagedDataSource)
+   at System.Web.UI.WebControls.DataGrid.CreateControlHierarchy(Boolean useDataSource)
+   at System.Web.UI.WebControls.BaseDataList.OnDataBinding(EventArgs e)
+   at System.Web.UI.WebControls.BaseDataList.DataBind()
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 847
+10:59:11 Sync, error:System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value, IFormatProvider provider)
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.WriteRawParameter(XdrStream xdr, DbField field) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 805
+   at FirebirdSql.Data.Client.Managed.Version13.GdsStatement.WriteParameters() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version13\GdsStatement.cs:line 75
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.SendExecuteToBuffer() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 547
+   at FirebirdSql.Data.Client.Managed.Version12.GdsStatement.Execute() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version12\GdsStatement.cs:line 56
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteCommand(CommandBehavior behavior, Boolean returnsSet) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 1175
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 582
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 655
+10:59:12 Sync, error:System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value, IFormatProvider provider)
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.WriteRawParameter(XdrStream xdr, DbField field) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 805
+   at FirebirdSql.Data.Client.Managed.Version13.GdsStatement.WriteParameters() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version13\GdsStatement.cs:line 75
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.SendExecuteToBuffer() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 547
+   at FirebirdSql.Data.Client.Managed.Version12.GdsStatement.Execute() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version12\GdsStatement.cs:line 56
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteCommand(CommandBehavior behavior, Boolean returnsSet) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 1175
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 582
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 655
+10:59:12 Sync, error:System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value, IFormatProvider provider)
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.WriteRawParameter(XdrStream xdr, DbField field) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 805
+   at FirebirdSql.Data.Client.Managed.Version13.GdsStatement.WriteParameters() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version13\GdsStatement.cs:line 75
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.SendExecuteToBuffer() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 547
+   at FirebirdSql.Data.Client.Managed.Version12.GdsStatement.Execute() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version12\GdsStatement.cs:line 56
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteCommand(CommandBehavior behavior, Boolean returnsSet) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 1175
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 582
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 655
+10:59:12 Sync, error:System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value, IFormatProvider provider)
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.WriteRawParameter(XdrStream xdr, DbField field) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 805
+   at FirebirdSql.Data.Client.Managed.Version13.GdsStatement.WriteParameters() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version13\GdsStatement.cs:line 75
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.SendExecuteToBuffer() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 547
+   at FirebirdSql.Data.Client.Managed.Version12.GdsStatement.Execute() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version12\GdsStatement.cs:line 56
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteCommand(CommandBehavior behavior, Boolean returnsSet) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 1175
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 582
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 655
+10:59:12 Sync, error:System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value, IFormatProvider provider)
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.WriteRawParameter(XdrStream xdr, DbField field) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 805
+   at FirebirdSql.Data.Client.Managed.Version13.GdsStatement.WriteParameters() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version13\GdsStatement.cs:line 75
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.SendExecuteToBuffer() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 547
+   at FirebirdSql.Data.Client.Managed.Version12.GdsStatement.Execute() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version12\GdsStatement.cs:line 56
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteCommand(CommandBehavior behavior, Boolean returnsSet) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 1175
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 582
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 655
+10:59:14 Sync, error:System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value, IFormatProvider provider)
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.WriteRawParameter(XdrStream xdr, DbField field) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 805
+   at FirebirdSql.Data.Client.Managed.Version13.GdsStatement.WriteParameters() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version13\GdsStatement.cs:line 75
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.SendExecuteToBuffer() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 547
+   at FirebirdSql.Data.Client.Managed.Version12.GdsStatement.Execute() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version12\GdsStatement.cs:line 56
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteCommand(CommandBehavior behavior, Boolean returnsSet) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 1175
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 582
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 655
+10:59:14 Sync, error:System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.String.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value, IFormatProvider provider)
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.WriteRawParameter(XdrStream xdr, DbField field) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 805
+   at FirebirdSql.Data.Client.Managed.Version13.GdsStatement.WriteParameters() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version13\GdsStatement.cs:line 75
+   at FirebirdSql.Data.Client.Managed.Version10.GdsStatement.SendExecuteToBuffer() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version10\GdsStatement.cs:line 547
+   at FirebirdSql.Data.Client.Managed.Version12.GdsStatement.Execute() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\Client\Managed\Version12\GdsStatement.cs:line 56
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteCommand(CommandBehavior behavior, Boolean returnsSet) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 1175
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteScalar() in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 582
+   at JC_SoccerWeb.Update.dgSchedule_UpdateCommand(Object source, DataGridCommandEventArgs e) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 655
+11:44:59   BindEvents()  FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 293
+from ---> Dynamic SQL Error
+SQL error code = -104
+Token unknown - line 1, column 293
+from
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.Update.BindEvents(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\Update.aspx.cs:line 846

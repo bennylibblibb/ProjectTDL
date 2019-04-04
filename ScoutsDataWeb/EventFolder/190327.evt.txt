@@ -1,0 +1,11 @@
+﻿17:47:04 Update [2504815]AC米蘭(主)/薩斯索羅(客) : Fouls,200,9 / 
+17:47:10 Update [2504815]AC米蘭(主)/薩斯索羅(客) : Dangerous free kicks,333,4 / 
+17:47:19 Update [2504815]AC米蘭(主)/薩斯索羅(客) : Goalkeeper saves,0,1 / 
+17:47:25 Update [2504815]AC米蘭(主)/薩斯索羅(客) : Shots blocked,12,0 / 
+18:02:18 BEN login success.
+18:06:33 BEN login success.
+18:07:48 Update [2439362]卡昂(主)/聖日門(客) : Shot On,26,7 / Attacks,566,92 / 
+18:12:15 Update [2455955]慕遜加柏(主)/拜仁慕尼黑(客) : Shot Off,465,256 / 
+18:14:14 BEN login success.
+18:16:22 Update [2456261]漢堡(主)/格雷特霍夫(客) : Fouls,111,151 / 
+18:17:05 Update [2456261]漢堡(主)/格雷特霍夫(客) : Fouls,11,15 / 

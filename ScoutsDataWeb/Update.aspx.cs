@@ -498,7 +498,7 @@
                        // cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(start_date).AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                      //   cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddDays(1).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                         id = Convert.ToInt32(cmd2.ExecuteScalar());
-                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Cancel Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " (" + eventName+") "  +lbHKJCHOSTNAME + "/" + lbHKJCGUESTNAME);
+                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Cancel Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + lbHKJCHOSTNAME + "/" + lbHKJCGUESTNAME + " (" + eventName+")" );
                         this.dgRankDetails.EditItemIndex = -1;
                     }
                     connection.Close();
@@ -532,40 +532,55 @@
 
         private void dgSchedule_ItemDataBound(object sender, DataGridItemEventArgs e)
         {
-            // ((((e.Item.Cells).Items[13])).Controls).Items[3]
-            /// for (int i = 0; i < this.dgRankDetails.Items.Count; i++)
+            try
             {
-                //if (((Anthem.Label)this.dgRankDetails.Items[i].Cells[13].Controls[3]).Text != "")
-                //{
-                //    ((Anthem.DropDownList)this.dgRankDetails.Items[i].Cells[13].Controls[3]).SelectedValue = ((Anthem.Label)this.dgRankDetails.Items[i].Cells[13].Controls[3]).Text;
-                //}
-            }
-            if (e.Item.ItemType == ListItemType.EditItem)
-            {
-                //if (((Anthem.Label)e.Item.Cells[13].Controls[3]).Text != "")
-                //{
-                //    ((Anthem.DropDownList)e.Item.Cells[13].Controls[1]).SelectedValue = ((Anthem.Label)e.Item.Cells[13].Controls[3]).Text;
-                //}
-                // ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
-                ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbDAYCODE")).Text;
-                System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[19].Controls[0];
-                string sID = ((System.Web.UI.WebControls.Label)e.Item.FindControl("lbID")).Text;
-                lbtnEdit.CausesValidation = true;
-                //  lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure？');";
-                lbtnEdit.Attributes.Add("onclick", "javascript:OpenMapping(" + sID + ")");
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                e.Item.Attributes["style"] = "cursor:hand";
-                System.Web.UI.WebControls.LinkButton link = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[1].Controls[3]; 
-                //e.Item.Attributes.Add("onclick", "this.style.backgroundColor='Gray';");
-                //href: "javascript:__doPostBack('dgRankDetails$ctl04$btnSelect','')"
-                e.Item.Attributes.Add("onclick", "javascript:return ClickLinkBtn(" + link.ClientID + ")");
-                if (((System.Web.UI.WebControls.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text == "")
+                // ((((e.Item.Cells).Items[13])).Controls).Items[3]
+                /// for (int i = 0; i < this.dgRankDetails.Items.Count; i++)
                 {
-                    System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
-                    lbtnEdit.Visible = false;
+                    //if (((Anthem.Label)this.dgRankDetails.Items[i].Cells[13].Controls[3]).Text != "")
+                    //{
+                    //    ((Anthem.DropDownList)this.dgRankDetails.Items[i].Cells[13].Controls[3]).SelectedValue = ((Anthem.Label)this.dgRankDetails.Items[i].Cells[13].Controls[3]).Text;
+                    //}
                 }
+                if (e.Item.ItemType == ListItemType.EditItem)
+                {
+                    //if (((Anthem.Label)e.Item.Cells[13].Controls[3]).Text != "")
+                    //{
+                    //    ((Anthem.DropDownList)e.Item.Cells[13].Controls[1]).SelectedValue = ((Anthem.Label)e.Item.Cells[13].Controls[3]).Text;
+                    //}
+                    // ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
+                    ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbDAYCODE")).Text;
+                    System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[19].Controls[0];
+                    string sID = ((System.Web.UI.WebControls.Label)e.Item.FindControl("lbID")).Text;
+                    lbtnEdit.CausesValidation = true;
+                    lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure Sync？');";
+                    // lbtnEdit.Attributes.Add("onclick", "javascript:OpenMapping(" + sID + ")");
+                    System.Web.UI.WebControls.LinkButton lbtnEdit2 = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
+                    lbtnEdit2.Visible = false;
+                }
+                else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+                {
+                    e.Item.Attributes["style"] = "cursor:hand";
+                    System.Web.UI.WebControls.LinkButton link = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[1].Controls[3];
+                    //e.Item.Attributes.Add("onclick", "this.style.backgroundColor='Gray';");
+                    //href: "javascript:__doPostBack('dgRankDetails$ctl04$btnSelect','')"
+                    e.Item.Attributes.Add("onclick", "javascript:return ClickLinkBtn(" + link.ClientID + ")");
+                    if (((System.Web.UI.WebControls.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text == "")
+                    {
+                        System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
+                        lbtnEdit.Visible = false;
+                    }
+                    else
+                    {
+                        System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
+                        lbtnEdit.Visible = true;
+                        lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure Cancel？');";
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                string str = exception.ToString();
             }
         }
 
@@ -618,8 +633,8 @@
             string start_date= ((Anthem.Label)e.Item.FindControl("lbSTART_DATE")).Text;
             string sUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff");
             string eventName= ((Anthem.Label)e.Item.FindControl("lbNAME")).Text;
-            //string oldDayCODE = ((Anthem.Label)e.Item.FindControl("lbDAYCODE")).Text;
-            //string oldMatchNo = ((Anthem.Label)e.Item.FindControl("lbMATCHNO")).Text;
+            //string lbHKJCHOSTNAME = ((Anthem.Label)e.Item.FindControl("lbHKJCHOSTNAME")).Text;
+            //string lbHKJCGUESTNAME = ((Anthem.Label)e.Item.FindControl("lbHKJCGUESTNAME")).Text;
             int id = 0;
             try
             {
@@ -636,12 +651,13 @@
                         //cmd2.Parameters.Add("@OLDHKJCMATCHNO", oldMatchNo);
                         cmd2.Parameters.Add("@HKJCDAYCODE", dayCODE);
                         cmd2.Parameters.Add("@HKJCMATCHNO", matchNo);
-                        cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(start_date).AddHours (-AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        cmd2.Parameters.Add("@CMATCHDATETIME1", Convert.ToDateTime(start_date).AddHours(-AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                         cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddHours(AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                          id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        // Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + lbHKJCHOSTNAME + "/" + lbHKJCGUESTNAME + " (" + eventName+")");
                         Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName);
                         this.dgRankDetails.EditItemIndex = -1;
-                        if(id>0&&AppFlag.AutoMapping)
+                        if (id > 0 && AppFlag.AutoMapping)
                         {
                             TeamMapping(eventId, dayCODE, matchNo, start_date, eventName);
                         }
@@ -752,7 +768,7 @@
                         cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(startDate).AddHours(AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                         int id = Convert.ToInt32(cmd2.ExecuteScalar());
                         //  Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventName + "] on Teams");
-                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + "") + " Sync [" + eventName + "] on Teams");
+                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + "") + "Sync [" + eventName + "] on Teams");
                     }
                     connection.Close();
                 }
@@ -810,11 +826,14 @@
             try
             {
                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
-                {//(r.caction !='delete' or r.caction is null) and 
-                 //string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS ,e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN "
-                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS , (select first 1 hkjc_name_cn from teams where id=r.home_id and r.id=e.EMATCHID) HKJCHOSTNAME_CN,(select first 1 hkjc_name_cn from teams where id= r.guest_id and r.id=e.EMATCHID) HKJCGUESTNAME_CN  "
-                    + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID"
-                       + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'"+ (id.ToString ()=="-1"?"": " and STATUS_ID ="+dplLeague.SelectedValue) +  " order by r.START_DATE , r.id ASC  ";
+                {
+                    // string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS , (select first 1 hkjc_name_cn from teams where id=r.home_id and r.id=e.EMATCHID) HKJCHOSTNAME_CN,(select first 1 hkjc_name_cn from teams where id= r.guest_id and r.id=e.EMATCHID) HKJCGUESTNAME_CN  "
+                    //+ "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID"
+                    //   + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'"+ (id.ToString ()=="-1"?"": " and STATUS_ID ="+dplLeague.SelectedValue) +  " order by r.START_DATE , r.id ASC  ";
+                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS , e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN  ,c.SHORT_NAME,e.CLEAGUE_OUTPUT_NAME "
+                   + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID inner join COMPETITIONS c on c.id =r.COMPETITION_ID "
+                      + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'" + (id.ToString() == "-1" ? "" : " and STATUS_ID =" + dplLeague.SelectedValue) + " order by r.START_DATE , r.id ASC  ";
+
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())
