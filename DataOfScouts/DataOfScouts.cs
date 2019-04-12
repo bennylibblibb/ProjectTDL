@@ -1112,6 +1112,7 @@ namespace DataOfScouts
                                     {
                                         if (api.data.@event.id > 0)
                                         {
+                                            SendAlertMsg("1", api.data.@event.id.ToString());
                                             /// await AyncHandleData("events.show3", true, api.data.@event.id.ToString());
                                             InsertData("events.show3", true, api.data.@event.id.ToString(), true);
                                             Files.WriteLog(" Housekeep [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
@@ -1121,8 +1122,9 @@ namespace DataOfScouts
                                     {
                                         InsertData("events.show3", true, api.data.@event.id.ToString(), true);
                                         Files.WriteLog(" Get event [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
+                                        if(api.data.@event.status_id == 33 || api.data.@event.status_id == 34) SendAlertMsg("1", api.data.@event.id.ToString());
                                     }
-                                    SendAlertMsg("1", api.data.@event.id.ToString());
+                                   
                                     SendAlertMsg(AppFlag.LIVEGOALS);
                                     done = false;
                                 }
