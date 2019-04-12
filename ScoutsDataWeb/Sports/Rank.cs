@@ -74,7 +74,7 @@ namespace SportsUtil
             /// SQLString.Append("sELECT r.CLEAG_ALIAS,r.RANK, R.TEAM,r.GAMES, r.SCORE, t.HKJC_NAME_CN,R.IWON,R.IDRAW,R.ILOST, r.SEASON_ID FROM LEAGRANKINFO r inner join teams t on t.id = r.TEAM_ID where r.SEASON_ID in (select first 1 max(SEASON_ID) from LEAGRANKINFO  where LEAG_ID = "+ sLeagID + " group by SEASON_ID order by SEASON_ID desc) and r.LEAG_ID =");
             SQLString.Append("sELECT l.LEAGUE_CHI_NAME ,r.RANK, R.TEAM,r.GAMES, r.SCORE, t.HKJC_NAME_CN,R.IWON,R.IDRAW,R.ILOST, r.SEASON_ID FROM LEAGRANKINFO r inner join LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME=r.CLEAG_ALIAS inner join teams t on t.id = r.TEAM_ID where r.SEASON_ID in (select first 1 max(SEASON_ID) from LEAGRANKINFO  where LEAG_ID = " + sLeagID + " group by SEASON_ID order by SEASON_ID desc) and r.LEAG_ID =");
             SQLString.Append(sLeagID);
-            SQLString.Append(" ORDER BY r.RANK");
+            SQLString.Append(" ORDER BY R.GROUP_ID, r.RANK");
             try
             {
                 m_SportsOleReader = m_SportsDBMgr.ExecuteQuery(SQLString.ToString());

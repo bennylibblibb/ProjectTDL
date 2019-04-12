@@ -43,10 +43,10 @@
 	</tr>
 	<TR>
 		<TD></TD>
-		<TD><STRONG><SPAN class="bold">≈Á√“ΩX</SPAN></STRONG> :
-			<asp:TextBox id="txtValidate" runat="server" width="65px" cssclass="safari-midtextbox" columns="9"></asp:TextBox>
+		<TD style="display:none"><STRONG><SPAN class="bold">≈Á√“ΩX</SPAN></STRONG> :
+			<asp:TextBox id="txtValidate" runat="server" width="65px" cssclass="safari-midtextbox" columns="9" Text='<%# Request.Cookies["CheckCode"].Value %>' ></asp:TextBox>
 			<IMG id='vimg' src="CheckCode.aspx" alt='"Click To Refresh"' OnClick="change()">
-			<asp:RequiredFieldValidator id="RequiredFieldValidator3" runat="server" ControlToValidate="txtValidate" ErrorMessage="*"></asp:RequiredFieldValidator>
+			<asp:RequiredFieldValidator id="RequiredFieldValidator3" runat="server"  Enabled="false" ControlToValidate="txtValidate" ErrorMessage="*"></asp:RequiredFieldValidator>
 		</TD>
 	</TR>
 	<tr>

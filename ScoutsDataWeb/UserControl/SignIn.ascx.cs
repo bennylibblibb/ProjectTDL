@@ -55,11 +55,11 @@
                 this.Message.Text = "<br>Cookie Is Block！<br>";
                 this.Message.Visible = true;
             }
-            else if (string.Compare(base.Request.Cookies["CheckCode"].Value, this.txtValidate.Text, true) != 0)
-            {
-                this.Message.Text = "<br>驗證碼錯誤！<br>";
-                this.Message.Visible = true;
-            }
+            //////else if (string.Compare(base.Request.Cookies["CheckCode"].Value, this.txtValidate.Text, true) != 0)
+            //////{
+            //////    this.Message.Text = "<br>驗證碼錯誤！<br>";
+            //////    this.Message.Visible = true;
+            //////}
             else
             {
                 string str = "";

@@ -473,7 +473,7 @@ namespace SportsUtil {
                     SQLString.Remove(0, SQLString.Length);
                     SQLString.Append("select IPOS, CPLAYER_NAME||'/'||cengname, IPLAYER_NO from PLAYERS_INFO where TEAM_ID=");
                     SQLString.Append(sHostID);
-                    SQLString.Append(" and IROSTER=1 order by IPOS desc, IPLAYER_NO");
+                    SQLString.Append("   AND EVENT_ID="+ sEventID + " and IROSTER=1 order by IPOS ASC, IPLAYER_NO");
                     m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
                     while (m_SportsOleReaderFb.Read())
                     {
@@ -527,7 +527,7 @@ namespace SportsUtil {
                     SQLString.Remove(0, SQLString.Length);
                     SQLString.Append("select IPOS, CPLAYER_NAME||'/'||cengname, IPLAYER_NO from PLAYERS_INFO where TEAM_ID=");
                     SQLString.Append(sGuestID);
-                    SQLString.Append(" and IROSTER=1 order by IPOS desc, IPLAYER_NO");
+                    SQLString.Append(" AND EVENT_ID=" + sEventID + " and IROSTER=1 order by IPOS ASC, IPLAYER_NO");
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
                     while (m_SportsOleReaderFb.Read())
                     {
