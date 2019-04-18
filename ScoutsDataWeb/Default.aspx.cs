@@ -42,9 +42,9 @@
                     Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + "  ( " + this.Context.User.Identity.Name + ")   This login name is already in use by a different user,please re-login.");
                 }
                 FormsAuthentication.SignOut();
-                base.Response.Cookies["userroles"].Value = "";
-                base.Response.Cookies["userroles"].Path = "/";
-                base.Response.Cookies["userroles"].Expires = new DateTime(0x76c, 10, 12);
+                base.Response.Cookies["userrolesS"].Value = "";
+                base.Response.Cookies["userrolesS"].Path = "/";
+                base.Response.Cookies["userrolesS"].Expires = new DateTime(0x76c, 10, 12);
                 this.Session.Clear();
                 this.Context.User = null;
             }

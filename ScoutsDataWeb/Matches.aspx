@@ -259,7 +259,7 @@
                                                         </ItemTemplate>
                                                          </asp:TemplateColumn>
 
-                                                    <asp:TemplateColumn HeaderText="Goals">
+                                                    <asp:TemplateColumn HeaderText="Goals" Visible="false">
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
                                                          <a href=# onclick="window.open('MatchDetails.aspx?Type=HKJC&ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=900,height=400, top=200,left=200')" >																	
 																		<b>Goals</b>	</a>   </ItemTemplate>

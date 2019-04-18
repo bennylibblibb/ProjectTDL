@@ -51,16 +51,17 @@
                 list.Add(new TabItem("其它資訊", Global.GetApplicationPath(base.Request) + "/sports/SportNews.aspx?csIndex=" + list.Count));
                 list.Add(new TabItem("EnetPlus", "http://" + Common.AppFlag.EnetPlus));
             }
-            else if (list.Count == 2 && (base.Request["csIndex"] != null && base.Request["csIndex"] != "0" && base.Request["csIndex"] != "8" && base.Request["csIndex"] != "9"))
+            else if (list.Count == 2 && (base.Request["csIndex"] != null && base.Request["csIndex"] != "0" && base.Request["csIndex"] != "6" && base.Request["csIndex"] != "7"))
             {
-                list.Add(new TabItem("陣容", Global.GetApplicationPath(base.Request) + "/sports/PlayersRetrieval.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
                 list.Add(new TabItem("分析", Global.GetApplicationPath(base.Request) + "/sports/AnalysisModify.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
+                list.Add(new TabItem("陣容", Global.GetApplicationPath(base.Request) + "/sports/PlayersRetrieval.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
+                list.Add(new TabItem("即場", Global.GetApplicationPath(base.Request) + "/MatchDetails.aspx?csIndex=" + list.Count + "&Type=Live&ID=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
                 list.Add(new TabItem("數據", Global.GetApplicationPath(base.Request) + "/sports/AnalysisStat.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
                 list.Add(new TabItem("近績", Global.GetApplicationPath(base.Request) + "/sports/AnalysisRecent.aspx?csIndex=" + list.Count + "&eventid=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
-                list.Add(new TabItem("即場", Global.GetApplicationPath(base.Request) + "/MatchDetails.aspx?csIndex=" + list.Count + "&Type=Live&ID=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
-                list.Add(new TabItem("發送分析", Global.GetApplicationPath(base.Request) + "/sports/AnalysisPreview.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
-                list.Add(new TabItem("發送近績", Global.GetApplicationPath(base.Request) + "/sports/AnalysisSinglePreview.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
-            }  
+                list.Add(new TabItem("比數詳情", Global.GetApplicationPath(base.Request) + "/MatchDetails.aspx?Type=HKJC&csIndex=" + list.Count + "&ID=" + (Session["eventID"] == null ? "0" : Session["eventID"].ToString())));
+                ////list.Add(new TabItem("發送分析", Global.GetApplicationPath(base.Request) + "/sports/AnalysisPreview.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
+                ////list.Add(new TabItem("發送近績", Global.GetApplicationPath(base.Request) + "/sports/AnalysisSinglePreview.aspx?csIndex=" + list.Count + "&eventid=" + EventID));
+            }
             //list.Add(new TabItem("組別管理", Global.GetApplicationPath(base.Request) + "/GroupAdmin.aspx?csIndex=" + list.Count));
             if (Users.UserCheck(name))
             {
@@ -74,12 +75,12 @@
             //list.Add(new TabItem("短訊統計", Global.GetApplicationPath(base.Request) + "/StatSms.aspx?csIndex=" + list.Count));
             if (Users.UserCheck(name))
             {
-                list.Add(new TabItem("更改密碼", Global.GetApplicationPath(base.Request) + "/ChangePassword.aspx?csIndex=" + list.Count));
+             ///   list.Add(new TabItem("更改密碼", Global.GetApplicationPath(base.Request) + "/ChangePassword.aspx?csIndex=" + list.Count));
             }
             else
             {
                 /// list.Add(new TabItem("", ""));
-                list.Add(new TabItem("更改密碼", Global.GetApplicationPath(base.Request) + "/ChangePassword.aspx?csIndex=" + list.Count));
+             ///   list.Add(new TabItem("更改密碼", Global.GetApplicationPath(base.Request) + "/ChangePassword.aspx?csIndex=" + list.Count));
 
             }
             list.Add(new TabItem("登出", Global.GetApplicationPath(base.Request) + "/Logout.aspx?csIndex=" + list.Count));
@@ -117,21 +118,36 @@
             //{
             HyperLink hl = e.Item.FindControl("hlMenu") as HyperLink;
             if (hl != null)
-            {
-                hl.Attributes.Add("onclick", "javascript:return CheckUrl('" + hl.Text + "')");
-            }
-            // }
+                //{
+                //    hl.Attributes.Add("onclick", "javascript:return CheckUrl('" + hl.Text + "')");
+                //}
+                // }
 
 
-            //if (tabs.SelectedIndex == 1)
-            //{
-            //    if (e.Item.ItemIndex == 0)
-            //    {
-            //        DataListItem item = e.Item as DataListItem;
-            //        item.Enabled = false;
-            //        item.ForeColor = Color.Black;
-            //    }
-            //}
+                if (tabs.SelectedIndex == 1)
+                {
+                    if (hl != null && hl.Text != "STATSCORE")
+                    {
+                      hl.Attributes.Add("onclick", "javascript:"+(Session["eventID"] == null ? "alert('請選擇賽事!');return false;" : "return true;"));
+                    }
+                    else
+                    {
+                        hl.Attributes.Add("onclick", "javascript:return CheckUrl('" + hl.Text + "')");
+                    }
+                    //if (e.Item.ItemIndex == 0)
+                    //{
+                    //    DataListItem item = e.Item as DataListItem;
+                    //    item.Enabled = false;
+                    //    item.ForeColor = Color.Black;
+                    //}
+                }
+                else
+                {
+                    if (hl != null)
+                    {
+                        hl.Attributes.Add("onclick", "javascript:return CheckUrl('" + hl.Text + "')");
+                    }
+                }
 
         }
         private void tabs_ItemCreated(object sender, DataListItemEventArgs e)

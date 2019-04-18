@@ -205,6 +205,7 @@
             }
             else if (base.Request.IsAuthenticated && !this.Page.IsPostBack)
             {
+                Session["eventID"] = null;
                 this.txtFrom.Text = DateTime.Now.ToString("yyyy-MM-dd", culture);
                 this.txtTo.Text = DateTime.Now.ToString("yyyy-MM-dd", culture);
                 this.lbUser.Text = this.Context.User.Identity.Name;

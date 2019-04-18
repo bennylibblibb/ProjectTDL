@@ -129,12 +129,12 @@ namespace SportsUtil {
                 while (m_SportsOleReaderFb.Read())
                 {
                     anlyMatchCntAL.Add(m_SportsOleReaderFb.GetInt32(0));
-                    hostWinAL.Add(m_SportsOleReaderFb.GetInt32(1));
-                    hostDrawAL.Add(m_SportsOleReaderFb.GetInt32(2));
-                    hostLossAL.Add(m_SportsOleReaderFb.GetInt32(3));
-                    guestWinAL.Add(m_SportsOleReaderFb.GetInt32(4));
-                    guestDrawAL.Add(m_SportsOleReaderFb.GetInt32(5));
-                    guestLossAL.Add(m_SportsOleReaderFb.GetInt32(6));
+                    hostWinAL.Add(m_SportsOleReaderFb[1].Equals(DBNull.Value)?0: m_SportsOleReaderFb.GetInt32(1));
+                    hostDrawAL.Add(m_SportsOleReaderFb[2].Equals(DBNull.Value) ? 0 : m_SportsOleReaderFb.GetInt32(2));
+                    hostLossAL.Add(m_SportsOleReaderFb[3].Equals(DBNull.Value) ? 0 : m_SportsOleReaderFb.GetInt32(3));
+                    guestWinAL.Add(m_SportsOleReaderFb[4].Equals(DBNull.Value) ? 0 : m_SportsOleReaderFb.GetInt32(4));
+                    guestDrawAL.Add(m_SportsOleReaderFb[5].Equals(DBNull.Value) ? 0 : m_SportsOleReaderFb.GetInt32(5));
+                    guestLossAL.Add(m_SportsOleReaderFb[6].Equals(DBNull.Value) ? 0 : m_SportsOleReaderFb.GetInt32(6));
                 }
                 m_SportsDBMgrFb.Close();
                 m_SportsOleReaderFb.Close();

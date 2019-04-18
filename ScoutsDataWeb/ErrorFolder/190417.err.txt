@@ -1,0 +1,4 @@
+﻿16:37:39 BindGoalInfo(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindGoalInfo(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 395

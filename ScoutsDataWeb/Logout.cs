@@ -21,9 +21,9 @@
         {
             Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + this.Context.User.Identity.Name + " logout success.");
             FormsAuthentication.SignOut();
-            base.Response.Cookies["userroles"].Value = "";
-            base.Response.Cookies["userroles"].Path = "/";
-            base.Response.Cookies["userroles"].Expires = new DateTime(0x76c, 10, 12);
+            base.Response.Cookies["userrolesS"].Value = "";
+            base.Response.Cookies["userrolesS"].Path = "/";
+            base.Response.Cookies["userrolesS"].Expires = new DateTime(0x76c, 10, 12);
             this.Context.User = null;
             this.Session.Clear();
             base.Response.Redirect("Default.aspx", false);

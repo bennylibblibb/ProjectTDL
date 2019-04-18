@@ -70,7 +70,7 @@
                 }
                 str = str + ch.ToString();
             }
-            base.Response.Cookies.Add(new HttpCookie("CheckCode", str));
+            base.Response.Cookies.Add(new HttpCookie("CheckCodeS", str));
             return str;
         }
 

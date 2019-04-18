@@ -50,7 +50,7 @@
         }
             private void Btnsignin_Click(object sender, EventArgs e)
         {
-            if (base.Request.Cookies["CheckCode"] == null)
+            if (base.Request.Cookies["CheckCodeS"] == null)
             {
                 this.Message.Text = "<br>Cookie Is Block！<br>";
                 this.Message.Visible = true;
@@ -71,7 +71,7 @@
                     Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + str + " login success.");
                     FormsAuthentication.SetAuthCookie(str.ToUpper(), this.RememberCheckbox.Checked);
                     FormsAuthentication.RedirectFromLoginPage(str.ToUpper(), false);
-                    Hashtable hashtable = (Hashtable) base.Application["Online"];
+                    Hashtable hashtable = (Hashtable) base.Application["OnlineScouts"];
                     if (hashtable != null)
                     {
                         for (int i = 0; i < hashtable.Count; i++)
@@ -83,7 +83,7 @@
                                 if ((enumerator.Value != null) && enumerator.Value.ToString().Equals(str.ToUpper()))
                                 {
                                     str2 = enumerator.Key.ToString();
-                                    hashtable[str2] = "XXXXXX";
+                                    hashtable[str2] = "XXXXXXX";
                                     break;
                                 }
                             }
@@ -95,7 +95,7 @@
                     }
                     hashtable[base.Session.SessionID] = str.ToUpper();
                     base.Application.Lock();
-                    base.Application["Online"] = hashtable;
+                    base.Application["OnlineScouts"] = hashtable;
                     base.Application.UnLock();
                 }
                 else
@@ -121,9 +121,9 @@
         private void Page_Load(object sender, EventArgs e)
         {
             this.res = new ResourceHelper(this.Page);
-            base.Response.Cookies["userroles"].Value = "";
-            base.Response.Cookies["userroles"].Path = "/";
-            base.Response.Cookies["userroles"].Expires = new DateTime(0x76c, 10, 12);
+            base.Response.Cookies["userrolesS"].Value = "";
+            base.Response.Cookies["userrolesS"].Path = "/";
+            base.Response.Cookies["userrolesS"].Expires = new DateTime(0x76c, 10, 12);
             this.Context.User = null;
             this.Message.Text = this.Msg;
         }

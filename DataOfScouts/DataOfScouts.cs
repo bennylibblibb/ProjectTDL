@@ -164,12 +164,12 @@ namespace DataOfScouts
                dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays(1).Subtract(DateTime.Now) : dueTimes.Subtract(DateTime.Now)),
                period: dueTimes.AddDays(1).Subtract(dueTimes));
                 // RunGetEventCompare("2658849");
-                // InsertData("events.show3", true, "2764969", true);
+                // InsertData("events.show3", true, "2656709", true);
                 //InsertData("events", true, this.bnAreas.Items[17].Text + "2019-03-19 00:00:00", this.bnAreas.Items[19].Text + "2019-03-31 23:59:59");
                 // InsertData("standings", true);
-             // SendAlertMsg("2", "2019-04-12 03:01:24.327");
-                //SendAlertMsg("1", "2737958");
-               // SendAlertMsg("2", "2019-04-12 13:01:24.327");
+                // SendAlertMsg("2", "2019-04-12 03:01:24.327");
+                  SendAlertMsg("2", "2669663");
+                // SendAlertMsg("2", "2019-04-12 13:01:24.327");
                 this.Receiver = new Receiver();
 
             }
@@ -1115,17 +1115,20 @@ namespace DataOfScouts
                                             SendAlertMsg("1", api.data.@event.id.ToString());
                                             /// await AyncHandleData("events.show3", true, api.data.@event.id.ToString());
                                             InsertData("events.show3", true, api.data.@event.id.ToString(), true);
+                                            SendAlertMsg("2", api.data.@event.id.ToString());
                                             Files.WriteLog(" Housekeep [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
                                         }
                                     }
                                     else
                                     {
+                                        // if (api.data.@event.status_id == 33 || api.data.@event.status_id == 34) SendAlertMsg("1", api.data.@event.id.ToString());
+                                        SendAlertMsg("1", api.data.@event.id.ToString());
                                         InsertData("events.show3", true, api.data.@event.id.ToString(), true);
                                         Files.WriteLog(" Get event [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
-                                        if(api.data.@event.status_id == 33 || api.data.@event.status_id == 34) SendAlertMsg("1", api.data.@event.id.ToString());
+                                        SendAlertMsg("2", api.data.@event.id.ToString());
                                     }
                                    
-                                    SendAlertMsg(AppFlag.LIVEGOALS);
+                                   /// SendAlertMsg(AppFlag.LIVEGOALS);
                                     done = false;
                                 }
 
@@ -1736,7 +1739,7 @@ namespace DataOfScouts
             try
             {
                 string path = Directory.GetCurrentDirectory() + @"\ScoutDBProvider\ScoutDBProvider";
-               path = @"E:\Disseminator_OnlyRecv\ScoutDBProvider\ScoutDBProvider";
+                path = @"E:\Disseminator_OnlyRecv\ScoutDBProvider\ScoutDBProvider";
                 int WINDOW_HANDLER = FindWindow(null, path);
                 int wParam = -1;
                 int lParam = -1; 
@@ -1800,25 +1803,30 @@ namespace DataOfScouts
                     //       mp = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd")); ml = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff"));
                     //    Files.WriteLog(" [Success] send " + Convert.ToDateTime(Id).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                     //}
-                    if (Type == "1")
+                    if (Type == "1"|| Type == "2")
                     {
-                        wParam = 1;
+                        wParam = Convert.ToInt32(Type); 
                         lParam = Convert.ToInt32(Id);
                         Files.WriteLog(" [Success] send " + Id.ToString());
                     }
-                    else if (Type == "2")
+                    else if (Type == "3")
                     {
                         wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd"));
                         lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff"));
-                        if (  Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("00") == 0)
+                        if (  Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("000") == 0)
+                        {
+                            wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "000");
+                            lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(3,6));
+                        }
+                        else if(Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("00") == 0 )
                         {
                             wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "00");
                             lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(2,7));
                         }
-                        else if(Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("0") == 0 )
+                        else if (Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("0") == 0)
                         {
                             wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "0");
-                            lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(1,8));
+                            lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(1, 8));
                         }
                         //wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd"));
                         //lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff"));
@@ -8341,7 +8349,7 @@ namespace DataOfScouts
                      
                     if (bUpdate)
                     {
-                        SendAlertMsg("2",AppFlag.SyncHkjcDateTime);
+                        SendAlertMsg("3",AppFlag.SyncHkjcDateTime);
                         Files.UpdateConfig("SyncHkjcDateTime", uDate.ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                         Files.WriteLog("Update SyncHkjcDateTime " + uDate.ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                         AppFlag.SyncHkjcDateTime = uDate.ToString("yyyy-MM-dd HH:mm:ss.fff", null);

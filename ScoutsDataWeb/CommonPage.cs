@@ -12,7 +12,7 @@
             //{
             //    this.Session[this.Session.SessionID] = "s";
             //}
-            Hashtable hashtable = (Hashtable) base.Application["Online"];
+            Hashtable hashtable = (Hashtable) base.Application["OnlineScouts"];
             if (hashtable != null)
             {
                 IDictionaryEnumerator enumerator = hashtable.GetEnumerator();
@@ -20,13 +20,13 @@
                 {
                     if ((enumerator.Key != null) && enumerator.Key.ToString().Equals(this.Session.SessionID))
                     {
-                        if ((enumerator.Value == null) || !"XXXXXX".Equals(enumerator.Value.ToString()))
+                        if ((enumerator.Value == null) || !"XXXXXXX".Equals(enumerator.Value.ToString()))
                         {
                             break;
                         }
                         hashtable.Remove(this.Session.SessionID);
                         base.Application.Lock();
-                        base.Application["Online"] = hashtable;
+                        base.Application["OnlineScouts"] = hashtable;
                         base.Application.UnLock();
                         string format = "<script language=javascript>window.location.replace('{0}')</script>";
                         base.Response.Write(string.Format(format, "Default.aspx?redtype=unonly"));

@@ -35,12 +35,13 @@ namespace JC_SoccerWeb
                     {
                         btnSave.Visible = false;
                     }
-                    if (this.Request.QueryString["csIndex"] == null)
+
+                    if (sType == "HKJC")
                     {
                         BindResults(sType, sID == "" ? "-1" : sID);
                         BindGoalInfo(sType, sID == "" ? "-1" : sID);
                     }
-                    else
+                    else if(sType == "Live")
                     {
                         //btnSave.Visible = false;
                         //btnSave.UpdateAfterCallBack = true;
@@ -48,6 +49,21 @@ namespace JC_SoccerWeb
                         //lbAction.Text = "上次行動:擷取即場數據("+ DateTime.Now.ToString ("HH: mm:ss")+")";
                         //lbAction.UpdateAfterCallBack = true;
                     }
+
+                    //if (this.Request.QueryString["csIndex"] == null)
+                    //{
+                    //    BindResults(sType, sID == "" ? "-1" : sID);
+                    //    BindGoalInfo(sType, sID == "" ? "-1" : sID);
+                    //}
+                    //else
+                    //{
+                    //    //btnSave.Visible = false;
+                    //    //btnSave.UpdateAfterCallBack = true;
+                    //    BindGoalInfo("Live", sID == "" ? "-1" : sID);
+                    //    //lbAction.Text = "上次行動:擷取即場數據("+ DateTime.Now.ToString ("HH: mm:ss")+")";
+                    //    //lbAction.UpdateAfterCallBack = true;
+                    //}
+
                     lbAction.Text = "上次行動:擷取即場數據(" + DateTime.Now.ToString("HH: mm:ss") + ")";
                     lbAction.UpdateAfterCallBack = true;
                 }

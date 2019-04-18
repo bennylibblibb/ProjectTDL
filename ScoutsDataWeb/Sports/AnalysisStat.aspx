@@ -377,17 +377,17 @@ function actionChange(index) {
 		<span id="AnalysisStatInformation" runat="server" />
 		<tr>
 			<th colspan="5" align="left">
-				<font color="#FFB573">橙色記錄已存在『數據』資料庫</font><br>
-				<font color="red">在刪除資料時，請確定所有傳呼機已選取，以避免傳呼機資料有錯誤！</font>
+				<%--<font color="#FFB573">橙色記錄已存在『數據』資料庫</font><br>
+				<font color="red">在刪除資料時，請確定所有傳呼機已選取，以避免傳呼機資料有錯誤！</font>--%>
 			</th>
 			<td colspan="5" align="right">
 				<!--
 					Value of SendToPager is Device ID defined in DEVICE_TYPE
 				-->
-				<input type="checkbox" name="SendToPager" value="1" checked>GOGO1&nbsp;
+				<%--<input type="checkbox" name="SendToPager" value="1" checked>GOGO1&nbsp;
 				<input type="checkbox" name="SendToPager" value="2" checked>GOGO2&nbsp;
 				<input type="checkbox" name="SendToPager" value="3" checked>馬會機&nbsp;
-				<input type="checkbox" name="SendToPager" value="4" checked>JCCombo&nbsp;
+				<input type="checkbox" name="SendToPager" value="4" checked>JCCombo&nbsp;--%>
 				<!--
 				<input type="checkbox" name="SendToPager" value="5" checked>GOGO3Combo&nbsp;
 				-->
@@ -395,7 +395,7 @@ function actionChange(index) {
 				<input type="reset" value="重設">
 			</td>
 			<td align="center">
-				<input type="submit" id="SendBtn" value="發送" OnServerClick="onSendMatchStat" runat="server">
+			<%--	<input type="submit" id="SendBtn" value="發送" OnServerClick="onSendMatchStat" runat="server">--%>
 			</td>
 		</table>
 	</form>

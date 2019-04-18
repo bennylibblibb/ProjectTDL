@@ -200,12 +200,12 @@ using System.Web;
 
 
 
-            Hashtable hOnline = (Hashtable)Application["Online"];
+            Hashtable hOnline = (Hashtable)Application["OnlineScouts"];
             if (hOnline!=null&&hOnline[Session.SessionID] != null)
             {
                 hOnline.Remove(Session.SessionID);
                 Application.Lock();
-                Application["Online"] = hOnline;
+                Application["OnlineScouts"] = hOnline;
                 Application.UnLock();
             }
 

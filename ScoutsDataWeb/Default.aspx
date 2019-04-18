@@ -70,7 +70,7 @@
 			</table>
 			<TABLE id="Table10" width="100%">
 				<TR valign="top">
-					<TD valign="top">
+					<TD valign="top" style="display:none">
 						<P align="left"><FONT color="#000000"><STRONG>電訊數碼服務系統(下稱「服務系統」) 
 									使用聲明<br>
 									<br>Privacy policy</STRONG>

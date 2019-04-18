@@ -81,7 +81,7 @@ namespace ScoutDBProvider
                         iIndex++;
                     }
                 }
-                configSetting.Clear();
+                // configSetting.Clear();
 
                 if (syncItems.Count() > 0)
                 {
@@ -375,6 +375,9 @@ namespace ScoutDBProvider
 
                     int mw = (int)m.WParam;
                     int ml = (int)m.LParam;
+
+                    Files.WriteLog(" [Success] recevied " + m.Msg + "-" + mw.ToString() + "/" + ml.ToString());
+
                     if (mw == 1)
                     {
                         try
@@ -384,7 +387,7 @@ namespace ScoutDBProvider
                             using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                             {
                                 connection.Open();
-                                Files.WriteLog("Update " + ml.ToString());
+                                Files.WriteLog("Update ADDANALYSISOTHER " + ml.ToString());
                                 this.listBox1.Invoke(new Action(() =>
                                 {
                                     this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync ANALYSISOTHERS."); } }));
@@ -416,28 +419,28 @@ namespace ScoutDBProvider
                                         List<DataRow> drG = ds.Tables[0].Select().AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMTYPE") == "G").ToList();
 
                                         connection2.Open();
-                                       
-                                            using (FbCommand cmd2 = new FbCommand("PR_ADDANALYSISOTHER", connection2))
+
+                                        using (FbCommand cmd2 = new FbCommand("PR_ADDANALYSISOTHER", connection2))
+                                        {
+                                            cmd2.CommandType = CommandType.StoredProcedure;
+                                            cmd2.Parameters.Add("@CLEAGUE", drH[0]["CLEAGUE"]);
+                                            cmd2.Parameters.Add("@CHOST", drH[0]["CTEAM"]);
+                                            cmd2.Parameters.Add("@CGUEST", drG[0]["CTEAM"]);
+                                            cmd2.Parameters.Add("@CACTION", "U");
+                                            cmd2.Parameters.Add("@CSHOTS", drH[0]["CSHOTS"] + "@" + drG[0]["CSHOTS"]);
+                                            cmd2.Parameters.Add("@CFOULS", drH[0]["CFOULS"] + "@" + drG[0]["CFOULS"]);
+                                            cmd2.Parameters.Add("@CCORNER_KICKS", drH[0]["CCORNER_KICKS"] + "@" + drG[0]["CCORNER_KICKS"]);
+                                            cmd2.Parameters.Add("@COFFSIDES", drH[0]["COFFSIDES"] + "@" + drG[0]["COFFSIDES"]);
+                                            cmd2.Parameters.Add("@CPOSSESSION", drH[0]["CPOSSESSION"] + "@" + drG[0]["CPOSSESSION"]);
+                                            cmd2.Parameters.Add("@CYELLOW_CARDS", drH[0]["CYELLOW_CARDS"] + "@" + drG[0]["CYELLOW_CARDS"]);
+                                            cmd2.Parameters.Add("@CRED_CARDS", drH[0]["CRED_CARDS"] + "@" + drG[0]["CRED_CARDS"]);
+                                            cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                            cmd2.Parameters.Add("@IDEST", "0");
+                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                            if (id > -1)
                                             {
-                                                cmd2.CommandType = CommandType.StoredProcedure;
-                                                cmd2.Parameters.Add("@CLEAGUE", drH[0]["CLEAGUE"]);
-                                                cmd2.Parameters.Add("@CHOST", drH[0]["CTEAM"]);
-                                                cmd2.Parameters.Add("@CGUEST", drG[0]["CTEAM"]);
-                                                cmd2.Parameters.Add("@CACTION", "U");
-                                                cmd2.Parameters.Add("@CSHOTS", drH[0]["CSHOTS"]+"@" + drG[0]["CSHOTS"]);
-                                                cmd2.Parameters.Add("@CFOULS", drH[0]["CFOULS"] + "@" + drG[0]["CFOULS"]);
-                                                cmd2.Parameters.Add("@CCORNER_KICKS", drH[0]["CCORNER_KICKS"] + "@" + drG[0]["CCORNER_KICKS"]);
-                                                cmd2.Parameters.Add("@COFFSIDES", drH[0]["COFFSIDES"] + "@" + drG[0]["COFFSIDES"]);
-                                                cmd2.Parameters.Add("@CPOSSESSION", drH[0]["CPOSSESSION"] + "@" + drG[0]["CPOSSESSION"]);
-                                                cmd2.Parameters.Add("@CYELLOW_CARDS", drH[0]["CYELLOW_CARDS"] + "@" + drG[0]["CYELLOW_CARDS"]);
-                                                cmd2.Parameters.Add("@CRED_CARDS", drH[0]["CRED_CARDS"] + "@" + drG[0]["CRED_CARDS"]); 
-                                                cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                                                cmd2.Parameters.Add("@IDEST", "0");
-                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                if (id > -1)
-                                                {
-                                                    Files.WriteLog(" [Success] Insert ADDANALYSISOTHER " + " " + drH[0]["CLEAGUE"] + " " + drH[0]["CTEAM"] + "/" + drG[0]["CTEAM"]);
-                                                } 
+                                                Files.WriteLog(" [Success] Insert ADDANALYSISOTHER " + " " + drH[0]["CLEAGUE"] + " " + drH[0]["CTEAM"] + "/" + drG[0]["CTEAM"]);
+                                            }
                                         }
 
                                         connection2.Close();
@@ -451,32 +454,181 @@ namespace ScoutDBProvider
                             Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + "ANALYSISOTHERS,error: " + exp);
                         }
                     }
+                    else if (mw == 2)
+                    {
+                        try
+                        {
+                            string queryString = "";
+                            DataSet ds = new DataSet();
+                            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                            {
+                                connection.Open();
+                                Files.WriteLog("Update LIVEGOALS/GOALDETAILS " + ml.ToString());
+                                this.listBox1.Invoke(new Action(() =>
+                                {
+                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync LIVEODDS." + ml.ToString()); } }));
+                                }));
+
+                                //LIVEGOALS
+                                queryString = "SELECT FIRST 1 E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_OUTPUT_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
+                                      "E.CMATCHDATETIME CMATCHDATE,E.CMATCHDATETIME CMATCHTIME,'H' CMATCHFIELD," +
+                                      "'U' CACTION,G.H_GOAL,G.G_GOAL,G.H_RED,G.G_RED,G.HH_GOAL,G.GH_GOAL," +
+                                      "G.H_CONFIRM,G.G_CONFIRM,''CSONGID,''CALERT,G.GAMESTATUS,'' " +
+                                      "CCOMMENT,-1 CTIMEOFGAME,current_timestamp TIMEFLAG,'0'IDEST FROM EVENTS r INNER JOIN" +
+                                      "  EMATCHES E ON E.EMATCHID = R.ID " +
+                                      "INNER JOIN GOALINFO G ON G.EMATCHID = E.EMATCHID WHERE R.ID =" + ml.ToString() + " ORDER BY E.CMATCHDATETIME DESC ";
+
+                                Files.WriteLog("Sql: " + queryString);
+
+                                using (FbCommand cmd = new FbCommand(queryString, connection))
+                                {
+                                    using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                    {
+                                        using (DataSet data = new DataSet())
+                                        {
+                                            data.Tables.Add(new DataTable("data"));
+                                            fda.Fill(data.Tables["data"]);
+                                            ds = data;
+                                        }
+                                    }
+                                }
+
+                                if (ds.Tables[0].Rows.Count > 0)
+                                {
+                                    DataRow drH = ds.Tables[0].Rows[0];
+                                    using (FbConnection connection2 = new FbConnection(AppFlag.MangoDBConn))
+                                    {
+                                        connection2.Open();
+                                        using (FbCommand cmd2 = new FbCommand("PR_LIVEGOALS", connection2))
+                                        {
+                                            cmd2.CommandType = CommandType.StoredProcedure;
+                                            cmd2.Parameters.Add("@CLEAGUEALIAS", drH["CLEAGUEALIAS_OUTPUT_NAME"]);
+                                            cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_OUTPUT_NAME"]);
+                                            cmd2.Parameters.Add("@CHOST", drH["HKJCHOSTNAME_CN"]);
+                                            cmd2.Parameters.Add("@CGUEST", drH["HKJCGUESTNAME_CN"]);
+                                            cmd2.Parameters.Add("@CMATCHDATE", Convert.ToDateTime(drH["CMATCHDATE"]).ToString("yyyyMMdd"));
+                                            cmd2.Parameters.Add("@CMATCHTIME", Convert.ToDateTime(drH["CMATCHTIME"]).ToString("HHmm"));
+                                            cmd2.Parameters.Add("@CMATCHFIELD", drH["CMATCHFIELD"]);
+                                            cmd2.Parameters.Add("@CACTION", drH["CACTION"]);
+                                            cmd2.Parameters.Add("@IH_GOAL", drH["H_GOAL"].ToString() == "" ? "-1" : drH["H_GOAL"].ToString());
+                                            cmd2.Parameters.Add("@IG_GOAL", drH["G_GOAL"].ToString() == "" ? "-1" : drH["G_GOAL"].ToString());
+                                            cmd2.Parameters.Add("@IH_REDCARD", drH["H_RED"].ToString() == "" ? "-1" : drH["H_RED"].ToString());
+                                            cmd2.Parameters.Add("@IG_REDCARD", drH["G_RED"].ToString() == "" ? "-1" : drH["G_RED"].ToString());
+                                            cmd2.Parameters.Add("@IH_HT_GOAL", drH["HH_GOAL"].ToString() == "" ? "-1" : drH["HH_GOAL"].ToString());
+                                            cmd2.Parameters.Add("@IG_HT_GOAL", drH["GH_GOAL"].ToString() == "" ? "-1" : drH["GH_GOAL"].ToString());
+                                            cmd2.Parameters.Add("@IH_CONFIRM", drH["H_CONFIRM"].ToString() == "" ? "-1" : drH["H_CONFIRM"].ToString());
+                                            cmd2.Parameters.Add("@IG_CONFIRM", drH["G_CONFIRM"].ToString() == "" ? "-1" : drH["G_CONFIRM"].ToString());
+                                            cmd2.Parameters.Add("@CSONGID", drH["CSONGID"]);
+                                            cmd2.Parameters.Add("@CALERT", drH["CALERT"]);
+                                            cmd2.Parameters.Add("@CSTATUS", drH["GAMESTATUS"]);
+                                            cmd2.Parameters.Add("@CCOMMENT", drH["CCOMMENT"]);
+                                            cmd2.Parameters.Add("@CTIMEOFGAME", drH["CTIMEOFGAME"]);
+                                            cmd2.Parameters.Add("@TIMEFLAG", Convert.ToDateTime(drH["TIMEFLAG"]).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                            cmd2.Parameters.Add("@IDEST", drH["IDEST"]);
+                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                            if (id > -1)
+                                            {
+                                                Files.WriteLog(" [Success] Insert LIVEGOALS " + " " + drH["CLEAGUEALIAS_OUTPUT_NAME"] + " " + drH["HKJCHOSTNAME_CN"] + "/" + drH["HKJCGUESTNAME_CN"]);
+                                            }
+                                        }
+
+                                        connection2.Close();
+                                    }
+                                }
+
+                                //GOALDETAILS 
+                                Files.WriteLog("Update GOALDETAILS " + ml.ToString());
+                                queryString = " SELECT  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_OUTPUT_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN,E.CMATCHDATETIME," +
+                                            " 'F' CCURRENTSTATUS, '' CPK, 'U' CACTION, '' CALERT, R.CTYPE CRECORDTYPE, R.HG CRECORDBELONG,   '' CMATCHSTATUS, r.ELAPSED , G.H_GOAL CSCOREHOST, G.G_GOAL CSCOREGUEST, '-1' CSCORENUM,   '0' CSCOREOWNGOAL, r.PLAYERCHI CSCORER,r.PLAYER CSCORER2 , current_timestamp TIMEFLAG, '0' IDEST " +
+                                            "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID  INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString();
+                                Files.WriteLog("Sql: " + queryString);
+
+                                using (FbCommand cmd = new FbCommand(queryString, connection))
+                                {
+                                    using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                    {
+                                        using (DataSet data = new DataSet())
+                                        {
+                                            data.Tables.Add(new DataTable("data"));
+                                            fda.Fill(data.Tables["data"]);
+                                            ds = data;
+                                        }
+                                    }
+                                }
+
+                                if (ds.Tables[0].Rows.Count > 0)
+                                {
+                                    using (FbConnection connection2 = new FbConnection(AppFlag.MangoDBConn))
+                                    {
+                                        connection2.Open();
+                                        foreach (DataRow drH in ds.Tables[0].Rows)
+                                        {
+                                            using (FbCommand cmd2 = new FbCommand("PR_GOALDETAILS", connection2))
+                                            {
+                                                cmd2.CommandType = CommandType.StoredProcedure;
+                                                cmd2.Parameters.Add("@CLEAGUEALIAS", drH["CLEAGUEALIAS_OUTPUT_NAME"]);
+                                                cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_OUTPUT_NAME"]);
+                                                cmd2.Parameters.Add("@CHOST", drH["HKJCHOSTNAME_CN"]);
+                                                cmd2.Parameters.Add("@CGUEST", drH["HKJCGUESTNAME_CN"]);
+                                                cmd2.Parameters.Add("@CCURRENTSTATUS", drH["CCURRENTSTATUS"]);
+                                                cmd2.Parameters.Add("@CPK", drH["CPK"]);
+                                                cmd2.Parameters.Add("@CACTION", drH["CACTION"]);
+                                                cmd2.Parameters.Add("@CALERT", drH["CALERT"]);
+                                                cmd2.Parameters.Add("@CRECORDTYPE", drH["CRECORDTYPE"]);
+                                                cmd2.Parameters.Add("@CRECORDBELONG", drH["CRECORDBELONG"]);
+                                                cmd2.Parameters.Add("@CMATCHSTATUS", drH["CMATCHSTATUS"]);
+                                                cmd2.Parameters.Add("@CMATCHTIME", drH["ELAPSED"]);
+                                                cmd2.Parameters.Add("@CSCOREHOST", drH["CSCOREHOST"]);
+                                                cmd2.Parameters.Add("@CSCOREGUEST", drH["CSCOREGUEST"]);
+                                                cmd2.Parameters.Add("@CSCORENUM", drH["CSCORENUM"]);
+                                                cmd2.Parameters.Add("@CSCOREOWNGOAL", drH["CSCOREOWNGOAL"]);
+                                                cmd2.Parameters.Add("@CSCORER", drH["CSCORER"].ToString() == "" ? drH["CSCORER2"].ToString() : drH["CSCORER"].ToString());
+                                                cmd2.Parameters.Add("@TIMEFLAG", Convert.ToDateTime(drH["TIMEFLAG"]).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                cmd2.Parameters.Add("@IDEST", drH["IDEST"]);
+                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                if (id > -1)
+                                                {
+                                                    Files.WriteLog(" [Success] Insert GOALDETAILS " + " " + drH["CLEAGUEALIAS_OUTPUT_NAME"] + " " + drH["HKJCHOSTNAME_CN"] + "/" + drH["HKJCGUESTNAME_CN"]);
+                                                }
+                                            }
+                                        }
+                                        connection2.Close();
+                                    }
+                                }
+                                connection.Close();
+                            }
+                        }
+                        catch (Exception exp)
+                        {
+                            Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + "LIVEGOALS/GOALDETAILS,error: " + exp);
+                        }
+                    }
                     else
                     {
-                        //COPYDATASTRUCT mystr2 = new COPYDATASTRUCT();
-                        //Type mytype2 = mystr.GetType();
-                        //mystr2 = (COPYDATASTRUCT)m.GetLParam(mytype2);
-                        //string ml2 = mystr.lpData;
-                        //// string len = mystr.cbData;
-                        //int mw2 = (int)m.WParam;
+                        try
+                        {      //COPYDATASTRUCT mystr2 = new COPYDATASTRUCT();
+                               //Type mytype2 = mystr.GetType();
+                               //mystr2 = (COPYDATASTRUCT)m.GetLParam(mytype2);
+                               //string ml2 = mystr.lpData;
+                               //// string len = mystr.cbData;
+                               //int mw2 = (int)m.WParam;
 
-                        //COPYDATASTRUCT cdata2 = new COPYDATASTRUCT();
-                        //Type mytype2 = cdata2.GetType();
-                        //cdata2 = (COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, mytype2);
-                        //string ml2 = cdata.lpData;
-                       // string ml2 = "";
-                        this.listBox1.Invoke(new Action(() =>
+                            //COPYDATASTRUCT cdata2 = new COPYDATASTRUCT();
+                            //Type mytype2 = cdata2.GetType();
+                            //cdata2 = (COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, mytype2);
+                            //string ml2 = cdata.lpData;
+                            // string ml2 = "";
+                            this.listBox1.Invoke(new Action(() =>
                         {
                             this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Recevied msg,start sync."); } }));
                         }));
 
-                        Files.WriteLog(" [Success] recevied " + m.Msg + "--" + ((int)m.WParam).ToString() + ((int)m.LParam).ToString());
-                          DateTime dt = DateTime.ParseExact(((int)m.WParam).ToString() + ((int)m.LParam).ToString(), "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
-                         // dt = DateTime.ParseExact(dt, "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
-                        Files.WriteLog(" [Success] recevied " + dt.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                        //  MessageBox.Show(" [Success] recevied " + m.Msg + "--" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff")); 
-                        try
-                        {
+                            //  Files.WriteLog(" [Success] recevied " + m.Msg + "--" + ((int)m.WParam).ToString() + ((int)m.LParam).ToString());
+                            DateTime dt = DateTime.ParseExact(((int)m.WParam).ToString() + ((int)m.LParam).ToString(), "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                            // dt = DateTime.ParseExact(dt, "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                            Files.WriteLog(" [Success] recevied " + dt.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                            //  MessageBox.Show(" [Success] recevied " + m.Msg + "--" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff")); 
+
                             int iIndex = 0;
                             DataSet ds = new DataSet();
                             string[] syncItems;
@@ -918,7 +1070,7 @@ namespace ScoutDBProvider
             }
             catch (Exception exp)
             {
-                Files.WriteError(DateTime.Now.ToString("HH:mm:ss fff ") + " WndProc ;  Error: " + exp.ToString());
+                Files.WriteError(DateTime.Now.ToString("HH:mm:ss fff ") + " WndProc() ;  Error: " + exp.ToString());
             }
             base.WndProc(ref m);
         }
