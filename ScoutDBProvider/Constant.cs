@@ -13,15 +13,27 @@ namespace ScoutDBProvider
         internal static readonly string MangoDBConn = ConfigurationManager.AppSettings["MangoDBConn"]; 
         internal static string GetTime = ConfigurationManager.AppSettings["GetTime"];
         internal static string SkSvrNotify = ConfigurationManager.AppSettings["SkSvrNotify"];
+             internal static string SkSvrNotify2 = ConfigurationManager.AppSettings["SkSvrNotify2"];
         internal static ArrayList configSetting = (ArrayList)ConfigurationManager.GetSection("SyncItems2");
         internal static string SkSvrNodtify = ConfigurationManager.AppSettings["SkSvrNotify"];
+        internal static bool Alert = ConfigurationManager.AppSettings["Alert"].ToLower() == "yes" ? true : false;
     }
 
-    public enum InformationType
-    { 
-        HeartBeat = 98,
-        LastPacketBeforeServerShutdown = 99
+    public enum MessageID
+    {
+        LIVEGOALS = 30,
+        GOALDETAILS = 31,
+        ANALYSISOTHER = 62,
+        FIXTURES = 63,
+        HKGOAL = 60,
+        HKGOALDETAILS = 61,
+        RANKS = 15,
+        SCORERS = 17,
+        ANALYSISRECENTS=1,
+        ANALYSISHISTORYS=2,
+        ANALYSISTATS=3
     }
+
 
     public enum xmlType
     {

@@ -34,7 +34,12 @@ namespace DataOfScouts
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataOfScouts));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpAuthorization = new System.Windows.Forms.TabPage();
+            this.btnANALYSIS = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnGotEvt = new System.Windows.Forms.Button();
+            this.btnSendSync = new System.Windows.Forms.Button();
             this.txtXmlFileUrl = new System.Windows.Forms.TextBox();
+            this.btnSend = new System.Windows.Forms.Button();
             this.btnXmlParser = new System.Windows.Forms.Button();
             this.btnSelectFile = new System.Windows.Forms.Button();
             this.lstStatus = new System.Windows.Forms.ListBox();
@@ -150,7 +155,12 @@ namespace DataOfScouts
             // 
             // tpAuthorization
             // 
+            this.tpAuthorization.Controls.Add(this.btnANALYSIS);
+            this.tpAuthorization.Controls.Add(this.button1);
+            this.tpAuthorization.Controls.Add(this.btnGotEvt);
+            this.tpAuthorization.Controls.Add(this.btnSendSync);
             this.tpAuthorization.Controls.Add(this.txtXmlFileUrl);
+            this.tpAuthorization.Controls.Add(this.btnSend);
             this.tpAuthorization.Controls.Add(this.btnXmlParser);
             this.tpAuthorization.Controls.Add(this.btnSelectFile);
             this.tpAuthorization.Controls.Add(this.lstStatus);
@@ -162,18 +172,68 @@ namespace DataOfScouts
             this.tpAuthorization.Text = "Authorization";
             this.tpAuthorization.UseVisualStyleBackColor = true;
             // 
+            // btnANALYSIS
+            // 
+            this.btnANALYSIS.Location = new System.Drawing.Point(846, 247);
+            this.btnANALYSIS.Name = "btnANALYSIS";
+            this.btnANALYSIS.Size = new System.Drawing.Size(115, 29);
+            this.btnANALYSIS.TabIndex = 9;
+            this.btnANALYSIS.Text = "Send(Analysis)";
+            this.btnANALYSIS.UseVisualStyleBackColor = true;
+            this.btnANALYSIS.Click += new System.EventHandler(this.btnANALYSIS_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(846, 211);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(115, 30);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Send (Sync)";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnSendSync_Click);
+            // 
+            // btnGotEvt
+            // 
+            this.btnGotEvt.Location = new System.Drawing.Point(846, 105);
+            this.btnGotEvt.Name = "btnGotEvt";
+            this.btnGotEvt.Size = new System.Drawing.Size(115, 30);
+            this.btnGotEvt.TabIndex = 7;
+            this.btnGotEvt.Text = "Got";
+            this.btnGotEvt.UseVisualStyleBackColor = true;
+            this.btnGotEvt.Click += new System.EventHandler(this.btnGotEvt_Click);
+            // 
+            // btnSendSync
+            // 
+            this.btnSendSync.Location = new System.Drawing.Point(846, 140);
+            this.btnSendSync.Name = "btnSendSync";
+            this.btnSendSync.Size = new System.Drawing.Size(115, 29);
+            this.btnSendSync.TabIndex = 6;
+            this.btnSendSync.Text = "Send (Goal)";
+            this.btnSendSync.UseVisualStyleBackColor = true;
+            this.btnSendSync.Click += new System.EventHandler(this.btnSendSyncGoal_Click);
+            // 
             // txtXmlFileUrl
             // 
-            this.txtXmlFileUrl.Location = new System.Drawing.Point(886, 3);
+            this.txtXmlFileUrl.Location = new System.Drawing.Point(846, 4);
             this.txtXmlFileUrl.Name = "txtXmlFileUrl";
-            this.txtXmlFileUrl.Size = new System.Drawing.Size(75, 26);
+            this.txtXmlFileUrl.Size = new System.Drawing.Size(115, 26);
             this.txtXmlFileUrl.TabIndex = 4;
+            // 
+            // btnSend
+            // 
+            this.btnSend.Location = new System.Drawing.Point(846, 174);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(115, 30);
+            this.btnSend.TabIndex = 5;
+            this.btnSend.Text = "Send (Live)";
+            this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.btnSendLive_Click);
             // 
             // btnXmlParser
             // 
-            this.btnXmlParser.Location = new System.Drawing.Point(886, 64);
+            this.btnXmlParser.Location = new System.Drawing.Point(846, 69);
             this.btnXmlParser.Name = "btnXmlParser";
-            this.btnXmlParser.Size = new System.Drawing.Size(75, 31);
+            this.btnXmlParser.Size = new System.Drawing.Size(115, 31);
             this.btnXmlParser.TabIndex = 3;
             this.btnXmlParser.Text = "Done";
             this.btnXmlParser.UseVisualStyleBackColor = true;
@@ -181,9 +241,9 @@ namespace DataOfScouts
             // 
             // btnSelectFile
             // 
-            this.btnSelectFile.Location = new System.Drawing.Point(886, 29);
+            this.btnSelectFile.Location = new System.Drawing.Point(846, 35);
             this.btnSelectFile.Name = "btnSelectFile";
-            this.btnSelectFile.Size = new System.Drawing.Size(75, 29);
+            this.btnSelectFile.Size = new System.Drawing.Size(115, 29);
             this.btnSelectFile.TabIndex = 2;
             this.btnSelectFile.Text = "Select";
             this.btnSelectFile.UseVisualStyleBackColor = true;
@@ -198,7 +258,7 @@ namespace DataOfScouts
             this.lstStatus.ItemHeight = 20;
             this.lstStatus.Location = new System.Drawing.Point(3, 3);
             this.lstStatus.Name = "lstStatus";
-            this.lstStatus.Size = new System.Drawing.Size(877, 484);
+            this.lstStatus.Size = new System.Drawing.Size(837, 484);
             this.lstStatus.TabIndex = 1;
             // 
             // gbAuthorization
@@ -206,9 +266,9 @@ namespace DataOfScouts
             this.gbAuthorization.Controls.Add(this.lbResults);
             this.gbAuthorization.Controls.Add(this.lbToken);
             this.gbAuthorization.Controls.Add(this.lbAuthorization);
-            this.gbAuthorization.Location = new System.Drawing.Point(785, 200);
+            this.gbAuthorization.Location = new System.Drawing.Point(907, 282);
             this.gbAuthorization.Name = "gbAuthorization";
-            this.gbAuthorization.Size = new System.Drawing.Size(144, 99);
+            this.gbAuthorization.Size = new System.Drawing.Size(33, 95);
             this.gbAuthorization.TabIndex = 0;
             this.gbAuthorization.TabStop = false;
             this.gbAuthorization.Visible = false;
@@ -217,7 +277,7 @@ namespace DataOfScouts
             // 
             this.lbResults.Location = new System.Drawing.Point(116, 32);
             this.lbResults.Name = "lbResults";
-            this.lbResults.Size = new System.Drawing.Size(338, 86);
+            this.lbResults.Size = new System.Drawing.Size(38, 86);
             this.lbResults.TabIndex = 3;
             // 
             // lbToken
@@ -910,6 +970,11 @@ namespace DataOfScouts
         private System.Windows.Forms.TextBox txtXmlFileUrl;
         private System.Windows.Forms.Button btnXmlParser;
         private System.Windows.Forms.Button btnSelectFile;
+        private System.Windows.Forms.Button btnSendSync;
+        private System.Windows.Forms.Button btnSend;
+        private System.Windows.Forms.Button btnGotEvt;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnANALYSIS;
     }
 }
 

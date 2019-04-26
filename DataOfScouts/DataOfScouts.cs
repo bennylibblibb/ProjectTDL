@@ -139,9 +139,15 @@ namespace DataOfScouts
                     this.tsdAreaParentId.DropDownItems.Add(dr[0].ToString());
                 }
 
-                this.btnSelectFile.Visible = false;
-                this.btnXmlParser.Visible = false;
-                this.txtXmlFileUrl.Visible = false;
+                if (!AppFlag.TestMode)
+                {
+                    this.btnSelectFile.Visible = false;
+                    this.btnXmlParser.Visible = false;
+                    this.txtXmlFileUrl.Visible = false;
+                    this.btnGotEvt.Visible = false;    
+                    this.btnSend.Visible = false;
+                    this.btnSendSync.Visible = false; 
+                }
 
                 //  RunAMQPService();
                 //  RunAMQPService2();
@@ -163,13 +169,13 @@ namespace DataOfScouts
                state: timerState,
                dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays(1).Subtract(DateTime.Now) : dueTimes.Subtract(DateTime.Now)),
                period: dueTimes.AddDays(1).Subtract(dueTimes));
-                // RunGetEventCompare("2658849");
+               //  RunGetEventCompare("2460757");
                 // InsertData("events.show3", true, "2656709", true);
                 //InsertData("events", true, this.bnAreas.Items[17].Text + "2019-03-19 00:00:00", this.bnAreas.Items[19].Text + "2019-03-31 23:59:59");
                 // InsertData("standings", true);
                 // SendAlertMsg("2", "2019-04-12 03:01:24.327");
-                  SendAlertMsg("2", "2669663");
-                // SendAlertMsg("2", "2019-04-12 13:01:24.327");
+                //  SendAlertMsg("2", "2669663");
+                //   SendAlertMsg("3", "2019-04-20 00:13:20.513");
                 this.Receiver = new Receiver();
 
             }
@@ -1112,20 +1118,20 @@ namespace DataOfScouts
                                     {
                                         if (api.data.@event.id > 0)
                                         {
-                                            SendAlertMsg("1", api.data.@event.id.ToString());
+                                            SendAlertMsg("1", api.data.@event.status_id.ToString (),api.data.@event.id.ToString());
                                             /// await AyncHandleData("events.show3", true, api.data.@event.id.ToString());
                                             InsertData("events.show3", true, api.data.@event.id.ToString(), true);
-                                            SendAlertMsg("2", api.data.@event.id.ToString());
+                                            SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
                                             Files.WriteLog(" Housekeep [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
                                         }
                                     }
                                     else
                                     {
                                         // if (api.data.@event.status_id == 33 || api.data.@event.status_id == 34) SendAlertMsg("1", api.data.@event.id.ToString());
-                                        SendAlertMsg("1", api.data.@event.id.ToString());
+                                        SendAlertMsg("1", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
                                         InsertData("events.show3", true, api.data.@event.id.ToString(), true);
                                         Files.WriteLog(" Get event [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
-                                        SendAlertMsg("2", api.data.@event.id.ToString());
+                                        SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
                                     }
                                    
                                    /// SendAlertMsg(AppFlag.LIVEGOALS);
@@ -1732,14 +1738,15 @@ namespace DataOfScouts
         //}
         //const int WM_COPYDATA = 0x004A;
 
-        public static bool SendAlertMsg(string Type,string Id )
+        public static bool SendAlertMsg(string Type,string status, string Id )
         {
             bool SUCCESS_CODE = false;
             int iResultCode = 0;
             try
             {
                 string path = Directory.GetCurrentDirectory() + @"\ScoutDBProvider\ScoutDBProvider";
-                path = @"E:\Disseminator_OnlyRecv\ScoutDBProvider\ScoutDBProvider";
+                //path = @"D:\DataOfScouts\ScoutDBProvider\ScoutDBProvider";
+                path = @AppFlag.NotifyApplication;
                 int WINDOW_HANDLER = FindWindow(null, path);
                 int wParam = -1;
                 int lParam = -1; 
@@ -1807,31 +1814,44 @@ namespace DataOfScouts
                     {
                         wParam = Convert.ToInt32(Type); 
                         lParam = Convert.ToInt32(Id);
-                        Files.WriteLog(" [Success] send " + Id.ToString());
+                        Files.WriteLog("provider", " [Success] Send " + status +"-"+ Type+"-"+ Id.ToString());
                     }
                     else if (Type == "3")
                     {
-                        wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd"));
-                        lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff"));
-                        if (  Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("000") == 0)
+                        if (status == "ANALYSIS")
                         {
-                            wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "000");
-                            lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(3,6));
+                            wParam = Convert.ToInt32(Type);
+                            lParam = Convert.ToInt32(Id);
                         }
-                        else if(Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("00") == 0 )
+                        else
                         {
-                            wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "00");
-                            lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(2,7));
-                        }
-                        else if (Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("0") == 0)
-                        {
-                            wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "0");
-                            lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(1, 8));
-                        }
-                        //wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd"));
-                        //lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff"));
-                        Files.WriteLog(" [Success] send " + Convert.ToDateTime(Id).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
-                    }
+                            wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd"));
+                            lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff"));
+                            String ids = Convert.ToDateTime(Id).ToString("yyyyMMddHHmmssfff");
+                            if (ids.IndexOf("000") > -1)
+                            {
+                                wParam = int.Parse(ids.Substring(0, ids.IndexOf("000") + 3));
+                                lParam = int.Parse(ids.Substring(ids.IndexOf("000") + 3, ids.Length - ids.IndexOf("000") - 3));
+                            }
+                            //if (Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("000") == 0)
+                            //{
+                            //    wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "000");
+                            //    lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(3, 6));
+                            //}
+                            else if (Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("00") == 0)
+                            {
+                                wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "00");
+                                lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(2, 7));
+                            }
+                            else if (Convert.ToDateTime(Id).ToString("HHmmssfff").IndexOf("0") == 0)
+                            {
+                                wParam = int.Parse(Convert.ToDateTime(Id).ToString("yyyyMMdd") + "0");
+                                lParam = int.Parse(Convert.ToDateTime(Id).ToString("HHmmssfff").Substring(1, 8));
+                                Files.WriteLog("provider", " [Success] Send " + status + "-" + Type + "-" + Convert.ToDateTime(Id).ToString("yyyy-MM-dd HH:mm:ss.fff", null));
+
+                            }
+                        } 
+                      }
 
                     iResultCode = (int)PostMessage(HWND_BROADCAST, uiSkSvrNotify2, wParam, lParam);
 
@@ -1840,7 +1860,7 @@ namespace DataOfScouts
                 if (iResultCode != 0)
                 {
                     SUCCESS_CODE = true;
-                    Files.WriteLog(" [Success] Sent "+ uiSkSvrNotify2+"-" + Type+ "-"+Id);
+                    Files.WriteLog("provider", " [Success] Sent "+ uiSkSvrNotify2+"-" + status + "-" + Type+ "-"+Id);
                 }
                 else
                 {
@@ -4786,7 +4806,7 @@ namespace DataOfScouts
                                                             cmd2.Parameters.Add("@G_GOAL", sevent.participants[1].counter == "2" ? sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value);
                                                             cmd2.Parameters.Add("@LASTTIME", DateTime.Now);
                                                             int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog((id > 0 ? " [Success] Update GoalInfo Goal " : " [Failure]  Update GoalInfo Goal") + "[" + sevent.id + "] " + sevent.participants[0].id + "/" + sevent.participants[1].id + "..");
+                                                            Files.WriteLog((id > 0 ? " [Success] Update GoalInfo Goal " : " [Failure]  Update GoalInfo Goal") + "[" + sevent.id + "] " + sevent.participants[0].id + "/" + sevent.participants[1].id + ".");
                                                         }
                                                     }
                                                     //1142019
@@ -5794,6 +5814,7 @@ namespace DataOfScouts
                                                             cmd2.CommandType = CommandType.StoredProcedure;
                                                             cmd2.Connection = connection;
                                                             cmd2.Parameters.Add("@EMATCHID", sevent.id);
+                                                            cmd2.Parameters.Add("@STATUS", sevent.status_id);
                                                             cmd2.Parameters.Add("@H_GOAL", sevent.participants[0].counter == "1" ? sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value);
                                                             cmd2.Parameters.Add("@G_GOAL", sevent.participants[1].counter == "2" ? sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value);
                                                             cmd2.Parameters.Add("@LASTTIME", DateTime.Now);
@@ -6957,9 +6978,18 @@ namespace DataOfScouts
                                     }
                                 }
 
-                                queryString = "SELECT a.IMATCH_CNT, a.IREC, a.CACT, a.EVENTID,a.home_id,a.guest_id,a.start_date,a.LEAGUEALIAS, a.IMATCHMONTH, a.IMATCHYEAR, a.IMATCHSTATUS, a.IHOSTSCORE, a.IGUESTSCORE, a.CTIMESTAMP FROM ANALYSIS_HISTORY_INFO  A " +
-                                    " WHERE  A.HOME_ID=" + m_HOME_ID + " OR A.GUEST_ID=" + m_GUEST_ID +
-                                    " OR  A.HOME_ID=" + m_GUEST_ID + " OR A.GUEST_ID=" + m_HOME_ID + " ORDER BY A.START_DATE DESC ";
+                                queryString = "select * From (select first 1  a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP " +
+                                    "from events a left join EMATCHES e on e.EMATCHID = a.id left join GOALINFO g on g.EMATCHID = a.id " +
+                                    "WHERE(A.HOME_ID = " + m_HOME_ID + "  OR A.GUEST_ID =" + m_HOME_ID + ") and a.START_DATE > current_timestamp AND A.ID!=" + arr[1] + "   ORDER BY A.START_DATE asc  ) " +
+                                    "union all select* From(select first 1 a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP " +
+                                    "from events a left join EMATCHES e on e.EMATCHID = a.id left join GOALINFO g on g.EMATCHID = a.id " +
+                                    "WHERE(A.HOME_ID = " + m_GUEST_ID + " OR A.GUEST_ID = " + m_GUEST_ID + ") and a.START_DATE > current_timestamp AND A.ID!=" + arr[1] + " ORDER BY A.START_DATE asc    )" +
+                                    "union all select* From(select first 5  a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP" +
+                                    " from events a left join EMATCHES e on e.EMATCHID = a.id left join GOALINFO g on g.EMATCHID = a.id " +
+                                    " WHERE(A.HOME_ID = " + m_HOME_ID + "  OR A.GUEST_ID = " + m_HOME_ID + ") and a.START_DATE < current_timestamp  AND A.ID!=" + arr[1] + "  ORDER BY A.START_DATE DESC)" +
+                                    " union all select* From(select first 5  a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP" +
+                                    " from events a left join EMATCHES e on e.EMATCHID = a.id left join GOALINFO g on g.EMATCHID = a.id " +
+                                    " WHERE(A.HOME_ID = " + m_GUEST_ID + " OR A.GUEST_ID = " + m_GUEST_ID + ") and a.START_DATE < current_timestamp AND A.ID!=" + arr[1] + " ORDER BY A.START_DATE DESC)"; 
                                 using (FbCommand cmd = new FbCommand(queryString, connection))
                                 {
                                     using (FbDataAdapter fda = new FbDataAdapter())
@@ -6976,7 +7006,8 @@ namespace DataOfScouts
                                                 string m_Team = "";
                                                 int iretry = 0;
                                                 m_Team = (i == 0) ? m_HOME_ID : m_GUEST_ID;
-                                                foreach (DataRow dr in hisData.Tables[0].Select("HOME_ID =" + m_Team + " or GUEST_ID= " + m_Team, "  START_DATE DESC "))
+                                                 
+                                                foreach (DataRow dr in hisData.Tables[0].Select("HOME_ID =" + m_Team + " or GUEST_ID= " + m_Team, "  START_DATE DESC ").Distinct(DataRowComparer.Default).ToList<DataRow>())
                                                 {
                                                     if (m_HOME_ID == m_Team)
                                                     {
@@ -6994,27 +7025,87 @@ namespace DataOfScouts
                                                         cmd1.Parameters.Add("@IMATCH_CNT", arr[1]);
                                                         cmd1.Parameters.Add("@IREC", irec);
                                                         cmd1.Parameters.Add("@CACT", 'U');
-                                                        cmd1.Parameters.Add("@EVENTID", dr["EVENTID"]);
+                                                        cmd1.Parameters.Add("@EVENTID", dr["id"]);
                                                         cmd1.Parameters.Add("@START_DATE", dr["START_DATE"]);
-                                                        cmd1.Parameters.Add("@LEAGUEALIAS", dr["LEAGUEALIAS"]);
+                                                        cmd1.Parameters.Add("@LEAGUEALIAS", dr["CLEAGUEALIAS_OUTPUT_NAME"]);
                                                         cmd1.Parameters.Add("@CTEAMFLAG", m_CTEAMFLAG);
-                                                        cmd1.Parameters.Add("@CCHALLENGER", m_HOME_ID == m_Team ? m_GUEST_ID : m_HOME_ID);
+                                                        // cmd1.Parameters.Add("@CCHALLENGER", m_HOME_ID == m_Team ?  dr["GUEST_ID"].ToString() : dr["HOME_ID"].ToString());
+                                                        cmd1.Parameters.Add("@CCHALLENGER", m_Team == dr["HOME_ID"].ToString() ? dr["GUEST_ID"].ToString() : dr["HOME_ID"].ToString());
                                                         cmd1.Parameters.Add("@IMATCHSTATUS", m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? "0" : "1" : dr["home_id"].ToString() == m_GUEST_ID ? "0" : "1");//  dr["IMATCHSTATUS"]);
-                                                                                                                                                                                                                           //cmd1.Parameters.Add("@IHOSTSCORE", m_HOME_ID == m_Team ? (dr["home_id"].ToString() == m_HOME_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]) : dr["home_id"].ToString() == m_GUEST_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"]);// dr["IHOSTSCORE"]);
-                                                                                                                                                                                                                           //cmd1.Parameters.Add("@IGUESTSCORE", m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"] : dr["home_id"].ToString() == m_GUEST_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]);// dr["IGUESTSCORE"]);
-                                                        cmd1.Parameters.Add("@IHOSTSCORE", dr["IHOSTSCORE"]);
-                                                        cmd1.Parameters.Add("@IGUESTSCORE", dr["IGUESTSCORE"]);
+                                                         //cmd1.Parameters.Add("@IHOSTSCORE", m_HOME_ID == m_Team ? (dr["home_id"].ToString() == m_HOME_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]) : dr["home_id"].ToString() == m_GUEST_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"]);// dr["IHOSTSCORE"]);
+                                                         //cmd1.Parameters.Add("@IGUESTSCORE", m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"] : dr["home_id"].ToString() == m_GUEST_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]);// dr["IGUESTSCORE"]);
+                                                        cmd1.Parameters.Add("@IHOSTSCORE",  (Convert.ToDateTime(dr["START_DATE"])>DateTime.Now? "-1" : dr["H_GOAL"].ToString()==""? "0": dr["H_GOAL"].ToString()));
+                                                        cmd1.Parameters.Add("@IGUESTSCORE", (Convert.ToDateTime(dr["START_DATE"]) > DateTime.Now ? "-1" : dr["G_GOAL"].ToString() == "" ? "0" : dr["G_GOAL"].ToString()));
                                                         cmd1.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                                         int id = Convert.ToInt32(cmd1.ExecuteScalar());
                                                         irec++;
                                                         iretry++;
                                                     }
-                                                    if (iretry > 4) break;
+                                                    if (iretry > 6) break;
                                                 }
                                             }
                                         }
                                     }
                                 }
+
+                                //queryString = "SELECT a.IMATCH_CNT, a.IREC, a.CACT, a.EVENTID,a.home_id,a.guest_id,a.start_date,a.LEAGUEALIAS, a.IMATCHMONTH, a.IMATCHYEAR, a.IMATCHSTATUS, a.IHOSTSCORE, a.IGUESTSCORE, a.CTIMESTAMP FROM ANALYSIS_HISTORY_INFO  A " +
+                                //    " WHERE  A.HOME_ID=" + m_HOME_ID + " OR A.GUEST_ID=" + m_GUEST_ID +
+                                //    " OR  A.HOME_ID=" + m_GUEST_ID + " OR A.GUEST_ID=" + m_HOME_ID + " ORDER BY A.START_DATE DESC ";
+                                //using (FbCommand cmd = new FbCommand(queryString, connection))
+                                //{
+                                //    using (FbDataAdapter fda = new FbDataAdapter())
+                                //    {
+                                //        fda.SelectCommand = cmd;
+                                //        using (DataSet hisData = new DataSet())
+                                //        {
+                                //            hisData.Tables.Add(new DataTable("hisData"));
+                                //            fda.Fill(hisData.Tables["hisData"]);
+                                //            irec = 1;
+                                //            for (int i = 0; i < 2; i++)
+                                //            {
+                                //                string m_CTEAMFLAG = "";
+                                //                string m_Team = "";
+                                //                int iretry = 0;
+                                //                m_Team = (i == 0) ? m_HOME_ID : m_GUEST_ID;
+                                //                foreach (DataRow dr in hisData.Tables[0].Select("HOME_ID =" + m_Team + " or GUEST_ID= " + m_Team, "  START_DATE DESC "))
+                                //                {
+                                //                    if (m_HOME_ID == m_Team)
+                                //                    {
+                                //                        m_CTEAMFLAG = "H";
+                                //                    }
+                                //                    else
+                                //                    {
+                                //                        m_CTEAMFLAG = "G";
+                                //                    }
+                                //                    using (FbCommand cmd1 = new FbCommand())
+                                //                    {
+                                //                        cmd1.CommandText = "ADD_ANALYSIS_RECENT_INFO";
+                                //                        cmd1.CommandType = CommandType.StoredProcedure;
+                                //                        cmd1.Connection = connection;
+                                //                        cmd1.Parameters.Add("@IMATCH_CNT", arr[1]);
+                                //                        cmd1.Parameters.Add("@IREC", irec);
+                                //                        cmd1.Parameters.Add("@CACT", 'U');
+                                //                        cmd1.Parameters.Add("@EVENTID", dr["EVENTID"]);
+                                //                        cmd1.Parameters.Add("@START_DATE", dr["START_DATE"]);
+                                //                        cmd1.Parameters.Add("@LEAGUEALIAS", dr["LEAGUEALIAS"]);
+                                //                        cmd1.Parameters.Add("@CTEAMFLAG", m_CTEAMFLAG);
+                                //                        cmd1.Parameters.Add("@CCHALLENGER", m_HOME_ID == m_Team ? m_GUEST_ID : m_HOME_ID);
+                                //                        cmd1.Parameters.Add("@IMATCHSTATUS", m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? "0" : "1" : dr["home_id"].ToString() == m_GUEST_ID ? "0" : "1");//  dr["IMATCHSTATUS"]);
+                                //                                                                                                                                                                                           //cmd1.Parameters.Add("@IHOSTSCORE", m_HOME_ID == m_Team ? (dr["home_id"].ToString() == m_HOME_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]) : dr["home_id"].ToString() == m_GUEST_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"]);// dr["IHOSTSCORE"]);
+                                //                                                                                                                                                                                           //cmd1.Parameters.Add("@IGUESTSCORE", m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"] : dr["home_id"].ToString() == m_GUEST_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]);// dr["IGUESTSCORE"]);
+                                //                        cmd1.Parameters.Add("@IHOSTSCORE", dr["IHOSTSCORE"]);
+                                //                        cmd1.Parameters.Add("@IGUESTSCORE", dr["IGUESTSCORE"]);
+                                //                        cmd1.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                //                        int id = Convert.ToInt32(cmd1.ExecuteScalar());
+                                //                        irec++;
+                                //                        iretry++;
+                                //                    }
+                                //                    if (iretry > 4) break;
+                                //                }
+                                //            }
+                                //        }
+                                //    }
+                                //}
                                 connection.Close();
                             }
                             break;
@@ -8349,7 +8440,7 @@ namespace DataOfScouts
                      
                     if (bUpdate)
                     {
-                        SendAlertMsg("3",AppFlag.SyncHkjcDateTime);
+                        SendAlertMsg("3","", AppFlag.SyncHkjcDateTime);
                         Files.UpdateConfig("SyncHkjcDateTime", uDate.ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                         Files.WriteLog("Update SyncHkjcDateTime " + uDate.ToString("yyyy-MM-dd HH:mm:ss.fff", null));
                         AppFlag.SyncHkjcDateTime = uDate.ToString("yyyy-MM-dd HH:mm:ss.fff", null);
@@ -10822,6 +10913,37 @@ namespace DataOfScouts
                 bBreak = true;
                 ///  bgwAMQPService.RunWorkerAsync();
             }
+        }
+
+        private void btnSendSync_Click(object sender, EventArgs e)
+        {
+            SendAlertMsg("3", "", this.txtXmlFileUrl.Text.Trim());
+            Files.WriteLog("btnSendSync_Click():3 " + this.txtXmlFileUrl.Text.Trim());
+        } 
+
+        private void btnGotEvt_Click(object sender, EventArgs e)
+        {
+            InsertData("events.show3", true, this.txtXmlFileUrl.Text.Trim(), true);
+            Files.WriteLog("btnGotEvt_Click():events.show3 " + this.txtXmlFileUrl.Text.Trim());
+        }
+
+        private void btnSendSyncGoal_Click(object sender, EventArgs e)
+        {
+            SendAlertMsg("2", "", this.txtXmlFileUrl.Text.Trim());
+            Files.WriteLog("btnSendSyncGoal_Click():2 " + this.txtXmlFileUrl.Text.Trim());
+        }
+
+        private void btnSendLive_Click(object sender, EventArgs e)
+        {
+            SendAlertMsg("1", "", this.txtXmlFileUrl.Text.Trim());
+            Files.WriteLog("btnSendLive_Click():1 " + this.txtXmlFileUrl.Text.Trim());
+        }
+
+        private void btnANALYSIS_Click(object sender, EventArgs e)
+        {
+            InsertData("events.compare", true, this.txtXmlFileUrl.Text.Trim());
+            SendAlertMsg("3", "ANALYSIS", this.txtXmlFileUrl.Text.Trim());
+            Files.WriteLog("btnANALYSIS_Click():events.compare 3 " + this.txtXmlFileUrl.Text.Trim());
         }
     }
 

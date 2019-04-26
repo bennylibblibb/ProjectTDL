@@ -146,6 +146,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="database\backup.7z" />
     <None Include="sql.json" />
     <None Include="index.json" />
     <None Include="packages.config">
@@ -185,5 +186,6 @@
   <ItemGroup>
     <Content Include="synctoyico.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

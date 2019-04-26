@@ -128,7 +128,10 @@
                 {
                     if (hl != null && hl.Text != "STATSCORE")
                     {
-                      hl.Attributes.Add("onclick", "javascript:"+(Session["eventID"] == null ? "alert('請選擇賽事!');return false;" : "return true;"));
+                        if (hl.Text != "數據" && hl.Text != "登出")
+                        {
+                            hl.Attributes.Add("onclick", "javascript:" + (Session["eventID"] == null ? "alert('請選擇賽事!');return false;" : "return true;"));
+                        }
                     }
                     else
                     {

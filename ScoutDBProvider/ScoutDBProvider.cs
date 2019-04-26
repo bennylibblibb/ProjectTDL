@@ -1,4 +1,4 @@
-﻿ 
+﻿
 using FileLog;
 using FirebirdSql.Data.FirebirdClient;
 using System;
@@ -16,12 +16,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Windows.Forms; 
+using System.Windows.Forms;
 
 namespace ScoutDBProvider
 {
     public partial class ScoutDBProvider : Form
     {
+
+        [DllImport("kernel32.dll")]
+        private static extern int GetLastError();  
 
         [DllImport("user32.dll", EntryPoint = "FindWindow")]
         public static extern int FindWindow(string lpClassName, string lpWindowName);
@@ -35,6 +38,7 @@ namespace ScoutDBProvider
         private static readonly IntPtr HWND_BROADCAST = new IntPtr(0xFFFF);
         private const int SUCCESS_CODE = 100000;
         private static readonly uint uiSkSvrNotify = RegisterWindowMessage(AppFlag.SkSvrNotify);
+        private static readonly uint uiSkSvrNotify2 = RegisterWindowMessage(AppFlag.SkSvrNotify2);
 
         private static System.Threading.Timer tTimer;
 
@@ -50,7 +54,7 @@ namespace ScoutDBProvider
                 tTimer = new System.Threading.Timer(
                callback: new TimerCallback(TimerTask),
                state: timerState,
-               dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays(1).Subtract(DateTime.Now) : dueTimes.Subtract(DateTime.Now)),// 
+               dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays(1).Subtract(DateTime.Now) : dueTimes.Subtract(DateTime.Now)),//  new TimeSpan(1000),//
                period: dueTimes.AddDays(1).Subtract(dueTimes));
 
             }
@@ -60,10 +64,109 @@ namespace ScoutDBProvider
             }
         }
 
+        private void InitGoalInfo()
+        {
+            try
+            {
+                string queryString = "";
+                DataSet ds = new DataSet();
+                using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                {
+                    connection.Open();
+                    Files.WriteLog("Init LIVEGOALS");
+                    this.listBox1.Invoke(new Action(() =>
+                    {
+                        this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start Init LIVEGOALS"); } }));
+                    }));
+
+                    //LIVEGOALS
+                    queryString = "SELECT   E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
+                    "E.CMATCHDATETIME CMATCHDATE,E.CMATCHDATETIME CMATCHTIME,'H' CMATCHFIELD," +
+                         "'U' CACTION,G.H_GOAL,G.G_GOAL,G.H_RED,G.G_RED,G.HH_GOAL,G.GH_GOAL," +
+                         "G.H_CONFIRM,G.G_CONFIRM,''CSONGID,''CALERT,G.GAMESTATUS,'' " +
+                         "CCOMMENT,-1 CTIMEOFGAME,current_timestamp TIMEFLAG,'0'IDEST FROM EVENTS r INNER JOIN" +
+                         "  EMATCHES E ON E.EMATCHID = R.ID " +
+                         "INNER JOIN GOALINFO G ON G.EMATCHID = E.EMATCHID WHERE R.ID in(" +
+                         " select E.EMATCHID from EMATCHES E " +
+                         "  WHERE e.HKJCDAYCODE = (SELECT first 1 HKJCDAYCODE FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))  order by CMATCHDATETIME desc    )  " +
+                         "  and e.CMATCHDATETIME < (SELECT first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   )+1" +
+                         " and e.CMATCHDATETIME > (SELECT  first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   ) -1 order by e.HKJCMATCHNO asc " + ")" +
+                         " ORDER BY E.CMATCHDATETIME DESC ";
+
+                    Files.WriteLog("Sql: " + queryString);
+
+                    using (FbCommand cmd = new FbCommand(queryString, connection))
+                    {
+                        using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                        {
+                            using (DataSet data = new DataSet())
+                            {
+                                data.Tables.Add(new DataTable("data"));
+                                fda.Fill(data.Tables["data"]);
+                                ds = data;
+                            }
+                        }
+                    }
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                    //    DataRow drH = ds.Tables[0].Rows[0];
+                        using (FbConnection connection2 = new FbConnection(AppFlag.MangoDBConn))
+                        {
+                            connection2.Open();
+                            foreach (DataRow drH in ds.Tables[0].Rows)
+                            {
+                                using (FbCommand cmd2 = new FbCommand("PR_LIVEGOALS", connection2))
+                                {
+                                    cmd2.CommandType = CommandType.StoredProcedure;
+                                    cmd2.Parameters.Add("@CLEAGUEALIAS", drH["CLEAGUEALIAS_OUTPUT_NAME"]);
+                                    cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_HKJC_NAME"]);
+                                    cmd2.Parameters.Add("@CHOST", drH["HKJCHOSTNAME_CN"]);
+                                    cmd2.Parameters.Add("@CGUEST", drH["HKJCGUESTNAME_CN"]);
+                                    cmd2.Parameters.Add("@CMATCHDATE", Convert.ToDateTime(drH["CMATCHDATE"]).ToString("yyyyMMdd"));
+                                    cmd2.Parameters.Add("@CMATCHTIME", Convert.ToDateTime(drH["CMATCHTIME"]).ToString("HHmm"));
+                                    cmd2.Parameters.Add("@CMATCHFIELD", drH["CMATCHFIELD"]);
+                                    cmd2.Parameters.Add("@CACTION", drH["CACTION"]);
+                                    cmd2.Parameters.Add("@IH_GOAL", drH["H_GOAL"].ToString() == "" ? "-1" : drH["H_GOAL"].ToString());
+                                    cmd2.Parameters.Add("@IG_GOAL", drH["G_GOAL"].ToString() == "" ? "-1" : drH["G_GOAL"].ToString());
+                                    cmd2.Parameters.Add("@IH_REDCARD", drH["H_RED"].ToString() == "" ? "-1" : drH["H_RED"].ToString());
+                                    cmd2.Parameters.Add("@IG_REDCARD", drH["G_RED"].ToString() == "" ? "-1" : drH["G_RED"].ToString());
+                                    cmd2.Parameters.Add("@IH_HT_GOAL", drH["HH_GOAL"].ToString() == "" ? "-1" : drH["HH_GOAL"].ToString());
+                                    cmd2.Parameters.Add("@IG_HT_GOAL", drH["GH_GOAL"].ToString() == "" ? "-1" : drH["GH_GOAL"].ToString());
+                                    cmd2.Parameters.Add("@IH_CONFIRM", drH["H_CONFIRM"].ToString() == "" ? "-1" : drH["H_CONFIRM"].ToString());
+                                    cmd2.Parameters.Add("@IG_CONFIRM", drH["G_CONFIRM"].ToString() == "" ? "-1" : drH["G_CONFIRM"].ToString());
+                                    cmd2.Parameters.Add("@CSONGID", drH["CSONGID"]);
+                                    cmd2.Parameters.Add("@CALERT", drH["CALERT"]);
+                                    cmd2.Parameters.Add("@CSTATUS", drH["GAMESTATUS"]);
+                                    cmd2.Parameters.Add("@CCOMMENT", drH["CCOMMENT"]);
+                                    cmd2.Parameters.Add("@CTIMEOFGAME", drH["CTIMEOFGAME"]);
+                                    cmd2.Parameters.Add("@TIMEFLAG", Convert.ToDateTime(drH["TIMEFLAG"]).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                    cmd2.Parameters.Add("@IDEST", drH["IDEST"]);
+                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                    if (id > -1)
+                                    {
+                                        Files.WriteLog(" [Success] Insert LIVEGOALS " + " " + drH["CLEAGUEALIAS_OUTPUT_NAME"] + " " + drH["HKJCHOSTNAME_CN"] + "/" + drH["HKJCGUESTNAME_CN"]);
+                                    }
+                                }
+                            }
+                            connection2.Close();
+                        }
+                    }
+                    SendAlertMsg(30);
+                    connection.Close();
+                }
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + "Init LIVEGOALS,error: " + exp);
+            }
+        }
+
         private void TimerTask(object timerState)
         {
             try
             {
+                InitGoalInfo();
                 int iIndex = 0;
                 DataSet ds = new DataSet();
                 string[] syncItems;
@@ -93,18 +196,21 @@ namespace ScoutDBProvider
                             connection.Open();
                             for (i = 0; i < syncItems.Length; i++)
                             {
-                                if (i == 0 || i == 1)
+                                //< item > RANKS </ item >
+                               //< item > SCORERS </ item >
+                               //< item > LEAGINFO </ item >
+                                Files.WriteLog("Update " + syncItems[i].ToString());
+                                this.listBox1.Invoke(new Action(() =>
                                 {
-                                    Files.WriteLog("Update " + syncItems[i].ToString());
-                                    this.listBox1.Invoke(new Action(() =>
-                                    {
-                                        this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Update " + syncItems[i].ToString()); } }));
-                                    }));
+                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Update " + syncItems[i].ToString()); } }));
+                                }));
 
-                                    queryString = "SELECT  c.id, c.ALIAS   FROM COMPETITIONS c  where c.ALIAS is not null ";
-
+                                if (i == 0 || i == 1)
+                                { 
                                     // queryString = "SELECT  c.id, c.ALIAS,l.ILEAG_ID  FROM COMPETITIONS c inner join LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME=c.alias where c.ALIAS is not null ";
-                                    using (FbCommand cmd = new FbCommand(queryString, connection))
+                                    //  queryString = "SELECT  c.id, c.ALIAS   FROM COMPETITIONS c inner join LEAGUE_INFO r on r.CLEAGUE_ALIAS_NAME=c.alias   where c.ALIAS is not null ";
+                                    queryString = "SELECT c.id, c.ALIAS cALIAS, r.LEAGUE_CHI_NAME ALIAS FROM COMPETITIONS c inner join LEAGUE_INFO r on r.CLEAGUE_ALIAS_NAME = c.alias   where c.ALIAS is not null ";
+                                     using (FbCommand cmd = new FbCommand(queryString, connection))
                                     {
                                         using (FbDataAdapter fda = new FbDataAdapter(cmd))
                                         {
@@ -121,14 +227,14 @@ namespace ScoutDBProvider
                                         DataSet ds2 = new DataSet();
                                         if (i == 0)
                                         {
-                                            queryString = "SELECT T.SHORT_NAME  , c.name, a.LEAG_ID, a.CLEAG_ALIAS, a.SEASON_ID, a.TEAM_ID, a.TEAM, a.HKJC_TEAM, a.SCORE, a.RANK, a.FLAG, a.GAMES, a.IWON, a.IDRAW,a.ILOST," +
-                                                "a.CTIMESTAMP,T.HKJC_NAME_CN FROM LEAGRANKINFO a inner join SEASONS s on s.id = a.SEASON_ID and ( s.SYEAR = '2019' or s.SYEAR = '2018/19') " +
+                                            queryString = "SELECT T.SHORT_NAME  , c.name, a.LEAG_ID, a.CLEAG_ALIAS,l.LEAGUE_CHI_NAME, a.SEASON_ID, a.TEAM_ID, a.TEAM, a.HKJC_TEAM, a.SCORE, a.RANK, a.FLAG, a.GAMES, a.IWON, a.IDRAW,a.ILOST," +
+                                                "a.CTIMESTAMP,T.HKJC_NAME_CN FROM LEAGRANKINFO a inner join LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME = a.CLEAG_ALIAS  inner join SEASONS s on s.id = a.SEASON_ID and ( s.SYEAR = '2019' or s.SYEAR = '2018/19') " +
                                                 "inner join teams t on t.id = a.team_id   inner join areas c on c.id = t.area_id where  a.LEAG_ID=" + dr["id"].ToString() + " order by a.CLEAG_ALIAS ,a.rank asc ";
                                         }
                                         else if (i == 1)
                                         {
-                                            queryString = "SELECT  first 15  t.SHORT_NAME tname,t.HKJC_NAME_CN tcname ,r.CLEAG_ID, r.CLEAG_ALIAS, r.SEASON_ID,  r.PLAYER_ID,r.CPLAYER_NAME, r.CTEAM_ABBR, r.CACT," +
-                                            " r.IRID, r.IRANK, r.IGOALS, r.UT, r.CTIMESTAMP ,t.short_name tname, p.CPLAYER_NAME pcname FROM SCORERS_INFO r " +
+                                            queryString = "SELECT  first 15  t.SHORT_NAME tname,t.HKJC_NAME_CN tcname ,r.CLEAG_ID, r.CLEAG_ALIAS,l.LEAGUE_CHI_NAME,  r.SEASON_ID,  r.PLAYER_ID,r.CPLAYER_NAME, r.CTEAM_ABBR, r.CACT," +
+                                            " r.IRID, r.IRANK, r.IGOALS, r.UT, r.CTIMESTAMP ,t.short_name tname, p.CPLAYER_NAME pcname FROM SCORERS_INFO r  inner join LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME = r.CLEAG_ALIAS   inner join SEASONS s on s.id = r.SEASON_ID and ( s.SYEAR = '2019' or s.SYEAR = '2018/19')  " +
                                             " inner join teams t on t.id = r.TEAM_ID  left join  PLAYERS_INFO p  on p.PLAYER_ID = r.PLAYER_ID and p.TEAM_ID = r.TEAM_ID " +
                                             " where r.CLEAG_ID = " + dr["id"].ToString() + "  order by r.IRANK asc";
                                         }
@@ -178,12 +284,12 @@ namespace ScoutDBProvider
                                                                     fda.Fill(data.Tables["data"]);
                                                                     foreach (DataRow dr2 in ds2.Tables[0].Rows)
                                                                     {
-                                                                        if (dr2["SHORT_NAME"].ToString() == "Brisbane Roar")
-                                                                        {
-                                                                            string ST = "";
-                                                                        }
+                                                                        //if (dr2["SHORT_NAME"].ToString() == "Brisbane Roar")
+                                                                        //{
+                                                                        //    string ST = "";
+                                                                        //}
                                                                         DataRow dr3 = data.Tables["data"].NewRow();
-                                                                        dr3[0] = dr2["CLEAG_ALIAS"];
+                                                                        dr3[0] = dr2["LEAGUE_CHI_NAME"];
                                                                         dr3[1] = DateTime.Now.ToString("yyyy/MM/dd");
                                                                         dr3[2] = dr2["name"];
                                                                         dr3[3] = "U";
@@ -231,7 +337,7 @@ namespace ScoutDBProvider
                                                                     foreach (DataRow dr2 in ds2.Tables[0].Rows)
                                                                     {
                                                                         DataRow dr3 = data.Tables["data"].NewRow();
-                                                                        dr3[0] = dr2["CLEAG_ALIAS"];
+                                                                        dr3[0] = dr2["LEAGUE_CHI_NAME"];
                                                                         dr3[1] = DateTime.Now.ToString("yyyy/MM/dd");
                                                                         dr3[2] = dr2["IRANK"];
                                                                         dr3[3] = dr2["pcname"].Equals(DBNull.Value) || dr2["pcname"].Equals("") ? dr2["CPLAYER_NAME"] : dr2["pcname"];
@@ -255,7 +361,7 @@ namespace ScoutDBProvider
                                     }
                                 }
                                 else if (i == 2)
-                                {
+                                { 
                                     using (FbConnection connection2 = new FbConnection(AppFlag.MangoDBConn))
                                     {
                                         connection2.Open();
@@ -293,7 +399,7 @@ namespace ScoutDBProvider
                                                             {
                                                                 DataRow dr3 = data.Tables["data"].NewRow();
                                                                 dr3[0] = dr2["ILEAG_ID"];
-                                                                dr3[1] = dr2["CLEAGUE_NAME"];
+                                                                dr3[1] = dr2["LEAGUE_CHI_NAME"];
                                                                 dr3[2] = DBNull.Value;
                                                                 dr3[3] = dr2["CLEAGUE_ALIAS_NAME"];
                                                                 dr3[4] = DBNull.Value;
@@ -316,7 +422,70 @@ namespace ScoutDBProvider
                                         connection2.Close();
                                     }
                                 }
-
+                                    int msg = -1;
+                                                if (AppFlag.Alert)
+                                                {
+                                                    switch (syncItems[i])
+                                                    {
+                                                        case "LIVEGOALS":
+                                                            {
+                                                                msg = 30;
+                                                            }
+                                                            break;
+                                                        case "GOALDETAILS":
+                                                            {
+                                                                msg = 31;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISOTHER":
+                                                            {
+                                                                msg = 62;
+                                                            }
+                                                            break;
+                                                        case "FIXTURES":
+                                                            {
+                                                                msg = 63;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISTATS":
+                                                            {
+                                                                msg =3;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISHISTORYS":
+                                                            {
+                                                                msg = 2;
+                                                            }
+                                                            break;
+                                                        case "RANKS":
+                                                            {
+                                                                msg = 15;
+                                                            }
+                                                            break;
+                                                        case "SCORERS":
+                                                            {
+                                                                msg = 17;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISRECENTS":
+                                                            {
+                                                                msg = 1;
+                                                            }
+                                                            break;
+                                                        case "HKGOAL":
+                                                            {
+                                                                msg = 60;
+                                                            }
+                                                            break;
+                                                        case "HKGOALDETAILS":
+                                                            {
+                                                                msg = 61;
+                                                            }
+                                                            break;
+                                                    }
+                                                    SendAlertMsg(msg);
+                                                    Files.WriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + msg);
+                                                }
                             }
                             connection.Close();
                         }
@@ -334,9 +503,9 @@ namespace ScoutDBProvider
             catch (Exception exp)
             {
                 Files.WriteError("TimerTask(),error: " + exp.Message);
-
             }
         }
+
         public struct COPYDATASTRUCT
         {
             public IntPtr dwData;
@@ -390,10 +559,11 @@ namespace ScoutDBProvider
                                 Files.WriteLog("Update ADDANALYSISOTHER " + ml.ToString());
                                 this.listBox1.Invoke(new Action(() =>
                                 {
-                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync ANALYSISOTHERS."); } }));
+                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync ANALYSISOTHERS." + ml.ToString()); } }));
                                 }));
 
-                                queryString = "SELECT a.EVENTID, a.CLEAGUE, a.CTEAM, a.CTEAMTYPE, a.CACTION, a.CSHOTS, a.CFOULS, a.CCORNER_KICKS, a.COFFSIDES, a.CPOSSESSION, a.CYELLOW_CARDS, a.CRED_CARDS, a.CATTACKS, a.CSUBSTITUTIONS, a.CTHROWINS, a.CGOALKICKS, a.CTIMESTAMP FROM ANALYSIS_OTHERS a where a.EVENTID = " + ml.ToString() + " order by a.CTIMESTAMP desc ";
+                                queryString = "SELECT a.EVENTID, a.CLEAGUE aCLEAGUE, l.LEAGUE_CHI_NAME CLEAGUE, a.CTEAM, a.CTEAMTYPE, a.CACTION, a.CSHOTS, a.CFOULS, a.CCORNER_KICKS, a.COFFSIDES, a.CPOSSESSION, a.CYELLOW_CARDS, a.CRED_CARDS, a.CATTACKS, a.CSUBSTITUTIONS, a.CTHROWINS, a.CGOALKICKS, a.CTIMESTAMP FROM ANALYSIS_OTHERS a" +
+                                    " inner join  LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME  =a.CLEAGUE where a.EVENTID = " + ml.ToString() + " order by a.CTIMESTAMP desc ";
 
                                 Files.WriteLog("Sql: " + queryString);
 
@@ -448,6 +618,7 @@ namespace ScoutDBProvider
                                 }
                                 connection.Close();
                             }
+                            SendAlertMsg(62);
                         }
                         catch (Exception exp)
                         {
@@ -466,12 +637,13 @@ namespace ScoutDBProvider
                                 Files.WriteLog("Update LIVEGOALS/GOALDETAILS " + ml.ToString());
                                 this.listBox1.Invoke(new Action(() =>
                                 {
-                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync LIVEODDS." + ml.ToString()); } }));
+                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync LIVEGOALS/GOALDETAILS." + ml.ToString()); } }));
                                 }));
 
                                 //LIVEGOALS
-                                queryString = "SELECT FIRST 1 E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_OUTPUT_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
-                                      "E.CMATCHDATETIME CMATCHDATE,E.CMATCHDATETIME CMATCHTIME,'H' CMATCHFIELD," +
+                                // queryString = "SELECT FIRST 1 E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_OUTPUT_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
+                                queryString = "SELECT FIRST 1 E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
+                                 "E.CMATCHDATETIME CMATCHDATE,E.CMATCHDATETIME CMATCHTIME,'H' CMATCHFIELD," +
                                       "'U' CACTION,G.H_GOAL,G.G_GOAL,G.H_RED,G.G_RED,G.HH_GOAL,G.GH_GOAL," +
                                       "G.H_CONFIRM,G.G_CONFIRM,''CSONGID,''CALERT,G.GAMESTATUS,'' " +
                                       "CCOMMENT,-1 CTIMEOFGAME,current_timestamp TIMEFLAG,'0'IDEST FROM EVENTS r INNER JOIN" +
@@ -503,7 +675,7 @@ namespace ScoutDBProvider
                                         {
                                             cmd2.CommandType = CommandType.StoredProcedure;
                                             cmd2.Parameters.Add("@CLEAGUEALIAS", drH["CLEAGUEALIAS_OUTPUT_NAME"]);
-                                            cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_OUTPUT_NAME"]);
+                                            cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_HKJC_NAME"]);
                                             cmd2.Parameters.Add("@CHOST", drH["HKJCHOSTNAME_CN"]);
                                             cmd2.Parameters.Add("@CGUEST", drH["HKJCGUESTNAME_CN"]);
                                             cmd2.Parameters.Add("@CMATCHDATE", Convert.ToDateTime(drH["CMATCHDATE"]).ToString("yyyyMMdd"));
@@ -535,10 +707,11 @@ namespace ScoutDBProvider
                                         connection2.Close();
                                     }
                                 }
+                                SendAlertMsg(30);
 
                                 //GOALDETAILS 
                                 Files.WriteLog("Update GOALDETAILS " + ml.ToString());
-                                queryString = " SELECT  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_OUTPUT_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN,E.CMATCHDATETIME," +
+                                queryString = " SELECT  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN,E.CMATCHDATETIME," +
                                             " 'F' CCURRENTSTATUS, '' CPK, 'U' CACTION, '' CALERT, R.CTYPE CRECORDTYPE, R.HG CRECORDBELONG,   '' CMATCHSTATUS, r.ELAPSED , G.H_GOAL CSCOREHOST, G.G_GOAL CSCOREGUEST, '-1' CSCORENUM,   '0' CSCOREOWNGOAL, r.PLAYERCHI CSCORER,r.PLAYER CSCORER2 , current_timestamp TIMEFLAG, '0' IDEST " +
                                             "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID  INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString();
                                 Files.WriteLog("Sql: " + queryString);
@@ -567,7 +740,7 @@ namespace ScoutDBProvider
                                             {
                                                 cmd2.CommandType = CommandType.StoredProcedure;
                                                 cmd2.Parameters.Add("@CLEAGUEALIAS", drH["CLEAGUEALIAS_OUTPUT_NAME"]);
-                                                cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_OUTPUT_NAME"]);
+                                                cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_HKJC_NAME"]);
                                                 cmd2.Parameters.Add("@CHOST", drH["HKJCHOSTNAME_CN"]);
                                                 cmd2.Parameters.Add("@CGUEST", drH["HKJCGUESTNAME_CN"]);
                                                 cmd2.Parameters.Add("@CCURRENTSTATUS", drH["CCURRENTSTATUS"]);
@@ -596,7 +769,12 @@ namespace ScoutDBProvider
                                     }
                                 }
                                 connection.Close();
+                                 
+                                SendAlertMsg(31);
                             }
+                            //SendAlertMsg(30);
+                            //SendAlertMsg(31);
+                           
                         }
                         catch (Exception exp)
                         {
@@ -605,465 +783,1204 @@ namespace ScoutDBProvider
                     }
                     else
                     {
-                        try
-                        {      //COPYDATASTRUCT mystr2 = new COPYDATASTRUCT();
-                               //Type mytype2 = mystr.GetType();
-                               //mystr2 = (COPYDATASTRUCT)m.GetLParam(mytype2);
-                               //string ml2 = mystr.lpData;
-                               //// string len = mystr.cbData;
-                               //int mw2 = (int)m.WParam;
-
-                            //COPYDATASTRUCT cdata2 = new COPYDATASTRUCT();
-                            //Type mytype2 = cdata2.GetType();
-                            //cdata2 = (COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, mytype2);
-                            //string ml2 = cdata.lpData;
-                            // string ml2 = "";
-                            this.listBox1.Invoke(new Action(() =>
+                        if (mw == 3)
                         {
-                            this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Recevied msg,start sync."); } }));
-                        }));
-
-                            //  Files.WriteLog(" [Success] recevied " + m.Msg + "--" + ((int)m.WParam).ToString() + ((int)m.LParam).ToString());
-                            DateTime dt = DateTime.ParseExact(((int)m.WParam).ToString() + ((int)m.LParam).ToString(), "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
-                            // dt = DateTime.ParseExact(dt, "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
-                            Files.WriteLog(" [Success] recevied " + dt.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                            //  MessageBox.Show(" [Success] recevied " + m.Msg + "--" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff")); 
-
-                            int iIndex = 0;
-                            DataSet ds = new DataSet();
-                            string[] syncItems;
-                            ArrayList configSetting = new ArrayList();
-                            string queryString = "";
-
-                            configSetting = AppFlag.configSetting;
-                            syncItems = new string[configSetting.Count];
-                            if (configSetting != null)
+                            try
                             {
-                                iIndex = 0;
-                                foreach (string s in configSetting)
+                                this.listBox1.Invoke(new Action(() =>
                                 {
-                                    syncItems[iIndex] = s;
-                                    iIndex++;
-                                }
-                            }
-                            // configSetting.Clear();
+                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Recevied msg,Start Sync."); } }));
+                                }));
 
-                            if (syncItems.Count() > 0)
-                            {
-                                int i = 0;
+                                //DateTime dt = DateTime.ParseExact(((int)m.WParam).ToString() + ((int)m.LParam).ToString(), "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                                //Files.WriteLog(" [Success] recevied " + dt.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
-                                try
+                                int iIndex = 0;
+                                DataSet ds = new DataSet();
+                                string[] syncItems;
+                                ArrayList configSetting = new ArrayList();
+                                string queryString = "";
+
+                                configSetting = AppFlag.configSetting;
+                                syncItems = new string[configSetting.Count];
+                                if (configSetting != null)
                                 {
-                                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                                    iIndex = 0;
+                                    foreach (string s in configSetting)
                                     {
-                                        connection.Open();
-                                        for (i = 0; i < syncItems.Length; i++)
+                                        syncItems[iIndex] = s;
+                                        iIndex++;
+                                    }
+                                }
+                                // configSetting.Clear();
+
+                                if (syncItems.Count() > 0)
+                                {
+                                    int i = 0;
+
+                                    try
+                                    {
+                                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                                         {
-                                            Files.WriteLog("Update " + syncItems[i].ToString());
-                                            this.listBox1.Invoke(new Action(() =>
+                                            connection.Open();
+                                            for (i = 0; i < syncItems.Length; i++)
                                             {
-                                                this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync " + syncItems[i] + "."); } }));
-                                            }));
-                                            if (i == 0)
-                                            {
-                                                queryString = "select  e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_STAT_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in (select  c.EMATCHID  FROM EMATCHES c where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
-                                            }
-                                            else if (i == 1)
-                                            {
-                                                //     queryString = "select   e.CLEAGUE_OUTPUT_NAME,e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from    ANALYSIS_HISTORY_INFO    a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC";
-                                                queryString = "select 'CLEAGUEALIAS='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' and cdate='''|| replace( cast(a.START_DATE as date),'-','')||''' ' ABC, e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_HISTORY_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in (select  c.EMATCHID  FROM EMATCHES c where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) ORDER BY  a.imatch_cnt ,a.irec asc   ";
-                                            }
-                                            else if (i == 2)
-                                            {
-                                                // queryString = "select  e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN,  e.CMATCHDATETIME, a.*   from    ANALYSIS_RECENT_INFO    a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT     a where a.IMATCH_CNT in (select  c.EMATCHID  FROM EMATCHES c where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
-                                                queryString = "select  'CLEAGUE='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME CLEAGUE, e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)  ORDER BY  a.IMATCH_CNT ,a.irec asc";
-                                            }
-                                            else if (i == 3)
-                                            {
-                                                //teams 2019-04-09 10:51:04.234
-                                                queryString = "select  t.id tid, t.SHORT_NAME,t.hkjc_name_cn ,T.AREA_ID ,a.NAME COUNTRY ,c.COUNTRY_CHI_NAME from events e inner join teams t on t.id = e.HOME_ID or t.id = e.guest_id inner join  AREAS a on a.ID = t.AREA_ID LEFT join  INT_COUNTRY c on c.COUNTRY_ENG_NAME = a.NAME  where e.id  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
-                                            }
-                                            else if (i == 4)
-                                            {
-                                                //players  
-                                                // queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'  AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
-                                                queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID = 2737951 and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
-                                            }
-                                            else if (i == 5)
-                                            {
-                                                //FIXTURES  
-                                                //queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'  AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
-                                                queryString = "SELECT 'c.id=''' || r.ID||'''' cid,  L.LEAGUE_CHI_NAME FROM COMPETITIONS r INNER JOIN  LEAGUE_INFO L ON R.ALIAS=L.CLEAGUE_ALIAS_NAME where r.ALIAS = '意甲' OR r.ALIAS = '英超' OR r.ALIAS = '法甲' OR r.ALIAS = '德甲' OR r.ALIAS = '蘇超' OR r.ALIAS = '西甲'OR r.ALIAS = '荷甲' OR r.ALIAS = '日聯' OR r.ALIAS = '澳A' OR r.ALIAS = '歐冠' ORDER BY  R.ID ";
-                                            }
-
-                                            Files.WriteLog("Sql: " + queryString);
-
-
-                                            using (FbCommand cmd = new FbCommand(queryString, connection))
-                                            {
-                                                using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                Files.WriteLog("Update " + syncItems[i].ToString());
+                                                this.listBox1.Invoke(new Action(() =>
                                                 {
-                                                    using (DataSet data = new DataSet())
+                                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync " + syncItems[i] + "."); } }));
+                                                }));
+                                                if (i == 0)
+                                                {
+                                                    queryString = "select  e.EMATCHID eid,   e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_STAT_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in ( " + ml.ToString() + ")";
+                                                }
+                                                else if (i == 1)
+                                                {
+                                                    //     queryString = "select   e.CLEAGUE_OUTPUT_NAME,e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from    ANALYSIS_HISTORY_INFO    a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC";
+                                                    queryString = "select  e.EMATCHID eid,  'CLEAGUEALIAS='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' and cdate='''|| replace( cast(a.START_DATE as date),'-','')||''' ' ABC, e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_HISTORY_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in (" + ml.ToString() + ") ORDER BY  a.imatch_cnt ,a.irec asc   ";
+                                                }
+                                                else if (i == 2)
+                                                {
+                                                    // queryString = "select  e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN,  e.CMATCHDATETIME, a.*   from    ANALYSIS_RECENT_INFO    a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT     a where a.IMATCH_CNT in (select  c.EMATCHID  FROM EMATCHES c where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
+                                                    queryString = "select  e.EMATCHID eid,   'CLEAGUE='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME CLEAGUE, e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  (" + ml.ToString() + ")  ORDER BY  a.IMATCH_CNT ,a.irec asc";
+                                                }
+                                                else if (i == 3)
+                                                {
+                                                    //teams 2019-04-09 10:51:04.234
+                                                    queryString = "select e.id eid,  t.id tid, t.SHORT_NAME,t.hkjc_name_cn ,T.AREA_ID ,a.NAME COUNTRY ,c.COUNTRY_CHI_NAME from events e inner join teams t on t.id = e.HOME_ID or t.id = e.guest_id inner join  AREAS a on a.ID = t.AREA_ID LEFT join  INT_COUNTRY c on c.COUNTRY_ENG_NAME = a.NAME  where e.id  in (" + ml.ToString() + ")";
+                                                }
+                                                else if (i == 4)
+                                                {
+                                                    //players  
+                                                    // queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'  AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
+                                                    // queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID = 2737951 and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
+                                                    queryString = "select e.id eid, e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID  in (" + ml.ToString() + ") and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
+                                                }
+                                                else if (i == 5)
+                                                {
+                                                    //FIXTURES  
+                                                    //queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'  AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
+                                                    queryString = "SELECT 'c.id=''' || r.ID||'''' cid, r.id eid,  L.LEAGUE_CHI_NAME FROM COMPETITIONS r INNER JOIN  LEAGUE_INFO L ON R.ALIAS=L.CLEAGUE_ALIAS_NAME where r.ALIAS = '意甲' OR r.ALIAS = '英超' OR r.ALIAS = '法甲' OR r.ALIAS = '德甲' OR r.ALIAS = '蘇超' OR r.ALIAS = '西甲'OR r.ALIAS = '荷甲' OR r.ALIAS = '日聯' OR r.ALIAS = '澳A' OR r.ALIAS = '歐冠' ORDER BY  R.ID ";
+                                                }
+
+                                                Files.WriteLog("Sql: " + queryString);
+
+
+                                                using (FbCommand cmd = new FbCommand(queryString, connection))
+                                                {
+                                                    using (FbDataAdapter fda = new FbDataAdapter(cmd))
                                                     {
-                                                        data.Tables.Add(new DataTable("data"));
-                                                        fda.Fill(data.Tables["data"]);
-                                                        ds = data;
+                                                        using (DataSet data = new DataSet())
+                                                        {
+                                                            data.Tables.Add(new DataTable("data"));
+                                                            fda.Fill(data.Tables["data"]);
+                                                            ds = data;
+                                                        }
                                                     }
                                                 }
-                                            }
 
-                                            if (ds.Tables[0].Rows.Count > 0)
-                                            {
-                                                using (FbConnection connection2 = new FbConnection(AppFlag.MangoDBConn))
+                                                if (ds.Tables[0].Rows.Count > 0)
                                                 {
-                                                    connection2.Open();
-                                                    if (i == 0)
+                                                    if (i != 5)
                                                     {
-                                                        foreach (DataRow dr in ds.Tables[0].Rows)
-                                                        {
-                                                            using (FbCommand cmd2 = new FbCommand("PR_ANALYSIS_STAT", connection2))
-                                                            {
-                                                                cmd2.CommandType = CommandType.StoredProcedure;
-                                                                cmd2.Parameters.Add("@CLEAGUE", dr["CLEAGUEALIAS_OUTPUT_NAME"]);
-                                                                cmd2.Parameters.Add("@CHOST", dr["HKJCHOSTNAME_CN"]);
-                                                                cmd2.Parameters.Add("@CGUEST", dr["HKJCGUESTNAME_CN"]);
-                                                                cmd2.Parameters.Add("@IMATCHDATE", Convert.ToDateTime(dr["CMATCHDATETIME"]).ToString("yyyyMMdd"));
-                                                                cmd2.Parameters.Add("@IMATCHTIME", Convert.ToDateTime(dr["CMATCHDATETIME"]).ToString("HHmmss"));
-                                                                cmd2.Parameters.Add("@CHANDICAP", DBNull.Value);
-                                                                cmd2.Parameters.Add("@CMATCHFIELD", DBNull.Value);
-                                                                cmd2.Parameters.Add("@IHOSTWIN", dr["IHOSTWIN"]);
-                                                                cmd2.Parameters.Add("@IHOSTDRAW", dr["IHOSTDRAW"]);
-                                                                cmd2.Parameters.Add("@IHOSTLOSS", dr["IHOSTLOSS"]);
-                                                                cmd2.Parameters.Add("@IGUESTWIN", dr["IGUESTWIN"]);
-                                                                cmd2.Parameters.Add("@IGUESTDRAW", dr["IGUESTDRAW"]);
-                                                                cmd2.Parameters.Add("@IGUESTLOSS", dr["IGUESTLOSS"]);
-                                                                cmd2.Parameters.Add("@CREMARK", DBNull.Value);
-                                                                cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                                                                cmd2.Parameters.Add("@IDEST", "0");
-                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                if (id > -1)
-                                                                {
-                                                                    Files.WriteLog(" [Success] Insert ANALYSIS_STAT " + " " + dr["CLEAGUEALIAS_OUTPUT_NAME"] + " " + dr["HKJCHOSTNAME_CN"] + "/" + dr["HKJCGUESTNAME_CN"]);
-                                                                }
-                                                            }
-                                                        }
+                                                        string ids = string.Concat("(", string.Join(") OR  (", ds.Tables[0].AsEnumerable().Select(d => d.Field<int>("eid")).ToList<int>().Distinct().ToList().ConvertAll<string>(x => x.ToString())), ")");
+                                                        Files.WriteLog("Sync ids: " + ids);
                                                     }
-                                                    else if (i == 1)
+                                                    using (FbConnection connection2 = new FbConnection(AppFlag.MangoDBConn))
                                                     {
-                                                        using (FbCommand cmd2 = new FbCommand())
+                                                        connection2.Open();
+                                                        if (i == 0)
                                                         {
-                                                            //List<string> strL= (ds.Tables[0].AsEnumerable().Select(d => d.Field<int>("IMATCH_CNT")).ToList<int>()).ConvertAll<string>(x => x.ToString());
-                                                            //string strs = string.Concat("'", string.Join("','", strL), "'");
-                                                            //cmd2.CommandText = "delete from ANALYSISHISTORYS where  IMATCH_CNT in (" + strs + ")";
-                                                            List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
-                                                            string strs = string.Concat("(", string.Join(") OR  (", strL), ")");
-                                                            cmd2.CommandText = "delete from ANALYSISHISTORYS where " + strs;
-                                                            cmd2.Connection = connection2;
-                                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog("Delete ANALYSISHISTORYS [" + strs + "]");
-                                                        }
-
-                                                        queryString = "select first   1 * from ANALYSISHISTORYS";
-                                                        using (FbCommand cmd = new FbCommand(queryString, connection2))
-                                                        {
-                                                            using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                            continue;
+                                                            foreach (DataRow dr in ds.Tables[0].Rows)
                                                             {
-                                                                using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
-                                                                {
-                                                                    using (DataSet data = new DataSet())
-                                                                    {
-                                                                        data.Tables.Add(new DataTable("data"));
-                                                                        fda.Fill(data.Tables["data"]);
-                                                                        foreach (DataRow dr2 in ds.Tables[0].Rows)
-                                                                        {
-                                                                            //r.CLEAGUE, r.CHOST, r.CGUEST, r.CDATE, r.CLEAGUEALIAS, r.CDES,
-                                                                            //  r.IHOSTSCORE, r.IGUESTSCORE, r.TIMEFLAG, r.IDEST
-                                                                            DataRow dr3 = data.Tables["data"].NewRow();
-                                                                            dr3[0] = dr2["CLEAGUE_OUTPUT_NAME"];
-                                                                            dr3[1] = dr2["HKJCHOSTNAME_CN"];
-                                                                            dr3[2] = dr2["HKJCGUESTNAME_CN"];
-                                                                            dr3[3] = Convert.ToDateTime(dr2["START_DATE"]).ToString("yyyyMMdd");
-                                                                            dr3[4] = dr2["CLEAGUEALIAS_OUTPUT_NAME"];
-                                                                            dr3[5] = dr2["IMATCHSTATUS"].ToString() == "0" ? "主" : "客";
-                                                                            dr3[6] = dr2["IHOSTSCORE"];
-                                                                            dr3[7] = dr2["IGUESTSCORE"];
-                                                                            dr3[8] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                                                                            dr3[9] = "0";
-                                                                            data.Tables["data"].Rows.Add(dr3);
-                                                                        }
-                                                                        int count = fda.Update(data.Tables["data"]);
-                                                                        Files.WriteLog((count > 0 ? "[Success] " : "[Failure] ") + " Insert ANALYSISHISTORYS [" + data.Tables["data"].Rows.Count + "]");
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    else if (i == 2)
-                                                    {
-                                                        using (FbCommand cmd2 = new FbCommand())
-                                                        {
-                                                            List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
-                                                            string strs = string.Concat("(", string.Join(") OR  (", strL), ")");
-                                                            cmd2.CommandText = "delete from ANALYSISRECENTS where " + strs;
-                                                            cmd2.Connection = connection2;
-                                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog("Delete ANALYSISRECENTS [" + strs + "]");
-                                                        }
-
-                                                        queryString = "select first   1 * from ANALYSISRECENTS";
-                                                        using (FbCommand cmd = new FbCommand(queryString, connection2))
-                                                        {
-                                                            using (FbDataAdapter fda = new FbDataAdapter(cmd))
-                                                            {
-                                                                using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
-                                                                {
-                                                                    using (DataSet data = new DataSet())
-                                                                    {
-                                                                        data.Tables.Add(new DataTable("data"));
-                                                                        fda.Fill(data.Tables["data"]);
-                                                                        List<string> strTeam = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
-
-                                                                        foreach (string s in strTeam)
-                                                                        {
-                                                                            DataRow[] drs = ds.Tables[0].Select(s);
-                                                                            List<DataRow> drH = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "H").ToList();
-                                                                            List<DataRow> drG = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "G").ToList();
-                                                                            DataRow dr3 = data.Tables["data"].NewRow();
-                                                                            dr3[0] = drH.Count > 0 ? drH[0][2] : drG.Count > 0 ? drG[0][2] : "";
-                                                                            dr3[1] = drH.Count > 0 ? drH[0][3] : drG.Count > 0 ? drG[0][3] : "";
-                                                                            dr3[2] = drH.Count > 0 ? drH[0][4] : drG.Count > 0 ? drG[0][4] : "";
-                                                                            dr3[3] = "U";
-                                                                            dr3[4] = "-1/-1/-1";
-                                                                            dr3[5] = drH.Count > 0 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[0]["CCHALLENGER"].ToString() + "/" + (drH[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[0]["IHOSTSCORE"].ToString() + "/" + drH[0]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[6] = drH.Count > 1 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[1]["CCHALLENGER"].ToString() + "/" + (drH[1]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[1]["IHOSTSCORE"].ToString() + "/" + drH[1]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[7] = drH.Count > 2 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[2]["CCHALLENGER"].ToString() + "/" + (drH[2]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[2]["IHOSTSCORE"].ToString() + "/" + drH[2]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[8] = drH.Count > 3 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[3]["CCHALLENGER"].ToString() + "/" + (drH[3]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[3]["IHOSTSCORE"].ToString() + "/" + drH[3]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[9] = drH.Count > 4 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[4]["CCHALLENGER"].ToString() + "/" + (drH[4]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[4]["IHOSTSCORE"].ToString() + "/" + drH[4]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[10] = "-1/-1/-1";
-                                                                            dr3[11] = drG.Count > 0 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[0]["CCHALLENGER"].ToString() + "/" + (drG[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[0]["IHOSTSCORE"].ToString() + "/" + drG[0]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[12] = drG.Count > 1 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[1]["CCHALLENGER"].ToString() + "/" + (drG[1]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[1]["IHOSTSCORE"].ToString() + "/" + drG[1]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[13] = drG.Count > 2 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[2]["CCHALLENGER"].ToString() + "/" + (drG[2]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[2]["IHOSTSCORE"].ToString() + "/" + drG[2]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[14] = drG.Count > 3 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[3]["CCHALLENGER"].ToString() + "/" + (drG[3]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[3]["IHOSTSCORE"].ToString() + "/" + drG[3]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[15] = drG.Count > 4 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[4]["CCHALLENGER"].ToString() + "/" + (drG[4]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[4]["IHOSTSCORE"].ToString() + "/" + drG[4]["IGUESTSCORE"].ToString() : "-1";
-                                                                            dr3[16] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                                                                            dr3[17] = "0";
-                                                                            data.Tables["data"].Rows.Add(dr3);
-                                                                        }
-
-                                                                        int count = fda.Update(data.Tables["data"]);
-                                                                        Files.WriteLog((count > 0 ? "[Success] " : "[Failure] ") + " Insert ANALYSISRECENTS [" + data.Tables["data"].Rows.Count + "]");
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    else if (i == 3)
-                                                    {
-                                                        foreach (DataRow dr in ds.Tables[0].Rows)
-                                                        {
-                                                            using (FbCommand cmd2 = new FbCommand("PR_AddTeam", connection2))
-                                                            {
-                                                                cmd2.CommandType = CommandType.StoredProcedure;
-                                                                cmd2.Parameters.Add("@TEAM_ID", dr["tid"]);
-                                                                cmd2.Parameters.Add("@TEAMNAME", dr["hkjc_name_cn"]);
-                                                                cmd2.Parameters.Add("@COUNTRY", dr["COUNTRY_CHI_NAME"] is DBNull ? dr["COUNTRY"] : dr["COUNTRY_CHI_NAME"]);
-                                                                cmd2.Parameters.Add("@CITY", DBNull.Value);
-                                                                cmd2.Parameters.Add("@VENUE", DBNull.Value);
-                                                                cmd2.Parameters.Add("@CONTINENT", DBNull.Value);
-                                                                cmd2.Parameters.Add("@CENGNAME", dr["SHORT_NAME"]);
-                                                                cmd2.Parameters.Add("@CMACAUNAME", dr["hkjc_name_cn"]);
-                                                                cmd2.Parameters.Add("@CHKJCNAME", dr["hkjc_name_cn"]);
-                                                                cmd2.Parameters.Add("@CHKJCSHORTNAME", dr["hkjc_name_cn"]);
-                                                                cmd2.Parameters.Add("@LASTUPDATE", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                                                                cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                if (id > -1)
-                                                                {
-                                                                    Files.WriteLog(" [Success] Insert TEAMINFO " + " " + dr["tid"] + " " + dr["hkjc_name_cn"] + "/" + dr["SHORT_NAME"]);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    else if (i == 4)
-                                                    {
-                                                        List<int> strE = ds.Tables[0].AsEnumerable().Select(d => d.Field<int>("id")).ToList<int>().Distinct().ToList<int>();
-                                                        Files.WriteLog(strE.Count.ToString());
-                                                        foreach (int s in strE)
-                                                        {
-                                                            Files.WriteLog(strE.Count.ToString() + " " + s);
-                                                            DataRow[] drs = ds.Tables[0].Select("id=" + s);
-                                                            List<int> strT = drs.Select(d => d.Field<int>("TEAM_ID")).ToList<int>().Distinct().ToList<int>();
-                                                            if (strT.Count == 2)
-                                                            {
-                                                                Files.WriteLog(strT.Count.ToString() + " " + "t");
-                                                                List<DataRow> drH = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<int>("TEAM_ID") == strT[0]).ToList();
-                                                                List<DataRow> drG = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<int>("TEAM_ID") == strT[1]).ToList();
-
-                                                                List<DataRow> sGH = drH.Where(x => x.Field<int>("IPOS") == 3).ToList();
-                                                                List<DataRow> sGG = drG.Where(x => x.Field<int>("IPOS") == 3).ToList();
-                                                                List<DataRow> sBH = drH.Where(x => x.Field<int>("IPOS") == 0).ToList();
-                                                                List<DataRow> sBG = drG.Where(x => x.Field<int>("IPOS") == 0).ToList();
-                                                                List<DataRow> sFH = drH.Where(x => x.Field<int>("IPOS") == 2).ToList();
-                                                                List<DataRow> sFG = drG.Where(x => x.Field<int>("IPOS") == 2).ToList();
-                                                                List<DataRow> sMH = drH.Where(x => x.Field<int>("IPOS") == 1).ToList();
-                                                                List<DataRow> sMG = drG.Where(x => x.Field<int>("IPOS") == 1).ToList();
-                                                                List<DataRow> sUH = drH.Where(x => x.Field<int>("IPOS") == 4).ToList();
-                                                                List<DataRow> sUG = drG.Where(x => x.Field<int>("IPOS") == 4).ToList();
-
-                                                                string sH = "";
-                                                                string sG = "";
-                                                                string ssBH = "", ssBG = "", ssFH = "", ssFG = "", ssMH = "", ssMG = "", ssUH = "", ssUG = "";
-                                                                for (int j = 0; j < 5; j++)
-                                                                {
-                                                                    if (j == 0)
-                                                                    {
-                                                                        foreach (DataRow R in sBH)
-                                                                        {
-                                                                            ssBH += "B/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"].ToString() : R["CPLAYER_NAME"].ToString()) + ",";
-                                                                        }
-                                                                        foreach (DataRow R in sBG)
-                                                                        {
-                                                                            ssBG += "B/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
-                                                                        }
-
-                                                                    }
-                                                                    if (j == 1)
-                                                                    {
-                                                                        foreach (DataRow R in sMH)
-                                                                        {
-                                                                            ssMH += "M/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
-                                                                        }
-                                                                        foreach (DataRow R in sMG)
-                                                                        {
-                                                                            ssMG += "M/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
-                                                                        }
-                                                                    }
-                                                                    if (j == 2)
-                                                                    {
-                                                                        foreach (DataRow R in sFH)
-                                                                        {
-                                                                            ssFH += "F/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
-                                                                        }
-                                                                        foreach (DataRow R in sFG)
-                                                                        {
-                                                                            ssFG += "F/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
-                                                                        }
-                                                                    }
-                                                                    if (j == 3)
-                                                                    {
-                                                                        sH = sGH.Count > 0 ? "G/" + sGH[0]["IPLAYER_NO"].ToString() + "/" + (sGH[0]["CPLAYER_NAME"].ToString() == "" ? sGH[0]["CENGNAME"] : sGH[0]["CPLAYER_NAME"]) : "";
-                                                                        sG = sGG.Count > 0 ? "G/" + sGG[0]["IPLAYER_NO"].ToString() + "/" + (sGG[0]["CPLAYER_NAME"].ToString() == "" ? sGG[0]["CENGNAME"] : sGG[0]["CPLAYER_NAME"]) : "";
-                                                                    }
-                                                                    if (j == 4)
-                                                                    {
-                                                                        foreach (DataRow R in sUH)
-                                                                        {
-                                                                            ssUH += "U/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
-                                                                        }
-                                                                        foreach (DataRow R in sUG)
-                                                                        {
-                                                                            ssUG += "U/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                using (FbCommand cmd2 = new FbCommand("PR_ADDPLAYERLIST", connection2))
+                                                                using (FbCommand cmd2 = new FbCommand("PR_ANALYSIS_STAT", connection2))
                                                                 {
                                                                     cmd2.CommandType = CommandType.StoredProcedure;
-                                                                    cmd2.Parameters.Add("@CLEAGUE", drs[0]["ALIAS"]);
-                                                                    cmd2.Parameters.Add("@CHOST", drH[0]["HKJC_NAME_CN"]);
-                                                                    cmd2.Parameters.Add("@CGUEST", drG[0]["HKJC_NAME_CN"]);
-                                                                    cmd2.Parameters.Add("@CACTION", "U");
-                                                                    cmd2.Parameters.Add("@CH_PLAYER", sH + "" + ssBH + "" + ssMH + "" + ssFH + ssUH);
-                                                                    cmd2.Parameters.Add("@CG_PLAYER", sG + "" + ssBG + "" + ssMG + "" + ssFG + ssUG);
+                                                                    cmd2.Parameters.Add("@CLEAGUE", dr["CLEAGUE_HKJC_NAME"]);
+                                                                    cmd2.Parameters.Add("@CHOST", dr["HKJCHOSTNAME_CN"]);
+                                                                    cmd2.Parameters.Add("@CGUEST", dr["HKJCGUESTNAME_CN"]);
+                                                                    cmd2.Parameters.Add("@IMATCHDATE", Convert.ToDateTime(dr["CMATCHDATETIME"]).ToString("yyyyMMdd"));
+                                                                    cmd2.Parameters.Add("@IMATCHTIME", Convert.ToDateTime(dr["CMATCHDATETIME"]).ToString("HHmmss"));
+                                                                    cmd2.Parameters.Add("@CHANDICAP", "1");
+                                                                    cmd2.Parameters.Add("@CMATCHFIELD", "H");
+                                                                    cmd2.Parameters.Add("@IHOSTWIN", dr["IHOSTWIN"]);
+                                                                    cmd2.Parameters.Add("@IHOSTDRAW", dr["IHOSTDRAW"]);
+                                                                    cmd2.Parameters.Add("@IHOSTLOSS", dr["IHOSTLOSS"]);
+                                                                    cmd2.Parameters.Add("@IGUESTWIN", dr["IGUESTWIN"]);
+                                                                    cmd2.Parameters.Add("@IGUESTDRAW", dr["IGUESTDRAW"]);
+                                                                    cmd2.Parameters.Add("@IGUESTLOSS", dr["IGUESTLOSS"]);
+                                                                    cmd2.Parameters.Add("@CREMARK", "");
                                                                     cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                                                                     cmd2.Parameters.Add("@IDEST", "0");
                                                                     int id = Convert.ToInt32(cmd2.ExecuteScalar());
                                                                     if (id > -1)
                                                                     {
-                                                                        Files.WriteLog(" [Success] Insert PLAYERLIST " + " " + drs[0]["ALIAS"] + " " + drH[0]["HKJC_NAME_CN"] + "/" + drG[0]["HKJC_NAME_CN"]);
+                                                                        Files.WriteLog(" [Success] Insert ANALYSIS_STAT " + " " + dr["CLEAGUEALIAS_OUTPUT_NAME"] + " " + dr["HKJCHOSTNAME_CN"] + "/" + dr["HKJCGUESTNAME_CN"]);
                                                                     }
                                                                 }
                                                             }
                                                         }
-                                                    }
-                                                    else if (i == 5)
-                                                    {
-                                                        List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("cid")).ToList<string>().Distinct().ToList();
-                                                        string strs = strL.Count == 0 ? "-1" : string.Concat("(", string.Join(" or ", strL), ")");
-
-                                                        queryString = "SELECT  count (*) FROM FIXTURES r";
-                                                        using (FbCommand cmd = new FbCommand(queryString, connection2))
+                                                        else if (i == 1)
                                                         {
-                                                            int count = Convert.ToInt32(cmd.ExecuteScalar());
-                                                            if (count > 0) strs = strs + " and e.id in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
-                                                        }
-
-                                                        queryString = "select e.COMPETITION_ID,c.ALIAS,l.LEAGUE_CHI_NAME, (select  hkjc_name_cn from teams where id= e.HOME_ID and hkjc_name_cn is not null ) HOME_ID,(select hkjc_name_cn from teams where id= e.GUEST_ID and hkjc_name_cn is not null) GUEST_ID,e.START_DATE, G.H_GOAL||':'||G.G_GOAL RESULT  from events e " +
-                                                            " inner join COMPETITIONS c on c.id = e.COMPETITION_ID   LEFT join LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME = c.ALIAS   LEFT JOIN GOALINFO G ON G.EMATCHID = E.ID" +
-                                                            "  where" + strs; //" (c.id = 1507 or c.id = 1519 or c.id = 1528 or c.id = 1556 or c.id = 1599 or c.id = 1625 or c.id = 1639 or c.id = 1658 or c.id = 2131 or c.id = 2202) ";
-                                                        using (FbCommand cmd = new FbCommand(queryString, connection))
-                                                        {
-                                                            using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                            continue;
+                                                            try
                                                             {
-                                                                using (DataSet data = new DataSet())
+                                                                using (FbCommand cmd2 = new FbCommand())
                                                                 {
-                                                                    data.Tables.Add(new DataTable("data"));
-                                                                    fda.Fill(data.Tables["data"]);
+                                                                    //List<string> strL= (ds.Tables[0].AsEnumerable().Select(d => d.Field<int>("IMATCH_CNT")).ToList<int>()).ConvertAll<string>(x => x.ToString());
+                                                                    //string strs = string.Concat("'", string.Join("','", strL), "'");
+                                                                    //cmd2.CommandText = "delete from ANALYSISHISTORYS where  IMATCH_CNT in (" + strs + ")";
+                                                                    List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
+                                                                    string strs = string.Concat("(", string.Join(") OR  (", strL), ")");
+                                                                    cmd2.CommandText = "delete from ANALYSISHISTORYS where " + strs;
+                                                                    cmd2.Connection = connection2;
+                                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                    Files.WriteLog("Delete ANALYSISHISTORYS [" + strs + "]");
+                                                                }
 
-                                                                    foreach (DataRow dr in data.Tables[0].Rows)
+                                                                queryString = "select first   1 * from ANALYSISHISTORYS";
+                                                                using (FbCommand cmd = new FbCommand(queryString, connection2))
+                                                                {
+                                                                    using (FbDataAdapter fda = new FbDataAdapter(cmd))
                                                                     {
-                                                                        using (FbCommand cmd2 = new FbCommand("PR_ADDFIXTURE", connection2))
+                                                                        using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
                                                                         {
-                                                                            cmd2.CommandType = CommandType.StoredProcedure;
-                                                                            cmd2.Parameters.Add("@CLEAGUEALIAS", dr["ALIAS"]);
-                                                                            cmd2.Parameters.Add("@CLEAGUE", dr["LEAGUE_CHI_NAME"]);
-                                                                            cmd2.Parameters.Add("@CHOST", dr["HOME_ID"] == DBNull.Value ? "" : dr["HOME_ID"]);
-                                                                            cmd2.Parameters.Add("@CJCHOST", dr["HOME_ID"] == DBNull.Value ? "" : dr["HOME_ID"]);
-                                                                            cmd2.Parameters.Add("@CGUEST", dr["GUEST_ID"] == DBNull.Value ? "" : dr["GUEST_ID"]);
-                                                                            cmd2.Parameters.Add("@CJCGUEST", dr["GUEST_ID"] == DBNull.Value ? "" : dr["GUEST_ID"]);
-                                                                            cmd2.Parameters.Add("@CMATCHFIELD", "H");
-                                                                            cmd2.Parameters.Add("@CMATCHDATE", Convert.ToDateTime(dr["START_DATE"]).ToString("yyyyMMdd"));
-                                                                            cmd2.Parameters.Add("@CMATCHTIME", Convert.ToDateTime(dr["START_DATE"]).ToString("HHmm"));
-                                                                            cmd2.Parameters.Add("@CHALF_TIME", DBNull.Value);
-                                                                            cmd2.Parameters.Add("@CFULL_TIME", dr["RESULT"]);
-                                                                            cmd2.Parameters.Add("@CREMARK", DBNull.Value);
-                                                                            cmd2.Parameters.Add("@CACTION", "U");
-                                                                            cmd2.Parameters.Add("@CSCORER", "");
-                                                                            cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                                                                            cmd2.Parameters.Add("@IDEST", "0");
-                                                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                            if (id > -1)
+                                                                            using (DataSet data = new DataSet())
                                                                             {
-                                                                                Files.WriteLog(" [Success] Insert FIXTURE" + " " + dr["ALIAS"] + " " + dr["HOME_ID"] + "/" + dr["GUEST_ID"]);
+                                                                                data.Tables.Add(new DataTable("data"));
+                                                                                fda.Fill(data.Tables["data"]);
+                                                                                foreach (DataRow dr2 in ds.Tables[0].Rows)
+                                                                                {
+                                                                                    //r.CLEAGUE, r.CHOST, r.CGUEST, r.CDATE, r.CLEAGUEALIAS, r.CDES,
+                                                                                    //  r.IHOSTSCORE, r.IGUESTSCORE, r.TIMEFLAG, r.IDEST
+                                                                                    DataRow dr3 = data.Tables["data"].NewRow();
+                                                                                    dr3[0] = dr2["CLEAGUE_HKJC_NAME"];
+                                                                                    dr3[1] = dr2["HKJCHOSTNAME_CN"];
+                                                                                    dr3[2] = dr2["HKJCGUESTNAME_CN"];
+                                                                                    dr3[3] = Convert.ToDateTime(dr2["START_DATE"]).ToString("yyyyMMdd");
+                                                                                    dr3[4] = dr2["CLEAGUEALIAS_OUTPUT_NAME"];
+                                                                                    dr3[5] = dr2["IMATCHSTATUS"].ToString() == "0" ? "主" : "客";
+                                                                                    dr3[6] = dr2["IHOSTSCORE"];
+                                                                                    dr3[7] = dr2["IGUESTSCORE"];
+                                                                                    dr3[8] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                                                                    dr3[9] = "0";
+                                                                                    data.Tables["data"].Rows.Add(dr3);
+                                                                                }
+                                                                                int count = fda.Update(data.Tables["data"]);
+                                                                                Files.WriteLog((count > 0 ? "[Success] " : "[Failure] ") + " Insert ANALYSISHISTORYS [" + data.Tables["data"].Rows.Count + "]");
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            catch (Exception exp)
+                                                            {
+                                                                Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + "Sync ANALYSISHISTORYS,error: " + exp);
+                                                            }
+                                                        }
+                                                        else if (i == 2)
+                                                        {
+                                                            using (FbCommand cmd2 = new FbCommand())
+                                                            {
+                                                                List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
+                                                                string strs = string.Concat("(", string.Join(") OR  (", strL), ")");
+                                                                cmd2.CommandText = "delete from ANALYSISRECENTS where " + strs;
+                                                                cmd2.Connection = connection2;
+                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                Files.WriteLog("Delete ANALYSISRECENTS [" + strs + "]");
+                                                            }
+
+                                                            queryString = "select first   1 * from ANALYSISRECENTS";
+                                                            using (FbCommand cmd = new FbCommand(queryString, connection2))
+                                                            {
+                                                                using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                                {
+                                                                    using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
+                                                                    {
+                                                                        using (DataSet data = new DataSet())
+                                                                        {
+                                                                            data.Tables.Add(new DataTable("data"));
+                                                                            fda.Fill(data.Tables["data"]);
+                                                                            List<string> strTeam = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
+
+                                                                            foreach (string s in strTeam)
+                                                                            {
+                                                                                DataRow[] drs = ds.Tables[0].Select(s);
+                                                                                List<DataRow> drH = (drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "H").ToList()).ToList<DataRow>().Where(x => x.Field<int>("IHOSTSCORE") != -1).ToList();
+                                                                                List<DataRow> drG = (drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "G").ToList()).ToList<DataRow>().Where(x => x.Field<int>("IHOSTSCORE") != -1).ToList();
+                                                                                List<DataRow> drHN = (drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "H").ToList()).ToList<DataRow>().Where(x => x.Field<int>("IHOSTSCORE") == -1).ToList();
+                                                                                List<DataRow> drGN = (drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "G").ToList()).ToList<DataRow>().Where(x => x.Field<int>("IHOSTSCORE") == -1).ToList();
+
+                                                                                DataRow dr3 = data.Tables["data"].NewRow();
+                                                                                dr3[0] = drH.Count > 0 ? drH[0]["CLEAGUE_HKJC_NAME"] : drG.Count > 0 ? drG[0][2] : "";
+                                                                                dr3[1] = drH.Count > 0 ? drH[0]["CHOST"] : drG.Count > 0 ? drG[0][3] : "";
+                                                                                dr3[2] = drH.Count > 0 ? drH[0]["CGUEST"] : drG.Count > 0 ? drG[0][4] : "";
+                                                                                dr3[3] = "U";
+                                                                                dr3[4] = drHN.Count > 0 ? drHN[0]["LEAGUEALIAS"].ToString() + "/" + drHN[0]["CCHALLENGER"].ToString() + "/" + (drHN[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") : "-1/-1/-1";
+                                                                                dr3[5] = drH.Count > 0 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[0]["CCHALLENGER"].ToString() + "/" + (drH[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[0]["IHOSTSCORE"].ToString() + "/" + drH[0]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[6] = drH.Count > 1 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[1]["CCHALLENGER"].ToString() + "/" + (drH[1]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[1]["IHOSTSCORE"].ToString() + "/" + drH[1]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[7] = drH.Count > 2 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[2]["CCHALLENGER"].ToString() + "/" + (drH[2]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[2]["IHOSTSCORE"].ToString() + "/" + drH[2]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[8] = drH.Count > 3 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[3]["CCHALLENGER"].ToString() + "/" + (drH[3]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[3]["IHOSTSCORE"].ToString() + "/" + drH[3]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[9] = drH.Count > 4 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[4]["CCHALLENGER"].ToString() + "/" + (drH[4]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[4]["IHOSTSCORE"].ToString() + "/" + drH[4]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[10] = drGN.Count > 0 ? drGN[0]["LEAGUEALIAS"].ToString() + "/" + drGN[0]["CCHALLENGER"].ToString() + "/" + (drGN[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") : "-1/-1/-1";
+                                                                                dr3[11] = drG.Count > 0 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[0]["CCHALLENGER"].ToString() + "/" + (drG[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[0]["IHOSTSCORE"].ToString() + "/" + drG[0]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[12] = drG.Count > 1 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[1]["CCHALLENGER"].ToString() + "/" + (drG[1]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[1]["IHOSTSCORE"].ToString() + "/" + drG[1]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[13] = drG.Count > 2 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[2]["CCHALLENGER"].ToString() + "/" + (drG[2]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[2]["IHOSTSCORE"].ToString() + "/" + drG[2]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[14] = drG.Count > 3 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[3]["CCHALLENGER"].ToString() + "/" + (drG[3]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[3]["IHOSTSCORE"].ToString() + "/" + drG[3]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[15] = drG.Count > 4 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[4]["CCHALLENGER"].ToString() + "/" + (drG[4]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[4]["IHOSTSCORE"].ToString() + "/" + drG[4]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[16] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                                                                dr3[17] = "0";
+                                                                                data.Tables["data"].Rows.Add(dr3);
+                                                                            }
+
+                                                                            int count = fda.Update(data.Tables["data"]);
+                                                                            Files.WriteLog((count > 0 ? "[Success] " : "[Failure] ") + " Insert ANALYSISRECENTS [" + data.Tables["data"].Rows.Count + "]");
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        else if (i == 3)
+                                                        {
+                                                            continue;
+                                                            try
+                                                            {
+                                                                foreach (DataRow dr in ds.Tables[0].Rows)
+                                                                {
+                                                                    using (FbCommand cmd2 = new FbCommand("PR_AddTeam", connection2))
+                                                                    {
+                                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                                        cmd2.Parameters.Add("@TEAM_ID", dr["tid"]);
+                                                                        cmd2.Parameters.Add("@TEAMNAME", dr["hkjc_name_cn"]);
+                                                                        cmd2.Parameters.Add("@COUNTRY", dr["COUNTRY_CHI_NAME"] is DBNull ? dr["COUNTRY"] : dr["COUNTRY_CHI_NAME"]);
+                                                                        cmd2.Parameters.Add("@CITY", DBNull.Value);
+                                                                        cmd2.Parameters.Add("@VENUE", DBNull.Value);
+                                                                        cmd2.Parameters.Add("@CONTINENT", DBNull.Value);
+                                                                        cmd2.Parameters.Add("@CENGNAME", dr["SHORT_NAME"]);
+                                                                        cmd2.Parameters.Add("@CMACAUNAME", dr["hkjc_name_cn"]);
+                                                                        cmd2.Parameters.Add("@CHKJCNAME", dr["hkjc_name_cn"]);
+                                                                        cmd2.Parameters.Add("@CHKJCSHORTNAME", dr["hkjc_name_cn"]);
+                                                                        cmd2.Parameters.Add("@LASTUPDATE", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                        cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                        if (id > -1)
+                                                                        {
+                                                                            Files.WriteLog(" [Success] Insert TEAMINFO " + " " + dr["tid"] + " " + dr["hkjc_name_cn"] + "/" + dr["SHORT_NAME"]);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            catch (Exception exp)
+                                                            {
+                                                                Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + "Sync TEAM,error: " + exp);
+                                                            }
+                                                        }
+                                                        else if (i == 4)
+                                                        {
+                                                            continue;
+                                                            List<int> strE = ds.Tables[0].AsEnumerable().Select(d => d.Field<int>("id")).ToList<int>().Distinct().ToList<int>();
+                                                            Files.WriteLog(strE.Count.ToString());
+                                                            foreach (int s in strE)
+                                                            {
+                                                                Files.WriteLog(strE.Count.ToString() + " " + s);
+                                                                DataRow[] drs = ds.Tables[0].Select("id=" + s);
+                                                                List<int> strT = drs.Select(d => d.Field<int>("TEAM_ID")).ToList<int>().Distinct().ToList<int>();
+                                                                if (strT.Count == 2)
+                                                                {
+                                                                    Files.WriteLog(strT.Count.ToString() + " " + "t");
+                                                                    List<DataRow> drH = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<int>("TEAM_ID") == strT[0]).ToList();
+                                                                    List<DataRow> drG = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<int>("TEAM_ID") == strT[1]).ToList();
+
+                                                                    List<DataRow> sGH = drH.Where(x => x.Field<int>("IPOS") == 3).ToList();
+                                                                    List<DataRow> sGG = drG.Where(x => x.Field<int>("IPOS") == 3).ToList();
+                                                                    List<DataRow> sBH = drH.Where(x => x.Field<int>("IPOS") == 0).ToList();
+                                                                    List<DataRow> sBG = drG.Where(x => x.Field<int>("IPOS") == 0).ToList();
+                                                                    List<DataRow> sFH = drH.Where(x => x.Field<int>("IPOS") == 2).ToList();
+                                                                    List<DataRow> sFG = drG.Where(x => x.Field<int>("IPOS") == 2).ToList();
+                                                                    List<DataRow> sMH = drH.Where(x => x.Field<int>("IPOS") == 1).ToList();
+                                                                    List<DataRow> sMG = drG.Where(x => x.Field<int>("IPOS") == 1).ToList();
+                                                                    List<DataRow> sUH = drH.Where(x => x.Field<int>("IPOS") == 4).ToList();
+                                                                    List<DataRow> sUG = drG.Where(x => x.Field<int>("IPOS") == 4).ToList();
+
+                                                                    string sH = "";
+                                                                    string sG = "";
+                                                                    string ssBH = "", ssBG = "", ssFH = "", ssFG = "", ssMH = "", ssMG = "", ssUH = "", ssUG = "";
+                                                                    for (int j = 0; j < 5; j++)
+                                                                    {
+                                                                        if (j == 0)
+                                                                        {
+                                                                            foreach (DataRow R in sBH)
+                                                                            {
+                                                                                ssBH += "B/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"].ToString() : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                            foreach (DataRow R in sBG)
+                                                                            {
+                                                                                ssBG += "B/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+
+                                                                        }
+                                                                        if (j == 1)
+                                                                        {
+                                                                            foreach (DataRow R in sMH)
+                                                                            {
+                                                                                ssMH += "M/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                            foreach (DataRow R in sMG)
+                                                                            {
+                                                                                ssMG += "M/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                        }
+                                                                        if (j == 2)
+                                                                        {
+                                                                            foreach (DataRow R in sFH)
+                                                                            {
+                                                                                ssFH += "F/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                            foreach (DataRow R in sFG)
+                                                                            {
+                                                                                ssFG += "F/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                        }
+                                                                        if (j == 3)
+                                                                        {
+                                                                            sH = sGH.Count > 0 ? "G/" + sGH[0]["IPLAYER_NO"].ToString() + "/" + (sGH[0]["CPLAYER_NAME"].ToString() == "" ? sGH[0]["CENGNAME"] : sGH[0]["CPLAYER_NAME"]) : "";
+                                                                            sG = sGG.Count > 0 ? "G/" + sGG[0]["IPLAYER_NO"].ToString() + "/" + (sGG[0]["CPLAYER_NAME"].ToString() == "" ? sGG[0]["CENGNAME"] : sGG[0]["CPLAYER_NAME"]) : "";
+                                                                        }
+                                                                        if (j == 4)
+                                                                        {
+                                                                            foreach (DataRow R in sUH)
+                                                                            {
+                                                                                ssUH += "U/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                            foreach (DataRow R in sUG)
+                                                                            {
+                                                                                ssUG += "U/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    using (FbCommand cmd2 = new FbCommand("PR_ADDPLAYERLIST", connection2))
+                                                                    {
+                                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                                        cmd2.Parameters.Add("@CLEAGUE", drs[0]["ALIAS"]);
+                                                                        cmd2.Parameters.Add("@CHOST", drH[0]["HKJC_NAME_CN"]);
+                                                                        cmd2.Parameters.Add("@CGUEST", drG[0]["HKJC_NAME_CN"]);
+                                                                        cmd2.Parameters.Add("@CACTION", "U");
+                                                                        cmd2.Parameters.Add("@CH_PLAYER", sH + "" + ssBH + "" + ssMH + "" + ssFH + ssUH);
+                                                                        cmd2.Parameters.Add("@CG_PLAYER", sG + "" + ssBG + "" + ssMG + "" + ssFG + ssUG);
+                                                                        cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                        cmd2.Parameters.Add("@IDEST", "0");
+                                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                        if (id > -1)
+                                                                        {
+                                                                            Files.WriteLog(" [Success] Insert PLAYERLIST " + " " + drs[0]["ALIAS"] + " " + drH[0]["HKJC_NAME_CN"] + "/" + drG[0]["HKJC_NAME_CN"]);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        else if (i == 5)
+                                                        {
+                                                            continue;
+                                                            List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("cid")).ToList<string>().Distinct().ToList().ConvertAll<string>(x => x.ToString());
+                                                            string strs = strL.Count == 0 ? "-1" : string.Concat("(", string.Join(" or ", strL), ")");
+
+                                                            queryString = "SELECT  count (*) FROM FIXTURES r";
+                                                            using (FbCommand cmd = new FbCommand(queryString, connection2))
+                                                            {
+                                                                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                                                                if (count > 0) strs = strs + " and e.id in ( " + ml.ToString() + ")";
+                                                            }
+
+                                                            queryString = "select e.id eid, e.COMPETITION_ID,c.ALIAS,l.LEAGUE_CHI_NAME, (select  hkjc_name_cn from teams where id= e.HOME_ID and hkjc_name_cn is not null ) HOME_ID,(select hkjc_name_cn from teams where id= e.GUEST_ID and hkjc_name_cn is not null) GUEST_ID,e.START_DATE, G.H_GOAL||':'||G.G_GOAL RESULT ,G.HH_GOAL||':'||G.GH_GOAL RESULT2 from events e " +
+                                                                " inner join COMPETITIONS c on c.id = e.COMPETITION_ID   LEFT join LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME = c.ALIAS   LEFT JOIN GOALINFO G ON G.EMATCHID = E.ID" +
+                                                                "  where" + strs; //" (c.id = 1507 or c.id = 1519 or c.id = 1528 or c.id = 1556 or c.id = 1599 or c.id = 1625 or c.id = 1639 or c.id = 1658 or c.id = 2131 or c.id = 2202) ";
+                                                            using (FbCommand cmd = new FbCommand(queryString, connection))
+                                                            {
+                                                                using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                                {
+                                                                    using (DataSet data = new DataSet())
+                                                                    {
+                                                                        data.Tables.Add(new DataTable("data"));
+                                                                        fda.Fill(data.Tables["data"]);
+
+                                                                        string ids = string.Concat("(", string.Join(") OR  (", data.Tables[0].AsEnumerable().Select(d => d.Field<int>("eid")).ToList<int>().Distinct().ToList().ConvertAll<string>(x => x.ToString())), ")");
+                                                                        Files.WriteLog("Sync ids: " + ids);
+
+                                                                        foreach (DataRow dr in data.Tables[0].Rows)
+                                                                        {
+                                                                            using (FbCommand cmd2 = new FbCommand("PR_ADDFIXTURE", connection2))
+                                                                            {
+                                                                                cmd2.CommandType = CommandType.StoredProcedure;
+                                                                                cmd2.Parameters.Add("@CLEAGUEALIAS", dr["ALIAS"]);
+                                                                                cmd2.Parameters.Add("@CLEAGUE", dr["LEAGUE_CHI_NAME"]);
+                                                                                cmd2.Parameters.Add("@CHOST", dr["HOME_ID"] == DBNull.Value ? "" : dr["HOME_ID"]);
+                                                                                cmd2.Parameters.Add("@CJCHOST", dr["HOME_ID"] == DBNull.Value ? "" : dr["HOME_ID"]);
+                                                                                cmd2.Parameters.Add("@CGUEST", dr["GUEST_ID"] == DBNull.Value ? "" : dr["GUEST_ID"]);
+                                                                                cmd2.Parameters.Add("@CJCGUEST", dr["GUEST_ID"] == DBNull.Value ? "" : dr["GUEST_ID"]);
+                                                                                cmd2.Parameters.Add("@CMATCHFIELD", "H");
+                                                                                cmd2.Parameters.Add("@CMATCHDATE", Convert.ToDateTime(dr["START_DATE"]).ToString("yyyyMMdd"));
+                                                                                cmd2.Parameters.Add("@CMATCHTIME", Convert.ToDateTime(dr["START_DATE"]).ToString("HHmm"));
+                                                                                cmd2.Parameters.Add("@CHALF_TIME", dr["RESULT2"] == DBNull.Value ? "" : dr["RESULT2"]);
+                                                                                cmd2.Parameters.Add("@CFULL_TIME", dr["RESULT"] == DBNull.Value ? "" : dr["RESULT"]);
+                                                                                cmd2.Parameters.Add("@CREMARK", "");
+                                                                                cmd2.Parameters.Add("@CACTION", "U");
+                                                                                cmd2.Parameters.Add("@CSCORER", "");
+                                                                                cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                                cmd2.Parameters.Add("@IDEST", "0");
+                                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                                if (id > -1)
+                                                                                {
+                                                                                    Files.WriteLog(" [Success] Insert FIXTURE" + " " + dr["ALIAS"] + " " + dr["HOME_ID"] + "/" + dr["GUEST_ID"]);
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
                                                                 }
                                                             }
                                                         }
+                                                        connection2.Close();
                                                     }
-                                                    connection2.Close();
+                                                }
+                                                int msg = -1;
+                                                if (AppFlag.Alert)
+                                                {
+                                                    switch (syncItems[i])
+                                                    {
+                                                        case "LIVEGOALS":
+                                                            {
+                                                                msg = 30;
+                                                            }
+                                                            break;
+                                                        case "GOALDETAILS":
+                                                            {
+                                                                msg = 31;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISOTHER":
+                                                            {
+                                                                msg = 62;
+                                                            }
+                                                            break;
+                                                        case "FIXTURES":
+                                                            {
+                                                                msg = 63;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISTATS":
+                                                            {
+                                                                msg =3;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISHISTORYS":
+                                                            {
+                                                                msg = 2;
+                                                            }
+                                                            break;
+                                                        case "RANKS":
+                                                            {
+                                                                msg = 15;
+                                                            }
+                                                            break;
+                                                        case "SCORERS":
+                                                            {
+                                                                msg = 17;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISRECENTS":
+                                                            {
+                                                                msg = 1;
+                                                            }
+                                                            break;
+                                                        case "HKGOAL":
+                                                            {
+                                                                msg = 60;
+                                                            }
+                                                            break;
+                                                        case "HKGOALDETAILS":
+                                                            {
+                                                                msg = 61;
+                                                            }
+                                                            break;
+                                                    }
+                                                    SendAlertMsg(msg);
+                                                    Files.WriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + msg);
                                                 }
                                             }
+                                            connection.Close(); 
                                         }
-                                        connection.Close();
+                                    }
+                                    catch (Exception exp)
+                                    {
+                                        Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + syncItems[i] + ",error: " + exp);
                                     }
                                 }
-                                catch (Exception exp)
-                                {
-                                    Files.WriteError(DateTime.Now.ToString("HH:mm:ss") + syncItems[i] + ",error: " + exp);
-                                }
+
+                                // Files.WriteLog(" TimerTask " + DateTime.Now);
+                                //var state = timerState as TimerState;
+                                //Interlocked.Increment(ref state.Counter);
                             }
+                            catch (Exception exp)
+                            {
+                                Files.WriteError("TimerTask(),error: " + exp.Message);
 
-                            // Files.WriteLog(" TimerTask " + DateTime.Now);
-                            //var state = timerState as TimerState;
-                            //Interlocked.Increment(ref state.Counter);
+                            }
                         }
-                        catch (Exception exp)
+                        else
                         {
-                            Files.WriteError("TimerTask(),error: " + exp.Message);
+                            try
+                            {      //COPYDATASTRUCT mystr2 = new COPYDATASTRUCT();
+                                   //Type mytype2 = mystr.GetType();
+                                   //mystr2 = (COPYDATASTRUCT)m.GetLParam(mytype2);
+                                   //string ml2 = mystr.lpData;
+                                   //// string len = mystr.cbData;
+                                   //int mw2 = (int)m.WParam;
 
+                                //COPYDATASTRUCT cdata2 = new COPYDATASTRUCT();
+                                //Type mytype2 = cdata2.GetType();
+                                //cdata2 = (COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, mytype2);
+                                //string ml2 = cdata.lpData;
+                                // string ml2 = "";
+                                this.listBox1.Invoke(new Action(() =>
+                                {
+                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Recevied msg,Start Sync."); } }));
+                                }));
+
+                                //  Files.WriteLog(" [Success] recevied " + m.Msg + "--" + ((int)m.WParam).ToString() + ((int)m.LParam).ToString());
+                                DateTime dt = DateTime.ParseExact(((int)m.WParam).ToString() + ((int)m.LParam).ToString(), "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                                // dt = DateTime.ParseExact(dt, "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                                Files.WriteLog(" [Success] recevied " + dt.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                //  MessageBox.Show(" [Success] recevied " + m.Msg + "--" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff")); 
+
+                                int iIndex = 0;
+                                DataSet ds = new DataSet();
+                                string[] syncItems;
+                                ArrayList configSetting = new ArrayList();
+                                string queryString = "";
+
+                                configSetting = AppFlag.configSetting;
+                                syncItems = new string[configSetting.Count];
+                                if (configSetting != null)
+                                {
+                                    iIndex = 0;
+                                    foreach (string s in configSetting)
+                                    {
+                                        syncItems[iIndex] = s;
+                                        iIndex++;
+                                    }
+                                }
+                                // configSetting.Clear();
+
+                                if (syncItems.Count() > 0)
+                                {
+                                    int i = 0;
+
+                                    try
+                                    {
+                                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                                        {
+                                            connection.Open();
+                                            for (i = 0; i < syncItems.Length; i++)
+                                            {
+                                                Files.WriteLog("Update " + syncItems[i].ToString());
+                                                this.listBox1.Invoke(new Action(() =>
+                                                {
+                                                    this.listBox1.Invoke(new Action(() => { { this.listBox1.Items.Insert(0, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + "Start sync " + syncItems[i] + "."); } }));
+                                                }));
+                                                if (i == 0)
+                                                {
+                                                    queryString = "select  e.EMATCHID eid,   e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_STAT_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in (select  c.EMATCHID  FROM EMATCHES c where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
+                                                }
+                                                else if (i == 1)
+                                                {
+                                                    //     queryString = "select   e.CLEAGUE_OUTPUT_NAME,e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from    ANALYSIS_HISTORY_INFO    a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC";
+                                                    queryString = "select  e.EMATCHID eid,  'CLEAGUEALIAS='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' and cdate='''|| replace( cast(a.START_DATE as date),'-','')||''' ' ABC, e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_HISTORY_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in (select  c.EMATCHID  FROM EMATCHES c where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) ORDER BY  a.imatch_cnt ,a.irec asc   ";
+                                                }
+                                                else if (i == 2)
+                                                {
+                                                    // queryString = "select  e.CLEAGUE_OUTPUT_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN,  e.CMATCHDATETIME, a.*   from    ANALYSIS_RECENT_INFO    a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT     a where a.IMATCH_CNT in (select  c.EMATCHID  FROM EMATCHES c where   c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
+                                                    queryString = "select  e.EMATCHID eid,   'CLEAGUE='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME CLEAGUE, e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)  ORDER BY  a.IMATCH_CNT ,a.irec asc";
+                                                }
+                                                else if (i == 3)
+                                                {
+                                                    //teams 2019-04-09 10:51:04.234
+                                                    queryString = "select e.id eid,  t.id tid, t.SHORT_NAME,t.hkjc_name_cn ,T.AREA_ID ,a.NAME COUNTRY ,c.COUNTRY_CHI_NAME from events e inner join teams t on t.id = e.HOME_ID or t.id = e.guest_id inner join  AREAS a on a.ID = t.AREA_ID LEFT join  INT_COUNTRY c on c.COUNTRY_ENG_NAME = a.NAME  where e.id  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
+                                                }
+                                                else if (i == 4)
+                                                {
+                                                    //players  
+                                                    // queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'  AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
+                                                    // queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID = 2737951 and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
+                                                    queryString = "select e.id eid, e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'  AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
+                                                }
+                                                else if (i == 5)
+                                                {
+                                                    //FIXTURES  
+                                                    //queryString = "select e.id,c.ALIAS, t.HKJC_NAME,t.HKJC_NAME_CN, p.*  from  PLAYERS_INFO p inner join teams t on t.id = p.TEAM_ID inner join events e on e.id = p.EVENT_ID inner join  COMPETITIONS c on c.id = e.COMPETITION_ID where p.EVENT_ID  in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'  AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC) and p.IROSTER = 1 order by p.EVENT_ID, p.TEAM_ID  ,p.IPLAYER_NO ";
+                                                    queryString = "SELECT 'c.id=''' || r.ID||'''' cid, r.id eid,  L.LEAGUE_CHI_NAME FROM COMPETITIONS r INNER JOIN  LEAGUE_INFO L ON R.ALIAS=L.CLEAGUE_ALIAS_NAME where r.ALIAS = '意甲' OR r.ALIAS = '英超' OR r.ALIAS = '法甲' OR r.ALIAS = '德甲' OR r.ALIAS = '蘇超' OR r.ALIAS = '西甲'OR r.ALIAS = '荷甲' OR r.ALIAS = '日聯' OR r.ALIAS = '澳A' OR r.ALIAS = '歐冠' ORDER BY  R.ID ";
+                                                }
+
+                                                Files.WriteLog("Sql: " + queryString);
+
+
+                                                using (FbCommand cmd = new FbCommand(queryString, connection))
+                                                {
+                                                    using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                    {
+                                                        using (DataSet data = new DataSet())
+                                                        {
+                                                            data.Tables.Add(new DataTable("data"));
+                                                            fda.Fill(data.Tables["data"]);
+                                                            ds = data;
+                                                        }
+                                                    }
+                                                }
+
+                                                if (ds.Tables[0].Rows.Count > 0)
+                                                {
+                                                    if (i != 5)
+                                                    {
+                                                        string ids = string.Concat("(", string.Join(") OR  (", ds.Tables[0].AsEnumerable().Select(d => d.Field<int>("eid")).ToList<int>().Distinct().ToList().ConvertAll<string>(x => x.ToString())), ")");
+                                                        Files.WriteLog("Sync ids: " + ids);
+                                                    }
+                                                    using (FbConnection connection2 = new FbConnection(AppFlag.MangoDBConn))
+                                                    {
+                                                        connection2.Open();
+                                                        if (i == 0)
+                                                        {
+                                                            foreach (DataRow dr in ds.Tables[0].Rows)
+                                                            {
+                                                                using (FbCommand cmd2 = new FbCommand("PR_ANALYSIS_STAT", connection2))
+                                                                {
+                                                                    cmd2.CommandType = CommandType.StoredProcedure;
+                                                                    cmd2.Parameters.Add("@CLEAGUE", dr["CLEAGUE_HKJC_NAME"]);
+                                                                    cmd2.Parameters.Add("@CHOST", dr["HKJCHOSTNAME_CN"]);
+                                                                    cmd2.Parameters.Add("@CGUEST", dr["HKJCGUESTNAME_CN"]);
+                                                                    cmd2.Parameters.Add("@IMATCHDATE", Convert.ToDateTime(dr["CMATCHDATETIME"]).ToString("yyyyMMdd"));
+                                                                    cmd2.Parameters.Add("@IMATCHTIME", Convert.ToDateTime(dr["CMATCHDATETIME"]).ToString("HHmmss"));
+                                                                    cmd2.Parameters.Add("@CHANDICAP", "1");
+                                                                    cmd2.Parameters.Add("@CMATCHFIELD", "H");
+                                                                    cmd2.Parameters.Add("@IHOSTWIN", dr["IHOSTWIN"]);
+                                                                    cmd2.Parameters.Add("@IHOSTDRAW", dr["IHOSTDRAW"]);
+                                                                    cmd2.Parameters.Add("@IHOSTLOSS", dr["IHOSTLOSS"]);
+                                                                    cmd2.Parameters.Add("@IGUESTWIN", dr["IGUESTWIN"]);
+                                                                    cmd2.Parameters.Add("@IGUESTDRAW", dr["IGUESTDRAW"]);
+                                                                    cmd2.Parameters.Add("@IGUESTLOSS", dr["IGUESTLOSS"]);
+                                                                    cmd2.Parameters.Add("@CREMARK", "");
+                                                                    cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                    cmd2.Parameters.Add("@IDEST", "0");
+                                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                    if (id > -1)
+                                                                    {
+                                                                        Files.WriteLog(" [Success] Insert ANALYSIS_STAT " + " " + dr["CLEAGUEALIAS_OUTPUT_NAME"] + " " + dr["HKJCHOSTNAME_CN"] + "/" + dr["HKJCGUESTNAME_CN"]);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        else if (i == 1)
+                                                        {
+                                                            try
+                                                            {
+                                                                using (FbCommand cmd2 = new FbCommand())
+                                                                {
+                                                                    //List<string> strL= (ds.Tables[0].AsEnumerable().Select(d => d.Field<int>("IMATCH_CNT")).ToList<int>()).ConvertAll<string>(x => x.ToString());
+                                                                    //string strs = string.Concat("'", string.Join("','", strL), "'");
+                                                                    //cmd2.CommandText = "delete from ANALYSISHISTORYS where  IMATCH_CNT in (" + strs + ")";
+                                                                    List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
+                                                                    string strs = string.Concat("(", string.Join(") OR  (", strL), ")");
+                                                                    cmd2.CommandText = "delete from ANALYSISHISTORYS where " + strs;
+                                                                    cmd2.Connection = connection2;
+                                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                    Files.WriteLog("Delete ANALYSISHISTORYS [" + strs + "]");
+                                                                }
+
+                                                                queryString = "select first   1 * from ANALYSISHISTORYS";
+                                                                using (FbCommand cmd = new FbCommand(queryString, connection2))
+                                                                {
+                                                                    using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                                    {
+                                                                        using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
+                                                                        {
+                                                                            using (DataSet data = new DataSet())
+                                                                            {
+                                                                                data.Tables.Add(new DataTable("data"));
+                                                                                fda.Fill(data.Tables["data"]);
+                                                                                foreach (DataRow dr2 in ds.Tables[0].Rows)
+                                                                                {
+                                                                                    //r.CLEAGUE, r.CHOST, r.CGUEST, r.CDATE, r.CLEAGUEALIAS, r.CDES,
+                                                                                    //  r.IHOSTSCORE, r.IGUESTSCORE, r.TIMEFLAG, r.IDEST
+                                                                                    DataRow dr3 = data.Tables["data"].NewRow();
+                                                                                    dr3[0] = dr2["CLEAGUE_HKJC_NAME"];
+                                                                                    dr3[1] = dr2["HKJCHOSTNAME_CN"];
+                                                                                    dr3[2] = dr2["HKJCGUESTNAME_CN"];
+                                                                                    dr3[3] = Convert.ToDateTime(dr2["START_DATE"]).ToString("yyyyMMdd");
+                                                                                    dr3[4] = dr2["CLEAGUEALIAS_OUTPUT_NAME"];
+                                                                                    dr3[5] = dr2["IMATCHSTATUS"].ToString() == "0" ? "主" : "客";
+                                                                                    dr3[6] = dr2["IHOSTSCORE"];
+                                                                                    dr3[7] = dr2["IGUESTSCORE"];
+                                                                                    dr3[8] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                                                                    dr3[9] = "0";
+                                                                                    data.Tables["data"].Rows.Add(dr3);
+                                                                                }
+                                                                                int count = fda.Update(data.Tables["data"]);
+                                                                                Files.WriteLog((count > 0 ? "[Success] " : "[Failure] ") + " Insert ANALYSISHISTORYS [" + data.Tables["data"].Rows.Count + "]");
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            catch (Exception exp)
+                                                            {
+                                                                Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + "Sync ANALYSISHISTORYS,error: " + exp);
+                                                            }
+                                                        }
+                                                        else if (i == 2)
+                                                        {
+                                                            using (FbCommand cmd2 = new FbCommand())
+                                                            {
+                                                                List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
+                                                                string strs = string.Concat("(", string.Join(") OR  (", strL), ")");
+                                                                cmd2.CommandText = "delete from ANALYSISRECENTS where " + strs;
+                                                                cmd2.Connection = connection2;
+                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                Files.WriteLog("Delete ANALYSISRECENTS [" + strs + "]");
+                                                            }
+
+                                                            queryString = "select first   1 * from ANALYSISRECENTS";
+                                                            using (FbCommand cmd = new FbCommand(queryString, connection2))
+                                                            {
+                                                                using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                                {
+                                                                    using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
+                                                                    {
+                                                                        using (DataSet data = new DataSet())
+                                                                        {
+                                                                            data.Tables.Add(new DataTable("data"));
+                                                                            fda.Fill(data.Tables["data"]);
+                                                                            List<string> strTeam = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
+
+                                                                            foreach (string s in strTeam)
+                                                                            {
+                                                                                DataRow[] drs = ds.Tables[0].Select(s);
+                                                                                List<DataRow> drH = (drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "H").ToList()).ToList<DataRow>().Where(x => x.Field<int>("IHOSTSCORE") != -1).ToList();
+                                                                                List<DataRow> drG = (drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "G").ToList()).ToList<DataRow>().Where(x => x.Field<int>("IHOSTSCORE") != -1).ToList();
+                                                                                List<DataRow> drHN = (drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "H").ToList()).ToList<DataRow>().Where(x => x.Field<int>("IHOSTSCORE") == -1).ToList();
+                                                                                List<DataRow> drGN = (drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "G").ToList()).ToList<DataRow>().Where(x => x.Field<int>("IHOSTSCORE") == -1).ToList();
+
+                                                                                DataRow dr3 = data.Tables["data"].NewRow();
+                                                                                dr3[0] = drH.Count > 0 ? drH[0]["CLEAGUE_HKJC_NAME"] : drG.Count > 0 ? drG[0][2] : "";
+                                                                                dr3[1] = drH.Count > 0 ? drH[0]["CHOST"] : drG.Count > 0 ? drG[0][3] : "";
+                                                                                dr3[2] = drH.Count > 0 ? drH[0]["CGUEST"] : drG.Count > 0 ? drG[0][4] : "";
+                                                                                dr3[3] = "U";
+                                                                                dr3[4] = drHN.Count > 0 ? drHN[0]["LEAGUEALIAS"].ToString() + "/" + drHN[0]["CCHALLENGER"].ToString() + "/" + (drHN[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") : "-1/-1/-1";
+                                                                                dr3[5] = drH.Count > 0 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[0]["CCHALLENGER"].ToString() + "/" + (drH[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[0]["IHOSTSCORE"].ToString() + "/" + drH[0]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[6] = drH.Count > 1 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[1]["CCHALLENGER"].ToString() + "/" + (drH[1]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[1]["IHOSTSCORE"].ToString() + "/" + drH[1]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[7] = drH.Count > 2 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[2]["CCHALLENGER"].ToString() + "/" + (drH[2]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[2]["IHOSTSCORE"].ToString() + "/" + drH[2]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[8] = drH.Count > 3 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[3]["CCHALLENGER"].ToString() + "/" + (drH[3]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[3]["IHOSTSCORE"].ToString() + "/" + drH[3]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[9] = drH.Count > 4 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[4]["CCHALLENGER"].ToString() + "/" + (drH[4]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[4]["IHOSTSCORE"].ToString() + "/" + drH[4]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[10] = drGN.Count > 0 ? drGN[0]["LEAGUEALIAS"].ToString() + "/" + drGN[0]["CCHALLENGER"].ToString() + "/" + (drGN[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") : "-1/-1/-1";
+                                                                                dr3[11] = drG.Count > 0 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[0]["CCHALLENGER"].ToString() + "/" + (drG[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[0]["IHOSTSCORE"].ToString() + "/" + drG[0]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[12] = drG.Count > 1 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[1]["CCHALLENGER"].ToString() + "/" + (drG[1]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[1]["IHOSTSCORE"].ToString() + "/" + drG[1]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[13] = drG.Count > 2 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[2]["CCHALLENGER"].ToString() + "/" + (drG[2]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[2]["IHOSTSCORE"].ToString() + "/" + drG[2]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[14] = drG.Count > 3 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[3]["CCHALLENGER"].ToString() + "/" + (drG[3]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[3]["IHOSTSCORE"].ToString() + "/" + drG[3]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[15] = drG.Count > 4 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[4]["CCHALLENGER"].ToString() + "/" + (drG[4]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[4]["IHOSTSCORE"].ToString() + "/" + drG[4]["IGUESTSCORE"].ToString() : "-1";
+                                                                                dr3[16] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                                                                dr3[17] = "0";
+                                                                                data.Tables["data"].Rows.Add(dr3);
+                                                                            }
+
+                                                                            int count = fda.Update(data.Tables["data"]);
+                                                                            Files.WriteLog((count > 0 ? "[Success] " : "[Failure] ") + " Insert ANALYSISRECENTS [" + data.Tables["data"].Rows.Count + "]");
+                                                                        }
+                                                                        //using (DataSet data = new DataSet())
+                                                                        //{
+                                                                        //    data.Tables.Add(new DataTable("data"));
+                                                                        //    fda.Fill(data.Tables["data"]);
+                                                                        //    List<string> strTeam = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
+
+                                                                        //    foreach (string s in strTeam)
+                                                                        //    {
+                                                                        //        DataRow[] drs = ds.Tables[0].Select(s);
+                                                                        //        List<DataRow> drH = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "H").ToList();
+                                                                        //        List<DataRow> drG = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<string>("CTEAMFLAG") == "G").ToList();
+                                                                        //        DataRow dr3 = data.Tables["data"].NewRow();
+                                                                        //        dr3[0] = drH.Count > 0 ? drH[0]["CLEAGUE_HKJC_NAME"] : drG.Count > 0 ? drG[0][2] : "";
+                                                                        //        dr3[1] = drH.Count > 0 ? drH[0]["CHOST"] : drG.Count > 0 ? drG[0][3] : "";
+                                                                        //        dr3[2] = drH.Count > 0 ? drH[0]["CGUEST"] : drG.Count > 0 ? drG[0][4] : "";
+                                                                        //        dr3[3] = "U";
+                                                                        //        dr3[4] = "-1/-1/-1";
+                                                                        //        dr3[5] = drH.Count > 0 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[0]["CCHALLENGER"].ToString() + "/" + (drH[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[0]["IHOSTSCORE"].ToString() + "/" + drH[0]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[6] = drH.Count > 1 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[1]["CCHALLENGER"].ToString() + "/" + (drH[1]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[1]["IHOSTSCORE"].ToString() + "/" + drH[1]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[7] = drH.Count > 2 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[2]["CCHALLENGER"].ToString() + "/" + (drH[2]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[2]["IHOSTSCORE"].ToString() + "/" + drH[2]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[8] = drH.Count > 3 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[3]["CCHALLENGER"].ToString() + "/" + (drH[3]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[3]["IHOSTSCORE"].ToString() + "/" + drH[3]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[9] = drH.Count > 4 ? drH[0]["LEAGUEALIAS"].ToString() + "/" + drH[4]["CCHALLENGER"].ToString() + "/" + (drH[4]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drH[4]["IHOSTSCORE"].ToString() + "/" + drH[4]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[10] = "-1/-1/-1";
+                                                                        //        dr3[11] = drG.Count > 0 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[0]["CCHALLENGER"].ToString() + "/" + (drG[0]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[0]["IHOSTSCORE"].ToString() + "/" + drG[0]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[12] = drG.Count > 1 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[1]["CCHALLENGER"].ToString() + "/" + (drG[1]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[1]["IHOSTSCORE"].ToString() + "/" + drG[1]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[13] = drG.Count > 2 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[2]["CCHALLENGER"].ToString() + "/" + (drG[2]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[2]["IHOSTSCORE"].ToString() + "/" + drG[2]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[14] = drG.Count > 3 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[3]["CCHALLENGER"].ToString() + "/" + (drG[3]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[3]["IHOSTSCORE"].ToString() + "/" + drG[3]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[15] = drG.Count > 4 ? drG[0]["LEAGUEALIAS"].ToString() + "/" + drG[4]["CCHALLENGER"].ToString() + "/" + (drG[4]["IMATCHSTATUS"].ToString() == "0" ? "主" : "客") + "/" + drG[4]["IHOSTSCORE"].ToString() + "/" + drG[4]["IGUESTSCORE"].ToString() : "-1";
+                                                                        //        dr3[16] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                                                        //        dr3[17] = "0";
+                                                                        //        data.Tables["data"].Rows.Add(dr3);
+                                                                        //    }
+
+                                                                        //    int count = fda.Update(data.Tables["data"]);
+                                                                        //    Files.WriteLog((count > 0 ? "[Success] " : "[Failure] ") + " Insert ANALYSISRECENTS [" + data.Tables["data"].Rows.Count + "]");
+                                                                        //}
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        else if (i == 3)
+                                                        {
+                                                            try
+                                                            {
+                                                                foreach (DataRow dr in ds.Tables[0].Rows)
+                                                                {
+                                                                    using (FbCommand cmd2 = new FbCommand("PR_AddTeam", connection2))
+                                                                    {
+                                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                                        cmd2.Parameters.Add("@TEAM_ID", dr["tid"]);
+                                                                        cmd2.Parameters.Add("@TEAMNAME", dr["hkjc_name_cn"]);
+                                                                        cmd2.Parameters.Add("@COUNTRY", dr["COUNTRY_CHI_NAME"] is DBNull ? dr["COUNTRY"] : dr["COUNTRY_CHI_NAME"]);
+                                                                        cmd2.Parameters.Add("@CITY", DBNull.Value);
+                                                                        cmd2.Parameters.Add("@VENUE", DBNull.Value);
+                                                                        cmd2.Parameters.Add("@CONTINENT", DBNull.Value);
+                                                                        cmd2.Parameters.Add("@CENGNAME", dr["SHORT_NAME"]);
+                                                                        cmd2.Parameters.Add("@CMACAUNAME", dr["hkjc_name_cn"]);
+                                                                        cmd2.Parameters.Add("@CHKJCNAME", dr["hkjc_name_cn"]);
+                                                                        cmd2.Parameters.Add("@CHKJCSHORTNAME", dr["hkjc_name_cn"]);
+                                                                        cmd2.Parameters.Add("@LASTUPDATE", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                        cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                        if (id > -1)
+                                                                        {
+                                                                            Files.WriteLog(" [Success] Insert TEAMINFO " + " " + dr["tid"] + " " + dr["hkjc_name_cn"] + "/" + dr["SHORT_NAME"]);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            catch (Exception exp)
+                                                            {
+                                                                Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + "Sync TEAM,error: " + exp);
+                                                            }
+                                                        }
+                                                        else if (i == 4)
+                                                        {
+                                                            List<int> strE = ds.Tables[0].AsEnumerable().Select(d => d.Field<int>("id")).ToList<int>().Distinct().ToList<int>();
+                                                            Files.WriteLog(strE.Count.ToString());
+                                                            foreach (int s in strE)
+                                                            {
+                                                                Files.WriteLog(strE.Count.ToString() + " " + s);
+                                                                DataRow[] drs = ds.Tables[0].Select("id=" + s);
+                                                                List<int> strT = drs.Select(d => d.Field<int>("TEAM_ID")).ToList<int>().Distinct().ToList<int>();
+                                                                if (strT.Count == 2)
+                                                                {
+                                                                    Files.WriteLog(strT.Count.ToString() + " " + "t");
+                                                                    List<DataRow> drH = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<int>("TEAM_ID") == strT[0]).ToList();
+                                                                    List<DataRow> drG = drs.AsEnumerable().ToList<DataRow>().Where(x => x.Field<int>("TEAM_ID") == strT[1]).ToList();
+
+                                                                    List<DataRow> sGH = drH.Where(x => x.Field<int>("IPOS") == 3).ToList();
+                                                                    List<DataRow> sGG = drG.Where(x => x.Field<int>("IPOS") == 3).ToList();
+                                                                    List<DataRow> sBH = drH.Where(x => x.Field<int>("IPOS") == 0).ToList();
+                                                                    List<DataRow> sBG = drG.Where(x => x.Field<int>("IPOS") == 0).ToList();
+                                                                    List<DataRow> sFH = drH.Where(x => x.Field<int>("IPOS") == 2).ToList();
+                                                                    List<DataRow> sFG = drG.Where(x => x.Field<int>("IPOS") == 2).ToList();
+                                                                    List<DataRow> sMH = drH.Where(x => x.Field<int>("IPOS") == 1).ToList();
+                                                                    List<DataRow> sMG = drG.Where(x => x.Field<int>("IPOS") == 1).ToList();
+                                                                    List<DataRow> sUH = drH.Where(x => x.Field<int>("IPOS") == 4).ToList();
+                                                                    List<DataRow> sUG = drG.Where(x => x.Field<int>("IPOS") == 4).ToList();
+
+                                                                    string sH = "";
+                                                                    string sG = "";
+                                                                    string ssBH = "", ssBG = "", ssFH = "", ssFG = "", ssMH = "", ssMG = "", ssUH = "", ssUG = "";
+                                                                    for (int j = 0; j < 5; j++)
+                                                                    {
+                                                                        if (j == 0)
+                                                                        {
+                                                                            foreach (DataRow R in sBH)
+                                                                            {
+                                                                                ssBH += "B/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"].ToString() : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                            foreach (DataRow R in sBG)
+                                                                            {
+                                                                                ssBG += "B/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+
+                                                                        }
+                                                                        if (j == 1)
+                                                                        {
+                                                                            foreach (DataRow R in sMH)
+                                                                            {
+                                                                                ssMH += "M/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                            foreach (DataRow R in sMG)
+                                                                            {
+                                                                                ssMG += "M/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                        }
+                                                                        if (j == 2)
+                                                                        {
+                                                                            foreach (DataRow R in sFH)
+                                                                            {
+                                                                                ssFH += "F/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                            foreach (DataRow R in sFG)
+                                                                            {
+                                                                                ssFG += "F/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                        }
+                                                                        if (j == 3)
+                                                                        {
+                                                                            sH = sGH.Count > 0 ? "G/" + sGH[0]["IPLAYER_NO"].ToString() + "/" + (sGH[0]["CPLAYER_NAME"].ToString() == "" ? sGH[0]["CENGNAME"] : sGH[0]["CPLAYER_NAME"]) : "";
+                                                                            sG = sGG.Count > 0 ? "G/" + sGG[0]["IPLAYER_NO"].ToString() + "/" + (sGG[0]["CPLAYER_NAME"].ToString() == "" ? sGG[0]["CENGNAME"] : sGG[0]["CPLAYER_NAME"]) : "";
+                                                                        }
+                                                                        if (j == 4)
+                                                                        {
+                                                                            foreach (DataRow R in sUH)
+                                                                            {
+                                                                                ssUH += "U/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                            foreach (DataRow R in sUG)
+                                                                            {
+                                                                                ssUG += "U/" + R["IPLAYER_NO"].ToString() + "/" + (R["CPLAYER_NAME"].ToString() == "" ? R["CENGNAME"] : R["CPLAYER_NAME"].ToString()) + ",";
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    using (FbCommand cmd2 = new FbCommand("PR_ADDPLAYERLIST", connection2))
+                                                                    {
+                                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                                        cmd2.Parameters.Add("@CLEAGUE", drs[0]["ALIAS"]);
+                                                                        cmd2.Parameters.Add("@CHOST", drH[0]["HKJC_NAME_CN"]);
+                                                                        cmd2.Parameters.Add("@CGUEST", drG[0]["HKJC_NAME_CN"]);
+                                                                        cmd2.Parameters.Add("@CACTION", "U");
+                                                                        cmd2.Parameters.Add("@CH_PLAYER", sH + "" + ssBH + "" + ssMH + "" + ssFH + ssUH);
+                                                                        cmd2.Parameters.Add("@CG_PLAYER", sG + "" + ssBG + "" + ssMG + "" + ssFG + ssUG);
+                                                                        cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                        cmd2.Parameters.Add("@IDEST", "0");
+                                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                        if (id > -1)
+                                                                        {
+                                                                            Files.WriteLog(" [Success] Insert PLAYERLIST " + " " + drs[0]["ALIAS"] + " " + drH[0]["HKJC_NAME_CN"] + "/" + drG[0]["HKJC_NAME_CN"]);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        else if (i == 5)
+                                                        {
+                                                            List<string> strL = ds.Tables[0].AsEnumerable().Select(d => d.Field<string>("cid")).ToList<string>().Distinct().ToList().ConvertAll<string>(x => x.ToString());
+                                                            string strs = strL.Count == 0 ? "-1" : string.Concat("(", string.Join(" or ", strL), ")");
+
+                                                            queryString = "SELECT  count (*) FROM FIXTURES r";
+                                                            using (FbCommand cmd = new FbCommand(queryString, connection2))
+                                                            {
+                                                                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                                                                if (count > 0) strs = strs + " and e.id in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + dt.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
+                                                            }
+
+                                                            queryString = "select e.id eid, e.COMPETITION_ID,c.ALIAS,l.LEAGUE_CHI_NAME, (select  hkjc_name_cn from teams where id= e.HOME_ID and hkjc_name_cn is not null ) HOME_ID,(select hkjc_name_cn from teams where id= e.GUEST_ID and hkjc_name_cn is not null) GUEST_ID,e.START_DATE, G.H_GOAL||':'||G.G_GOAL RESULT ,G.HH_GOAL||':'||G.GH_GOAL RESULT2 from events e " +
+                                                                " inner join COMPETITIONS c on c.id = e.COMPETITION_ID   LEFT join LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME = c.ALIAS   LEFT JOIN GOALINFO G ON G.EMATCHID = E.ID" +
+                                                                "  where" + strs; //" (c.id = 1507 or c.id = 1519 or c.id = 1528 or c.id = 1556 or c.id = 1599 or c.id = 1625 or c.id = 1639 or c.id = 1658 or c.id = 2131 or c.id = 2202) ";
+                                                            using (FbCommand cmd = new FbCommand(queryString, connection))
+                                                            {
+                                                                using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                                {
+                                                                    using (DataSet data = new DataSet())
+                                                                    {
+                                                                        data.Tables.Add(new DataTable("data"));
+                                                                        fda.Fill(data.Tables["data"]);
+
+                                                                        string ids = string.Concat("(", string.Join(") OR  (", data.Tables[0].AsEnumerable().Select(d => d.Field<int>("eid")).ToList<int>().Distinct().ToList().ConvertAll<string>(x => x.ToString())), ")");
+                                                                        Files.WriteLog("Sync ids: " + ids);
+
+                                                                        foreach (DataRow dr in data.Tables[0].Rows)
+                                                                        {
+                                                                            using (FbCommand cmd2 = new FbCommand("PR_ADDFIXTURE", connection2))
+                                                                            {
+                                                                                cmd2.CommandType = CommandType.StoredProcedure;
+                                                                                cmd2.Parameters.Add("@CLEAGUEALIAS", dr["ALIAS"]);
+                                                                                cmd2.Parameters.Add("@CLEAGUE", dr["LEAGUE_CHI_NAME"]);
+                                                                                cmd2.Parameters.Add("@CHOST", dr["HOME_ID"] == DBNull.Value ? "" : dr["HOME_ID"]);
+                                                                                cmd2.Parameters.Add("@CJCHOST", dr["HOME_ID"] == DBNull.Value ? "" : dr["HOME_ID"]);
+                                                                                cmd2.Parameters.Add("@CGUEST", dr["GUEST_ID"] == DBNull.Value ? "" : dr["GUEST_ID"]);
+                                                                                cmd2.Parameters.Add("@CJCGUEST", dr["GUEST_ID"] == DBNull.Value ? "" : dr["GUEST_ID"]);
+                                                                                cmd2.Parameters.Add("@CMATCHFIELD", "H");
+                                                                                cmd2.Parameters.Add("@CMATCHDATE", Convert.ToDateTime(dr["START_DATE"]).ToString("yyyyMMdd"));
+                                                                                cmd2.Parameters.Add("@CMATCHTIME", Convert.ToDateTime(dr["START_DATE"]).ToString("HHmm"));
+                                                                                cmd2.Parameters.Add("@CHALF_TIME", dr["RESULT2"] == DBNull.Value ? "" : dr["RESULT2"]);
+                                                                                cmd2.Parameters.Add("@CFULL_TIME", dr["RESULT"] == DBNull.Value ? "" : dr["RESULT"]);
+                                                                                cmd2.Parameters.Add("@CREMARK", "");
+                                                                                cmd2.Parameters.Add("@CACTION", "U");
+                                                                                cmd2.Parameters.Add("@CSCORER", "");
+                                                                                cmd2.Parameters.Add("@TIMEFLAG", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                                                                                cmd2.Parameters.Add("@IDEST", "0");
+                                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                                if (id > -1)
+                                                                                {
+                                                                                    Files.WriteLog(" [Success] Insert FIXTURE" + " " + dr["ALIAS"] + " " + dr["HOME_ID"] + "/" + dr["GUEST_ID"]);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        connection2.Close();
+                                                    }
+                                                }
+
+                                                  int msgID = -1;
+                                                if (AppFlag.Alert)
+                                                {
+                                                    switch (syncItems[i])
+                                                    {
+                                                        case "LIVEGOALS":
+                                                            {
+                                                                msgID = 30;
+                                                            }
+                                                            break;
+                                                        case "GOALDETAILS":
+                                                            {
+                                                                msgID = 31;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISOTHER":
+                                                            {
+                                                                msgID = 62;
+                                                            }
+                                                            break;
+                                                        case "FIXTURES":
+                                                            {
+                                                                msgID = 63;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISTATS":
+                                                            {
+                                                                msgID = 3;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISHISTORYS":
+                                                            {
+                                                                msgID = 2;
+                                                            }
+                                                            break;
+                                                        case "RANKS":
+                                                            {
+                                                                msgID = 15;
+                                                            }
+                                                            break;
+                                                        case "SCORERS":
+                                                            {
+                                                                msgID = 17;
+                                                            }
+                                                            break;
+                                                        case "ANALYSISRECENTS":
+                                                            {
+                                                                msgID = 1;
+                                                            }
+                                                            break;
+                                                        case "HKGOAL":
+                                                            {
+                                                                msgID = 60;
+                                                            }
+                                                            break;
+                                                        case "HKGOALDETAILS":
+                                                            {
+                                                                msgID = 61;
+                                                            }
+                                                            break;
+                                                    }
+                                                    SendAlertMsg(msgID);
+                                                    Files.WriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + msgID);
+                                                }
+
+                                            }
+                                            connection.Close();
+                                        }
+                                        MessageID msg =new MessageID();
+                                        if (AppFlag.Alert)
+                                        {
+                                            switch (syncItems[i])
+                                            {
+                                                case "LIVEGOALS":
+                                                    {
+                                                        msg = MessageID.LIVEGOALS;
+                                                    }
+                                                    break;
+                                                case "GOALDETAILS":
+                                                    {
+                                                        msg = MessageID.GOALDETAILS;
+                                                    }
+                                                    break;
+                                                case "ANALYSISOTHER":
+                                                    {
+                                                        msg = MessageID.ANALYSISOTHER;
+                                                    }
+                                                    break;
+                                                case "FIXTURES":
+                                                    {
+                                                        msg = MessageID.FIXTURES;
+                                                    }
+                                                    break;
+                                                case "ANALYSISTATS":
+                                                    {
+                                                        msg = MessageID.ANALYSISTATS;
+                                                    }
+                                                    break;
+                                                case "ANALYSISHISTORYS":
+                                                    {
+                                                        msg = MessageID.ANALYSISHISTORYS;
+                                                    }
+                                                    break;
+                                                case "RANKS":
+                                                    {
+                                                        msg = MessageID.RANKS;
+                                                    }
+                                                    break;
+                                                case "SCORERS":
+                                                    {
+                                                        msg = MessageID.SCORERS;
+                                                    }
+                                                    break;
+                                                case "ANALYSISRECENTS":
+                                                    {
+                                                        msg = MessageID.ANALYSISRECENTS;
+                                                    }
+                                                    break;
+                                                case "HKGOAL":
+                                                    {
+                                                        msg = MessageID.HKGOAL;
+                                                    }
+                                                    break;
+                                                case "HKGOALDETAILS":
+                                                    {
+                                                        msg = MessageID.HKGOALDETAILS;
+                                                    }
+                                                    break;
+                                            }
+                                            SendAlertMsg(Convert.ToInt32(msg));
+                                            Files.WriteLog(DateTime.Now.ToString("HH:mm:ss ") +"Send "+((MessageID)msg).ToString());
+                                        }
+                                    }
+                                    catch (Exception exp)
+                                    {
+                                        Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + syncItems[i] + ",error: " + exp);
+                                    }
+                                }
+
+                                // Files.WriteLog(" TimerTask " + DateTime.Now);
+                                //var state = timerState as TimerState;
+                                //Interlocked.Increment(ref state.Counter);
+                            }
+                            catch (Exception exp)
+                            {
+                                Files.WriteError("TimerTask(),error: " + exp.Message);
+
+                            }
                         }
                     }
                 }
@@ -1074,7 +1991,33 @@ namespace ScoutDBProvider
             }
             base.WndProc(ref m);
         }
+        public static bool SendAlertMsg(int sBroadcast)
+        {
+            bool SUCCESS_CODE = false;
+            int iResultCode = 0;
+            try
+            {
+                IntPtr handle = PostMessage(HWND_BROADCAST, uiSkSvrNotify2, new Random().Next(), sBroadcast);
+                iResultCode = (int)handle;
 
+                if (iResultCode != 0)
+                {
+                    SUCCESS_CODE = true;
+                    Files.WriteLog(" [Success] Send " + sBroadcast.ToString());
+                }
+                else
+                {
+                    iResultCode = GetLastError();
+                    throw (new Exception("GetLastError()"));
+                }
+            }
+            catch (Exception ex)
+            {
+                SUCCESS_CODE = false;
+                Files.WriteError("SendAlertMsg(),error:" + ex.ToString());
+            }
+            return SUCCESS_CODE;
+        }
         private void ScoutDBProvider_Load(object sender, EventArgs e)
         {
             this.listBox1.Invoke(new Action(() =>

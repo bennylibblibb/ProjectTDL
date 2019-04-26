@@ -1,8 +1,589 @@
-﻿SELECT r.EVENTID, r.PARTICIPANT_ID, r.PARTICIPANT_NAME,
-  r.TEAMTYPE, sum(case when r.INCIDENT_NAME= 'Goal' or r.INCIDENT_ID= 421 then 1 else 0 end ) as Goal ,
-   r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Yellow card' then 1 else 0 end ) as Yellow card,
-     r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Red card' then 1 else 0 end ) as Red card
-      r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Substitution in' then 1 else 0 end ) as Substitution
- FROM INCIDENTS r where r.EVENTID='2439656'  and r.TEAMTYPE !=''  GROUP BY r.EVENTID, r.TEAMTYPE, r.PARTICIPANT_ID, r.PARTICIPANT_NAME
+﻿SELECT r.EVENTID, r.PARTICIPANT_ID, r.PARTICIPANT_NAME, r.TEAMTYPE, sum(case when r.INCIDENT_NAME= 'Goal' or r.INCIDENT_ID= 421 then 1 else 0 end ) as Goal, r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Yellow card' then 1 else 0 end ) as Yellow card, r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Red card' then 1 else 0 end ) as Red card r.TEAMTYPE,sum(case when r.INCIDENT_NAME= 'Substitution in' then 1 else 0 end ) as Substitution FROM INCIDENTS r where r.EVENTID='2439656' and r.TEAMTYPE !='' GROUP BY r.EVENTID, r.TEAMTYPE, r.PARTICIPANT_ID, r.PARTICIPANT_NAME update teams t set t.GENDER = case when t.MAPPING_STATUS is null then false else true end
 
-      update teams t  set t.GENDER = case when t.MAPPING_STATUS is null then  false  else  true end
+
+
+
+{
+  "id": 225587204,
+  "type": "event",
+  "source": 2318,
+  "ut": 1556098256,
+  "data": {
+    "event": {
+      "id": 2763211,
+      "action": "update",
+      "start_date": "1900-01-08 23:21",
+      "ft_only": "no",
+      "coverage_type": "from_tv",
+      "status_id": 13,
+      "sport_id": 5,
+      "day": null,
+      "neutral_venue": "yes",
+      "item_status": "active",
+      "clock_time": 0,
+      "clock_status": "stopped",
+      "area_id": 208,
+      "competition_id": 1004,
+      "season_id": 26769,
+      "stage_id": 0,
+      "tour_id": null,
+      "gender": "male",
+      "bet_status": "active",
+      "relation_status": "finished",
+      "status_type": "finished",
+      "name": "Test 1 - Test 2",
+      "round_id": null,
+      "round_name": null,
+      "scoutsfeed": "yes",
+      "event_stats_lvl": "silver",
+      "details": [
+        {
+          "id": 8,
+          "value": null
+        },
+        {
+          "id": 16,
+          "value": 45
+        },
+        {
+          "id": 17,
+          "value": 2
+        },
+        {
+          "id": 19,
+          "value": "2019-04-24 09:08"
+        },
+        {
+          "id": 20,
+          "value": "2019-04-24 09:21"
+        },
+        {
+          "id": 36,
+          "value": null
+        },
+        {
+          "id": 44,
+          "value": "2019-04-24 09:23"
+        },
+        {
+          "id": 45,
+          "value": "2019-04-24 09:23"
+        },
+        {
+          "id": 50,
+          "value": 15
+        },
+        {
+          "id": 58,
+          "value": "No Extra Time"
+        },
+        {
+          "id": 124,
+          "value": "up"
+        },
+        {
+          "id": 141,
+          "value": null
+        },
+        {
+          "id": 150,
+          "value": "2019-04-24 09:23"
+        },
+        {
+          "id": 151,
+          "value": null
+        },
+        {
+          "id": 160,
+          "value": "yes"
+        },
+        {
+          "id": 168,
+          "value": 45
+        },
+        {
+          "id": 169,
+          "value": 15
+        },
+        {
+          "id": 170,
+          "value": 2
+        },
+        {
+          "id": 178,
+          "value": "no"
+        },
+        {
+          "id": 201,
+          "value": null
+        },
+        {
+          "id": 202,
+          "value": null
+        },
+        {
+          "id": 203,
+          "value": null
+        },
+        {
+          "id": 204,
+          "value": null
+        },
+        {
+          "id": 205,
+          "value": "yes"
+        }
+      ],
+      "participants": [
+        {
+          "id": 143124,
+          "counter": 1,
+          "name": "Test 1",
+          "short_name": "Test 1",
+          "acronym": "TE1",
+          "area_id": 13,
+          "area_name": "Aruba",
+          "area_code": "ABW",
+          "ut": 1455092024,
+          "stats": [
+            {
+              "id": 8,
+              "value": 1
+            },
+            {
+              "id": 9,
+              "value": 1
+            },
+            {
+              "id": 10,
+              "value": 0
+            },
+            {
+              "id": 11,
+              "value": 2
+            },
+            {
+              "id": 13,
+              "value": 0
+            },
+            {
+              "id": 14,
+              "value": 0
+            },
+            {
+              "id": 15,
+              "value": 0
+            },
+            {
+              "id": 16,
+              "value": 1
+            },
+            {
+              "id": 17,
+              "value": 0
+            },
+            {
+              "id": 18,
+              "value": 0
+            },
+            {
+              "id": 19,
+              "value": 2
+            },
+            {
+              "id": 20,
+              "value": 2
+            },
+            {
+              "id": 21,
+              "value": 0
+            },
+            {
+              "id": 22,
+              "value": 1
+            },
+            {
+              "id": 23,
+              "value": 0
+            },
+            {
+              "id": 24,
+              "value": 1
+            },
+            {
+              "id": 25,
+              "value": 0
+            },
+            {
+              "id": 26,
+              "value": 0
+            },
+            {
+              "id": 27,
+              "value": 0
+            },
+            {
+              "id": 28,
+              "value": 0
+            },
+            {
+              "id": 29,
+              "value": 0
+            },
+            {
+              "id": 30,
+              "value": 0
+            },
+            {
+              "id": 31,
+              "value": 0
+            },
+            {
+              "id": 32,
+              "value": 0
+            },
+            {
+              "id": 33,
+              "value": 0
+            },
+            {
+              "id": 34,
+              "value": 0
+            },
+            {
+              "id": 40,
+              "value": 0
+            },
+            {
+              "id": 639,
+              "value": 1
+            },
+            {
+              "id": 697,
+              "value": 1
+            },
+            {
+              "id": 716,
+              "value": null
+            },
+            {
+              "id": 718,
+              "value": null
+            },
+            {
+              "id": 770,
+              "value": "00:00:18"
+            },
+            {
+              "id": 771,
+              "value": 81.82
+            },
+            {
+              "id": 772,
+              "value": 1
+            },
+            {
+              "id": 773,
+              "value": 0
+            },
+            {
+              "id": 774,
+              "value": 0
+            },
+            {
+              "id": 775,
+              "value": 0
+            },
+            {
+              "id": 776,
+              "value": 0
+            },
+            {
+              "id": 777,
+              "value": 0
+            },
+            {
+              "id": 778,
+              "value": 0
+            },
+            {
+              "id": 779,
+              "value": 0
+            },
+            {
+              "id": 845,
+              "value": null
+            }
+          ],
+          "results": [
+            {
+              "id": 2,
+              "value": 1
+            },
+            {
+              "id": 3,
+              "value": 1
+            },
+            {
+              "id": 4,
+              "value": 1
+            },
+            {
+              "id": 5,
+              "value": 0
+            },
+            {
+              "id": 7,
+              "value": 3
+            },
+            {
+              "id": 104,
+              "value": 0
+            },
+            {
+              "id": 133,
+              "value": 0
+            },
+            {
+              "id": 134,
+              "value": 0
+            },
+            {
+              "id": 411,
+              "value": 1
+            },
+            {
+              "id": 412,
+              "value": 0
+            }
+          ],
+          "subparticipants": []
+        },
+        {
+          "id": 143125,
+          "counter": 2,
+          "name": "Test 2",
+          "short_name": "Test 2",
+          "acronym": "TE2",
+          "area_id": 13,
+          "area_name": "Aruba",
+          "area_code": "ABW",
+          "ut": 1455092024,
+          "stats": [
+            {
+              "id": 8,
+              "value": 0
+            },
+            {
+              "id": 9,
+              "value": 0
+            },
+            {
+              "id": 10,
+              "value": 0
+            },
+            {
+              "id": 11,
+              "value": 1
+            },
+            {
+              "id": 13,
+              "value": 0
+            },
+            {
+              "id": 14,
+              "value": 0
+            },
+            {
+              "id": 15,
+              "value": 0
+            },
+            {
+              "id": 16,
+              "value": 0
+            },
+            {
+              "id": 17,
+              "value": 1
+            },
+            {
+              "id": 18,
+              "value": 0
+            },
+            {
+              "id": 19,
+              "value": 0
+            },
+            {
+              "id": 20,
+              "value": 0
+            },
+            {
+              "id": 21,
+              "value": 0
+            },
+            {
+              "id": 22,
+              "value": 1
+            },
+            {
+              "id": 23,
+              "value": 0
+            },
+            {
+              "id": 24,
+              "value": 0
+            },
+            {
+              "id": 25,
+              "value": 2
+            },
+            {
+              "id": 26,
+              "value": 0
+            },
+            {
+              "id": 27,
+              "value": 0
+            },
+            {
+              "id": 28,
+              "value": 0
+            },
+            {
+              "id": 29,
+              "value": 0
+            },
+            {
+              "id": 30,
+              "value": 0
+            },
+            {
+              "id": 31,
+              "value": 0
+            },
+            {
+              "id": 32,
+              "value": 0
+            },
+            {
+              "id": 33,
+              "value": 0
+            },
+            {
+              "id": 34,
+              "value": 0
+            },
+            {
+              "id": 40,
+              "value": 0
+            },
+            {
+              "id": 639,
+              "value": 0
+            },
+            {
+              "id": 697,
+              "value": 0
+            },
+            {
+              "id": 716,
+              "value": null
+            },
+            {
+              "id": 718,
+              "value": null
+            },
+            {
+              "id": 770,
+              "value": "00:00:04"
+            },
+            {
+              "id": 771,
+              "value": 18.18
+            },
+            {
+              "id": 772,
+              "value": 1
+            },
+            {
+              "id": 773,
+              "value": 0
+            },
+            {
+              "id": 774,
+              "value": 0
+            },
+            {
+              "id": 775,
+              "value": 0
+            },
+            {
+              "id": 776,
+              "value": 0
+            },
+            {
+              "id": 777,
+              "value": 0
+            },
+            {
+              "id": 778,
+              "value": 0
+            },
+            {
+              "id": 779,
+              "value": 0
+            },
+            {
+              "id": 845,
+              "value": null
+            }
+          ],
+          "results": [
+            {
+              "id": 2,
+              "value": 1
+            },
+            {
+              "id": 3,
+              "value": 1
+            },
+            {
+              "id": 4,
+              "value": 1
+            },
+            {
+              "id": 5,
+              "value": 0
+            },
+            {
+              "id": 7,
+              "value": 0
+            },
+            {
+              "id": 104,
+              "value": 0
+            },
+            {
+              "id": 133,
+              "value": 0
+            },
+            {
+              "id": 134,
+              "value": 0
+            },
+            {
+              "id": 411,
+              "value": 0
+            },
+            {
+              "id": 412,
+              "value": 0
+            }
+          ],
+          "subparticipants": []
+        }
+      ]
+    }
+  }
+}

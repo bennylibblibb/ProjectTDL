@@ -44,7 +44,21 @@
                                                                                                    <asp:TemplateColumn HeaderText="START DATE">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
 				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue?"":DataBinder.Eval(Container, "DataItem.FHSD_19") %>
-				  <BR/> <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>  
+				  <BR/> <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>
+                               &nbsp;
+                               <asp:DropDownList ID="dplLeagues" runat="server" AutoCallBack="True" Width="120px" >
+                                                     <asp:ListItem Selected="True" Value="All">-Select-</asp:ListItem>  
+                                                                <asp:ListItem Value="0">未</asp:ListItem> 
+                                                                <asp:ListItem Value="1">上</asp:ListItem>
+                                                                <asp:ListItem Value="2">休</asp:ListItem>
+                                                                <asp:ListItem Value="3">下</asp:ListItem>
+                                                                <asp:ListItem Value="4">完</asp:ListItem> 
+                                                                <asp:ListItem Value="5">加</asp:ListItem>
+                       <asp:ListItem Value="6">消</asp:ListItem>
+                       <asp:ListItem Value="7">斬</asp:ListItem>
+                       <asp:ListItem Value="8">改</asp:ListItem>
+                       <asp:ListItem Value="9">延</asp:ListItem>
+                                                                <asp:ListItem Value="10">待</asp:ListItem>  </asp:DropDownList> 
                            </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="RESULT">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
