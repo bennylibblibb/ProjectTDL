@@ -88,12 +88,18 @@ namespace SportsUtil {
                 //SQLString.Append(" AND cast(cast(e.CMATCHDATETIME as date) as varchar(10))= (SELECT cast(cast(CMATCHDATETIME as date) as varchar(10)) FROM EMATCHES WHERE EMATCHID = '"+ sEventID + "'  ) ");
                 if (sEventID != "" && sEventID != "-1" && sEventID != "0")
                 {
-                    SQLString.Append(" WHERE e.HKJCDAYCODE = (SELECT HKJCDAYCODE FROM EMATCHES WHERE EMATCHID =" + sEventID + "  ) and e.CMATCHDATETIME < (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " )+1 and e.CMATCHDATETIME > (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " ) -1  order by e.HKJCMATCHNO asc ");
+                    SQLString.Append(" WHERE e.HKJCDAYCODE = (SELECT HKJCDAYCODE FROM EMATCHES WHERE EMATCHID =" + sEventID + "  ) and e.CMATCHDATETIME <= (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " )+1 and e.CMATCHDATETIME >= (SELECT CMATCHDATETIME FROM EMATCHES WHERE EMATCHID =  " + sEventID + " ) -1  order by e.HKJCMATCHNO asc ");
                 }
                 else
                 {
-                    SQLString.Append("   WHERE e.HKJCDAYCODE = (SELECT first 1 HKJCDAYCODE FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))  order by CMATCHDATETIME desc    ) ");
-                    SQLString.Append("  and e.CMATCHDATETIME < (SELECT first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   )+1 and e.CMATCHDATETIME > (SELECT  first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   ) -1 order by e.HKJCMATCHNO asc ");
+                    //alway display match by currently day
+                    // SQLString.Append("   WHERE e.HKJCDAYCODE = (SELECT first 1 HKJCDAYCODE FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   order by CMATCHDATETIME asc    ) ");// order by CMATCHDATETIME desc    ) ");
+                    //display match by status
+                    SQLString.Append("   WHERE e.HKJCDAYCODE = (SELECT first 1 HKJCDAYCODE FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10)) and STATUS!='finished'  order by CMATCHDATETIME desc    ) ");// order by CMATCHDATETIME desc    ) ");
+                    //SQLString.Append("  and e.CMATCHDATETIME <= (SELECT first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date)+1 as varchar(10))   )  and e.CMATCHDATETIME >= (SELECT  first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) -1 as varchar(10))  )  order by e.HKJCMATCHNO asc ");
+                    SQLString.Append("  and e.CMATCHDATETIME >= (SELECT  first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) -1 as varchar(10))" +
+                     //  " and e.CMATCHDATETIME <= (SELECT first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date)+1 as varchar(10))   )  " +
+                     " )  order by e.HKJCMATCHNO asc ");
                 }
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
                 while (m_SportsOleReaderFb.Read())

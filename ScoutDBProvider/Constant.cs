@@ -29,9 +29,10 @@ namespace ScoutDBProvider
         HKGOALDETAILS = 61,
         RANKS = 15,
         SCORERS = 17,
-        ANALYSISRECENTS=1,
-        ANALYSISHISTORYS=2,
-        ANALYSISTATS=3
+        ANALYSISRECENTS=13,
+        ANALYSISHISTORYS=11,
+        ANALYSISTATS=14,
+        ANALYSISPLAYERLIST=12
     }
 
 
