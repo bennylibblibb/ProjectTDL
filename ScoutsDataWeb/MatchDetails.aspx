@@ -157,7 +157,8 @@
                           <Columns>   	
                                 <asp:TemplateColumn HeaderText="H/G" Visible ="true" >  <HeaderStyle  CssClass="grid-header" />
                                      <ItemTemplate>
-				<%# DataBinder.Eval(Container, "DataItem.hg") %>
+                                          <asp:label id ="lbHG" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.hg") %>'> </asp:label> 
+			<%--	<%# DataBinder.Eval(Container, "DataItem.hg") %>--%>
 				</ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn Visible ="false"   HeaderText="ID"  >
                            <ItemTemplate>
@@ -189,7 +190,8 @@
                              </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Elapsed">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate> 
-				<%# DataBinder.Eval(Container, "DataItem.ELAPSED") %>
+			<%--	<%# DataBinder.Eval(Container, "DataItem.ELAPSED") %>--%>
+               <asp:label id ="lbELAPSED" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.ELAPSED") %>'> </asp:label> 
 				</ItemTemplate>  </asp:TemplateColumn> 
                                <asp:TemplateColumn HeaderText="TIMESTAMP">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate> 

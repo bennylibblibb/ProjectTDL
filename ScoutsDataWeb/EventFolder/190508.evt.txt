@@ -1,0 +1,25 @@
+﻿15:14:13 BEN login success.
+15:14:56 [Success] Update player name:華Kase y .殊/Palmer Kasey [2446081] 380893
+15:16:18 BEN login success.
+15:16:54 [Success] Update player name:祖Mathias .  特/Suarez Mathias [2439424] 385463
+15:16:54 [Success] Update player name:戴文勒泰戴/Le Tallec Damien [2439424] 260667
+15:16:54 [Success] Update player name:戴Colin   戴/Dagba Colin [2439424] 1046267
+15:17:51 BEN login success.
+15:19:27 [Success] Update player name:卡Tancredi . 卡/Tancredi Jose [2684847] 245447
+15:19:27 [Success] Update player name:洛Tancredi . 洛/Ciucci Emiliano [2684847] 181656
+15:19:27 [Success] Update player name:學Tancredi學卡/Pellejero Richard [2684847] 252623
+15:20:14 BEN login success.
+15:20:57 [Success] Update player name:治12.治/Chala Walter [2684848] 170769
+15:20:57 [Success] Update player name:迪d.治/Lopez M. [2684848] 216958
+15:20:57 [Success] Update player name:亞3治治.治/Ona Bryan [2684848] 357786
+15:21:02 Sent GoalDetails-2684848
+15:27:40 BEN login success.
+15:28:21 [Success] Update player name:瑟卡o/Zopalato Carlos [2771586] 1032200
+15:30:47 [Success] Update player name:姆Martin.Martin/Sarrafiore Martin [2771591] 951726
+15:31:22 Sent GoalDetails-2771591
+15:43:13 [Success] Update player name:斯dsdf斯/Flores Francisco [2684849] 194658
+15:43:13 [Success] Update player name:拿dfd拿/Clar Walter [2684849] 370584
+15:43:13 [Success] Update player name:羅斯da.羅斯/Camargo Miguel [2684849] 946549
+15:43:13 Sent GoalDetails-2684849
+15:47:03 [Success] Update player name:斯文agc斯文/Lopez Maximiliano [2771589] 195609
+15:47:03 Sent GoalDetails-2771589

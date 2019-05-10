@@ -550,7 +550,7 @@
                     //}
                     // ((System.Web.UI.WebControls.TextBox)e.Item.FindControl("txtMATCHNO")).Attributes.Add("onChange", "javascript:return CheckNum(this)");
                     ((Anthem.DropDownList)e.Item.FindControl("dplDayCode")).SelectedValue = ((Anthem.Label)e.Item.FindControl("lbDAYCODE")).Text;
-                    System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[19].Controls[0];
+                    System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[0].Controls[0];
                     string sID = ((System.Web.UI.WebControls.Label)e.Item.FindControl("lbID")).Text;
                     lbtnEdit.CausesValidation = true;
                     lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure Sync？');";
@@ -561,7 +561,7 @@
                 else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
                 {
                     e.Item.Attributes["style"] = "cursor:hand";
-                    System.Web.UI.WebControls.LinkButton link = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[1].Controls[3];
+                    System.Web.UI.WebControls.LinkButton link = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[2].Controls[3];
                     //e.Item.Attributes.Add("onclick", "this.style.backgroundColor='Gray';");
                     //href: "javascript:__doPostBack('dgRankDetails$ctl04$btnSelect','')"
                     e.Item.Attributes.Add("onclick", "javascript:return ClickLinkBtn(" + link.ClientID + ")");

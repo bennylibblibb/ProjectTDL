@@ -46,6 +46,7 @@ using System.Web;
             string[]   positionItems; ;
             string[] QueueItemsArray; 
             string[] NotifyMessageArray;
+            string[] NotifyUpdateTypeArray;
 
             ArrayList configSetting = new ArrayList();
 
@@ -156,6 +157,19 @@ using System.Web;
             Application["NotifyMessageTypes"] = NotifyMessageArray;
             configSetting.Clear();
 
+            configSetting = (ArrayList)ConfigurationSettings.GetConfig("NotifyUpdateType");
+            NotifyUpdateTypeArray = new string[configSetting.Count];
+            if (configSetting != null)
+            {
+                iIndex = 0;
+                foreach (string s in configSetting)
+                {
+                    NotifyUpdateTypeArray[iIndex] = s;
+                    iIndex++;
+                }
+            }
+            Application["NotifyUpdateType"] = NotifyUpdateTypeArray;
+            configSetting.Clear();
 
             //string str = base.Context.Server.MapPath(base.Context.Request.ApplicationPath);
             //string path = Path.Combine(str, "remotingclient.cfg");

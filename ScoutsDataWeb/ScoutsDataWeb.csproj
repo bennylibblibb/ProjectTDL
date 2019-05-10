@@ -84,9 +84,14 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Win32Message">
+      <HintPath>D:\Users\Administrator\Documents\Reflector\Disassembler\SportGOGO3\bin\Debug\Win32Message.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Default.aspx" />
     <Content Include="Fixtures.aspx" />
+    <Content Include="resource\sports-info.jpg" />
     <Content Include="Sports\AnalysisModify.aspx" />
     <Content Include="Sports\AnalysisPreview.aspx" />
     <Content Include="Sports\AnalysisRecent.aspx" />
@@ -99,7 +104,6 @@
     <Content Include="ChangePassword.aspx" />
     <Content Include="CheckCode.aspx" />
     <Content Include="CommonPage.aspx" />
-    <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Logout.aspx" />
     <Content Include="Matches.aspx" />
@@ -174,6 +178,7 @@
     </Compile>
     <Compile Include="Default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="Logout.cs">

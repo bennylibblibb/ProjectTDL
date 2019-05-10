@@ -1,5 +1,5 @@
 /********************* ROLES **********************/
-
+   TR_INCIDENTS_MATCHDETAILS  TR_EVENTS_GOALINFO TR_EVENTS_EMATCHES 
 CREATE ROLE RDB$ADMIN;
 /********************* UDFS ***********************/
 

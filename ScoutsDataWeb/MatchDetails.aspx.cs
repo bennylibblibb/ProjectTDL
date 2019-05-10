@@ -5,6 +5,9 @@ using Anthem;
 using FirebirdSql.Data.FirebirdClient;
 using JC_SoccerWeb.Common;
 using System.Collections;
+using RemoteService.Win32;
+using System.Web;
+using System.Linq;
 
 namespace JC_SoccerWeb
 {
@@ -111,6 +114,7 @@ namespace JC_SoccerWeb
                 bool results = false;
                 int id = -1;
                 string strResults = "";
+                string strEventid = "";
                 for (int i = 0; i < this.dgGoalInfo.Items.Count; i++)
                 {
                     try
@@ -118,14 +122,16 @@ namespace JC_SoccerWeb
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             string strName = ((System.Web.UI.WebControls.TextBox)this.dgGoalInfo.Items[i].FindControl("txtCNName")).Text;
-                            string strEventid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbEventid")).Text;
+                              strEventid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbEventid")).Text;
                             string strPlayerid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbPlayerid")).Text;
                             string strPlayer = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbPlayerName")).Text;
                             string strTeamid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbTeamid")).Text;
-
-                            if (strPlayerid != "" && strName != ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbCNName")).Text)
-                            {
-                                id = -1;
+                            string strELAPSED = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbELAPSED")).Text;
+                            string strHG = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbHG")).Text;
+                            // if (strPlayerid != "" && strName != ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbCNName")).Text)
+                            if (strName != ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbCNName")).Text)
+                                {
+                                    id = -1;
 
                                 using (FbCommand cmd = new FbCommand())
                                 {
@@ -136,6 +142,8 @@ namespace JC_SoccerWeb
                                     cmd.Parameters.Add("@EMATCHID", strEventid);
                                     cmd.Parameters.Add("@TEAMID", strTeamid == "" ? "-1" : strTeamid);
                                     cmd.Parameters.Add("@PARTICIPANTID", strPlayerid);
+                                    cmd.Parameters.Add("@HG", strHG);
+                                    cmd.Parameters.Add("@ELAPSED", strELAPSED);
                                     cmd.Parameters.Add("@ENName", strPlayer);
                                     cmd.Parameters.Add("@CNName", strName);
                                     cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
@@ -171,6 +179,7 @@ namespace JC_SoccerWeb
                     {
                         ((System.Web.UI.WebControls.TextBox)this.dgGoalInfo.Items[i].FindControl("txtCNName")).Enabled = false;
                     }
+                     if(strEventid!="") SendWinMsg("GoalDetails-"+ strEventid);
                 }
                 this.btnSave.Text = results ? "Edit" : "Save";
                 this.lbMsg.Text = results && strResults == "" ? "[Success]" : results && strResults != "" ? "[Success] " + "but " + strResults + " [Failure]" : !results && strResults == "" ? "" : "[Failure]";
@@ -178,6 +187,29 @@ namespace JC_SoccerWeb
             this.lbMsg.UpdateAfterCallBack = true;
             this.btnSave.UpdateAfterCallBack = true;
             this.dgGoalInfo.UpdateAfterCallBack = true;
+        }
+
+        private void SendWinMsg(string type)
+        { 
+            try
+            {
+                Win32Message message = (Win32Message)Activator.GetObject(typeof(Win32Message), AppFlag.ServiceURL);
+                if (message != null)
+                {
+                    //string [] arrFields = (string[])HttpContext.Current.Application["NotifyUpdateTypeArray"];
+                    //string sType= arrFields.Where(s => s.ToLower().Contains(type)).ToString();
+                    //string id = sType.Substring(sType.IndexOf("-") + 1, sType.Length - sType.IndexOf("-"));
+                    string id= type.Substring(type.IndexOf("-") + 1, type.Length - type.IndexOf("-")-1);
+                    message.Broadcast("S"+id);
+                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Sent "+ type);
+
+                }
+            }
+            catch (Exception exception)
+            {
+                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + " SendWinMsg(),error: " + exception);
+                this.RegisterStartupScript("key", " <script language='javascript'> alert('PLEASE CHECK REMOTING HOST!'); </script> ");
+               }
         }
 
         private void btnLiveEdit_Click(object sender, EventArgs e)
@@ -351,7 +383,7 @@ namespace JC_SoccerWeb
                                 "SELECT a.TEAMTYPE HG, a.EVENTID EMATCHID, a.SUBPARTICIPANT_NAME PLAYER, a.INCIDENT_NAME CTYPE, a.SUBPARTICIPANT_ID PARTICIPANTID, '' PLAYERCHI, t.NAME_CN  , cast(SUBSTRING(a.EVENT_TIME FROM 1 FOR 2) as integer)+1 ELAPSED,  a.CTIMESTAMP LASTTIME," +
                                "a.PARTICIPANT_ID TEAM_ID FROM INCIDENTS a left JOIN players T ON CAST(T.ID AS varchar(12)) = a.PARTICIPANT_ID  where a.EVENTID = '" + id + "'  and a.PARTICIPANT_ID !='' order by a.EVENT_TIME asc" :
                     //"select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.NAME_CN , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  players T  ON CAST(T.ID AS varchar(12)) = I.PARTICIPANTID  WHERE i.EMATCHID = '" + id + "' and (i.ctype='ycard' or i.ctype='ycard'  or i.ctype='goal' ) order by i.ELAPSED asc";
-                    "select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.CPLAYER_NAME , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  PLAYERS_INFO T  ON CAST(T.PLAYER_ID AS varchar(12)) = I.PARTICIPANTID AND I.team_id=T.TEAM_ID  WHERE i.EMATCHID = '" + id + "' and (i.ctype='rcard' or i.ctype='ycard'  or i.ctype='goal' ) and (i.N !=0 or i.n is null) order by i.ELAPSED asc";// and I.PLAYER !='' order by i.ELAPSED asc";
+                    "select i.hg, I.EMATCHID, i.player, i.CTYPE,  i.PARTICIPANTID, i.PLAYERCHI ,t.CPLAYER_NAME , i.ELAPSED,i.LASTTIME ,i.team_id from MATCHDETAILS I left JOIN  PLAYERS_INFO T  ON CAST(T.PLAYER_ID AS varchar(12)) = I.PARTICIPANTID AND I.team_id=T.TEAM_ID  and t.EVENT_ID=i.EMATCHID WHERE i.EMATCHID = '" + id + "' and (i.ctype='rcard' or i.ctype='ycard'  or i.ctype='goal' ) and (i.N !=0 or i.n is null) order by i.ELAPSED asc";// and I.PLAYER !='' order by i.ELAPSED asc";
                     if (Type == "Live")
                     {
                         this.dgGoalInfo.Visible = false;

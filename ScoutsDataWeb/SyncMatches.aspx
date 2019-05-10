@@ -176,19 +176,22 @@
                                                 <ItemStyle Height="34px" CssClass="grid-item"></ItemStyle>
                                                 <SelectedItemStyle   BackColor="#CECB7B"></SelectedItemStyle> 
                                                 <Columns>
+                                                       <ASP:EDITCOMMANDCOLUMN EditText="Edit" HeaderText="EDIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" CancelText="Cancel" UpdateText="Update" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
+                                                        <HEADERSTYLE    Wrap="true" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE  CssClass="grid-item"></ITEMSTYLE>
+                                                    </ASP:EDITCOMMANDCOLUMN> 
                                                     <asp:TemplateColumn HeaderText="ID"    Visible="false">
                                                         <HeaderStyle HorizontalAlign="Left" Width="20px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="30px" CssClass="grid-item"></ItemStyle>
                                                         <ItemTemplate>
                                                             <%#this.dgRankDetails.CurrentPageIndex * this.dgRankDetails.PageSize + Container.ItemIndex + 1%>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
-                                                     <asp:TemplateColumn HeaderText="ID"   >
+                                                    <asp:TemplateColumn HeaderText="ID"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbID"   Visible="false"  runat="server" Width="50px"  Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
                                                       <asp:LinkButton ID="btnSelect" runat="server"  CommandName="Select" Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'> </asp:LinkButton>
                                                             </ItemTemplate>
-                                                    </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="NAME" Visible ="true" >
+                                                    </asp:TemplateColumn>  
+                                                     <asp:TemplateColumn HeaderText="NAME" Visible ="true" >
                                                         <HeaderStyle HorizontalAlign="Left" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbNAME" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.NAME") %>'></anthem:Label>
                                                         </ItemTemplate>
@@ -309,7 +312,7 @@
                                                          </asp:TemplateColumn>
                                                       <asp:TemplateColumn HeaderText="Action">
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"  Width="80px"></ItemStyle><ItemTemplate>
-                                                          <a href=# onclick="window.open('MatchDetails.aspx?Type=SCOUT&ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=900,height=400, top=200,left=200')" >																	
+                                                          <a href=# onclick="window.open('MatchDetails.aspx?Type=HKJC&ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=900,height=400, top=200,left=200')" >																	
 																		<b>Goals</b>	</a>
                                                               <a href=# onclick="window.open('TeamMapping.aspx?id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=650,height=280, top=200,left=200')" >																	
 																		<b><%# DataBinder.Eval(Container, "DataItem.MAPPING_STATUS")==DBNull.Value? "Mapping" :Convert.ToBoolean(DataBinder.Eval(Container, "DataItem.MAPPING_STATUS"))? "Mapped":"Mapping"  %> </b>	</a>
@@ -320,10 +323,11 @@
                                                           <a href=# onclick="window.open('TeamMapping.aspx?id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=650,height=280, top=200,left=200')" >																	
 																		<b><%# DataBinder.Eval(Container, "DataItem.MAPPING_STATUS")==DBNull.Value? "Mapping" :Convert.ToBoolean(DataBinder.Eval(Container, "DataItem.MAPPING_STATUS"))? "Mapped":"Mapping"  %> </b>	</a></ItemTemplate>
                                                          </asp:TemplateColumn>
-<ASP:EDITCOMMANDCOLUMN EditText="Edit" CancelText="Cancel" UpdateText="Update" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
+                                                       
+<%--<ASP:EDITCOMMANDCOLUMN EditText="Edit" CancelText="Cancel" UpdateText="Update" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
                                                         <HEADERSTYLE Width="150px"  Wrap="false" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE Width="150px" CssClass="grid-item"></ITEMSTYLE>
-                                                    </ASP:EDITCOMMANDCOLUMN><asp:ButtonColumn Text="Cancel"  CommandName="Delete" ItemStyle-Font-Bold="True">
-                                                        <HeaderStyle HorizontalAlign="Left" Wrap="false" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="80px" CssClass="grid-item"></ItemStyle>
+                                                    </ASP:EDITCOMMANDCOLUMN>--%><asp:ButtonColumn Text="Cancel"  CommandName="Delete" ItemStyle-Font-Bold="True">
+                                                        <HeaderStyle HorizontalAlign="Left" Wrap="false" Width="2px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="2px" CssClass="grid-item"></ItemStyle>
                                                     </asp:ButtonColumn>
                                                 </Columns>
                                             </anthem:DataGrid>

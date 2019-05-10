@@ -1,0 +1,29 @@
+﻿10:07:49 BEN login success.
+14:00:50 BEN login success.
+14:35:20 [Success] Sync [2768442] EMATCHES[FRI 8]  Standard Liege - KAA Gent
+14:35:20Sync [Standard Liege - KAA Gent] on Teams
+14:45:28 BEN login success.
+14:53:32 BEN login success.
+14:56:31 BEN login success.
+14:59:01 BEN login success.
+15:00:20 BEN login success.
+15:02:35 BEN login success.
+15:03:03 BEN login success.
+15:03:31 BEN login success.
+15:03:59 BEN login success.
+15:06:09 BEN login success.
+15:09:37 [Success] Cancel Sync [2451870] EMATCHES[FRI 5] Lokomotiv Moscow/Rubin Kazan (Lokomotiv Moskva - Rubin Kazan)
+15:09:39 [Failure] Cancel Sync [2451870] EMATCHES[FRI 5] Lokomotiv Moscow/Rubin Kazan (Lokomotiv Moskva - Rubin Kazan)
+15:09:43 [Success] Cancel Sync [2900731] EMATCHES[FRI 6] NEC Nijmegen/RKC Waalwijk (NEC Nijmegen - RKC Waalwijk)
+15:10:31 [Success] Cancel Sync [2656756] EMATCHES[FRI 7] Hammarby/Sirius (Hammarby IF - Sirius IK)
+15:11:21 [Success] Sync [2451870] EMATCHES[FRI 5]  Lokomotiv Moskva - Rubin Kazan
+15:11:21 [Success] Sync [Lokomotiv Moskva - Rubin Kazan] on Teams
+15:56:59 [Success] Sync [2451870] EMATCHES[FRI 5]  Lokomotiv Moskva - Rubin Kazan
+15:56:59Sync [Lokomotiv Moskva - Rubin Kazan] on Teams
+16:10:31 [Success] Sync [2451870] EMATCHES[FRI 5]  Lokomotiv Moskva - Rubin Kazan
+16:10:31Sync [Lokomotiv Moskva - Rubin Kazan] on Teams
+16:10:40 [Success] Sync [2451870] EMATCHES[FRI 5]  Lokomotiv Moskva - Rubin Kazan
+16:10:40Sync [Lokomotiv Moskva - Rubin Kazan] on Teams
+16:10:50 [Success] Sync [2451870] EMATCHES[FRI 5]  Lokomotiv Moskva - Rubin Kazan
+16:10:50Sync [Lokomotiv Moskva - Rubin Kazan] on Teams
+19:37:19 BEN login success.

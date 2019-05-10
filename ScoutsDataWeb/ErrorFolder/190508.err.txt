@@ -1,0 +1,19 @@
+﻿15:29:23 SendWinMsg(),error: System.Net.Sockets.SocketException (0x80004005): An existing connection was forcibly closed by the remote host
+
+Server stack trace: 
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Runtime.Remoting.Channels.SocketStream.Read(Byte[] buffer, Int32 offset, Int32 size)
+   at System.Runtime.Remoting.Channels.SocketHandler.ReadFromSocket(Byte[] buffer, Int32 offset, Int32 count)
+   at System.Runtime.Remoting.Channels.SocketHandler.Read(Byte[] buffer, Int32 offset, Int32 count)
+   at System.Runtime.Remoting.Channels.SocketHandler.ReadAndMatchFourBytes(Byte[] buffer)
+   at System.Runtime.Remoting.Channels.Tcp.TcpSocketHandler.ReadAndMatchPreamble()
+   at System.Runtime.Remoting.Channels.Tcp.TcpSocketHandler.ReadVersionAndOperation(UInt16& operation)
+   at System.Runtime.Remoting.Channels.Tcp.TcpClientSocketHandler.ReadHeaders()
+   at System.Runtime.Remoting.Channels.Tcp.TcpClientTransportSink.ProcessMessage(IMessage msg, ITransportHeaders requestHeaders, Stream requestStream, ITransportHeaders& responseHeaders, Stream& responseStream)
+   at System.Runtime.Remoting.Channels.BinaryClientFormatterSink.SyncProcessMessage(IMessage msg)
+
+Exception rethrown at [0]: 
+   at System.Runtime.Remoting.Proxies.RealProxy.HandleReturnMessage(IMessage reqMsg, IMessage retMsg)
+   at System.Runtime.Remoting.Proxies.RealProxy.PrivateInvoke(MessageData& msgData, Int32 type)
+   at RemoteService.Win32.Win32Message.Broadcast(String sBroadcast)
+   at JC_SoccerWeb.MatchDetails.SendWinMsg(String type) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 199

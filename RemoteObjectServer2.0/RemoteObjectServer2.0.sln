@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteObjectServer2.0", "RemoteObjectServer2.0.csproj", "{A379E2B5-000E-4798-8948-30FB0573EE18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A379E2B5-000E-4798-8948-30FB0573EE18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A379E2B5-000E-4798-8948-30FB0573EE18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A379E2B5-000E-4798-8948-30FB0573EE18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A379E2B5-000E-4798-8948-30FB0573EE18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6ECD4269-17EC-412C-9945-4F76C9DB96BD}
+	EndGlobalSection
+EndGlobal

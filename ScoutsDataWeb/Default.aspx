@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="Default.aspx.cs" AutoEventWireup="false" Inherits="JC_SoccerWeb._Default" %>
+ï»¿<%@ Page language="c#" Codebehind="Default.aspx.cs" AutoEventWireup="false" Inherits="JC_SoccerWeb._Default" %>
 <%@ Register TagPrefix="uc1" TagName="SignIn" Src="UserControl/SignIn.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
@@ -14,7 +14,7 @@
 		<script type="text/javascript">   
         function change() {    
             var imgNode = document.getElementById("vimg");    
-            imgNode.src = "CheckCode.asPx?t=" + (new Date()).valueOf();  // ??¬O "WaterMark.ashx?t=" + (new Date()).valueOf(); ?¥y?¥i¥H§ï????¡A?¨½¥[???ªº??¬O?¤F¨¾¤î??¾¹?¦sªº??    
+            imgNode.src = "CheckCode.asPx?t=" + (new Date()).valueOf();  // ??æ˜¯ "WaterMark.ashx?t=" + (new Date()).valueOf(); ?å¥?å¯ä»¥æ”¹????ï¼Œ?é‡ŒåŠ ???çš„??æ˜¯?äº†é˜²æ­¢??å™¨?å­˜çš„??    
         }    
          function Clear() 
 			{ 
@@ -27,52 +27,54 @@
 	</HEAD>
 	<body OnLoad="document.forms[0].SignIn1_UserID.focus()">
 		<form id="Reports" method="post" runat="server">
-			<table cellSpacing="0" cellPadding="0" width="100%" border="0">
-				<tr>
+			<table cellSpacing="0" cellPadding="0" width="100%" border="0" style="height:1%;"  >
+			<%--	<tr>
 					<td class="top_bar01_bg">
                         <!--     <img src="resource/mango_logo_title.gif" width="359" height="49"> -->
 					</td>
 				</tr>
 				<tr>
 					<td class="top_bar02_bg"><IMG height="15" src="resource/spacer.gif" width="15"></td>
-				</tr>
+				</tr>--%>
 			</table>
-			<table cellSpacing="0" cellPadding="0" width="100%" border="0">
+			<table cellSpacing="0" cellPadding="0" width="100%" border="0" style="height:98%">
 				<tr width="100%">
 					<td vAlign="top">
 						<table class="admin-tan-border" height="100%" cellSpacing="0" cellPadding="0" width="100%"
 							border="0">
-							<tr>
-								<td height="20"><FONT face="·s²Ó©úÅé"></FONT></td>
-							</tr>
+							<%--<tr>
+								<td> </td>
+							</tr>--%>
 							<tr valign="top">
-								<td align="center" valign="middle"><br>
-									<table width="600" border="0" cellpadding="0" cellspacing="0">
+								<td align="left" valign="middle"><br>
+									<table width="1200" border="0" cellpadding="0" cellspacing="0">
 										<tr>
-											<td width="299" align="center"> </td>
-											<td width="1" class="line_bg"></td>
-											<td width="300"><P>
+                                            <td width="100"></td>
+											<td width="399"  style="height:300px;width:399px" align="left">  <IMG   src="resource/Statscore.png"  >  </td>
+											<td width="1" class="line_bg"> </td>
+											<td  width="400"    style="background-image:url('resource/sports-info.jpg');" ><P>
 													<uc1:SignIn id="SignIn1" runat="server"></uc1:SignIn></P>
 											</td>
+                                            <td  width="200" ></td>
 										</tr>
 									</table>
 									<br>
 								</td>
 							</tr>
-							<tr bgcolor="#edecd1">
-								<td class="bottom_bar_bg"><FONT face="·s²Ó©úÅé"></FONT></td>
+							<tr >
+								<td > </td>
 							</tr>
-						</table>
+                        </table>
 					</td>
 				</tr>
-				<tr>
-				</tr>
+			<%--	<tr>
+				</tr>--%>
 			</table>
-			<TABLE id="Table10" width="100%">
+			<TABLE id="Table10" width="100%" style="height:1%;display:none" >
 				<TR valign="top">
-					<TD valign="top" style="display:none">
-						<P align="left"><FONT color="#000000"><STRONG>¹q°T¼Æ½XªA°È¨t²Î(¤UºÙ¡uªA°È¨t²Î¡v) 
-									¨Ï¥ÎÁn©ú<br>
+					<TD valign="top"  >
+						<P align="left"><FONT color="#000000"><STRONG>é›»è¨Šæ•¸ç¢¼æœå‹™ç³»çµ±(ä¸‹ç¨±ã€Œæœå‹™ç³»çµ±ã€) 
+									ä½¿ç”¨è²æ˜<br>
 									<br>Privacy policy</STRONG>
 								<BR>
 							</FONT>Privacy policy
@@ -88,11 +90,13 @@ information contained in this document violates the law.
 									src="resource/yellow.bmp"> Copyright 2009 Mango Limited. All Rights 
 								Reserved.<BR>
 								<IMG id="ctl00_image4" style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 7px; HEIGHT: 7px; BORDER-RIGHT-WIDTH: 0px"
-									src="resource/images_41.gif"> Last Update¡G</SPAN><SPAN class="style2" style="COLOR: #cc3333">[12/07/2018]</SPAN></P>
+									src="resource/images_41.gif"> Last Updateï¼š</SPAN><SPAN class="style2" style="COLOR: #cc3333">[12/07/2018]</SPAN></P>
 					</TD>
 				</TR>
-			</TABLE>
-			</TD></TR>
+                	<tr bgcolor="#edecd1">
+								<td class="bottom_bar_bg"> </td>
+				 </tr>
+			</TABLE> 
 		</form>
 	</body>
 </HTML>

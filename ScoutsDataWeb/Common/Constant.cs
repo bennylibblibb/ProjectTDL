@@ -33,6 +33,7 @@ namespace JC_SoccerWeb.Common
         internal static readonly int MarginOfDeviation = Convert.ToInt32(ConfigurationManager.AppSettings["MarginOfDeviation"]);
         internal static bool AutoMapping = ConfigurationManager.AppSettings["AutoMapping"].ToLower()=="yes"? true:false;
         internal static string EnetPlus = ConfigurationManager.AppSettings["EnetPlus"];
+        internal static string ServiceURL = ConfigurationSettings.AppSettings["ServiceURL"];
         //internal static readonly int CentaSmsSendTime =
         //    Convert.ToInt32(ConfigurationManager.AppSettings["CentaSmsSendTime"]);
 

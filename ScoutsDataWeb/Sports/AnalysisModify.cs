@@ -588,7 +588,7 @@ namespace SportsUtil {
                     }
                 m_SportsOleReaderFb.Close();
                 m_SportsDBMgrFb.Close();
-                    HTMLString.Append("<tr style=\"background-color:#5F9EA0\" align=\"left\"><th colspan=3><font color=\"#F0F8FF\">附加訊息: (最多300個位元)</font></th></tr><tr align=\"center\"><td colspan=3><textarea name=\"remarks\" rows=12 cols=20 onChange=\"checkRemarkByte()\">");
+                    HTMLString.Append("<tr style=\"background-color:#5F9EA0\" align=\"left\"><th colspan=3><font color=\"#F0F8FF\">附加訊息: (最多300個位元)</font></th></tr><tr align=\"center\"><td colspan=3><textarea style=\"height:100%;width:80%\"  name=\"remarks\" rows=12 cols=20 onChange=\"checkRemarkByte()\">");
                     HTMLString.Append(sRemarks.Replace(DBCR, PAGECR));
                     HTMLString.Append("</textarea></td></tr><input type=\"hidden\" name=\"matchcount\" value=\"");
                     //// HTMLString.Append(sMatchCount);

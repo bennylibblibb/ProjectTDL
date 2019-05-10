@@ -169,7 +169,7 @@ namespace DataOfScouts
                state: timerState,
                dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays(1).Subtract(DateTime.Now) : dueTimes.Subtract(DateTime.Now)),
                period: dueTimes.AddDays(1).Subtract(dueTimes));
-                 RunGetEventCompare("2771593");
+               //   RunGetEventCompare("2665695");
                 // InsertData("events.show3", true, "2656709", true);
                 //InsertData("events", true, this.bnAreas.Items[17].Text + "2019-03-19 00:00:00", this.bnAreas.Items[19].Text + "2019-03-31 23:59:59");
                 // InsertData("standings", true);
@@ -885,12 +885,14 @@ namespace DataOfScouts
                 {
                     //string receiveMsg = Encoding.UTF8.GetString(buffer);
                     //if (AppFlag.TestMode) this.lstStatus.Invoke(new Action(() => { { this.lstStatus.Items.Insert(0, "ABC"); } }));
-
+                     bool done = false;
+                     int  eventid = -1;
+                    int   statusid = -1;
                     using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                     {
                         connection.Open();
                         string strName = "";
-                        bool done = false;
+                    //    bool done = false;
                         try
                         {
                             DOSEventJson.EventJson api = JsonUtil.Deserialize(typeof(DOSEventJson.EventJson), message) as DOSEventJson.EventJson;
@@ -1169,32 +1171,34 @@ namespace DataOfScouts
                                     }
                                 }
 
-                                if (done)
-                                {
-                                    if (api.data.@event.status_id == 6 || api.data.@event.status_id == 9 || api.data.@event.status_id == 11)
-                                    {
-                                        if (api.data.@event.id > 0)
-                                        {
-                                            ///SendAlertMsg("1", api.data.@event.status_id.ToString (),api.data.@event.id.ToString());
-                                            /// await AyncHandleData("events.show3", true, api.data.@event.id.ToString());
-                                            InsertData("events.show3", true, api.data.@event.id.ToString(), true);
-                                            /// SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
-                                            Files.WriteLog(" Housekeep [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // if (api.data.@event.status_id == 33 || api.data.@event.status_id == 34) SendAlertMsg("1", api.data.@event.id.ToString());
-                                        /// SendAlertMsg("1", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
-                                        InsertData("events.show3", true, api.data.@event.id.ToString(), true);
-                                        Files.WriteLog(" Get event [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
-                                        /// SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
-                                    }
-                                    SendAlertMsg("1", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
-                                    SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
-                                    /// SendAlertMsg(AppFlag.LIVEGOALS);
-                                    done = false;
-                                }
+                                eventid = api.data.@event.id;
+                                statusid = api.data.@event.status_id;
+                                //if (done)
+                                //{
+                                //    if (api.data.@event.status_id == 6 || api.data.@event.status_id == 9 || api.data.@event.status_id == 11)
+                                //    {
+                                //        if (api.data.@event.id > 0)
+                                //        {
+                                //            ///SendAlertMsg("1", api.data.@event.status_id.ToString (),api.data.@event.id.ToString());
+                                //            /// await AyncHandleData("events.show3", true, api.data.@event.id.ToString());
+                                //            InsertData("events.show3", true, api.data.@event.id.ToString(), true);
+                                //            /// SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
+                                //            Files.WriteLog(" Housekeep [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
+                                //        }
+                                //    }
+                                //    else
+                                //    {
+                                //        // if (api.data.@event.status_id == 33 || api.data.@event.status_id == 34) SendAlertMsg("1", api.data.@event.id.ToString());
+                                //        /// SendAlertMsg("1", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
+                                //        InsertData("events.show3", true, api.data.@event.id.ToString(), true);
+                                //        Files.WriteLog(" Get event [" + api.data.@event.id.ToString() + "].." + api.data.@event.status_id);
+                                //        /// SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
+                                //    }
+                                //    SendAlertMsg("1", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
+                                //    SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
+                                //    /// SendAlertMsg(AppFlag.LIVEGOALS);
+                                //    done = false;
+                                //}
 
                                 if (id > 0)
                                 {
@@ -1735,6 +1739,32 @@ namespace DataOfScouts
                             connection.Close();
                         }
                         //  connection.Close();
+                        if (done)
+                        {
+                            if (statusid == 6 || statusid == 9 || statusid == 11)
+                            {
+                                if (eventid > 0)
+                                {
+                                    ///SendAlertMsg("1", api.data.@event.status_id.ToString (),api.data.@event.id.ToString());
+                                    /// await AyncHandleData("events.show3", true, api.data.@event.id.ToString());
+                                    InsertData("events.show3", true, eventid.ToString(), true);
+                                    /// SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
+                                    Files.WriteLog(" Housekeep [" + eventid.ToString() + "].." + statusid);
+                                }
+                            }
+                            else
+                            {
+                                // if (api.data.@event.status_id == 33 || api.data.@event.status_id == 34) SendAlertMsg("1", api.data.@event.id.ToString());
+                                /// SendAlertMsg("1", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
+                                InsertData("events.show3", true, eventid.ToString(), true);
+                                Files.WriteLog(" Get event [" + eventid.ToString() + "].." + statusid);
+                                /// SendAlertMsg("2", api.data.@event.status_id.ToString(), api.data.@event.id.ToString());
+                            }
+                            SendAlertMsg("1", statusid.ToString(), eventid.ToString());
+                            SendAlertMsg("2", statusid.ToString(), eventid.ToString());
+                            /// SendAlertMsg(AppFlag.LIVEGOALS);
+                            done = false;
+                        }
                     }
 
                     return true;
@@ -2078,11 +2108,10 @@ namespace DataOfScouts
                                         }
                                         if (id > 0)
                                         {
-                                            if (AppFlag.GetEventShow) InsertData("events.show3", true, id, true);
-                                          //  if (!AppFlag.GetEventShow) RunGetEventCompare(id.ToString());
-                                            if (!AppFlag.GetEventShow) InsertData("events.compare", true, id);
-                                            Files.WriteLog("GetEventCompare " + id);
-                                        }
+                                            if (AppFlag.GetEventShow) { InsertData("events.show3", true, id, true); }
+                                            //  if (!AppFlag.GetEventShow) RunGetEventCompare(id.ToString());
+                                            if (!AppFlag.GetEventShow) { InsertData("events.compare", true, id); Files.WriteLog("GetEventCompare " + id); }
+                                         }
                                     }
                                     catch (Exception exp)
                                     {
@@ -5910,7 +5939,7 @@ namespace DataOfScouts
                                                             cmd2.Parameters.Add("@PARTICIPANT_ID", Event_incident.participant_id);
                                                             cmd2.Parameters.Add("@PARTICIPANT_NAME", Event_incident.participant_name);
                                                             cmd2.Parameters.Add("@SUBPARTICIPANT_ID", Event_incident.subparticipant_id);
-                                                            cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", Event_incident.subparticipant_name);
+                                                            cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", Event_incident.subparticipant_name == "" ? (Event_incident.info != "" && Event_incident.incident_id=="413"  ? Event_incident.info + "*": ""  ) : Event_incident.subparticipant_name);
                                                             cmd2.Parameters.Add("@IMPORTANT_FOR_TRADER", true);// incidentJson.data.incident.important_for_trader == "yes" ? true : false);
                                                             cmd2.Parameters.Add("@EVENT_TIME", Event_incident.event_time);
                                                             cmd2.Parameters.Add("@EVENT_STATUS_ID", Event_incident.event_status_id);
@@ -7016,12 +7045,19 @@ namespace DataOfScouts
                                                             cmd.Parameters.Add("@CLEAGUEALIASID", c.id);
                                                             cmd.Parameters.Add("@IMATCHMONTH", Convert.ToDateTime(e.start_date).Year);
                                                             cmd.Parameters.Add("@IMATCHYEAR", Convert.ToDateTime(e.start_date).Month);
-                                                            cmd.Parameters.Add("@IMATCHSTATUS", participants[0].id == p1 ? 1 : 0);
-                                                            cmd.Parameters.Add("@IHOSTSCORE", m_IHOSTSCORE);
-                                                            cmd.Parameters.Add("@IGUESTSCORE", m_IGUESTSCORE);
+                                                            //20190509
+                                                            //cmd.Parameters.Add("@IMATCHSTATUS", participants[0].id == p1 ? 1 : 0);
+                                                            cmd.Parameters.Add("@IMATCHSTATUS", participants[0].id == p1 ? 0 : 1);
+                                                            cmd.Parameters.Add("@IHOSTSCORE", m_HOME_ID == p1 ? m_IHOSTSCORE : m_IGUESTSCORE);
+                                                            cmd.Parameters.Add("@IGUESTSCORE", m_GUEST_ID == p2 ? m_IGUESTSCORE : m_IHOSTSCORE);
                                                             cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                                             int id = Convert.ToInt32(cmd.ExecuteScalar());
                                                             irec++;
+                                                            //if (irec == 5)
+                                                            //{
+                                                            //    irec--;
+                                                            //    break;
+                                                            //}
                                                         }
                                                         DOSCompare.apiDataHead2headH2h_eventsCompetitionsCompetitionSeasonsSeasonStagesStageGroupsGroupEventsEventDetailsDetail[] details = (e.details == null || e.details.Length == 0) ? null : e.details;
                                                         foreach (DOSCompare.apiDataHead2headH2h_eventsCompetitionsCompetitionSeasonsSeasonStagesStageGroupsGroupEventsEventDetailsDetail detail in details)
@@ -7066,7 +7102,7 @@ namespace DataOfScouts
                                                 string m_Team = "";
                                                 int iretry = 0;
                                                 m_Team = (i == 0) ? m_HOME_ID : m_GUEST_ID;
-                                                 
+
                                                 foreach (DataRow dr in hisData.Tables[0].Select("HOME_ID =" + m_Team + " or GUEST_ID= " + m_Team, "  START_DATE DESC ").Distinct(DataRowComparer.Default).ToList<DataRow>())
                                                 {
                                                     if (m_HOME_ID == m_Team)
@@ -7087,16 +7123,20 @@ namespace DataOfScouts
                                                         cmd1.Parameters.Add("@CACT", 'U');
                                                         cmd1.Parameters.Add("@EVENTID", dr["id"]);
                                                         cmd1.Parameters.Add("@START_DATE", dr["START_DATE"]);
-                                                       // cmd1.Parameters.Add("@LEAGUEALIASID", dr["COMPETITION_ID"]);
-                                                        cmd1.Parameters.Add("@LEAGUEALIAS", dr["CLEAGUEALIAS_OUTPUT_NAME"] is DBNull?( dr["alias"] is DBNull ? dr["SHORT_NAME"].ToString() : dr["alias"].ToString()) : dr["CLEAGUEALIAS_OUTPUT_NAME"].ToString());
+                                                        // cmd1.Parameters.Add("@LEAGUEALIASID", dr["COMPETITION_ID"]);
+                                                        cmd1.Parameters.Add("@LEAGUEALIAS", dr["CLEAGUEALIAS_OUTPUT_NAME"] is DBNull ? (dr["alias"] is DBNull ? dr["SHORT_NAME"].ToString() : dr["alias"].ToString()) : dr["CLEAGUEALIAS_OUTPUT_NAME"].ToString());
                                                         cmd1.Parameters.Add("@CTEAMFLAG", m_CTEAMFLAG);
                                                         // cmd1.Parameters.Add("@CCHALLENGER", m_HOME_ID == m_Team ?  dr["GUEST_ID"].ToString() : dr["HOME_ID"].ToString());
                                                         cmd1.Parameters.Add("@CCHALLENGER", m_Team == dr["HOME_ID"].ToString() ? dr["GUEST_ID"].ToString() : dr["HOME_ID"].ToString());
+                                                        string mStatus = m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? "0" : "1" : dr["home_id"].ToString() == m_GUEST_ID ? "0" : "1";
                                                         cmd1.Parameters.Add("@IMATCHSTATUS", m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? "0" : "1" : dr["home_id"].ToString() == m_GUEST_ID ? "0" : "1");//  dr["IMATCHSTATUS"]);
-                                                         //cmd1.Parameters.Add("@IHOSTSCORE", m_HOME_ID == m_Team ? (dr["home_id"].ToString() == m_HOME_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]) : dr["home_id"].ToString() == m_GUEST_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"]);// dr["IHOSTSCORE"]);
-                                                         //cmd1.Parameters.Add("@IGUESTSCORE", m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"] : dr["home_id"].ToString() == m_GUEST_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]);// dr["IGUESTSCORE"]);
-                                                        cmd1.Parameters.Add("@IHOSTSCORE",  (Convert.ToDateTime(dr["START_DATE"])>DateTime.Now? "-1" : dr["H_GOAL"].ToString()==""? "0": dr["H_GOAL"].ToString()));
-                                                        cmd1.Parameters.Add("@IGUESTSCORE", (Convert.ToDateTime(dr["START_DATE"]) > DateTime.Now ? "-1" : dr["G_GOAL"].ToString() == "" ? "0" : dr["G_GOAL"].ToString()));
+                                                          //cmd1.Parameters.Add("@IHOSTSCORE", m_HOME_ID == m_Team ? (dr["home_id"].ToString() == m_HOME_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]) : dr["home_id"].ToString() == m_GUEST_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"]);// dr["IHOSTSCORE"]);
+                                                          //cmd1.Parameters.Add("@IGUESTSCORE", m_HOME_ID == m_Team ? dr["home_id"].ToString() == m_HOME_ID ? dr["IGUESTSCORE"] : dr["IHOSTSCORE"] : dr["home_id"].ToString() == m_GUEST_ID ? dr["IHOSTSCORE"] : dr["IGUESTSCORE"]);// dr["IGUESTSCORE"]);
+                                                          //cmd1.Parameters.Add("@IHOSTSCORE",  (Convert.ToDateTime(dr["START_DATE"])>DateTime.Now? "-1" : dr["H_GOAL"].ToString()==""? "0": dr["H_GOAL"].ToString()));
+                                                          //cmd1.Parameters.Add("@IGUESTSCORE", (Convert.ToDateTime(dr["START_DATE"]) > DateTime.Now ? "-1" : dr["G_GOAL"].ToString() == "" ? "0" : dr["G_GOAL"].ToString()));
+
+                                                        cmd1.Parameters.Add("@IHOSTSCORE", (Convert.ToDateTime(dr["START_DATE"]) > DateTime.Now ? "-1" : mStatus == "0" ? (dr["H_GOAL"].ToString()==""?"0": dr["H_GOAL"].ToString() ): (dr["G_GOAL"].ToString()==""?"0": dr["G_GOAL"].ToString())));
+                                                        cmd1.Parameters.Add("@IGUESTSCORE", (Convert.ToDateTime(dr["START_DATE"]) > DateTime.Now ? "-1" : mStatus == "0" ?( dr["G_GOAL"].ToString()==""?"0": dr["G_GOAL"].ToString()) :( dr["H_GOAL"].ToString()==""?"0": dr["H_GOAL"].ToString())));
                                                         cmd1.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                                         int id = Convert.ToInt32(cmd1.ExecuteScalar());
                                                         irec++;
@@ -8302,6 +8342,8 @@ namespace DataOfScouts
                 Files.WriteError("tsbGet_Click(),error: " + exp.Message);
             }
         }
+
+        bool bAutoDone = true;
         private bool AutoRunSync()
         {
             try
@@ -8509,7 +8551,7 @@ namespace DataOfScouts
                 }
                 //}
 
-                return true;
+               //// return true;
                 //});
             }
             catch (Exception exp)
@@ -8517,6 +8559,12 @@ namespace DataOfScouts
                 Files.WriteError("AutoRunSync(),error: " + exp.Message);
                 return false;
             }
+            finally
+            {
+                bAutoDone = true;
+            }
+
+            return true;
         }
 
         private void tsdAreaParentId_Click(object sender, EventArgs e)
@@ -10399,6 +10447,7 @@ namespace DataOfScouts
         private static System.Timers.Timer aTimer;
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
+            //monitor listen
             if (bBreak == true)
             {
                 bBreak = false;
@@ -10408,9 +10457,13 @@ namespace DataOfScouts
                     bgwAMQPService.RunWorkerAsync();
                 }
             }
-
-            Files.WriteLog(" Auto run sync HKJC data.");
-            AutoRunSync();
+            //complete AutoRunSync done
+            if (bAutoDone)
+            {
+                bAutoDone = false;
+                Files.WriteLog(" Auto run sync HKJC data.");
+                AutoRunSync(); 
+            } 
         }
 
         private static System.Threading.Timer tTimer;

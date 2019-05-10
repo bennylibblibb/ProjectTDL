@@ -3,16 +3,24 @@
 	<TR>
 		<TD colSpan="2">&nbsp;</TD>
 	</TR>
-	<TR>
+	<%--<TR>
 		<TD></TD>
 		<TD><FONT face="新細明體">&nbsp;</FONT></TD>
-	</TR>
+	</TR>--%>
 	<tr>
 		<TD><FONT face="新細明體"></FONT></TD>
-		<td><span class="header-gray" style="HEIGHT:20px">用戶登錄</span></td>
+		<td><span class="header-gray" style="HEIGHT:20px;">用戶登錄</span></td>
 	</tr>
-	<tr>
-		<TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+    <TR>
+		<TD>&nbsp;</TD>
+		<TD>&nbsp;</TD>
+	</TR>
+    <TR>
+		<TD>&nbsp;</TD>
+		<TD>&nbsp;</TD>
+	</TR>
+	<tr> 
+        <TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 		<td>
 			<span>用戶 ID:</span>
 			<asp:RequiredFieldValidator id="RequiredFieldValidator1" runat="server" ErrorMessage="*" ControlToValidate="UserID"></asp:RequiredFieldValidator>
@@ -21,7 +29,7 @@
 	<tr>
 		<TD><FONT face="新細明體"></FONT></TD>
 		<td><FONT face="新細明體"></FONT><FONT face="新細明體"></FONT>
-			<br>
+		<%--	<br>--%>
 			<asp:TextBox id="UserID" columns="9" width="200px" cssclass="safari-midtextbox" runat="server"></asp:TextBox>
 		</td>
 	</tr>
@@ -36,7 +44,7 @@
 	<tr>
 		<TD></TD>
 		<td>
-			<br>
+		<%--	<br>--%>
 			<asp:TextBox id="Password" columns="9" width="200px" textmode="password" cssclass="safari-midtextbox"
 				runat="server"></asp:TextBox>
 		</td>
