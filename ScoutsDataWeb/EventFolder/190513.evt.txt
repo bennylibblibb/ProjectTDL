@@ -1,0 +1,11 @@
+﻿16:57:09 Update [2451866]圖拉兵工廠(主)/莫斯科火車頭(客) : Dangerous free kicks,20,5 / 
+17:12:55 BEN login success.
+17:15:56 BEN login success.
+17:16:51 BEN login success.
+17:19:10 BEN login success.
+17:28:34 BEN login success.
+17:38:32 BEN login success.
+17:54:18 Sql: insert into ANALYSIS_BG_INFO values(2504919,'beijing','12',4,'U',0,0,0,'2019-05-13 17:54:18.812')
+17:54:18 Sql: insert into ANALYSIS_REMARK_INFO values(2504919,'U','remaks','2019-05-13 17:54:18.822')
+17:54:18 Send 2504919 ANALYSISBGREMARK/10 
+17:54:19 Sent 2504919 ANALYSISBGREMARK/10

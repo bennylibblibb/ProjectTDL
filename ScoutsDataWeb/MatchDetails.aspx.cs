@@ -8,6 +8,7 @@ using System.Collections;
 using RemoteService.Win32;
 using System.Web;
 using System.Linq;
+using System.Web.UI.WebControls;
 
 namespace JC_SoccerWeb
 {
@@ -16,15 +17,15 @@ namespace JC_SoccerWeb
     /// </summary>
     public class MatchDetails : System.Web.UI.Page
     {
-        protected DataGrid eventDetails;
-        protected DataGrid dgGoalInfo, totalDetails;
-        protected Button btnSave;
+        protected Anthem.DataGrid eventDetails;
+        protected Anthem.DataGrid dgGoalInfo, totalDetails;
+        protected Anthem.Button btnSave;
         protected Anthem.Label lbMsg;
         protected Anthem.Label lbAction;
         protected Anthem.Label lbHomeid;
         protected Anthem.Label lbGuestid;
         protected Anthem.Label lbEventid;
-        protected Button btnLiveEdit;
+        protected Anthem.Button btnLiveEdit;
         private void Page_Load(object sender, EventArgs e)
         {
             if (Request.IsAuthenticated)
@@ -93,13 +94,65 @@ namespace JC_SoccerWeb
             this.btnSave.Click += new EventHandler(this.btnSave_Click);
             this.btnLiveEdit.Click += new EventHandler(this.btnLiveEdit_Click);
             this.Load += new System.EventHandler(this.Page_Load);
+            this.eventDetails.ItemDataBound += new DataGridItemEventHandler(this.eventDetails_ItemDataBound);
 
         }
 
         #endregion
 
+        private void eventDetails_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item)
+            {
+                string Status = ((System.Web.UI.WebControls.Label)e.Item.FindControl("lbGoalInfoStatus2")).Text;
+                string sGameStatus = "";
+                if (Status == "not_started"|| Status == "Not started")
+                { sGameStatus = "0"; }
+                else if (Status == "gamestarted")
+                { sGameStatus = "1"; }
+                else if (Status == "firsthalfended")
+                {
+                    sGameStatus = "2";
+                }
+                else if (Status == "secondhalfstarted")
+                {
+                    sGameStatus = "3";
+                }
+                else if (Status == "secondhalfended")
+                {
+                    sGameStatus = "4";
+                }
+                else if (Status == "extratimestarted")
+                {
+                    sGameStatus = "5";
+                }
+                else if (Status == "cancelled")
+                {
+                    sGameStatus = "6";
+                }
+                else if (Status == "interrupted")
+                {
+                    sGameStatus = "7";
+                }
+                else if (Status == "changed")
+                {
+                    sGameStatus = "8";
+                }
+                else if (Status == "delayed")
+                {
+                    sGameStatus = "9";
+                }
+                else if (Status == "unknown")
+                { sGameStatus = "10"; }
+                ((System.Web.UI.WebControls.DropDownList)e.Item.FindControl("dplLeagues")).SelectedValue = sGameStatus;
+            }
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
+            System.Web.UI.WebControls.DropDownList dpl = (System.Web.UI.WebControls.DropDownList)(this.eventDetails.Items[0].FindControl("dplLeagues"));
+            System.Web.UI.WebControls.Label lbStatus = (System.Web.UI.WebControls.Label)(this.eventDetails.Items[0].FindControl("lbGoalInfoStatus"));
+
             if (btnSave.Text == "Edit")
             {
                 for (int i = 0; i < this.dgGoalInfo.Items.Count; i++)
@@ -108,6 +161,7 @@ namespace JC_SoccerWeb
                 }
                 this.btnSave.Text = "Save";
                 this.lbMsg.Text = "";
+                dpl.Enabled = true;
             }
             else if (btnSave.Text == "Save")
             {
@@ -115,6 +169,40 @@ namespace JC_SoccerWeb
                 int id = -1;
                 string strResults = "";
                 string strEventid = "";
+                strEventid = HttpContext.Current.Request.QueryString["ID"];
+                string sStatus = dpl.SelectedItem.Value;
+                if (strEventid != "" && sStatus != "All")
+                {
+                    results = true;
+                    try
+                    {
+                        using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                        {
+                            using (FbCommand cmd = new FbCommand())
+                            {
+                                connection.Open();
+                                cmd.CommandText = "Update_Status_Goalinfo";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Connection = connection;
+                                cmd.Parameters.Add("@EMATCHID", strEventid);
+                                cmd.Parameters.Add("@Status", sStatus);
+                                cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                id = Convert.ToInt32(cmd.ExecuteScalar());
+                                Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss ") + "[Success] " : "[Failure] ") + "Update Status: " + lbStatus.Text + " to " + dpl.SelectedItem.Text + "/" + sStatus);
+                                if (id > 0) { results = true; }
+                            }
+                            connection.Close();
+                        }
+                    }
+                    catch (Exception exp)
+                    {
+                        this.lbMsg.Text = "[Failure]";
+                        string exps = exp.ToString();
+                        Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + " btnSave_Click(),error: " + exps);
+                    }
+                }
+
+                id = -1;
                 for (int i = 0; i < this.dgGoalInfo.Items.Count; i++)
                 {
                     try
@@ -122,7 +210,7 @@ namespace JC_SoccerWeb
                         using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             string strName = ((System.Web.UI.WebControls.TextBox)this.dgGoalInfo.Items[i].FindControl("txtCNName")).Text;
-                              strEventid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbEventid")).Text;
+                            strEventid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbEventid")).Text;
                             string strPlayerid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbPlayerid")).Text;
                             string strPlayer = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbPlayerName")).Text;
                             string strTeamid = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbTeamid")).Text;
@@ -130,8 +218,8 @@ namespace JC_SoccerWeb
                             string strHG = ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbHG")).Text;
                             // if (strPlayerid != "" && strName != ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbCNName")).Text)
                             if (strName != ((System.Web.UI.WebControls.Label)this.dgGoalInfo.Items[i].FindControl("lbCNName")).Text)
-                                {
-                                    id = -1;
+                            {
+                                id = -1;
 
                                 using (FbCommand cmd = new FbCommand())
                                 {
@@ -172,14 +260,22 @@ namespace JC_SoccerWeb
                         Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + " btnSave_Click(),error: " + exps);
                         continue;
                     }
-                }
+                } 
                 if (results)
                 {
                     for (int i = 0; i < this.dgGoalInfo.Items.Count; i++)
                     {
                         ((System.Web.UI.WebControls.TextBox)this.dgGoalInfo.Items[i].FindControl("txtCNName")).Enabled = false;
                     }
-                     if(strEventid!="") SendWinMsg("GoalDetails-"+ strEventid);
+                    dpl.Enabled = false;
+                    if (strEventid != "")
+                    {
+                        JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + strEventid + " LIVEGOALS/30 ");
+                        string sReslut = ConfigManager.SendWinMsg(strEventid == "" ? "-1" : strEventid, "LIVEGOALS/30");
+
+                        JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + strEventid + " GoalDetails/31 ");
+                          sReslut = ConfigManager.SendWinMsg(strEventid, "GoalDetails/31");
+                      }
                 }
                 this.btnSave.Text = results ? "Edit" : "Save";
                 this.lbMsg.Text = results && strResults == "" ? "[Success]" : results && strResults != "" ? "[Success] " + "but " + strResults + " [Failure]" : !results && strResults == "" ? "" : "[Failure]";
@@ -187,6 +283,7 @@ namespace JC_SoccerWeb
             this.lbMsg.UpdateAfterCallBack = true;
             this.btnSave.UpdateAfterCallBack = true;
             this.dgGoalInfo.UpdateAfterCallBack = true;
+            this.eventDetails.UpdateAfterCallBack = true;
         }
 
         private void SendWinMsg(string type)
@@ -296,6 +393,15 @@ namespace JC_SoccerWeb
                              ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].Cells[2].Controls[1]).Enabled = false;
                             ((System.Web.UI.WebControls.Label)this.totalDetails.Items[i].Cells[2].Controls[3]).Text = ((System.Web.UI.WebControls.TextBox)this.totalDetails.Items[i].Cells[2].Controls[1]).Text;
                         }
+
+                        //Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Sql: " + playerQuery);
+                        if (this.lbEventid.Text != "")
+                        {
+                            JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + this.lbEventid.Text + " ANALYSISOTHER/62");
+                            string sReslut = ConfigManager.SendWinMsg(this.lbEventid.Text, "ANALYSISOTHER/62");
+                            //  if (sReslut != "Done") JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ")+ "[Failure] Send " + sMatchCount + " ANALYSISBGREMARK-10, " + sReslut);
+                        }
+
                     }
                     catch (Exception exp)
                     {
@@ -329,12 +435,13 @@ namespace JC_SoccerWeb
                     //     "select e.id, e.NAME, e.HOME_ID, e.GUEST_ID, t.NAME gtname, e.START_DATE, e.CTIMESTAMP from events e  inner join teams t  on t.id = e.GUEST_ID  where e.id == '" + id + "'  )) x1 " +
                     //     "on x.id = x1.id" :
                     string queryString =
-                        "SELECT  x.ID, X.RNAME, X.TNAME HNAME, X.TNAMECN HNAMECN, X1.NAME GNAME,x1.HKJC_NAME_CN GNAMECN, X.HKJCHOSTNAME,x.HKJCGUESTNAME , x.hmnameCN,x.gmnameCN,X.FHSD_19, X.RESULT_2 ||':'||  X1.RESULT_2 RESULT,X.HKJCDAYCODE,X.HKJCMATCHNO ,X.HKJCHOSTNAME,x.HKJCGUESTNAME ,x.STATUS_NAME " +
-                        "FROM(SELECT R.ID, R.NAME RNAME, T.NAME TNAME, T.HKJC_NAME_CN TNAMECN, E.FHSD_19, P.TEAMTYPE, P.RESULT_2, M.HKJCDAYCODE, M.HKJCMATCHNO, m.HKJCHOSTNAME, m.HKJCGUESTNAME,m.HKJCHOSTNAME_CN hmnameCN, m.HKJCGUESTNAME_CN gmnameCN ,r.STATUS_NAME " +
-                        "FROM EVENTS R LEFT  JOIN EMATCHES M ON M.EMATCHID = R.ID and m.CMATCHDATETIME=r.START_DATE INNER JOIN  EVENT_DETAILS E ON  R.ID = E.EVENTID " +
+                        "SELECT x.GAMESTATUS, x.ID, X.RNAME, X.TNAME HNAME, X.TNAMECN HNAMECN, X1.NAME GNAME,x1.HKJC_NAME_CN GNAMECN, X.HKJCHOSTNAME,x.HKJCGUESTNAME , x.hmnameCN,x.gmnameCN,X.FHSD_19, X.RESULT_2 ||':'||  X1.RESULT_2 RESULT,X.HKJCDAYCODE,X.HKJCMATCHNO ,X.HKJCHOSTNAME,x.HKJCGUESTNAME ,x.STATUS_NAME " +
+                        "FROM(SELECT  g.GAMESTATUS,R.ID, R.NAME RNAME, T.NAME TNAME, T.HKJC_NAME_CN TNAMECN, E.FHSD_19, P.TEAMTYPE, P.RESULT_2, M.HKJCDAYCODE, M.HKJCMATCHNO, m.HKJCHOSTNAME, m.HKJCGUESTNAME,m.HKJCHOSTNAME_CN hmnameCN, m.HKJCGUESTNAME_CN gmnameCN ,r.STATUS_NAME " +
+                        "FROM EVENTS R LEFT  JOIN EMATCHES M ON M.EMATCHID = R.ID and m.CMATCHDATETIME=r.START_DATE  inner join GOALINFO g on g.EMATCHID=r.ID   INNER JOIN  EVENT_DETAILS E ON  R.ID = E.EVENTID " +
                         "INNER JOIN PARTICIPANT_RESULTS P ON P.EVENTID = R.ID INNER JOIN TEAMS T ON T.ID = P.PARTICIPANTID WHERE R.ID = '" + id + "' and p.TEAMTYPE = 'H') X " +
                         "INNER JOIN(SELECT * FROM(SELECT P2.EVENTID, P2.RESULT_2, T2.NAME, t2.HKJC_NAME_CN FROM PARTICIPANT_RESULTS P2 " +
                         "INNER JOIN TEAMS T2 ON P2.PARTICIPANTID = T2.ID  WHERE  EVENTID = '" + id + "'  and  TEAMTYPE = 'G')) X1 ON X1.EVENTID = X.ID ";
+                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Sql1: " + queryString);
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())
@@ -348,11 +455,12 @@ namespace JC_SoccerWeb
                                 fda.Fill(data.Tables["EVENT_DETAILS"]);
                                 if (data.Tables["EVENT_DETAILS"].Rows.Count == 0)
                                 {
-                                    queryString = " SELECT x.id, x.name rname ,''  RESULT,x.HOME_ID,x.GUEST_ID,x.hname, x1.gname,x.hnameCN,x1.gnameCN , x.hmnameCN,x.gmnameCN ,x.FHSD_19, x.HKJCDAYCODE,x.HKJCMATCHNO, x.HKJCHOSTNAME,x.HKJCGUESTNAME, x.CTIMESTAMP ,X.STATUS_NAME FROM( " +
-"select e.id,e.NAME,e.HOME_ID,e.GUEST_ID,t.NAME hname, t.HKJC_NAME_CN hnameCN, e.START_DATE,e.CTIMESTAMP ,m.HKJCDAYCODE,m.HKJCMATCHNO,m.HKJCHOSTNAME,m.HKJCGUESTNAME ,m.HKJCHOSTNAME_CN hmnameCN, m.HKJCGUESTNAME_CN gmnameCN,b.FHSD_19,E.STATUS_NAME from events e " +
-"inner join teams t on t.id = e.HOME_ID left JOIN EMATCHES M ON M.EMATCHID = e.ID left JOIN  EVENT_DETAILS b ON  e.ID = b.EVENTID  where e.id = '" + id + "' ) x " +
+                                    queryString = " SELECT  x.GAMESTATUS, x.id, x.name rname ,''  RESULT,x.HOME_ID,x.GUEST_ID,x.hname, x1.gname,x.hnameCN,x1.gnameCN , x.hmnameCN,x.gmnameCN ,x.FHSD_19, x.HKJCDAYCODE,x.HKJCMATCHNO, x.HKJCHOSTNAME,x.HKJCGUESTNAME, x.CTIMESTAMP ,X.STATUS_NAME FROM( " +
+"select   g.GAMESTATUS,e.id,e.NAME,e.HOME_ID,e.GUEST_ID,t.NAME hname, t.HKJC_NAME_CN hnameCN, e.START_DATE,e.CTIMESTAMP ,m.HKJCDAYCODE,m.HKJCMATCHNO,m.HKJCHOSTNAME,m.HKJCGUESTNAME ,m.HKJCHOSTNAME_CN hmnameCN, m.HKJCGUESTNAME_CN gmnameCN,b.FHSD_19,E.STATUS_NAME from events e " +
+"inner join teams t on t.id = e.HOME_ID left JOIN EMATCHES M ON M.EMATCHID = e.ID  inner join GOALINFO g on g.EMATCHID=r.ID  left JOIN  EVENT_DETAILS b ON  e.ID = b.EVENTID  where e.id = '" + id + "' ) x " +
 "INNER JOIN(SELECT * FROM(select e.id, e.NAME, e.HOME_ID, e.GUEST_ID, t.NAME gname, T.HKJC_NAME_CN gnameCN, e.START_DATE, e.CTIMESTAMP from events e " +
 "inner join teams t  on t.id = e.GUEST_ID  where e.id = '" + id + "'  )) x1 on x.id = x1.id";
+                                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Sql2: " + queryString);
                                     cmd.CommandText = queryString;
                                     fda.SelectCommand = cmd;
                                     fda.Fill(data.Tables["EVENT_DETAILS"]);
@@ -468,8 +576,8 @@ namespace JC_SoccerWeb
                                     dgGoalInfo.UpdateAfterCallBack = true;
                                     if (data.Tables["EVENT_DETAILS"].Rows.Count == 0)
                                     {
-                                        btnSave.Visible = false;
-                                        btnSave.UpdateAfterCallBack = true;
+                                        //btnSave.Visible = false;
+                                        //btnSave.UpdateAfterCallBack = true;
                                     }
                                     totalDetails.UpdateAfterCallBack = true;
                                 }

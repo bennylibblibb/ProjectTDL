@@ -833,6 +833,8 @@ namespace DataOfScouts
                                     cmd2.Parameters.Add("@GOALS7690_777", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 777).value);
                                     cmd2.Parameters.Add("@MPG_778", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 778).value);
                                     cmd2.Parameters.Add("@MPS_779", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 779).value);
+                                    cmd2.Parameters.Add("@BP_770", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 770).value);
+                                    cmd2.Parameters.Add("@BPP_771", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 771).value);
                                     cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                     cmd2.Parameters.Add("@CACTION", api.data.@event.action);
                                     cmd2.Parameters.Add("@TEAMTYPE", api.data.@event.participants[i].counter == 2 ? "G" : "H");
@@ -1076,6 +1078,8 @@ namespace DataOfScouts
                                             cmd2.Parameters.Add("@GOALS7690_777", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 777).value);
                                             cmd2.Parameters.Add("@MPG_778", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 778).value);
                                             cmd2.Parameters.Add("@MPS_779", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 779).value);
+                                            cmd2.Parameters.Add("@BP_770", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 770).value);
+                                            cmd2.Parameters.Add("@BPP_771", api.data.@event.participants[i].stats.FirstOrDefault(c => c.id == 771).value);
                                             cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                             cmd2.Parameters.Add("@CACTION", api.data.@event.action);
                                             cmd2.Parameters.Add("@TEAMTYPE", api.data.@event.participants[i].counter == 2 ? "G" : "H");
@@ -4806,7 +4810,7 @@ namespace DataOfScouts
                                                                 cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
                                                                 cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
                                                                 cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
-                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.shirt_nr == "" || lineup.shirt_nr == "-" ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "0" :( lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
                                                                 cmd2.Parameters.Add("@TEAM_ID", participant.id);
                                                                 cmd2.Parameters.Add("@SEASON_ID", season.id);
                                                                 cmd2.Parameters.Add("@EVENT_ID", sevent.id);
@@ -5181,7 +5185,7 @@ namespace DataOfScouts
                                                                 cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
                                                                 cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
                                                                 cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
-                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.shirt_nr == "" || lineup.shirt_nr == "-" ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "0" : (lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
                                                                 cmd2.Parameters.Add("@TEAM_ID", participant.id);
                                                                 cmd2.Parameters.Add("@SEASON_ID", season.id);
                                                                 cmd2.Parameters.Add("@EVENT_ID", sevent.id);
@@ -5853,7 +5857,7 @@ namespace DataOfScouts
                                                                 cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
                                                                 cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
                                                                 cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
-                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.shirt_nr == "" || lineup.shirt_nr == "-" ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type== "coach"?"0":(lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
                                                                 cmd2.Parameters.Add("@TEAM_ID", participant.id);
                                                                 cmd2.Parameters.Add("@SEASON_ID", season.id);
                                                                 cmd2.Parameters.Add("@EVENT_ID", sevent.id);

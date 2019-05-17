@@ -302,7 +302,7 @@ namespace SportsUtil
                         if (!arrRank[iUpdIndex].Trim().Equals("") || !arrScore[iUpdIndex].Trim().Equals(""))
                         {
                             iRecUpd++;
-                            //insert team record
+                            //insert team record INSERT INTO LEAGRANKINFO (LEAG_ID, CLEAG_ALIAS, SEASON_ID, GROUP_ID, TEAM_ID, TEAM, HKJC_TEAM, SCORE, RANK, FLAG, GAMES, IWON, IDRAW, ILOST, CTIMESTAMP) VALUES ('1625', '²ü¥Ò', '33848', '-1', '136692', 'Feyenoord Rotterdam', '', '62', '3', '0', '33', '19', '5', '9', '16.05.2019, 02:02:15.050');
                             SQLString.Remove(0, SQLString.Length);
                             SQLString.Append("insert into LEAGRANKINFO values('");
                             SQLString.Append(sLeagID);
@@ -362,9 +362,9 @@ namespace SportsUtil
 								else SQLString.Append(arrGames[iUpdIndex].Trim());
 								SQLString.Append(")");
 							}
-							*/
+							 */
                             m_SportsDBMgr.ExecuteNonQuery(SQLString.ToString());
-                            m_SportsDBMgr.Close();
+                            m_SportsDBMgr.Close(); 
                         }
                     }
                 }

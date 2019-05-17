@@ -11,6 +11,7 @@ csc /t:library /out:..\bin\AnalysisStat.dll /r:..\bin\DBManager.dll;..\bin\Files
 */
 
 using FirebirdSql.Data.FirebirdClient;
+using JC_SoccerWeb.Common;
 using System;
 using System.Collections;
 using System.Configuration;
@@ -27,9 +28,9 @@ namespace SportsUtil {
 	public class AnalysisStat {
 		const string LOGFILESUFFIX = "log";
 		int m_RecordsInPage = 0;
-		///OleDbDataReader m_SportsOleReader;
-		///DBManager m_SportsDBMgr;
-		Files m_SportsLog;
+        ///OleDbDataReader m_SportsOleReader;
+        ///DBManager m_SportsDBMgr;
+        TDL.IO.Files m_SportsLog;
 		Encoding m_Big5Encoded;
 		StringBuilder SQLString;
 
@@ -40,7 +41,7 @@ namespace SportsUtil {
         public AnalysisStat(string Connection) {
 			///m_SportsDBMgr = new DBManager();
 			///m_SportsDBMgr.ConnectionString = Connection;
-			m_SportsLog = new Files();
+			m_SportsLog = new TDL.IO.Files();
 			m_Big5Encoded = Encoding.GetEncoding(950);
 			SQLString = new StringBuilder();
             m_SportsDBMgrFb = new DBManagerFB();
@@ -101,6 +102,8 @@ namespace SportsUtil {
                      //  " and e.CMATCHDATETIME <= (SELECT first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date)+1 as varchar(10))   )  " +
                      " )  order by e.HKJCMATCHNO asc ");
                 }
+
+                JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Sql: " + SQLString.ToString());
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
                 while (m_SportsOleReaderFb.Read())
                 {
@@ -254,8 +257,8 @@ namespace SportsUtil {
 			StringBuilder LogSQLString = new StringBuilder();
 			DBManagerFB logDBMgr = new DBManagerFB();
 			logDBMgr.ConnectionString = m_SportsDBMgrFb.ConnectionString;
-
-			arrMatchCnt = HttpContext.Current.Request.Form["matchcount"].Split(delimiter);
+ 
+            arrMatchCnt = HttpContext.Current.Request.Form["matchcount"].Split(delimiter);
 			arrLeague = HttpContext.Current.Request.Form["league"].Split(delimiter);
 			arrHost = HttpContext.Current.Request.Form["host"].Split(delimiter);
 			arrGuest = HttpContext.Current.Request.Form["guest"].Split(delimiter);
@@ -320,7 +323,15 @@ namespace SportsUtil {
 							iUpdCnt++;
 						}
 					}
-				}
+                    string sMatchCount = HttpContext.Current.Request.QueryString["eventid"];
+                    // JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Sql: " + SQLString.ToString());
+                 //   if (sMatchCount != "")
+                 //   {
+                        JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + sMatchCount + " ANALYSISTATS/14 ");
+                        string sReslut = ConfigManager.SendWinMsg(sMatchCount==""?"-1": sMatchCount, "ANALYSISTATS/14");
+                        //  if (sReslut != "Done") JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ")+ "[Failure] Send " + sMatchCount + " ANALYSISBGREMARK-10, " + sReslut);
+                 //   }
+                }
 				//write log
 				m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];
 				m_SportsLog.SetFileName(0,LOGFILESUFFIX);
@@ -779,6 +790,15 @@ namespace SportsUtil {
                     }
                     m_SportsDBMgrFb.Dispose();
                 }
+               string   sMatchCount= HttpContext.Current.Request.QueryString["eventid"];
+                // JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Sql: " + SQLString.ToString());
+              //  if (sMatchCount != "")
+               // {
+                    JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + sMatchCount + " ANALYSISTATS/14 ");
+                    string sReslut = ConfigManager.SendWinMsg(sMatchCount == "" ? "-1" : sMatchCount, "ANALYSISTATS/14");
+                    //  if (sReslut != "Done") JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ")+ "[Failure] Send " + sMatchCount + " ANALYSISBGREMARK-10, " + sReslut);
+               // }
+
 
                 //write log
                 m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];

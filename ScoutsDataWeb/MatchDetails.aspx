@@ -44,9 +44,10 @@
                                                                                                    <asp:TemplateColumn HeaderText="START DATE">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
 				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue?"":DataBinder.Eval(Container, "DataItem.FHSD_19") %>
-				  <BR/> <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>
-                               &nbsp;
-                               <asp:DropDownList ID="dplLeagues" runat="server" AutoCallBack="True" Width="120px" >
+				  <BR/>   <asp:Label ID="lbGoalInfoStatus"   runat="server" Width="80px" text=' <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>'></asp:Label>  
+                             <asp:Label ID="lbGoalInfoStatus2"  Visible="false"  runat="server" Width="80px" text='<%#DataBinder.Eval(Container, "DataItem.GAMESTATUS") %>'></asp:Label>  
+                                &nbsp;
+                               <asp:DropDownList ID="dplLeagues" Enabled="false" runat="server" AutoCallBack="True" Width="120px" >
                                                      <asp:ListItem Selected="True" Value="All">-Select-</asp:ListItem>  
                                                                 <asp:ListItem Value="0">¥¼</asp:ListItem> 
                                                                 <asp:ListItem Value="1">¤W</asp:ListItem>

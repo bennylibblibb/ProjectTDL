@@ -1,5 +1,5 @@
 /********************* ROLES **********************/
-   TR_INCIDENTS_MATCHDETAILS  TR_EVENTS_GOALINFO TR_EVENTS_EMATCHES 
+
 CREATE ROLE RDB$ADMIN;
 /********************* UDFS ***********************/
 
@@ -62,9 +62,9 @@ CREATE PROCEDURE ADD_ANALYSIS_RECENT_INFO (
     CACT Varchar(1),
     EVENTID Integer,
     START_DATE Timestamp,
-    LEAGUEALIAS Varchar(8),
+    LEAGUEALIAS Varchar(30),
     CTEAMFLAG Varchar(1),
-    CCHALLENGER Varchar(8),
+    CCHALLENGER Varchar(50),
     IMATCHSTATUS Integer,
     IHOSTSCORE Integer,
     IGUESTSCORE Integer,
@@ -943,6 +943,22 @@ CREATE PROCEDURE UPDATE_CNNAME_GOALINFO_PLAYERS (
     EMATCHID Varchar(20),
     TEAMID Integer,
     PARTICIPANTID Varchar(12),
+    HG Varchar(2),
+    ELAPSED Integer,
+    ENNAME Varchar(60),
+    CNNAME Varchar(60),
+    CTIMESTAMP Timestamp )
+RETURNS (
+    RESULT Integer )
+AS
+BEGIN SUSPEND; END^
+SET TERM ; ^
+
+SET TERM ^ ;
+CREATE PROCEDURE UPDATE_CN_GOAL_PLAYERS_BAK (
+    EMATCHID Varchar(20),
+    TEAMID Integer,
+    PARTICIPANTID Varchar(12),
     ENNAME Varchar(60),
     CNNAME Varchar(60),
     CTIMESTAMP Timestamp )
@@ -1063,7 +1079,7 @@ CREATE TABLE ANALYSIS_RECENT_INFO
   EVENTID Integer,
   START_DATE Timestamp,
   LEAGUEALIASID Integer,
-  LEAGUEALIAS Varchar(8),
+  LEAGUEALIAS Varchar(30),
   CTEAMFLAG Varchar(1),
   CCHALLENGER Varchar(50),
   IMATCHSTATUS Integer,
@@ -1575,6 +1591,21 @@ CREATE TABLE TEAMS
 /******************** TRIGGERS ********************/
 
 SET TERM ^ ;
+CREATE TRIGGER TR_EMATCHES_GOAL_INFO FOR EMATCHES ACTIVE
+AFTER INSERT OR UPDATE POSITION 0
+AS     
+DECLARE VARIABLE iHgoal integer; 
+DECLARE VARIABLE iGgoal integer ;
+BEGIN
+IF(NEW.EMATCHID IS NOT NULL AND NEW.EMATCHID !=0 AND NEW.EMATCHID !=-1) then
+   begin
+   select count(*) from MATCHDETAILS  m where m.EMATCHID=new.EMATCHID and m.CTYPE='goal' and m.STATUS='1st half' and m.HG='H'     into :iHgoal;
+   select count(*) from MATCHDETAILS  m2 where m2.EMATCHID=new.EMATCHID and m2.CTYPE='goal' and m2.STATUS='1st half' and m2.HG='G'     into :iGgoal;
+ UPDATE  GOALINFO G  SET G.HH_GOAL =:iHgoal, G.GH_GOAL=:iGgoal  WHERE G.EMATCHID=NEW.EMATCHID;
+   END 
+ END^
+SET TERM ; ^
+SET TERM ^ ;
 CREATE TRIGGER TR_EMATCHES_LEAGUE_INFO FOR EMATCHES ACTIVE
 AFTER INSERT POSITION 0
 AS     
@@ -1623,13 +1654,14 @@ END
 else IF(new.STATUS_TYPE='live') then
 BEGIN 
 MatchStatus='inprogress';
--- Update goalinfo GAMESTATUS   
-update goalinfo g set g.GAMESTATUS='gamestarted'  WHERE G.EMATCHID=NEW.ID AND G.GAMESTATUS='Not started';
+-- Update goalinfo GAMESTATUS   20190511
+---update goalinfo g set g.GAMESTATUS='gamestarted'  WHERE G.EMATCHID=NEW.ID AND G.GAMESTATUS='Not started';
 END
 else IF(new.RELATION_STATUS='in_progress') then
 BEGIN 
 MatchStatus='inprogress';
-update goalinfo g set g.GAMESTATUS='gamestarted'  WHERE G.EMATCHID=NEW.ID AND G.GAMESTATUS='Not started';
+--20190511
+---update goalinfo g set g.GAMESTATUS='gamestarted'  WHERE G.EMATCHID=NEW.ID AND G.GAMESTATUS='Not started';  
 END
 else IF(new.STATUS_TYPE='finished') then
 BEGIN 
@@ -1754,7 +1786,7 @@ END
  
  --update  GOALINFO.GAMESTATUS
  UPDATE OR INSERT INTO  GoalInfo (EMATCHID,GAMESTATUS,LASTTIME) VALUES (new.ID, :sGameStatus,new.CTIMESTAMP) MATCHING  (EMATCHID) ;
- 
+  -- for hhgoal and ghgoal
   if( NEW.STATUS_ID=33 OR (NEW.STATUS_ID=9  and OLD.STATUS_ID=33)) then 
     begin
     -- select first 1 g.H_GOAL,g.G_GOAL  from  GOALINFO g WHERE g.EMATCHID=NEW.ID ORDER BY  G.LASTTIME desc INTO :iH_GOAL,:iG_GOAL; 
@@ -1763,7 +1795,7 @@ END
    end 
 
  --log
- ---INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type )VALUES  (new.ID,new.CTIMESTAMP,:sGameStatus,0 ,'EGoalInfo') ;
+ INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type )VALUES  (new.ID,new.CTIMESTAMP,:sGameStatus,NEW.STATUS_ID,'EGoalInfo') ;
 end
  END^
 SET TERM ; ^
@@ -1875,13 +1907,14 @@ BEGIN
 --Missed penalty 3 21 2019
  --delete  from MATCHDETAILS  m where m.EMATCHID=new.EVENTID and m.INCIDENTS_ID=( select first 1 i.ID from INCIDENTS  i where i.EVENTID=new.EVENTID   and i.PARTICIPANT_ID=new.PARTICIPANT_ID and  i.INCIDENT_ID=421  order by i.CTIMESTAMP desc  );
 ---update  MATCHDETAILS  m set m.N=0 where m.EMATCHID=new.EVENTID and m.INCIDENTS_ID=( select first 1 i.ID from INCIDENTS  i where i.EVENTID=new.EVENTID   and i.PARTICIPANT_ID=new.PARTICIPANT_ID and  i.INCIDENT_ID=421  order by i.CTIMESTAMP desc  );
-
+STYPE='Missed penalty';
 END 
 else IF(new.INCIDENT_ID=424) then
 BEGIN 
 --incident_id="424" incident_name="Goal cancelled  3 26 2019
  --delete  from MATCHDETAILS  m where m.EMATCHID=new.EVENTID and m.INCIDENTS_ID=( select  first 1 i.ID from INCIDENTS  i where i.EVENTID=new.EVENTID  and i.PARTICIPANT_ID=new.PARTICIPANT_ID and i.INCIDENT_ID=413  order by i.CTIMESTAMP desc  );
  ---update  MATCHDETAILS  m set  m.N=0  where m.EMATCHID=new.EVENTID and m.INCIDENTS_ID=( select  first 1 i.ID from INCIDENTS  i where i.EVENTID=new.EVENTID  and i.PARTICIPANT_ID=new.PARTICIPANT_ID and i.INCIDENT_ID=413  order by i.CTIMESTAMP desc  );
+STYPE='Goal cancelled';
 END 
 
 :playername=null;
@@ -1926,14 +1959,16 @@ UPDATE OR INSERT INTO  MATCHDETAILS ( ID,EMATCHID,CTYPE,STATUS , LASTTIME  ,  PL
 --434 Finished afterextratimeyes
 --435 Finished afterpenalties
 
---IF(new.STATUS_NAME='Not started') then
-IF(new.EVENT_STATUS_ID=1) then
-BEGIN 
-sGameStatus=new.EVENT_STATUS_NAME;
-END
---IF(new.STATUS_NAME='Start delayed') then
+----IF(new.STATUS_NAME='Not started') then
+--20190505
+--IF(new.EVENT_STATUS_ID=1) then
+--BEGIN 
+--sGameStatus=new.EVENT_STATUS_NAME;
+--END
+----IF(new.STATUS_NAME='Start delayed') then
 --else IF(new.EVENT_STATUS_ID=429) then
-else IF(new.INCIDENT_ID=429) then
+--else 
+IF(new.INCIDENT_ID=429) then
 BEGIN 
 sGameStatus='gamestarted';
 END
@@ -2015,24 +2050,14 @@ END
 else
 BEGIN
  sGameStatus=new.EVENT_STATUS_NAME;
-END  
---20190121 update events status
- --   STATUSID = NULL;   
- --   select id from STATUSES where name =new.INCIDENT_NAME INTO :STATUSID;
- --   if(STATUSID is not null) then 
- --   begin  
- --   UPDATE  EVENTS e set e.STATUS_ID=:STATUSID, e.STATUS_NAME=  new.EVENT_STATUS_NAME, e.CTIMESTAMP =new.CTIMESTAMP WHERE e.ID=new.EVENTID; 
- --   end 
-  IF(new.INCIDENT_ID=437) then
-BEGIN 
-UPDATE  EVENTS e set e.STATUS_ID=11, e.STATUS_NAME='Finished', e.CTIMESTAMP =new.CTIMESTAMP WHERE e.ID=new.EVENTID; 
-END
-
---UPDATE  GOALINFO g set  g.ELAPSED= cast(SUBSTRING(new.EVENT_TIME FROM 1 FOR 2) as integer)+1,g.GAMESTATUS=:sGameStatus, LASTTIME =new.CTIMESTAMP WHERE  g.EMATCHID=new.EVENTID; 
- UPDATE  GOALINFO g set  g.ELAPSED=  cast(SUBSTRING(new.EVENT_TIME FROM 1 FOR  position(':',new.EVENT_TIME)-1  ) as integer)+ case when position( ':00',new.EVENT_TIME) >0 then 0 else 1 end ,g.GAMESTATUS=:sGameStatus, LASTTIME =new.CTIMESTAMP WHERE  g.EMATCHID=new.EVENTID; 
-  --log
-----INSERT INTO GOALINFO_LOG   (AID,EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,LOG_TYPE )VALUES  (new.ID, new.EVENTID,new.CTIMESTAMP,:sGameStatus, cast(SUBSTRING(new.EVENT_TIME FROM 1 FOR 2) as integer)+1 ,'GoalInfo') ;
-
+END   
+--IF(new.INCIDENT_ID=437) then
+--BEGIN 
+--UPDATE  EVENTS e set e.STATUS_ID=11, e.STATUS_NAME='Finished', e.CTIMESTAMP =new.CTIMESTAMP WHERE e.ID=new.EVENTID; 
+--END
+-- UPDATE  GOALINFO g set  g.ELAPSED=  cast(SUBSTRING(new.EVENT_TIME FROM 1 FOR  position(':',new.EVENT_TIME)-1  ) as integer)+ case when position( ':00',new.EVENT_TIME) >0 then 0 else 1 end ,g.GAMESTATUS=:sGameStatus, LASTTIME =new.CTIMESTAMP WHERE  g.EMATCHID=new.EVENTID; 
+-- INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type,AID )VALUES  (new.EVENTID,new.CTIMESTAMP,:sGameStatus,
+-- cast(SUBSTRING(new.EVENT_TIME FROM 1 FOR  position(':',new.EVENT_TIME)-1  ) as integer)+ case when position( ':00',new.EVENT_TIME) >0 then 0 else 1 end  ,'IGoalInfo',NEW.EVENT_STATUS_NAME) ;
 END  
 else  --delete 
 begin 
@@ -2173,9 +2198,9 @@ ALTER PROCEDURE ADD_ANALYSIS_RECENT_INFO (
     CACT Varchar(1),
     EVENTID Integer,
     START_DATE Timestamp,
-    LEAGUEALIAS Varchar(8),
+    LEAGUEALIAS Varchar(30),
     CTEAMFLAG Varchar(1),
-    CCHALLENGER Varchar(8),
+    CCHALLENGER Varchar(50),
     IMATCHSTATUS Integer,
     IHOSTSCORE Integer,
     IGUESTSCORE Integer,
@@ -2184,8 +2209,13 @@ RETURNS (
     RESULT Integer )
 AS
 DECLARE VARIABLE sTeamName varchar(50); 
+DECLARE VARIABLE sTeamEName varchar(50); 
 BEGIN
-     select  t.HKJC_NAME_CN from teams t   where  t.ID=cast(:CCHALLENGER  as integer)   into :sTeamName; 
+     select  t.HKJC_NAME_CN,t.SHORT_NAME from teams t   where  t.ID=cast(:CCHALLENGER  as integer)   into :sTeamName,sTeamEName; 
+     if(sTeamName is null or sTeamName='') then
+     begin
+     :sTeamName=:sTeamEName;
+     end
      UPDATE OR INSERT INTO  ANALYSIS_RECENT_INFO   (IMATCH_CNT, IREC ,CACT,EVENTID,START_DATE,LEAGUEALIAS,CTEAMFLAG, CCHALLENGER,IMATCHSTATUS,IHOSTSCORE,IGUESTSCORE,CTIMESTAMP)VALUES
       (:IMATCH_CNT, :IREC ,:CACT,:EVENTID,:START_DATE,:LEAGUEALIAS,:CTEAMFLAG, :sTeamName,:IMATCHSTATUS,:IHOSTSCORE,:IGUESTSCORE,:CTIMESTAMP) MATCHING  (IMATCH_CNT,IREC)  RETURNING IMATCH_CNT INTO :Result ;
  END^
@@ -2628,7 +2658,8 @@ RETURNS (
 AS
 BEGIN
     Result = NULL; 
-    SELECT ID FROM PLAYERS WHERE TEAM_ID=:TEAM_ID and id= :ID and name=:NAME  into :Result;
+    --UPDATE SAME ID 20190508
+    SELECT first 1 ID FROM PLAYERS WHERE (TEAM_ID=:TEAM_ID and id= :ID AND :ID=-1 and name=:NAME) OR (TEAM_ID=:TEAM_ID and id= :ID AND :ID!=-1)  into :Result;
    IF (Result is NULL) then
  INSERT INTO PLAYERS (ID ,
   NAME,
@@ -2685,8 +2716,13 @@ RETURNS (
 AS
 BEGIN
     Result = NULL; 
-    SELECT ID FROM PLAYERS WHERE TEAM_ID=:TEAM_ID and id= :ID and name=:NAME  into :Result;
-   IF (Result is NULL) then
+     --UPDATE SAME ID 20190508
+    --SELECT ID FROM PLAYERS WHERE TEAM_ID=:TEAM_ID and id= :ID and name=:NAME  into :Result;
+    --05112019
+    --SELECT first 1 ID FROM PLAYERS WHERE ( EVENT_ID =:EVENT_ID and TEAM_ID=:TEAM_ID and id= :ID AND :ID=-1 and name=:NAME) OR (EVENT_ID =:EVENT_ID and TEAM_ID=:TEAM_ID and id= :ID AND :ID!=-1)  into :Result;
+SELECT first 1 ID FROM PLAYERS WHERE (  TEAM_ID=:TEAM_ID and id= :ID AND :ID=-1 and name=:NAME) OR (TEAM_ID=:TEAM_ID and id= :ID AND :ID!=-1)  into :Result;
+
+IF (Result is NULL) then
  INSERT INTO PLAYERS (ID ,
   NAME, 
   AREA_ID , 
@@ -2708,8 +2744,12 @@ VALUES  (:ID ,
   :EVENT_ID,
   :CTIMESTAMP  )  RETURNING ID INTO :Result;
 else
-
-UPDATE  PLAYERS set  NAME=:NAME , AREA_ID= :AREA_ID, SLUG=:SLUG, shirt_nr  =:shirt_nr   ,bench  =:bench  ,SEASON_ID=:SEASON_ID , EVENT_ID=:EVENT_ID, ctimestamp =:ctimestamp WHERE TEAM_ID=:TEAM_ID and id= :ID and name=:NAME  RETURNING id INTO :Result; 
+--05112019
+--UPDATE  PLAYERS set  NAME=:NAME , AREA_ID= :AREA_ID, SLUG=:SLUG, shirt_nr  =:shirt_nr   ,bench  =:bench  ,SEASON_ID=:SEASON_ID , EVENT_ID=:EVENT_ID, ctimestamp =:ctimestamp 
+--WHERE   EVENT_ID=:EVENT_ID and  TEAM_ID=:TEAM_ID and id= :ID and name=:NAME;--  RETURNING id INTO :Result; 
+UPDATE  PLAYERS set  NAME=:NAME , AREA_ID= :AREA_ID, SLUG=:SLUG, shirt_nr  =:shirt_nr   ,bench  =:bench  ,SEASON_ID=:SEASON_ID , ctimestamp =:ctimestamp 
+WHERE     TEAM_ID=:TEAM_ID and id= :ID and name=:NAME;--  RETURNING id INTO :Result; 
+select first 1 id from PLAYERS WHERE   EVENT_ID=:EVENT_ID and  TEAM_ID=:TEAM_ID and id= :ID and name=:NAME  INTO :Result;  
 
 END^
 SET TERM ; ^
@@ -3770,7 +3810,15 @@ RETURNS (
 AS
 BEGIN
     Result = NULL;  
-    UPDATE OR INSERT INTO   PARTICIPANT_STATS (
+       --TOTAL_SHOTS_19 SOT_20 FOULS_22, CORNERS_13 OFFSIDES_24 YELLOW_CARDS_8 RED_CARDS_9 ATTACKS_10 TI_32 GK_30
+    --  SELECT  first 1 EVENTID FROM PARTICIPANT_STATS  
+    --WHERE EVENTID=:EVENTID and PARTICIPANTID=:PARTICIPANTID AND (TOTAL_SHOTS_19=:TOTAL_SHOTS_19 or :TOTAL_SHOTS_19 is null )  and (SOT_20=:SOT_20 or :SOT_20 is null ) 
+   -- and (FOULS_22=:FOULS_22 or :FOULS_22 is null )  and (CORNERS_13=:CORNERS_13 or :CORNERS_13 is null )  and (OFFSIDES_24=:OFFSIDES_24 or :OFFSIDES_24 is null )
+   -- and (YELLOW_CARDS_8=:YELLOW_CARDS_8 or :YELLOW_CARDS_8 is null ) and (RED_CARDS_9=:RED_CARDS_9 or :RED_CARDS_9 is null ) and  (ATTACKS_10=:ATTACKS_10 or :ATTACKS_10 is null ) 
+    -- and  (GK_30=:GK_30 or :GK_30 is null )  and  (TI_32=:TI_32 or :TI_32 is null )     
+    --into :Result;
+      
+ UPDATE OR INSERT INTO   PARTICIPANT_STATS (
   EVENTID ,
   PARTICIPANTID ,
   SOT_20 ,
@@ -3852,8 +3900,12 @@ BEGIN
   :GOALS7690_777,
   :MPG_778,
   :MPS_779 ,
-  :CTIMESTAMP,:CACTION  ,:TEAMTYPE  ) MATCHING  (EVENTID,participantID )
-        RETURNING participantID INTO :Result; 
+  :CTIMESTAMP,:CACTION  ,:TEAMTYPE  ) MATCHING  (EVENTID,participantID ) RETURNING participantID INTO :Result; 
+  
+  -- if(Result is null) then
+  -- begin 
+  --  :Result=1;
+  -- END
 END^
 SET TERM ; ^
 
@@ -3935,8 +3987,30 @@ ALTER PROCEDURE PR_STATS_RESULT_GOALINFO (
 RETURNS (
     RESULT Integer )
 AS
+DECLARE VARIABLE sGameStatus varchar(30); 
 BEGIN
     Result= null; 
+    if(:STATUSID=33) then
+    begin 
+    sGameStatus='gamestarted';
+    end 
+    else IF(:STATUSID=9) then
+    BEGIN 
+    sGameStatus='firsthalfended';
+    END
+    else if(:STATUSID=34) then
+    begin 
+    sGameStatus='secondhalfstarted';
+    end 
+    else if(:STATUSID=11) then
+    begin 
+    sGameStatus='gameended';
+    end 
+    else 
+    begin
+    sGameStatus=null;
+    end 
+    
     SELECT  first 1 EMATCHID FROM GOALINFO  INNER JOIN EVENTS E ON E.ID=EMATCHID
     WHERE EMATCHID=:EMATCHID and  (H_RED=:H_RED or :H_RED is null )  and (G_RED=:G_RED or :G_RED is null ) and (H_YELLOW=:H_YELLOW or :H_YELLOW is null )
     and (G_YELLOW=:G_YELLOW or :G_YELLOW is null ) and (H_GOAL=:H_GOAL or :H_GOAL is null ) and  (G_GOAL=:G_GOAL or :G_GOAL is null ) AND (E.STATUS_ID=:STATUSID)
@@ -3945,7 +4019,15 @@ BEGIN
    begin  
    UPDATE  GOALINFO set  H_RED=:H_RED, G_RED=:G_RED,H_YELLOW=:H_YELLOW,G_YELLOW=:G_YELLOW,H_GOAL=:H_GOAL, G_GOAL=:G_GOAL ,  LASTTIME=:LASTTIME  
    WHERE EMATCHID  = :EMATCHID;-- RETURNING EMATCHID INTO :Result; 
-   
+  
+   --20190511
+   if(:sGameStatus is not null) then
+  begin
+  UPDATE  GOALINFO set GameStatus =:sGameStatus , LASTTIME=:LASTTIME WHERE EMATCHID  = :EMATCHID;
+  --LOG
+  INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type )VALUES  (:EMATCHID,:LASTTIME ,:sGameStatus,:STATUSID ,'PGoalInfo') ;
+  end
+  
    SELECT  first 1 EMATCHID FROM EMATCHES WHERE EMATCHID=:EMATCHID into :Result;
    IF (Result is NULL) then  
     begin
@@ -3961,6 +4043,11 @@ BEGIN
    begin 
    Result=-1;
    end  
+   --20190511
+  -- if(:sGameStatus is not null) then
+  -- begin
+  -- UPDATE  GOALINFO set GameStatus =:sGameStatus   ,  LASTTIME=:LASTTIME WHERE EMATCHID  = :EMATCHID;
+  -- end
 END^
 SET TERM ; ^
 
@@ -4845,6 +4932,59 @@ ALTER PROCEDURE UPDATE_CNNAME_GOALINFO_PLAYERS (
     EMATCHID Varchar(20),
     TEAMID Integer,
     PARTICIPANTID Varchar(12),
+    HG Varchar(2),
+    ELAPSED Integer,
+    ENNAME Varchar(60),
+    CNNAME Varchar(60),
+    CTIMESTAMP Timestamp )
+RETURNS (
+    RESULT Integer )
+AS
+DECLARE VARIABLE  playerName Varchar(60);
+DECLARE VARIABLE  playerName2 Varchar(60);
+DECLARE VARIABLE  TEAMID2 Integer;
+DECLARE VARIABLE  TEAMID3 Integer;
+BEGIN
+  Result = NULL;  
+  :playerName2=:CNNAME;
+  :playerName=:CNNAME;
+  :TEAMID3=:TEAMID;
+  IF( position('*'  in :CNNAME)>0 ) THEN
+      BEGIN
+      :playerName2=replace(:CNNAME, '*', '');
+      select e.HOME_ID,e.GUEST_ID from events e where e.id=:EMATCHID into :TEAMID2,:TEAMID3;
+      if(:TEAMID2!=:TEAMID) then
+      begin
+      :TEAMID3=:TEAMID2;
+      end
+      end
+  if(:PARTICIPANTID='') then
+  begin
+  --UPDATE  MATCHDETAILS e  set  e.PLAYERCHI=:playerName,e.LASTTIME=:CTIMESTAMP   WHERE e.EMATCHID= :EMATCHID and e.TEAM_ID=:TEAMID3 and  e.HG=:HG and e.ELAPSED=:ELAPSED   ; 
+    UPDATE  MATCHDETAILS e  set  e.PLAYERCHI=:playerName,e.LASTTIME=:CTIMESTAMP   WHERE e.EMATCHID= :EMATCHID and e.TEAM_ID=:TEAMID and  e.HG=:HG and e.ELAPSED=:ELAPSED   ; 
+   Result=1;
+  end
+  else
+  begin
+UPDATE  MATCHDETAILS e  set  e.PLAYERCHI=:playerName,e.LASTTIME=:CTIMESTAMP   WHERE e.EMATCHID= :EMATCHID and e.PARTICIPANTID=:PARTICIPANTID ;--   RETURNING PLAYERCHI INTO :playerName; 
+UPDATE OR INSERT INTO  players ( ID,NAME,NAME_CN, TEAM_ID,event_id,CTIMESTAMP  ) VALUES  (:PARTICIPANTID,:ENName,:playerName2,:TEAMID3,:EMATCHID,:CTIMESTAMP ) MATCHING  (ID,TEAM_ID) ; 
+ Result=1;
+--SELECT first 1 e.PLAYERCHI FROM MATCHDETAILS e WHERE  e.EMATCHID= :EMATCHID and e.PARTICIPANTID=:PARTICIPANTID into : playername;  
+ end
+ 
+IF (Result is NULL) then  
+  Result=0; 
+  else
+   Result=1; 
+END^
+SET TERM ; ^
+
+
+SET TERM ^ ;
+ALTER PROCEDURE UPDATE_CN_GOAL_PLAYERS_BAK (
+    EMATCHID Varchar(20),
+    TEAMID Integer,
+    PARTICIPANTID Varchar(12),
     ENNAME Varchar(60),
     CNNAME Varchar(60),
     CTIMESTAMP Timestamp )
@@ -5217,6 +5357,9 @@ GRANT EXECUTE
 
 GRANT EXECUTE
  ON PROCEDURE UPDATE_CNNAME_GOALINFO_PLAYERS TO  SYSDBA WITH GRANT OPTION;
+
+GRANT EXECUTE
+ ON PROCEDURE UPDATE_CN_GOAL_PLAYERS_BAK TO  SYSDBA WITH GRANT OPTION;
 
 GRANT EXECUTE
  ON PROCEDURE WEB_SYNC_MANUAL_HKJCDATA TO  SYSDBA WITH GRANT OPTION;

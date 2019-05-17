@@ -74,7 +74,7 @@
                 UpdateHistoryMessage("沒有儲存隊伍近績(" + sNow + ")");
             }
         }   catch(NullReferenceException nullex) {
-            FormsAuthentication.SignOut();
+         //   FormsAuthentication.SignOut();
             UpdateHistoryMessage("<a href=\"/sports/index.htm\" target=\"_top\">" + ConfigurationManager.AppSettings["sessionExpiredMsg"]+ "</a>");
         }
     }

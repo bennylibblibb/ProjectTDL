@@ -19,7 +19,8 @@ using System.Web;
 using TDL.DB;
 using TDL.IO;
 using FirebirdSql.Data.FirebirdClient;
- 
+using JC_SoccerWeb.Common;
+
 namespace SportsUtil {
 	public class Players {
 		const int TOTALRECORDS = 35;
@@ -27,14 +28,14 @@ namespace SportsUtil {
 		const string DEFAULTTEAMID = "000";
 		//OleDbDataReader m_SportsOleReader;
         FbDataReader m_SportsOleReaderFb;
-       // DBManager m_SportsDBMgr; 
-         Files m_SportsLog;
+        // DBManager m_SportsDBMgr; 
+        TDL.IO.Files m_SportsLog;
         public string m_Title = "";
         DBManagerFB m_SportsDBMgrFb;
         public Players(string Connection) {
 			//m_SportsDBMgr = new DBManager();
 			//m_SportsDBMgr.ConnectionString = Connection;
-			m_SportsLog = new Files();
+			m_SportsLog = new TDL.IO.Files();
             m_SportsDBMgrFb = new DBManagerFB();
             m_SportsDBMgrFb.ConnectionString = JC_SoccerWeb.Common.AppFlag.ScoutsDBConn;
         }
@@ -357,10 +358,11 @@ namespace SportsUtil {
         public int Update(string sType) {
 			char[] delimiter = new char[] {','};
 			int iRecUpd = 0;
-			string sTeamID;
+			string sTeamID, sMatchCount;
 			string playerQuery = "";
 
-			sTeamID = HttpContext.Current.Request.Form["team_id"];
+            sMatchCount = HttpContext.Current.Request.QueryString["eventid"];
+            sTeamID = HttpContext.Current.Request.Form["team_id"];
 			switch(sType) {
 				case "MOD":	//case: modify players information
 					int iIdx = 0;
@@ -464,8 +466,16 @@ namespace SportsUtil {
                             }
                         }
 
-						//write log
-						m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];
+                        JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Sql: " + playerQuery);
+                        if (sMatchCount != "")
+                        {
+                            JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + sMatchCount + " ANALYSISPLAYERLIST/12 ");
+                            string sReslut = ConfigManager.SendWinMsg(sMatchCount, "ANALYSISPLAYERLIST/12");
+                            //  if (sReslut != "Done") JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ")+ "[Failure] Send " + sMatchCount + " ANALYSISBGREMARK-10, " + sReslut);
+                        }
+
+                        //write log
+                        m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];
 						m_SportsLog.SetFileName(0,LOGFILESUFFIX);
 						m_SportsLog.Open();
 						m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Players.cs: insert " + iRecUpd.ToString() + " players with team ID=" + sTeamID + " (" + HttpContext.Current.Session["user_name"] + ")");

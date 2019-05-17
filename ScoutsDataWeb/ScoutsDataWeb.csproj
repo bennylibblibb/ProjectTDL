@@ -137,6 +137,7 @@
     <Content Include="sayhello.ascx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ConfigManager.cs" />
     <Compile Include="Common\DBManager.cs" />
     <Compile Include="Fixtures.aspx.cs">
       <DependentUpon>Fixtures.aspx</DependentUpon>

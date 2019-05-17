@@ -1,0 +1,2 @@
+﻿17:15:31 Sql: insert into ANALYSIS_RECENT_INFO values(2913801,1,'H','U','韓職','FC首爾',0,-1,-1)
+18:01:43 BEN login success.
