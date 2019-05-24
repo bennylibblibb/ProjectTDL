@@ -454,7 +454,7 @@ namespace SportsUtil {
                                     playerQuery += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
                                     playerQuery += "'";
 
-                                    playerQuery += " where TEAM_ID=" + sTeamID + " and  PLAYER_ID=" + sPlayID + "";
+                                    playerQuery += " where TEAM_ID=" + sTeamID + " and  PLAYER_ID=" + sPlayID + "" +( sPlayID=="-1"? " and CENGNAME='"+ arrEngName[iIdx] + "'" : "");
                                 }
                                 m_SportsDBMgrFb.ExecuteNonQuery(playerQuery);
                                 m_SportsDBMgrFb.Close();

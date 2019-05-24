@@ -81,6 +81,12 @@ namespace DataOfScouts
 #pragma warning restore CS0618 // 'ConfigurationSettings.AppSettings' is obsolete: 'This method is obsolete, it has been replaced by System.Configuration!System.Configuration.ConfigurationManager.AppSettings'
         internal static string NotifyApplication = ConfigurationManager.AppSettings["NotifyApplication"];
         internal static string SkSvrNotify = ConfigurationManager.AppSettings["SkSvrNotify"];
+        public static string AlertTime = ConfigurationSettings.AppSettings["AlertTime"];
+        public static string AlertEmailFrom = ConfigurationSettings.AppSettings["AlertEmailFrom"];
+        public static string AlertEmailPwd = ConfigurationSettings.AppSettings["AlertEmailPwd"];
+        public static string AlertEmailTo = ConfigurationSettings.AppSettings["AlertEmailTo"];
+        public static string AlertEmailSMTP = ConfigurationSettings.AppSettings["AlertEmailSMTP"];
+         
     }
 
     public enum InformationType

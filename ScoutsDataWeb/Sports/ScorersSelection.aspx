@@ -61,15 +61,18 @@ function UpdateMainWin() {
     if (team != '') {
         var strName = document.ScorersSelectionForm.player.value;   
         var indexStr = document.ScorersSelectionForm.player.value.indexOf('|');
+         var indexStr2 = document.ScorersSelectionForm.player.value.indexOf('||');
         var planycnname = strName.substring(0, indexStr);  
-        var planyenname = strName.substring(indexStr+1, strName.length); 
-       // alert(planycnname + ' ' + planyenname);
+        var planyenname = strName.substring(indexStr + 1,  indexStr2);  
+        var planerID = strName.substring(indexStr2+2, strName.length); 
+         alert( strName+'    --'+ planycnname + ' a ' + planyenname+ ' b ' + planerID);
 		abbr = GetAbbr(team);
 		window.opener.document.ScorersForm.abbr[Number(document.ScorersSelectionForm.RecordIndex.value)].value = abbr;
 		window.opener.document.ScorersForm.team[Number(document.ScorersSelectionForm.RecordIndex.value)].value = team;
         window.opener.document.ScorersForm.teamid[Number(document.ScorersSelectionForm.RecordIndex.value)].value = document.ScorersSelectionForm.teamID.value;
         window.opener.document.ScorersForm.playerenname[Number(document.ScorersSelectionForm.RecordIndex.value)].value = planyenname;
         window.opener.document.ScorersForm.player[Number(document.ScorersSelectionForm.RecordIndex.value)].value = planycnname;
+        window.opener.document.ScorersForm.playid[Number(document.ScorersSelectionForm.RecordIndex.value)].value = planerID;
 	}
 	window.close();
 }

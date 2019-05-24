@@ -306,8 +306,8 @@ namespace SportsUtil
                     if (!(m_SportsOleReaderFb.IsDBNull(0) || m_SportsOleReaderFb.IsDBNull(4) || m_SportsOleReaderFb.IsDBNull(5)))
                     {
                         History[iIdx].sAlias = m_SportsOleReaderFb.GetString(0).Trim();
-                        History[iIdx].iMonth = m_SportsOleReaderFb.GetInt32(2);
-                        History[iIdx].iYear = m_SportsOleReaderFb.GetInt32(1);
+                        History[iIdx].iMonth = m_SportsOleReaderFb.GetInt32(1);
+                        History[iIdx].iYear = m_SportsOleReaderFb.GetInt32(2);
                         History[iIdx].iStatus = m_SportsOleReaderFb.GetInt32(3);
                         History[iIdx].iHostScore = m_SportsOleReaderFb.GetInt32(4);
                         History[iIdx].iGuestScore = m_SportsOleReaderFb.GetInt32(5);
@@ -1216,7 +1216,7 @@ namespace SportsUtil
                         using (FbConnection connection2 = new FbConnection(AppFlag.ScoutsDBConn))
                         {
                             connection2.Open();
-                            string sql = "UPDATE OR INSERT INTO ANALYSIS_HISTORY_INFO (IMATCH_CNT, IREC, CACT, EVENTID, HOME_ID, GUEST_ID, START_DATE, LEAGUEALIASID, LEAGUEALIAS, IMATCHMONTH, IMATCHYEAR, IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE, CTIMESTAMP) VALUES" +
+                            string sql = "UPDATE OR INSERT INTO ANALYSIS_HISTORY_INFO (IMATCH_CNT, IREC, CACT, EVENTID, HOME_ID, GUEST_ID, START_DATE, LEAGUEALIASID, LEAGUEALIAS,IMATCHYEAR, IMATCHMONTH,  IMATCHSTATUS, IHOSTSCORE, IGUESTSCORE, CTIMESTAMP) VALUES" +
                                 " ('"+ sMatchCount + "', '"+ iIdx.ToString() + "', 'U', '-1', '-1', '-1',null, '-1', '"+ arrLeagueAlias[iIdx] + "', '"+ arrYear[iIdx] + "', '"+ arrMonth[iIdx] + "', '"+ arrFields[iIdx] + "', '"+ arrHostScore[iIdx] + "', '"+ arrGuestScore[iIdx] + "', '"+ DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "') MATCHING  (IMATCH_CNT, IREC)";
                             using (FbCommand cmd2 = new FbCommand(sql, connection2))
                             {

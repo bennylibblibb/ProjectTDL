@@ -22,7 +22,8 @@ using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
 using Ecostar.MQConsumer.Core;
-using System.Xml.Linq;
+using System.Xml.Linq; 
+using System.Net.Mail;
 
 namespace DataOfScouts
 {
@@ -69,8 +70,9 @@ namespace DataOfScouts
           public static extern int FindWindow(string lpClassName, string lpWindowName);
         //public static extern int FindWindow(String text, String class_name);
         private const int SUCCESS_CODE = 100000;
-        private static readonly uint uiSkSvrNotify2 = RegisterWindowMessage(AppFlag.SkSvrNotify); 
+        private static readonly uint uiSkSvrNotify2 = RegisterWindowMessage(AppFlag.SkSvrNotify);
 
+        private static System.Threading.Timer analysisTimer;
 
         public IReceiver Receiver { get; set; }
         public DataOfScouts()
@@ -177,6 +179,14 @@ namespace DataOfScouts
                 //  SendAlertMsg("2", "2669663");
                 //   SendAlertMsg("3", "2019-04-20 00:13:20.513");
                 this.Receiver = new Receiver();
+
+                  DateTime analysisTimes = Convert.ToDateTime((DateTime.Now.Date.ToString("yyyy/MM/dd ") + AppFlag.AlertTime));
+                var analysisState = new TimerState { Counter = 0 };
+                analysisTimer = new System.Threading.Timer(
+                callback: new TimerCallback(alertTimerTask),
+                state: analysisState,
+                dueTime:  (analysisTimes < DateTime.Now ? analysisTimes.AddDays(1).Subtract(DateTime.Now) : analysisTimes.Subtract(DateTime.Now)),// new TimeSpan(1000),// 
+                period: analysisTimes.AddDays(1).Subtract(analysisTimes));
 
             }
             catch (Exception exp)
@@ -553,6 +563,103 @@ namespace DataOfScouts
             //    Files.WriteError("DataOfScouts(),error: " + exp.Message);
             //} 
         }
+
+        private void alertTimerTask(object timerState)
+        {
+            Files.WriteLog("Alert Matches.");
+            try
+            {
+                DataSet ds1 = new DataSet();
+                using (FbConnection connection = new FbConnection(AppFlag.HkjcDBConn))
+                {
+                    string queryString = "SELECT e.* FROM matchlist e order by e.CMATCHDATETIME desc";
+                    using (FbCommand cmd = new FbCommand(queryString, connection))
+                    {
+                        using (FbCommandBuilder fcb = new FbCommandBuilder())
+                        {
+                            using (FbDataAdapter fda = new FbDataAdapter())
+                            {
+                                fda.SelectCommand = cmd;
+                                fcb.DataAdapter = fda;
+                                using (DataSet data = new DataSet())
+                                {
+                                    data.Tables.Add(new DataTable("HKjcMatch"));
+                                    fda.Fill(data.Tables["HKjcMatch"]);
+                                    ds1 = data;
+                                }
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+
+                var culture = new System.Globalization.CultureInfo("zh-HK");
+                DateTime maxTime = DateTime.MinValue;
+                DateTime minTime = DateTime.MaxValue;
+
+                if (ds1.Tables["HKjcMatch"].Rows.Count > 0)
+                {
+                    maxTime = Convert.ToDateTime(ds1.Tables[0].Rows[0]["CMATCHDATETIME"]);
+                    minTime = Convert.ToDateTime(ds1.Tables[0].Rows[ds1.Tables[0].Rows.Count - 1]["CMATCHDATETIME"]);
+                    if (this.bnAreas.InvokeRequired)
+                    {
+                        this.bnAreas.Invoke(new MethodInvoker(delegate { this.bnAreas.Items[19].Text = maxTime.ToString("yyyy-MM-dd", culture); }));
+                    }
+
+                    using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                    {
+                        connection.Open();
+                        //   string queryString = "SELECT r.id, r.NAME, r.START_DATE,e.ematchid, e.CLEAGUE_HKJC_NAME||' '|| e.HKJCDAYCODE||'['||e.HKJCMATCHNO||'] '||e.HKJCHOSTNAME_CN||'/'||e.HKJCGUESTNAME_CN||' '|| replace(e.CMATCHDATETIME, ':00.0000', '')  abc,  e.HKJCDAYCODE||'['||e.HKJCMATCHNO||']' title ,e.MAPPINGSTATUS FROM ematches e left join events r on r.id=e.ematchid  where '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME  and e.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'  and ((e.EMATCHID<1 or e.EMATCHID is null) " + " or ( e.MAPPINGSTATUS is null AND e.EMATCHID>0 ) " + " ) and r.id is null order by e.CMATCHDATETIME desc";
+                        string queryString = "SELECT r.id, r.NAME, r.START_DATE,e.ematchid, e.HKJCDAYCODE||'['||e.HKJCMATCHNO||'] '||e.CLEAGUE_HKJC_NAME||' '||  e.HKJCHOSTNAME_CN||'/'||e.HKJCGUESTNAME_CN||' '|| replace(e.CMATCHDATETIME, ':00.0000', '')  abc,  e.HKJCDAYCODE||'['||e.HKJCMATCHNO||']' title ,e.MAPPINGSTATUS FROM ematches e left join events r on r.id=e.ematchid  where '" + minTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'<=  e.CMATCHDATETIME  and e.CMATCHDATETIME<='" + maxTime.ToString("yyyy-MM-dd HH:mm:ss.fff", null) + "'  and ((e.EMATCHID<1 or e.EMATCHID is null) " + " or ( e.MAPPINGSTATUS is null AND e.EMATCHID>0 ) " + " ) and r.id is null order by e.CMATCHDATETIME desc";
+                        using (FbCommand cmd = new FbCommand(queryString, connection))
+                        {
+                            using (FbDataAdapter fda = new FbDataAdapter())
+                            {
+                                fda.SelectCommand = cmd;
+                                using (DataSet data = new DataSet())
+                                {
+                                    data.Tables.Add(new DataTable("Matches"));
+                                    fda.Fill(data.Tables["Matches"]);
+                                    ds1 = data;
+                                    if (AppFlag.TestMode) Files.WriteTestLog("Test", "Alert Sql: " + data.Tables["Matches"].Rows.Count + " " + queryString);
+                                }
+                            }
+                        }
+                        connection.Close();
+                    }
+                }
+                if (ds1.Tables["Matches"].Rows.Count > 0)
+                {
+                    List<string> strL = ds1.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
+                    string strs = string.Concat("", string.Join(" \r\n", strL), "");
+                    Files.WriteLog("Alert: " + strs);
+                    string title = "";
+                   // string title = string.Concat("", string.Join(" \r\n(", ds1.Tables[0].AsEnumerable().Select(d => d.Field<string>("title")).ToList<string>().Distinct().ToList()), " ");
+
+                    MailMessage mail = new MailMessage();// (AppFlag.AlertEmailFrom, AppFlag.AlertEmailTo);
+                    MailAddress fromMail = new MailAddress(AppFlag.AlertEmailFrom);
+                    mail.From = fromMail;
+                    foreach (var address in AppFlag.AlertEmailTo.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        mail.To.Add(address);
+                    }
+                    SmtpClient client = new SmtpClient();
+                    client.Port = 25;
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
+                    client.Host = AppFlag.AlertEmailSMTP;
+                    mail.Subject = "Scouts Alert Matches " + title;
+                    mail.Body = strs;
+                    mail.Priority = MailPriority.High;
+                    client.Send(mail);
+                }
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError("alertTimerTask(),error: " + exp.Message);
+            }
+        }
+
         private void btnSelectFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -4810,13 +4917,13 @@ namespace DataOfScouts
                                                                 cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
                                                                 cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
                                                                 cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
-                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "0" :( lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "-2" :( lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
                                                                 cmd2.Parameters.Add("@TEAM_ID", participant.id);
                                                                 cmd2.Parameters.Add("@SEASON_ID", season.id);
                                                                 cmd2.Parameters.Add("@EVENT_ID", sevent.id);
                                                                 cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
                                                                 int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                Files.WriteLog((id > 0 ? " [Success] Insert players [" + lineup.participant_id + "] " + lineup.participant_name : "[" + lineup.participant_id + "] " + lineup.participant_name + " player exist.") + sevent.id);
+                                                                Files.WriteLog((id > 0 ? " [Success] Insert players [" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name : "[" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name + " player exist.") + sevent.id);
                                                             }
                                                         }
 
@@ -5185,14 +5292,14 @@ namespace DataOfScouts
                                                                 cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
                                                                 cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
                                                                 cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
-                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "0" : (lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "-2" : (lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
                                                                 cmd2.Parameters.Add("@TEAM_ID", participant.id);
                                                                 cmd2.Parameters.Add("@SEASON_ID", season.id);
                                                                 cmd2.Parameters.Add("@EVENT_ID", sevent.id);
                                                                 cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
                                                                 int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                Files.WriteLog((id > 0 ? " [Success] Insert players [" + lineup.participant_id + "] " + lineup.participant_name : "[" + lineup.participant_id + "] " + lineup.participant_name + " player exist.") + sevent.id);
-                                                            }
+                                                                  Files.WriteLog((id > 0 ? " [Success] Insert players [" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name : "[" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name + " player exist.") + sevent.id);
+                                                             }
                                                         }
 
                                                         using (FbCommand cmd2 = new FbCommand())
@@ -5857,13 +5964,13 @@ namespace DataOfScouts
                                                                 cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
                                                                 cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
                                                                 cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
-                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type== "coach"?"0":(lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                                                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type== "coach"?"-2":(lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
                                                                 cmd2.Parameters.Add("@TEAM_ID", participant.id);
                                                                 cmd2.Parameters.Add("@SEASON_ID", season.id);
                                                                 cmd2.Parameters.Add("@EVENT_ID", sevent.id);
                                                                 cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
                                                                 int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                Files.WriteLog(id > 0 ? " [Success] Insert players [" + lineup.participant_id + "] " + lineup.participant_name : "[" + lineup.participant_id + "] " + lineup.participant_name + " player exist.");
+                                                                Files.WriteLog(id > 0 ? " [Success] Insert players [" + participant.id + "] " + lineup.participant_id+"/"+ lineup.participant_name : "[" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name + " player exist.");
                                                             }
                                                         }
                                                     }
@@ -7047,8 +7154,8 @@ namespace DataOfScouts
                                                             cmd.Parameters.Add("@GUEST_ID", eparticipants[1].counter == "2" ? eparticipants[1].id : eparticipants[0].id);
                                                             cmd.Parameters.Add("@START_DATE", e.start_date);
                                                             cmd.Parameters.Add("@CLEAGUEALIASID", c.id);
-                                                            cmd.Parameters.Add("@IMATCHMONTH", Convert.ToDateTime(e.start_date).Year);
-                                                            cmd.Parameters.Add("@IMATCHYEAR", Convert.ToDateTime(e.start_date).Month);
+                                                            cmd.Parameters.Add("@IMATCHMONTH", Convert.ToDateTime(e.start_date).Month);
+                                                            cmd.Parameters.Add("@IMATCHYEAR", Convert.ToDateTime(e.start_date).Year);
                                                             //20190509
                                                             //cmd.Parameters.Add("@IMATCHSTATUS", participants[0].id == p1 ? 1 : 0);
                                                             cmd.Parameters.Add("@IMATCHSTATUS", participants[0].id == p1 ? 0 : 1);
@@ -10470,7 +10577,8 @@ namespace DataOfScouts
             } 
         }
 
-        private static System.Threading.Timer tTimer;
+        private static System.Threading.Timer tTimer; 
+
         private void TimerTask(object timerState)
         {
             try

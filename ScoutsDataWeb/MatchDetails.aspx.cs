@@ -138,7 +138,7 @@ namespace JC_SoccerWeb
                 {
                     sGameStatus = "8";
                 }
-                else if (Status == "delayed")
+                else if (Status == "delayed"|| Status == "Postponed")
                 {
                     sGameStatus = "9";
                 }

@@ -11,12 +11,13 @@ namespace ScoutDBProvider
     {
         internal static readonly string ScoutsDBConn = ConfigurationManager.AppSettings["ScoutsDBConn"];
         internal static readonly string MangoDBConn = ConfigurationManager.AppSettings["MangoDBConn"]; 
-        internal static string GetTime = ConfigurationManager.AppSettings["GetTime"];
+        internal static string GetTime = ConfigurationManager.AppSettings["InitialTime"];
         internal static string SkSvrNotify = ConfigurationManager.AppSettings["SkSvrNotify"];
              internal static string SkSvrNotify2 = ConfigurationManager.AppSettings["SkSvrNotify2"];
         internal static ArrayList configSetting = (ArrayList)ConfigurationManager.GetSection("SyncItems2");
         internal static string SkSvrNodtify = ConfigurationManager.AppSettings["SkSvrNotify"];
         internal static bool Alert = ConfigurationManager.AppSettings["Alert"].ToLower() == "yes" ? true : false;
+        internal static string DailyAnalysisTime = ConfigurationManager.AppSettings["DailyAnalysisTime"];
     }
 
     public enum MessageID

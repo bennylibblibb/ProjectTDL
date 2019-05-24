@@ -83,6 +83,8 @@ namespace SportsUtil
             int iTabIndex = 0;
             int iRecordCount = 0;
             string sLeagID;
+            string seasonid = "-1";
+            string sLeagAlias = "";   
             StringBuilder HTMLString = new StringBuilder();
 
             //sLeagID = HttpContext.Current.Request.QueryString["leagID"].Trim();
@@ -122,7 +124,12 @@ namespace SportsUtil
                 //SQLString.Append(" select first 15 s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b  from  SCORERS_INFO s  inner join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
                 //SQLString.Append(sLeagID);
                 //SQLString.Append(" AND CACT='U' ORDER BY s.IRANK, s.IRID, s.CPLAYER_NAME");
-                SQLString.Append(" select first 15 s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b  from  SCORERS_INFO s  left join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
+
+                //20190523
+                //SQLString.Append(" select first 15 s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b  from  SCORERS_INFO s  left join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
+                //SQLString.Append(sLeagID);
+                //SQLString.Append(" AND CACT='U' ORDER BY s.IRANK, s.IRID, s.CPLAYER_NAME");
+                SQLString.Append(" select first 15  distinct s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b ,s.PLAYER_ID,s.SEASON_ID ,s.CLEAG_ALIAS,S.CPLAYER_NAME_CN C from  SCORERS_INFO s  left join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
                 SQLString.Append(sLeagID);
                 SQLString.Append(" AND CACT='U' ORDER BY s.IRANK, s.IRID, s.CPLAYER_NAME");
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
@@ -171,8 +178,12 @@ namespace SportsUtil
                     //Player Label
                     HTMLString.Append("<td><input type=\"text\" style=\"background:#778899; color:#FFFFFF\" name=\"player\" maxlength=\"5\" size=\"12\" value=\"");
                     // HTMLString.Append(m_SportsOleReaderFb.GetString(5).Trim()==""? m_SportsOleReaderFb.GetString(2).Trim(): m_SportsOleReaderFb.GetString(5).Trim());
-                    HTMLString.Append(m_SportsOleReaderFb.GetString(5).Trim());
-                    HTMLString.Append("\" readonly=\"true\"></td>");
+                    HTMLString.Append(m_SportsOleReaderFb.GetString(9).Trim().Equals("")? m_SportsOleReaderFb.GetString(5).Trim(): m_SportsOleReaderFb.GetString(9).Trim());
+                    // HTMLString.Append("\" readonly=\"true\"></td>");
+                    //playerid
+                    HTMLString.Append("\"><input  type=\"hidden\"  name=\"playid\" value=\"");
+                    HTMLString.Append(m_SportsOleReaderFb.GetInt32(6).ToString());
+                    HTMLString.Append("\">");
 
                     iTabIndex++;
                     //Rank
@@ -198,8 +209,11 @@ namespace SportsUtil
                     HTMLString.Append(iRecordCount.ToString());
                     HTMLString.Append(")\" tabindex=\"");
                     HTMLString.Append(iTabIndex.ToString());
-                    HTMLString.Append("\"></td></tr>");
+                    HTMLString.Append("\">"); 
+                    HTMLString.Append("</td></tr>");
 
+                    if (!m_SportsOleReaderFb.IsDBNull(7)) seasonid = m_SportsOleReaderFb.GetInt32(7).ToString();
+                    if (!m_SportsOleReaderFb.IsDBNull(8)) sLeagAlias = m_SportsOleReaderFb.GetString(8).Trim();
                     iRecordCount++;
                 }
                 m_SportsOleReaderFb.Close();
@@ -262,6 +276,12 @@ namespace SportsUtil
                 HTMLString.Append("\"><input type=\"hidden\" name=\"LeagID\" value=\"");
                 HTMLString.Append(sLeagID);
                 HTMLString.Append("\">");
+                HTMLString.Append("<input  type=\"hidden\" name=\"seasonid\" value=\"");
+                HTMLString.Append(seasonid);
+                HTMLString.Append("\">");
+                HTMLString.Append("<input type=\"hidden\" name=\"leagAlias\" value=\"");
+                HTMLString.Append(sLeagAlias);
+                HTMLString.Append("\">");
             }
             catch (Exception ex)
             {
@@ -297,7 +317,7 @@ namespace SportsUtil
                 //SQLString.Append("SELECT team.TEAMNAME, player.CPLAYER_NAME FROM PLAYERS_INFO player, TEAMINFO team WHERE team.TEAM_ID=player.TEAM_ID and player.TEAM_ID=");
                 //SQLString.Append(sTeamID);
                 //SQLString.Append(" order by player.IPOS, player.IPLAYER_NO");
-                SQLString.Append("SELECT team.HKJC_NAME_CN, player.CPLAYER_NAME||'|'||player.CENGNAME  FROM PLAYERS_INFO player, TEAMS team WHERE team.ID=player.TEAM_ID and player.TEAM_ID=");
+                SQLString.Append("SELECT team.HKJC_NAME_CN, player.CPLAYER_NAME||'|'||player.CENGNAME||'||'||player.PLAYER_ID  FROM PLAYERS_INFO player, TEAMS team WHERE team.ID=player.TEAM_ID and player.TEAM_ID=");
                 SQLString.Append(sTeamID);
                 SQLString.Append(" order by player.IPOS, player.IPLAYER_NO");
 
@@ -367,6 +387,8 @@ namespace SportsUtil
             string[] arrMsgType;
             string[] arrSendToPager;
             string[] arrRemotingPath;
+            string[] arrPlayerID;
+            string[] arrplayerenname;   
 
             //SportsMessage object message
             SportsMessage sptMsg = new SportsMessage();
@@ -393,6 +415,11 @@ namespace SportsUtil
             arrPlayer = HttpContext.Current.Request.Form["player"].Split(delimiter);
             arrGoals = HttpContext.Current.Request.Form["goals"].Split(delimiter);
 
+            arrplayerenname = HttpContext.Current.Request.Form["playerenname"].Split(delimiter);
+            arrPlayerID = HttpContext.Current.Request.Form["playid"].Split(delimiter);
+            string  sleagAlias =HttpContext.Current.Request.Form["leagAlias"];
+            string iseasonid = HttpContext.Current.Request.Form["seasonid"];
+
             try
             {
                 /*****************************
@@ -417,19 +444,32 @@ namespace SportsUtil
                     m_SportsDBMgrFb.Close();
                 }
 
+                //insert into SCORERS_INFO values('2191',138396,'ªk¥[¬f¥§','null','U',0,10,7)
                 if (sAction.Equals("U"))
-                {
+                {//INSERT INTO SCORERS_INFO (CLEAG_ID, CLEAG_ALIAS, SEASON_ID, TEAM_ID, PLAYER_ID, CPLAYER_NAME, CTEAM_ABBR, CACT, IRID, IRANK, IGOALS, UT, CTIMESTAMP) VALUES ('2202', 'Ä¬¶W', '33833', '136858', '370761', 'Morelos Alfredo', '', 'U', '-1', '1', '18', '', '21.05.2019, 02:00:39.730');
                     for (iUpdIndex = 0; iUpdIndex < arrTeamID.Length; iUpdIndex++)
                     {
-                        if (!(arrTeamID[iUpdIndex].Trim().Equals("0") || arrTeamID[iUpdIndex].Trim().Equals("") || arrPlayer[iUpdIndex].Trim().Equals("0") || arrPlayer[iUpdIndex].Trim().Equals("")))
-                        {
+                      //  if (!(arrTeamID[iUpdIndex].Trim().Equals("0") || arrTeamID[iUpdIndex].Trim().Equals("") || arrPlayer[iUpdIndex].Trim().Equals("0") || arrPlayer[iUpdIndex].Trim().Equals("")))
+                       if (!(arrTeamID[iUpdIndex].Trim().Equals("0") || arrTeamID[iUpdIndex].Trim().Equals("") || arrPlayer[iUpdIndex].Trim().Equals("0")))
+                         {
                             SQLString.Remove(0, SQLString.Length);
-                            SQLString.Append("insert into SCORERS_INFO values('");
+                            //SQLString.Append("insert into SCORERS_INFO values('");
+                            SQLString.Append("INSERT INTO SCORERS_INFO (CLEAG_ID, CLEAG_ALIAS, SEASON_ID, TEAM_ID, PLAYER_ID, CPLAYER_NAME,CPLAYER_NAME_CN, CTEAM_ABBR, CACT, IRID, IRANK, IGOALS, UT, CTIMESTAMP) VALUES('");
                             SQLString.Append(sLeagID);
+                            SQLString.Append("','");
+                            SQLString.Append(sleagAlias);
                             SQLString.Append("',");
-                            SQLString.Append(arrTeamID[iUpdIndex]);
+                            SQLString.Append(iseasonid);
                             SQLString.Append(",'");
+                            SQLString.Append(arrTeamID[iUpdIndex]);
+                            SQLString.Append("','");
+                            SQLString.Append(arrPlayerID[iUpdIndex]);
+                            SQLString.Append("','");
+                              SQLString.Append(arrplayerenname[iUpdIndex]);
+                            SQLString.Append("','");
                             SQLString.Append(arrPlayer[iUpdIndex]);
+                          //  if (arrPlayer[iUpdIndex].Trim().Equals("")) SQLString.Append(arrplayerenname[iUpdIndex].Trim());
+                          //  else SQLString.Append(arrPlayer[iUpdIndex].Trim());
                             SQLString.Append("','");
                             if (arrAbbr[iUpdIndex].Trim().Equals("")) SQLString.Append("null");
                             else SQLString.Append(arrAbbr[iUpdIndex].Trim());
@@ -441,11 +481,16 @@ namespace SportsUtil
                             SQLString.Append(",");
                             if (arrGoals[iUpdIndex].Trim().Equals("")) SQLString.Append("null");
                             else SQLString.Append(arrGoals[iUpdIndex].Trim());
-                            SQLString.Append(")");
+                            SQLString.Append(",'','"+ DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "')");
                             m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
                             m_SportsDBMgrFb.Close();
                             iRecUpd++;
                         }
+                    }
+                    if (sLeagID != "")
+                    {
+                        JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + sLeagID + " Scorers/17 ");
+                        string sReslut = JC_SoccerWeb.Common.ConfigManager.SendWinMsg(sLeagID, "Scorers/17");
                     }
                 }
                 else
@@ -453,136 +498,137 @@ namespace SportsUtil
                     iRecUpd++;
                 }
 
-                sCurrentTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                if (iRecUpd > 0 && arrSendToPager.Length > 0)
-                {
-                    if (sAction.Equals("U"))
-                    {
-                        sBatchJob = DateTime.Now.ToString("yyMMddHHmmss_fffffff") + "." + HttpContext.Current.Session["user_name"].ToString() + "." + arrMsgType[35] + ".ini";
+                //20190523
+                //sCurrentTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                //if (iRecUpd > 0 && arrSendToPager.Length > 0)
+                //{
+                //    if (sAction.Equals("U"))
+                //    {
+                //        sBatchJob = DateTime.Now.ToString("yyMMddHHmmss_fffffff") + "." + HttpContext.Current.Session["user_name"].ToString() + "." + arrMsgType[35] + ".ini";
 
-                        SQLString.Remove(0, SQLString.Length);
-                        SQLString.Append("SELECT IRANK, CTEAM_ABBR, CPLAYER_NAME, IGOALS FROM SCORERS_INFO WHERE CLEAG_ID='");
-                        SQLString.Append(sLeagID);
-                        SQLString.Append("' AND CACT='U' ORDER BY IRANK, IRID, CPLAYER_NAME");
-                        m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
-                        while (m_SportsOleReaderFb.Read())
-                        {
-                            iSubKeyIndex++;
-                            LogSQLString.Remove(0, LogSQLString.Length);
-                            LogSQLString.Append("insert into LOG_SCORERS (TIMEFLAG, SECTION, ALIAS, ACT, IITEMSEQ_NO, RANK, TEAMABBR, PLAYER, GOALS, BATCHJOB) values ('");
-                            LogSQLString.Append(sCurrentTimestamp);
-                            LogSQLString.Append("','SCORERS_','");
-                            LogSQLString.Append(sAlias);
-                            LogSQLString.Append("','");
-                            LogSQLString.Append(sAction);
-                            LogSQLString.Append("',");
-                            LogSQLString.Append(iSubKeyIndex.ToString());
-                            LogSQLString.Append(",");
-                            if (!m_SportsOleReaderFb.IsDBNull(0)) LogSQLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
-                            else LogSQLString.Append("-1");
-                            LogSQLString.Append(",'");
-                            if (!m_SportsOleReaderFb.IsDBNull(1))
-                            {
-                                if (m_SportsOleReaderFb.GetString(1).Trim().Equals("")) LogSQLString.Append("-1");
-                                else LogSQLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
-                            }
-                            else
-                            {
-                                LogSQLString.Append("-1");
-                            }
-                            LogSQLString.Append("','");
-                            if (!m_SportsOleReaderFb.IsDBNull(2)) LogSQLString.Append(m_SportsOleReaderFb.GetString(2).Trim());
-                            else LogSQLString.Append("-1");
-                            LogSQLString.Append("',");
-                            if (!m_SportsOleReaderFb.IsDBNull(3)) LogSQLString.Append(m_SportsOleReaderFb.GetInt32(3).ToString());
-                            else LogSQLString.Append("-1");
-                            LogSQLString.Append(",'");
-                            LogSQLString.Append(sBatchJob);
-                            LogSQLString.Append("')");
-                            logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
-                            logDBMgr.Close();
-                        }
-                        m_SportsDBMgrFb.Close();
-                        m_SportsOleReaderFb.Close();
-                    }
-                    else
-                    {
-                        sBatchJob = DateTime.Now.ToString("yyMMddHHmmss_fffffff") + "." + HttpContext.Current.Session["user_name"].ToString() + "." + arrMsgType[35] + ".del.ini";
+                //        SQLString.Remove(0, SQLString.Length);
+                //        SQLString.Append("SELECT IRANK, CTEAM_ABBR, CPLAYER_NAME, IGOALS FROM SCORERS_INFO WHERE CLEAG_ID='");
+                //        SQLString.Append(sLeagID);
+                //        SQLString.Append("' AND CACT='U' ORDER BY IRANK, IRID, CPLAYER_NAME");
+                //        m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
+                //        while (m_SportsOleReaderFb.Read())
+                //        {
+                //            iSubKeyIndex++;
+                //            LogSQLString.Remove(0, LogSQLString.Length);
+                //            LogSQLString.Append("insert into LOG_SCORERS (TIMEFLAG, SECTION, ALIAS, ACT, IITEMSEQ_NO, RANK, TEAMABBR, PLAYER, GOALS, BATCHJOB) values ('");
+                //            LogSQLString.Append(sCurrentTimestamp);
+                //            LogSQLString.Append("','SCORERS_','");
+                //            LogSQLString.Append(sAlias);
+                //            LogSQLString.Append("','");
+                //            LogSQLString.Append(sAction);
+                //            LogSQLString.Append("',");
+                //            LogSQLString.Append(iSubKeyIndex.ToString());
+                //            LogSQLString.Append(",");
+                //            if (!m_SportsOleReaderFb.IsDBNull(0)) LogSQLString.Append(m_SportsOleReaderFb.GetInt32(0).ToString());
+                //            else LogSQLString.Append("-1");
+                //            LogSQLString.Append(",'");
+                //            if (!m_SportsOleReaderFb.IsDBNull(1))
+                //            {
+                //                if (m_SportsOleReaderFb.GetString(1).Trim().Equals("")) LogSQLString.Append("-1");
+                //                else LogSQLString.Append(m_SportsOleReaderFb.GetString(1).Trim());
+                //            }
+                //            else
+                //            {
+                //                LogSQLString.Append("-1");
+                //            }
+                //            LogSQLString.Append("','");
+                //            if (!m_SportsOleReaderFb.IsDBNull(2)) LogSQLString.Append(m_SportsOleReaderFb.GetString(2).Trim());
+                //            else LogSQLString.Append("-1");
+                //            LogSQLString.Append("',");
+                //            if (!m_SportsOleReaderFb.IsDBNull(3)) LogSQLString.Append(m_SportsOleReaderFb.GetInt32(3).ToString());
+                //            else LogSQLString.Append("-1");
+                //            LogSQLString.Append(",'");
+                //            LogSQLString.Append(sBatchJob);
+                //            LogSQLString.Append("')");
+                //            logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
+                //            logDBMgr.Close();
+                //        }
+                //        m_SportsDBMgrFb.Close();
+                //        m_SportsOleReaderFb.Close();
+                //    }
+                //    else
+                //    {
+                //        sBatchJob = DateTime.Now.ToString("yyMMddHHmmss_fffffff") + "." + HttpContext.Current.Session["user_name"].ToString() + "." + arrMsgType[35] + ".del.ini";
 
-                        LogSQLString.Remove(0, LogSQLString.Length);
-                        LogSQLString.Append("insert into LOG_SCORERS (TIMEFLAG, SECTION, ALIAS, ACT, IITEMSEQ_NO, RANK, TEAMABBR, PLAYER, GOALS, BATCHJOB) values ('");
-                        LogSQLString.Append(sCurrentTimestamp);
-                        LogSQLString.Append("','SCORERS_','");
-                        LogSQLString.Append(sAlias);
-                        LogSQLString.Append("','");
-                        LogSQLString.Append(sAction);
-                        LogSQLString.Append("',null,null,null,null,null,'");
-                        LogSQLString.Append(sBatchJob);
-                        LogSQLString.Append("')");
-                        logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
-                        logDBMgr.Close();
-                    }
+                //        LogSQLString.Remove(0, LogSQLString.Length);
+                //        LogSQLString.Append("insert into LOG_SCORERS (TIMEFLAG, SECTION, ALIAS, ACT, IITEMSEQ_NO, RANK, TEAMABBR, PLAYER, GOALS, BATCHJOB) values ('");
+                //        LogSQLString.Append(sCurrentTimestamp);
+                //        LogSQLString.Append("','SCORERS_','");
+                //        LogSQLString.Append(sAlias);
+                //        LogSQLString.Append("','");
+                //        LogSQLString.Append(sAction);
+                //        LogSQLString.Append("',null,null,null,null,null,'");
+                //        LogSQLString.Append(sBatchJob);
+                //        LogSQLString.Append("')");
+                //        logDBMgr.ExecuteNonQuery(LogSQLString.ToString());
+                //        logDBMgr.Close();
+                //    }
 
-                    //Send Notify Message
-                    sptMsg.Body = sBatchJob;
-                    sptMsg.Timestamp = DateTime.Now.ToString("yyMMddHHmmss");
-                    sptMsg.AppID = "07";
-                    sptMsg.MsgID = "31";
-                    sptMsg.DeviceID = new string[0];
-                    for (int i = 0; i < arrSendToPager.Length; i++)
-                    {
-                        sptMsg.AddDeviceID((string)arrSendToPager[i]);
-                    }
-                    try
-                    {
-                        //Notify via MSMQ
-                        msgClt.MessageType = arrMessageTypes[0];
-                        msgClt.MessagePath = arrQueueNames[0];
-                        msgClt.SendMessage(sptMsg);
-                    }
-                    //// catch (System.Messaging.MessageQueueException mqEx)
-                    catch (InvalidOperationException mqEx)
-                    {
-                        try
-                        {
-                            m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-                            m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-                            m_SportsLog.Open();
-                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " MSMQ ERROR: Scorers");
-                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Scorers.cs.Update(): Notify via MSMQ throws MessageQueueException:  " + mqEx.ToString());
-                            m_SportsLog.Close();
+                //    //Send Notify Message
+                //    sptMsg.Body = sBatchJob;
+                //    sptMsg.Timestamp = DateTime.Now.ToString("yyMMddHHmmss");
+                //    sptMsg.AppID = "07";
+                //    sptMsg.MsgID = "31";
+                //    sptMsg.DeviceID = new string[0];
+                //    for (int i = 0; i < arrSendToPager.Length; i++)
+                //    {
+                //        sptMsg.AddDeviceID((string)arrSendToPager[i]);
+                //    }
+                //    try
+                //    {
+                //        //Notify via MSMQ
+                //        msgClt.MessageType = arrMessageTypes[0];
+                //        msgClt.MessagePath = arrQueueNames[0];
+                //        msgClt.SendMessage(sptMsg);
+                //    }
+                //    //// catch (System.Messaging.MessageQueueException mqEx)
+                //    catch (InvalidOperationException mqEx)
+                //    {
+                //        try
+                //        {
+                //            m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                //            m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                //            m_SportsLog.Open();
+                //            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " MSMQ ERROR: Scorers");
+                //            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Scorers.cs.Update(): Notify via MSMQ throws MessageQueueException:  " + mqEx.ToString());
+                //            m_SportsLog.Close();
 
-                            //If MSMQ fail, notify via .NET Remoting
-                            msgClt.MessageType = arrMessageTypes[1];
-                            msgClt.MessagePath = arrRemotingPath[0];
-                            if (!msgClt.SendMessage((object)sptMsg))
-                            {
-                                m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-                                m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-                                m_SportsLog.Open();
-                                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Scorers");
-                                m_SportsLog.Close();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-                            m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-                            m_SportsLog.Open();
-                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Scorers");
-                            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Scorers.cs.Update(): Notify via .NET Remoting throws exception: " + ex.ToString());
-                            m_SportsLog.Close();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
-                        m_SportsLog.SetFileName(0, LOGFILESUFFIX);
-                        m_SportsLog.Open();
-                        m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Scorers.cs.Update(): Notify via MSMQ throws exception: " + ex.ToString());
-                        m_SportsLog.Close();
-                    }
-                }   //Insert log into LOG_RANK
+                //            //If MSMQ fail, notify via .NET Remoting
+                //            msgClt.MessageType = arrMessageTypes[1];
+                //            msgClt.MessagePath = arrRemotingPath[0];
+                //            if (!msgClt.SendMessage((object)sptMsg))
+                //            {
+                //                m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                //                m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                //                m_SportsLog.Open();
+                //                m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Scorers");
+                //                m_SportsLog.Close();
+                //            }
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                //            m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                //            m_SportsLog.Open();
+                //            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Remoting ERROR: Scorers");
+                //            m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Scorers.cs.Update(): Notify via .NET Remoting throws exception: " + ex.ToString());
+                //            m_SportsLog.Close();
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        m_SportsLog.FilePath = ConfigurationManager.AppSettings["errlog"];
+                //        m_SportsLog.SetFileName(0, LOGFILESUFFIX);
+                //        m_SportsLog.Open();
+                //        m_SportsLog.Write(DateTime.Now.ToString("HH:mm:ss") + " Scorers.cs.Update(): Notify via MSMQ throws exception: " + ex.ToString());
+                //        m_SportsLog.Close();
+                //    }
+                //}   //Insert log into LOG_RANK
 
                 //write log
                 m_SportsLog.FilePath = ConfigurationManager.AppSettings["eventlog"];
