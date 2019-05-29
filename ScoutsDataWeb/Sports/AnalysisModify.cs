@@ -1203,12 +1203,13 @@ namespace SportsUtil
 
                 JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Sql: " + SQLString.ToString());
                 //3/28/2019
-				//update match history information: delete first, and then insert
-				//SQLString.Remove(0,SQLString.Length);
-				//SQLString.Append("delete from ANALYSIS_HISTORY_INFO where IMATCH_CNT=");
-				//SQLString.Append(sMatchCount);
-				//m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
+                //update match history information: delete first, and then insert
+                //SQLString.Remove(0,SQLString.Length);
+                //SQLString.Append("delete from ANALYSIS_HISTORY_INFO where IMATCH_CNT=");
+                //SQLString.Append(sMatchCount);
+                //m_SportsDBMgrFb.ExecuteNonQuery(SQLString.ToString());
                 //m_SportsDBMgrFb.Close();
+                bool done = false;
 				for(iIdx=0;iIdx<HISTORYCOUNT;iIdx++) {
 					if(!(arrMonth[iIdx].Equals("0") || arrYear[iIdx].Equals("0"))) {
 						if(arrHostScore[iIdx].Equals("")) arrHostScore[iIdx] = "0";
@@ -1224,6 +1225,7 @@ namespace SportsUtil
                                 if (id > -1)
                                 {
                                      JC_SoccerWeb.Common.Files.CicsWriteLog(" [Success] Insert/Update ANALYSIS_HISTORY_INFO "+ sMatchCount + " :" + " " + arrLeagueAlias[iIdx].Trim());
+                                    done = true;
                                 }
                             }
                             connection2.Close();
@@ -1285,12 +1287,16 @@ namespace SportsUtil
 
                 JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Sql: " + SQLString.ToString());
                 if (sMatchCount != "")
-                {
-                    JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + sMatchCount + " ANALYSISHISTORYS/11 ");
-                    string sReslut = ConfigManager.SendWinMsg(sMatchCount, "ANALYSISHISTORYS/11");
-                    JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + sMatchCount + " ANALYSISBGREMARK/10 "); 
-                     sReslut = ConfigManager.SendWinMsg(sMatchCount,"ANALYSISBGREMARK/10"  );
-                  //  if (sReslut != "Done") JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ")+ "[Failure] Send " + sMatchCount + " ANALYSISBGREMARK-10, " + sReslut);
+                { 
+                    JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + sMatchCount + " ANALYSISBGREMARK/10 ");
+                    string  sReslut = ConfigManager.SendWinMsg(sMatchCount,"ANALYSISBGREMARK/10"  );
+
+                    if (done)
+                    {
+                        JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + sMatchCount + " ANALYSISHISTORYS/11 ");
+                          sReslut = ConfigManager.SendWinMsg(sMatchCount, "ANALYSISHISTORYS/11");
+                    }
+                    //  if (sReslut != "Done") JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ")+ "[Failure] Send " + sMatchCount + " ANALYSISBGREMARK-10, " + sReslut);
                 }  
             }
             catch (Exception ex)

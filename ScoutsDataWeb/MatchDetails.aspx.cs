@@ -118,15 +118,17 @@ namespace JC_SoccerWeb
                 {
                     sGameStatus = "3";
                 }
-                else if (Status == "secondhalfended")
+                else if (Status == "secondhalfended"||Status == "gameended"|| Status == "finishedawardedwin" ||
+                    Status == "finishedafterextratime"|| Status == "finishedafterpenalties"  )
                 {
                     sGameStatus = "4";
                 }
-                else if (Status == "extratimestarted")
+                else if (Status == "extratimestarted"|| Status == "extratimefirsthalfended" || Status == "extratimesecondhalfstarted"
+                    || Status == "penaltyshootout" || Status == "waitingforpenalty")
                 {
                     sGameStatus = "5";
                 }
-                else if (Status == "cancelled")
+                else if (Status == "cancelled"||Status == "abandoned" || Status == "deleted")
                 {
                     sGameStatus = "6";
                 }
@@ -138,7 +140,7 @@ namespace JC_SoccerWeb
                 {
                     sGameStatus = "8";
                 }
-                else if (Status == "delayed"|| Status == "Postponed")
+                else if (Status == "delayed"|| Status == "postponed")
                 {
                     sGameStatus = "9";
                 }

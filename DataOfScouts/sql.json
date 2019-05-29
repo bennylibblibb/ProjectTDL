@@ -1383,7 +1383,7 @@ CREATE TABLE LEAGRANKINFO
   GROUP_ID Integer,
   TEAM_ID Integer NOT NULL,
   TEAM Varchar(50),
-  HKJC_TEAM Varchar(10),
+  HKJC_TEAM Varchar(30),
   SCORE Integer,
   RANK Integer,
   FLAG Varchar(1),
@@ -1545,6 +1545,7 @@ CREATE TABLE SCORERS_INFO
   IGOALS Integer,
   UT Varchar(12),
   CTIMESTAMP Timestamp,
+  CPLAYER_NAME_CN Varchar(30),
   PRIMARY KEY (CLEAG_ALIAS,SEASON_ID,TEAM_ID,CPLAYER_NAME)
 );
 CREATE TABLE SEASONS
@@ -1805,17 +1806,33 @@ END
 else IF(new.STATUS_ID=48) then
 BEGIN
  sGameStatus='secondhalfended';
-END 
+END  
 --else IF(new.STATUS_NAME='Penalty shootout'  ) then
 else IF(new.STATUS_ID=141) then
 BEGIN
- sGameStatus='gameended';
+sGameStatus='penaltyshootout';
 END  
 --else IF(new.STATUS_NAME='Waiting for penalty'  ) then
 else IF(new.STATUS_ID=142) then
 BEGIN
- sGameStatus='gameended';
+ sGameStatus='waitingforpenalty';
 END 
+else IF(new.STATUS_ID=13) then
+BEGIN
+ sGameStatus='finishedafterpenalties';
+END   
+else IF(new.STATUS_ID=14) then
+BEGIN
+ sGameStatus='finishedafterextratime';
+END  
+else IF(new.STATUS_ID=12) then
+BEGIN
+ sGameStatus='finishedawardedwin';
+END
+--else IF(new.STATUS_TYPE='finished') then
+--BEGIN
+-- sGameStatus='gameended';
+--END 
 else
 BEGIN
  sGameStatus=new.STATUS_NAME;
@@ -2937,7 +2954,7 @@ VALUES  (
  :IRANK,
   :IGOALS,
     :ut,
-  :CTIMESTAMP  )  MATCHING   (CLEAG_ID,SEASON_ID,TEAM_ID,CPLAYER_NAME)      RETURNING   PLAYER_ID INTO :Result;  
+  :CTIMESTAMP  )  MATCHING   (CLEAG_ID,SEASON_ID,TEAM_ID,PLAYER_ID)      RETURNING   PLAYER_ID INTO :Result;  
    
    IF (Result is NULL) then
    begin
@@ -3250,7 +3267,8 @@ ALTER PROCEDURE PR_EVENT_DETAILS (
 RETURNS (
     RESULT Integer )
 AS
---DECLARE VARIABLE Result2 Integer; 
+DECLARE VARIABLE WEATHER_STATUS Integer;  
+DECLARE VARIABLE  iMatchid Integer;  
 BEGIN
     
     Result = NULL;   
@@ -3306,11 +3324,46 @@ EVENTID,
   :HF_178 ,
   :UT ,
   :CTIMESTAMP )  MATCHING  ( EVENTID)  RETURNING EVENTID INTO :Result; 
+  
+   --WEATHER_STATUS
+   select first 1 e.EMATCHID from EMATCHES e  where e.EMATCHID=:EVENTID into iMatchid;
+IF(:WC_8 !='' and iMatchid is not null ) then 
+--IF(:WC_8 !='' ) then 
+begin
+  IF(:WC_8 ='Cloudy') then
+  WEATHER_STATUS=0;
+   ELSE IF (:WC_8 ='Good') then
+  WEATHER_STATUS=1;
+  ELSE IF (:WC_8 ='Heavy rain') then
+  WEATHER_STATUS=2;
+   ELSE IF (:WC_8 ='Heavy snow') then
+  WEATHER_STATUS=3; 
+  ELSE IF (:WC_8 ='Hot') then
+  WEATHER_STATUS=4;
+   ELSE IF (:WC_8 ='Light rain') then
+  WEATHER_STATUS=5;
+   ELSE IF (:WC_8 ='Light snow') then
+  WEATHER_STATUS=6;
+   ELSE IF (:WC_8 ='Rainy') then
+  WEATHER_STATUS=7;
+   ELSE IF (:WC_8 ='Stormy') then
+  WEATHER_STATUS=8;
+   ELSE IF (:WC_8 ='Sunny') then
+  WEATHER_STATUS=9;
+   ELSE IF (:WC_8 ='Very hot') then
+  WEATHER_STATUS=10;
+   ELSE IF (:WC_8 ='Windy') then
+  WEATHER_STATUS=11; 
+  else
+  WEATHER_STATUS=-1; 
+  UPDATE OR INSERT INTO  ANALYSIS_BG_INFO (IMATCH_CNT, CMATCH_VENUE, CTEMPERATURE, IWEATHER_STATUS, CACT, IFLAG_HISTORY, IFLAG_PLAYERS, IFLAG_REMARK, CTIMESTAMP) 
+  VALUES (:EVENTID,  '', '', :WEATHER_STATUS, 'U', '0', '0', '0', current_timestamp ) MATCHING  ( IMATCH_CNT);
+END
+  
    IF (Result is NULL) then 
    Begin
    Result=-1;
-   end
-  
+   end 
   end
    ELSE   
     begin
@@ -4110,7 +4163,8 @@ BEGIN
   begin
    --20190516
    --if( (:STATUSID=33 and (oldGameStatus='not_started'or oldGameStatus='Not started'))   or (:STATUSID=33 and :iELAPSED is null ) )then 
-    if( ((:STATUSID=33 and :oldGameStatus!='gamestarted')   or (:STATUSID=33 and :iELAPSED is null )) or (:STATUSID=34 and  (:oldGameStatus!='firsthalfended'or :oldGameStatus!='secondhalfstarted')) )then 
+   --if( ((:STATUSID=33 and :oldGameStatus!='gamestarted')   or (:STATUSID=33 and :iELAPSED is null )) or (:STATUSID=34 and  (:oldGameStatus!='firsthalfended'or :oldGameStatus!='secondhalfstarted')) )then 
+   if( ((:STATUSID=33 and :oldGameStatus!='gamestarted')   or (:STATUSID=33 and :iELAPSED is null )) or (:STATUSID=34 and :oldGameStatus!='secondhalfstarted') )then 
    begin
     :iELAPSED=0;
    end
@@ -5157,7 +5211,7 @@ BEGIN
   else if(:Status=3) then
   :sGameStatus='secondhalfstarted';
   else  if(:Status=4) then
-  :sGameStatus='secondhalfended';
+  :sGameStatus='gameended';
   else  if(:Status=5) then
   :sGameStatus='extratimestarted';
   else  if(:Status=6) then
