@@ -361,7 +361,7 @@ namespace JC_SoccerWeb
                         {
                             connection.Open();
                             string queryString = "SELECT  r.SOT_20  \"Shot On\", r.SOT_21 \"Shot Off\", r.ATTACKS_10 \"Attacks\",    r.DA_11 \"Dangerous attacks\", r.CORNERS_13 \"Corners\", r.YELLOW_CARDS_8 \"Yellow cards\", r.RED_CARDS_9 \"Red cards\", r.TOTAL_SHOTS_19 \"Total shots\" ,    r.FOULS_22 \"Fouls\", r.OFFSIDES_24 \"Offsides\", r.PS_14 \"Penalties scored\", r.PM_15 \"Penalties missed\", r.PG_16 \"Penalties given\", r.FK_25 \"Free kicks\", r.DFK_26 \"Dangerous free kicks\"," +
-                                        "r.FKG_18 \"Free kick goals\" , r.SW_27 \"Shots woodwork\", r.SB_28 \"Shots blocked\" , r.GS_29 \"Goalkeeper saves\", r.GK_30 \"Goal kicks\", r.TI_32 \"Throw-ins\" , r.SUBSTITUTIONS_31 \"Substitutions\",    r.GOALS_40, r.MP_34, r.OWN_GOALS_17, r.ADW_33, r.FORM_716, r.SKIN_718,    r.PS_639, r.PU_697, r.GOALS115_772, r.GOALS1630_773, r.GOALS3145_774,    r.GOALS4660_775, r.GOALS6175_776, r.GOALS7690_777, r.MPG_778, r.MPS_779," +
+                                        "r.FKG_18 \"Free kick goals\" , r.SW_27 \"Shots woodwork\", r.SB_28 \"Shots blocked\" , r.GS_29 \"Goalkeeper saves\", r.GK_30 \"Goal kicks\", r.TI_32 \"Throw-ins\" , r.SUBSTITUTIONS_31 \"Substitutions\", r.BPP_771 \"Possession(%)\",    r.GOALS_40, r.MP_34, r.OWN_GOALS_17, r.ADW_33, r.FORM_716, r.SKIN_718,    r.PS_639, r.PU_697, r.GOALS115_772, r.GOALS1630_773, r.GOALS3145_774,    r.GOALS4660_775, r.GOALS6175_776, r.GOALS7690_777, r.MPG_778, r.MPS_779," +
                                          " r.CTIMESTAMP, r.CACTION, r.TEAMTYPE, r.PARTICIPANTID   FROM PARTICIPANT_STATS r  where r.EVENTID=" + this.lbEventid.Text + " ORDER BY R.TEAMTYPE DESC ";
                             using (FbCommand cmd = new FbCommand(queryString, connection))
                             {
@@ -507,7 +507,7 @@ namespace JC_SoccerWeb
                         //    " FROM INCIDENTS r inner join teams e on e.id= cast (r.PARTICIPANT_ID as integer) where r.EVENTID=" + id + " and  r.TEAMTYPE !=''  GROUP BY r.EVENTID, r.TEAMTYPE,r.PARTICIPANT_ID,e.HKJC_NAME_CN";
                         ///  queryString = "SELECT  * FROM ANALYSIS_OTHERS r WHERE R.EVENTID=" + id+ " ORDER BY R.CTEAMTYPE DESC ";
                          queryString = "SELECT t.HKJC_NAME_CN, r.ID, r.EVENTID, r.PARTICIPANTID, r.SOT_20  \"Shot On\", r.SOT_21 \"Shot Off\", r.ATTACKS_10 \"Attacks\",    r.DA_11 \"Dangerous attacks\", r.CORNERS_13 \"Corners\", r.YELLOW_CARDS_8 \"Yellow cards\", r.RED_CARDS_9 \"Red cards\", r.TOTAL_SHOTS_19 \"Total shots\" ,    r.FOULS_22 \"Fouls\", r.OFFSIDES_24 \"Offsides\", r.PS_14 \"Penalties scored\", r.PM_15 \"Penalties missed\", r.PG_16 \"Penalties given\", r.FK_25 \"Free kicks\", r.DFK_26 \"Dangerous free kicks\"," +
-                                     "r.FKG_18 \"Free kick goals\" , r.SW_27 \"Shots woodwork\", r.SB_28 \"Shots blocked\" , r.GS_29 \"Goalkeeper saves\", r.GK_30 \"Goal kicks\", r.TI_32 \"Throw-ins\" , r.SUBSTITUTIONS_31 \"Substitutions\",    r.GOALS_40, r.MP_34, r.OWN_GOALS_17, r.ADW_33, r.FORM_716, r.SKIN_718,    r.PS_639, r.PU_697, r.GOALS115_772, r.GOALS1630_773, r.GOALS3145_774,    r.GOALS4660_775, r.GOALS6175_776, r.GOALS7690_777, r.MPG_778, r.MPS_779," +
+                                     "r.FKG_18 \"Free kick goals\" , r.SW_27 \"Shots woodwork\", r.SB_28 \"Shots blocked\" , r.GS_29 \"Goalkeeper saves\", r.GK_30 \"Goal kicks\", r.TI_32 \"Throw-ins\" , r.SUBSTITUTIONS_31 \"Substitutions\", r.BPP_771 \"Possession(%)\",   r.GOALS_40, r.MP_34, r.OWN_GOALS_17, r.ADW_33, r.FORM_716, r.SKIN_718,    r.PS_639, r.PU_697, r.GOALS115_772, r.GOALS1630_773, r.GOALS3145_774,    r.GOALS4660_775, r.GOALS6175_776, r.GOALS7690_777, r.MPG_778, r.MPS_779," +
                                       " r.CTIMESTAMP, r.CACTION, r.TEAMTYPE   FROM PARTICIPANT_STATS r inner join  teams t on t.id =r.PARTICIPANTID where r.EVENTID=" + id + " ORDER BY R.TEAMTYPE DESC ";
                         using (FbCommand cmd = new FbCommand(queryString))
                         {
@@ -530,7 +530,7 @@ namespace JC_SoccerWeb
                                     DataRow tbDr ;
                                     //foreach (DataRow dr in data.Tables[0].Rows)
                                     //{
-                                    for (int i = 4; i < 26; i++)
+                                    for (int i = 4; i < 27; i++)
                                     {
                                         tbDr = tb.NewRow();
                                         tbDr[0] = data.Tables[0].Columns[i].ColumnName;
