@@ -20,10 +20,13 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
-    <SccProjectName>"%24/JC_SoccerWeb", OBRAAAAA</SccProjectName>
-    <SccLocalPath>..</SccLocalPath>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
     <SccAuxPath />
-    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+    <SccProvider>
+    </SccProvider>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
   </PropertyGroup>

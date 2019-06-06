@@ -171,7 +171,9 @@ namespace DataOfScouts
                state: timerState,
                dueTime: (dueTimes < DateTime.Now ? dueTimes.AddDays(1).Subtract(DateTime.Now) : dueTimes.Subtract(DateTime.Now)),
                period: dueTimes.AddDays(1).Subtract(dueTimes));
-               //   RunGetEventCompare("2665695");
+               //RunGetEventCompare("2651225");
+               // RunGetEventCompare("2919097");
+               // RunGetEventCompare("2669768");
                 // InsertData("events.show3", true, "2656709", true);
                 //InsertData("events", true, this.bnAreas.Items[17].Text + "2019-03-19 00:00:00", this.bnAreas.Items[19].Text + "2019-03-31 23:59:59");
                 // InsertData("standings", true);
@@ -7105,6 +7107,34 @@ namespace DataOfScouts
                                     foreach (DOSCompare.apiDataHead2headH2h_eventsCompetitionsCompetition c in competition)
                                     {
                                         if (c == null) break;
+                                        using (FbCommand cmd = new FbCommand())
+                                        {
+                                            //                                        'ID', 'NAME', 'SHORT_NAME', 'MINI_NAME', 'GENDER',
+                                            //'CTYPE', 'AREA_ID', 'AREA_TYPE', 'AREA_SORT', 'OVERALL_SORT', 'SPORT_ID',
+                                            //'SPORT_NAME', 'TOUR_ID', 'TOUR_NAME', 'UT', 'OLD_COMPETITION_ID', 'SLUG', 'CTIMESTAMP'
+                                            cmd.CommandText = "ADD_COMPETITION";
+                                            cmd.CommandType = CommandType.StoredProcedure;
+                                            cmd.Connection = connection;
+                                            cmd.Parameters.Add("@ID", c.id);
+                                            cmd.Parameters.Add("@NAME", c.name);
+                                            cmd.Parameters.Add("@SHORT_NAME", c.short_name);
+                                            cmd.Parameters.Add("@MINI_NAME", c.mini_name);
+                                            cmd.Parameters.Add("@GENDER", (c.gender.ToLower() == "male") ? true : false);
+                                            cmd.Parameters.Add("@CTYPE", c.type);
+                                            cmd.Parameters.Add("@AREA_ID", c.area_id);
+                                            cmd.Parameters.Add("@AREA_TYPE", c.area_type);
+                                            cmd.Parameters.Add("@AREA_SORT", c.area_sort);
+                                            cmd.Parameters.Add("@OVERALL_SORT", c.overall_sort);
+                                            cmd.Parameters.Add("@TOUR_ID", c.tour_id == "" ? "-1" : c.tour_id);
+                                            cmd.Parameters.Add("@TOUR_NAME", c.tour_name);
+                                            cmd.Parameters.Add("@UT", c.ut);
+                                            cmd.Parameters.Add("@OLD_COMPETITION_ID", c.old_competition_id == "" ? "-1" : c.old_competition_id);
+                                            cmd.Parameters.Add("@SLUG", c.slug);
+                                            cmd.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                            int id = Convert.ToInt32(cmd.ExecuteScalar());
+                                            Files.WriteLog("Insert  COMPETITION [" + c.id.ToString() + "] " +c.name);
+                                        }
+
                                         DOSCompare.apiDataHead2headH2h_eventsCompetitionsCompetitionSeasonsSeason[] seasons = (c.seasons == null || c.seasons.Length == 0) ? null : c.seasons;
                                         foreach (DOSCompare.apiDataHead2headH2h_eventsCompetitionsCompetitionSeasonsSeason season in seasons)
                                         {
@@ -7181,6 +7211,7 @@ namespace DataOfScouts
                                             }
                                         }
                                     }
+                                    Files.WriteLog("Insert ANALYSIS_HISTORY_INFO [" + arr[1].ToString() + "] " );
                                 }
 
                                 queryString = "select * From (select first 1  a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP ,c.SHORT_NAME,c.alias " +
@@ -7256,6 +7287,8 @@ namespace DataOfScouts
                                                     if (iretry > 6) break;
                                                 }
                                             }
+
+                                            Files.WriteLog("Insert ANALYSIS_RECENT_INFO [" + arr[1].ToString() + "] ");
                                         }
                                     }
                                 }

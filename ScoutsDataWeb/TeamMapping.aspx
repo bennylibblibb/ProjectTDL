@@ -45,22 +45,22 @@
                                                     </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="HKJC_NAME"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" ></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJC_NAME"  Visible="false" runat="server" Width="80px"  Text='<%# DataBinder.Eval(Container, "DataItem.HKJC_NAME") %>'></anthem:Label>
-                                                        <asp:DropDownList ID="dplHkjcName" runat="server"   BackColor="#CECB7B" Width="120px"  DataTextField="HKJC_NAME"  DataValueField="HKJC_NAME"
+                                                            <anthem:Label id="lbHKJC_NAME"  Visible="false" runat="server" Width="80px"  Text='<%# DataBinder.Eval(Container, "DataItem.HKJCNAME") %>'></anthem:Label>
+                                                        <asp:DropDownList ID="dplHkjcName" runat="server"   BackColor="#CECB7B" Width="120px"  DataTextField="HKJCNAME"  DataValueField="HKJCNAME"
                                                             AutoPostBack="True" OnSelectedIndexChanged="dplHkjcName_SelectedIndexChanged" ></asp:DropDownList>
                                                             </ItemTemplate>
                                                     </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="HKJC_NAME_CN"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" ></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJC_NAME_CN" runat="server" Visible="false" Width="80px"  Text='<%# DataBinder.Eval(Container, "DataItem.HKJC_NAME_CN") %>'></anthem:Label>
-                                                        <asp:DropDownList ID="dplHKJC_NAME_CN" runat="server"  Enabled="false"   Width="80px"  DataTextField="HKJC_NAME_CN" DataValueField="HKJC_NAME_CN"
+                                                            <anthem:Label id="lbHKJC_NAME_CN" runat="server" Visible="false" Width="80px"  Text='<%# DataBinder.Eval(Container, "DataItem.HKJCNAMECN") %>'></anthem:Label>
+                                                        <asp:DropDownList ID="dplHKJC_NAME_CN" runat="server"  Enabled="false"   Width="80px"  DataTextField="HKJCNAMECN" DataValueField="HKJCNAMECN"
                                                               ></asp:DropDownList>
                                                             </ItemTemplate>
                                                     </asp:TemplateColumn>
                                 <asp:TemplateColumn HeaderText="HKJC_ID"   >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"  ></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbIDHKJC_ID" runat="server"  Visible="false"   Width="60px"  Text='<%# DataBinder.Eval(Container, "DataItem.HKJC_ID") %>'></anthem:Label>
-                                                         <asp:DropDownList ID="dplHKJC_ID" runat="server"  Enabled="false"  Width="60px" DataTextField="HKJC_ID" DataValueField="HKJC_ID"
+                                                            <anthem:Label id="lbIDHKJC_ID" runat="server"  Visible="false"   Width="60px"  Text='<%# DataBinder.Eval(Container, "DataItem.HKJCID") %>'></anthem:Label>
+                                                         <asp:DropDownList ID="dplHKJC_ID" runat="server"  Enabled="false"  Width="60px" DataTextField="HKJCID" DataValueField="HKJCID"
                                                               ></asp:DropDownList> </ItemTemplate>
                                                     </asp:TemplateColumn>
                          </Columns> </anthem:DataGrid>   

@@ -1,0 +1,4 @@
+﻿13:07:23 Italy U20/142534/Poland U20/波蘭U20/949 -- Poland U20/142531/Italy U20/意大利U20/652
+13:07:23 [Success] Sure [2893383 Italy U20 - Poland U20] on Teams
+13:07:28 Italy U20/142534/Italy U20/意大利U20/652 -- Poland U20/142531/Poland U20/波蘭U20/949
+13:07:28 [Success] Sure [2893383 Italy U20 - Poland U20] on Teams

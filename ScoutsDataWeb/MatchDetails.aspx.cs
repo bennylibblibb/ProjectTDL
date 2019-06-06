@@ -38,9 +38,10 @@ namespace JC_SoccerWeb
                     if (sType != "HKJC")
                     {
                         btnSave.Visible = false;
+                        btnLiveEdit.Visible = false;
                     }
 
-                    if (sType == "HKJC")
+                    if (sType == "HKJC"|| sType == "STATSCORE")
                     {
                         BindResults(sType, sID == "" ? "-1" : sID);
                         BindGoalInfo(sType, sID == "" ? "-1" : sID);
@@ -436,13 +437,24 @@ namespace JC_SoccerWeb
                     //     "inner join teams t on t.id = e.HOME_ID " + "left JOIN EMATCHES M ON M.EMATCHID = e.ID where e.id= '" + id + "' ) x " + "INNER JOIN(SELECT * FROM( " +
                     //     "select e.id, e.NAME, e.HOME_ID, e.GUEST_ID, t.NAME gtname, e.START_DATE, e.CTIMESTAMP from events e  inner join teams t  on t.id = e.GUEST_ID  where e.id == '" + id + "'  )) x1 " +
                     //     "on x.id = x1.id" :
-                    string queryString =
-                        "SELECT x.GAMESTATUS, x.ID, X.RNAME, X.TNAME HNAME, X.TNAMECN HNAMECN, X1.NAME GNAME,x1.HKJC_NAME_CN GNAMECN, X.HKJCHOSTNAME,x.HKJCGUESTNAME , x.hmnameCN,x.gmnameCN,X.FHSD_19, X.RESULT_2 ||':'||  X1.RESULT_2 RESULT,X.HKJCDAYCODE,X.HKJCMATCHNO ,X.HKJCHOSTNAME,x.HKJCGUESTNAME ,x.STATUS_NAME " +
-                        "FROM(SELECT  g.GAMESTATUS,R.ID, R.NAME RNAME, T.NAME TNAME, T.HKJC_NAME_CN TNAMECN, E.FHSD_19, P.TEAMTYPE, P.RESULT_2, M.HKJCDAYCODE, M.HKJCMATCHNO, m.HKJCHOSTNAME, m.HKJCGUESTNAME,m.HKJCHOSTNAME_CN hmnameCN, m.HKJCGUESTNAME_CN gmnameCN ,r.STATUS_NAME " +
-                        "FROM EVENTS R LEFT  JOIN EMATCHES M ON M.EMATCHID = R.ID and m.CMATCHDATETIME=r.START_DATE  inner join GOALINFO g on g.EMATCHID=r.ID   INNER JOIN  EVENT_DETAILS E ON  R.ID = E.EVENTID " +
-                        "INNER JOIN PARTICIPANT_RESULTS P ON P.EVENTID = R.ID INNER JOIN TEAMS T ON T.ID = P.PARTICIPANTID WHERE R.ID = '" + id + "' and p.TEAMTYPE = 'H') X " +
-                        "INNER JOIN(SELECT * FROM(SELECT P2.EVENTID, P2.RESULT_2, T2.NAME, t2.HKJC_NAME_CN FROM PARTICIPANT_RESULTS P2 " +
-                        "INNER JOIN TEAMS T2 ON P2.PARTICIPANTID = T2.ID  WHERE  EVENTID = '" + id + "'  and  TEAMTYPE = 'G')) X1 ON X1.EVENTID = X.ID ";
+                    //string queryString =
+                    //    "SELECT x.GAMESTATUS, x.ID, X.RNAME, X.TNAME HNAME, X.TNAMECN HNAMECN, X1.NAME GNAME,x1.HKJC_NAME_CN GNAMECN, X.HKJCHOSTNAME,x.HKJCGUESTNAME , x.hmnameCN,x.gmnameCN,X.FHSD_19, X.RESULT_2 ||':'||  X1.RESULT_2 RESULT,X.HKJCDAYCODE,X.HKJCMATCHNO ,X.HKJCHOSTNAME,x.HKJCGUESTNAME ,x.STATUS_NAME " +
+                    //    "FROM(SELECT  g.GAMESTATUS,R.ID, R.NAME RNAME, T.NAME TNAME, T.HKJC_NAME_CN TNAMECN, E.FHSD_19, P.TEAMTYPE, P.RESULT_2, M.HKJCDAYCODE, M.HKJCMATCHNO, m.HKJCHOSTNAME, m.HKJCGUESTNAME,m.HKJCHOSTNAME_CN hmnameCN, m.HKJCGUESTNAME_CN gmnameCN ,r.STATUS_NAME " +
+                    //    "FROM EVENTS R LEFT  JOIN EMATCHES M ON M.EMATCHID = R.ID and m.CMATCHDATETIME=r.START_DATE  inner join GOALINFO g on g.EMATCHID=r.ID   INNER JOIN  EVENT_DETAILS E ON  R.ID = E.EVENTID " +
+                    //    "INNER JOIN PARTICIPANT_RESULTS P ON P.EVENTID = R.ID INNER JOIN TEAMS T ON T.ID = P.PARTICIPANTID WHERE R.ID = '" + id + "' and p.TEAMTYPE = 'H') X " +
+                    //    "INNER JOIN(SELECT * FROM(SELECT P2.EVENTID, P2.RESULT_2, T2.NAME, t2.HKJC_NAME_CN FROM PARTICIPANT_RESULTS P2 " +
+                    //    "INNER JOIN TEAMS T2 ON P2.PARTICIPANTID = T2.ID  WHERE  EVENTID = '" + id + "'  and  TEAMTYPE = 'G')) X1 ON X1.EVENTID = X.ID ";
+
+                    //string queryString = "select first 1 r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,  e.NAME,e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,   e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,e.id,e.START_DATE,d.FHSD_19, e.STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL, p.* from PARTICIPANT_RESULTS p  inner join EMATCHES r on r.EMATCHID=p.EVENTID inner join events e on e.id =p.EVENTID   INNER JOIN  EVENT_DETAILS d ON  d.EVENTID = p.EVENTID inner join GOALINFO g on g.EMATCHID=p.EVENTID where p.EVENTID=2893383    order by p.CTIMESTAMP desc ";
+                    string queryString = "select first 1 e.NAME, r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,  e.NAME,e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,   e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,e.id, d.FHSD_19, e.STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL RESULT from GOALINFO g " +
+                        " inner join EMATCHES r on r.EMATCHID=g.EMATCHID   inner join events e on e.id =g.EMATCHID  INNER JOIN  EVENT_DETAILS d ON  d.EVENTID = g.EMATCHID " +
+                        " where g.EMATCHID=" + id + " order by g.LASTTIME desc ";
+                    queryString = "select  e.id, e.NAME,e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,  e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,    d.FHSD_19, e.STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL RESULT from events e" +
+                        " inner join  EMATCHES R on e.id =R.EMATCHID inner join  GOALINFO g   on r.EMATCHID=g.EMATCHID INNER JOIN  EVENT_DETAILS d ON  d.EVENTID = g.EMATCHID " +
+                        " where E.ID=2893389 order by g.LASTTIME desc ";
+                    queryString = "select FIRST 1 e.id, e.NAME,e.start_date, e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,  e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,    d.FHSD_19, e.STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL RESULT from events e " +
+                        "LEFT join  EMATCHES R on e.id =R.EMATCHID LEFT join  GOALINFO g   on E.ID=g.EMATCHID LEFT JOIN  EVENT_DETAILS d ON  d.EVENTID = g.EMATCHID " +
+                        "Where E.ID=" + id + " order by E.CTIMESTAMP desc ";
                     Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Sql1: " + queryString);
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
@@ -457,21 +469,24 @@ namespace JC_SoccerWeb
                                 fda.Fill(data.Tables["EVENT_DETAILS"]);
                                 if (data.Tables["EVENT_DETAILS"].Rows.Count == 0)
                                 {
-                                    queryString = " SELECT  x.GAMESTATUS, x.id, x.name rname ,''  RESULT,x.HOME_ID,x.GUEST_ID,x.hname, x1.gname,x.hnameCN,x1.gnameCN , x.hmnameCN,x.gmnameCN ,x.FHSD_19, x.HKJCDAYCODE,x.HKJCMATCHNO, x.HKJCHOSTNAME,x.HKJCGUESTNAME, x.CTIMESTAMP ,X.STATUS_NAME FROM( " +
-"select   g.GAMESTATUS,e.id,e.NAME,e.HOME_ID,e.GUEST_ID,t.NAME hname, t.HKJC_NAME_CN hnameCN, e.START_DATE,e.CTIMESTAMP ,m.HKJCDAYCODE,m.HKJCMATCHNO,m.HKJCHOSTNAME,m.HKJCGUESTNAME ,m.HKJCHOSTNAME_CN hmnameCN, m.HKJCGUESTNAME_CN gmnameCN,b.FHSD_19,E.STATUS_NAME from events e " +
-"inner join teams t on t.id = e.HOME_ID left JOIN EMATCHES M ON M.EMATCHID = e.ID  inner join GOALINFO g on g.EMATCHID=r.ID  left JOIN  EVENT_DETAILS b ON  e.ID = b.EVENTID  where e.id = '" + id + "' ) x " +
-"INNER JOIN(SELECT * FROM(select e.id, e.NAME, e.HOME_ID, e.GUEST_ID, t.NAME gname, T.HKJC_NAME_CN gnameCN, e.START_DATE, e.CTIMESTAMP from events e " +
-"inner join teams t  on t.id = e.GUEST_ID  where e.id = '" + id + "'  )) x1 on x.id = x1.id";
-                                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Sql2: " + queryString);
-                                    cmd.CommandText = queryString;
-                                    fda.SelectCommand = cmd;
-                                    fda.Fill(data.Tables["EVENT_DETAILS"]);
+                                    //    //queryString = " SELECT  x.GAMESTATUS, x.id, x.name rname ,''  RESULT,x.HOME_ID,x.GUEST_ID,x.hname, x1.gname,x.hnameCN,x1.gnameCN , x.hmnameCN,x.gmnameCN ,x.FHSD_19, x.HKJCDAYCODE,x.HKJCMATCHNO, x.HKJCHOSTNAME,x.HKJCGUESTNAME, x.CTIMESTAMP ,X.STATUS_NAME FROM( " +
+                                    //    //"select   g.GAMESTATUS,e.id,e.NAME,e.HOME_ID,e.GUEST_ID,t.NAME hname, t.HKJC_NAME_CN hnameCN, e.START_DATE,e.CTIMESTAMP ,m.HKJCDAYCODE,m.HKJCMATCHNO,m.HKJCHOSTNAME,m.HKJCGUESTNAME ,m.HKJCHOSTNAME_CN hmnameCN, m.HKJCGUESTNAME_CN gmnameCN,b.FHSD_19,E.STATUS_NAME from events e " +
+                                    //    //"inner join teams t on t.id = e.HOME_ID left JOIN EMATCHES M ON M.EMATCHID = e.ID  inner join GOALINFO g on g.EMATCHID=r.ID  left JOIN  EVENT_DETAILS b ON  e.ID = b.EVENTID  where e.id = '" + id + "' ) x " +
+                                    //    //"INNER JOIN(SELECT * FROM(select e.id, e.NAME, e.HOME_ID, e.GUEST_ID, t.NAME gname, T.HKJC_NAME_CN gnameCN, e.START_DATE, e.CTIMESTAMP from events e " +
+                                    //    //"inner join teams t  on t.id = e.GUEST_ID  where e.id = '" + id + "'  )) x1 on x.id = x1.id";
+                                    //    queryString = "";
+                                    //    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Sql2: " + queryString);
+                                    //    cmd.CommandText = queryString;
+                                    //    fda.SelectCommand = cmd;
+                                    //    fda.Fill(data.Tables["EVENT_DETAILS"]);
+                                    this.btnSave.Visible = false;
+                                    this.btnSave.AutoUpdateAfterCallBack = true;
                                 }
 
                                 eventDetails.DataSource = data.Tables[0].DefaultView;
                                 eventDetails.DataBind();
                                 this.eventDetails.UpdateAfterCallBack = true;
-                                this.Page.Title = (data.Tables[0].Rows.Count > 0) ? data.Tables[0].Rows[0]["rname"].ToString() : "" + "   Details";
+                                this.Page.Title = (data.Tables[0].Rows.Count > 0) ? data.Tables[0].Rows[0]["name"].ToString() : "" + "   Details";
                             }
                         }
                     }

@@ -32,18 +32,17 @@
                            <ItemStyle Height="34px"  Wrap="false"  CssClass="grid-item"></ItemStyle>
                           <Columns>   
                               <asp:TemplateColumn HeaderText="Host" Visible ="true" >  <HeaderStyle  CssClass="grid-header" />
-                                     <ItemTemplate >
-                                     <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.HNAME"):DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME")   %>
-			   <BR/>	 <strong>   <%#DataBinder.Eval(Container, "DataItem.HmNAMECN") %> </strong>   
+                                     <ItemTemplate >  
+                                  <%#DataBinder.Eval(Container, "DataItem.Name").ToString().Substring(0,DataBinder.Eval(Container, "DataItem.Name").ToString().IndexOf(" - ")) %>
+			   <BR/>	 <strong>  <%# DataBinder.Eval(Container, "DataItem.HTName") %>   <%-- <%# DataBinder.Eval(Container, "DataItem.HTName")==DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME_CN")?DataBinder.Eval(Container, "DataItem.HTName"):( DataBinder.Eval(Container, "DataItem.HTName")==DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME_CN"))?DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME") :""  %>  --%> </strong>   
                                      </ItemTemplate> </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="Guest"  >  <HeaderStyle  CssClass="grid-header" />
-                           <ItemTemplate>
-				                            <%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE")==DBNull.Value?DataBinder.Eval(Container, "DataItem.GNAME"):DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME")   %>
-			   <BR/>	 <strong>    <%#DataBinder.Eval(Container, "DataItem.GmNAMECN") %></strong>   
+                           <ItemTemplate><%#DataBinder.Eval(Container, "DataItem.Name").ToString().Substring(DataBinder.Eval(Container, "DataItem.Name").ToString().IndexOf(" - ")+3,DataBinder.Eval(Container, "DataItem.Name").ToString().Length-DataBinder.Eval(Container, "DataItem.Name").ToString().IndexOf(" - ")-3) %> <BR/>
+                               <strong><%# DataBinder.Eval(Container, "DataItem.GTName") %> </strong>   
                                                           </ItemTemplate> </asp:TemplateColumn>
                                                                                                    <asp:TemplateColumn HeaderText="START DATE">  <HeaderStyle  CssClass="grid-header" />
                            <ItemTemplate>
-				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue?"":DataBinder.Eval(Container, "DataItem.FHSD_19") %>
+				<%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?"": Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue? Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.start_date")):DataBinder.Eval(Container, "DataItem.FHSD_19") %>
 				  <BR/>   <asp:Label ID="lbGoalInfoStatus"   runat="server" Width="80px" text=' <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>'></asp:Label>  
                              <asp:Label ID="lbGoalInfoStatus2"  Visible="false"  runat="server" Width="80px" text='<%#DataBinder.Eval(Container, "DataItem.GAMESTATUS") %>'></asp:Label>  
                                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;

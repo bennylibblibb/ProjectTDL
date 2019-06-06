@@ -1,0 +1,328 @@
+﻿10:22:32 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 473
+10:39:36 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 473
+10:39:40 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 473
+10:46:26 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:46:47 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:47:28 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:49:28 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:49:45 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:51:39 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:52:06 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:52:22 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:52:50 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:53:19 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:53:25 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+10:53:31 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 473
+10:53:34 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 473
+10:53:43 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 473
+10:53:57 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 473
+10:57:55 BindResults(),error: System.ArgumentException: Column 'rname' does not belong to table EVENT_DETAILS.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 485
+11:00:27 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:10:42 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:10:45 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:21:16 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:21:20 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:25:13 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:25:29 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:25:46 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:25:58 BindResults(),error: FirebirdSql.Data.FirebirdClient.FbException (0x80004005): Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638 ---> Dynamic SQL Error
+SQL error code = -206
+Column unknown
+R.ID
+At line 1, column 638
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 507
+   at FirebirdSql.Data.FirebirdClient.FbCommand.ExecuteDbDataReader(CommandBehavior behavior) in C:\Users\Jiri\Documents\devel\NETProvider\working\Provider\src\FirebirdSql.Data.FirebirdClient\FirebirdClient\FbCommand.cs:line 610
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at JC_SoccerWeb.MatchDetails.BindResults(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 479
+11:58:33 BindGoalInfo(),error: System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at JC_SoccerWeb.MatchDetails.BindGoalInfo(String Type, String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\MatchDetails.aspx.cs:line 552
+18:05:59 BindTeams(),error: System.ArgumentException: Column '' does not belong to table Teams.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.TeamMapping.BindTeams(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 178
+18:06:04 BindTeams(),error: System.ArgumentException: Column '' does not belong to table Teams.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.TeamMapping.BindTeams(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 178
+18:06:30 BindTeams(),error: System.ArgumentException: Column '' does not belong to table Teams.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.TeamMapping.BindTeams(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 178
+18:06:38 BindTeams(),error: System.ArgumentException: Column '' does not belong to table Teams.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.TeamMapping.BindTeams(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 178
+18:06:53 BindTeams(),error: System.ArgumentException: Column '' does not belong to table Teams.
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at JC_SoccerWeb.TeamMapping.BindTeams(String id) in E:\Project\AppProject\DataOfScouts\ScoutsDataWeb\TeamMapping.aspx.cs:line 178

@@ -126,17 +126,21 @@ namespace ScoutDBProvider
                                 {
                                     //ANALYSIS_STAT_INFO
                                     //queryString = " select   'CLEAGUE='''|| x.CLEAGUE_HKJC_NAME||''' AND CHOST=''' || x.HKJCHOSTNAME_CN||''' AND CGUEST='''|| x.HKJCGUESTNAME_CN|| ''' and IMATCHDATE=''' || replace(cast(X.CMATCHDATETIME as date), '-', '') || ''' and IMATCHTIME=''' || SUBSTRING(replace(cast(X.CMATCHDATETIME as time), ':', '') FROM 1 FOR 6) || ''''  ABC, X.EMATCHID,X.HKJCDAYCODE,X.HKJCMATCHNO, x.CMATCHDATETIME from EMATCHES X WHERE X.HKJCDAYCODE  = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast(current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0  ORDER BY x.HKJCMATCHNO ASC";
-                                     queryString = "select  e.EMATCHID eid,   e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_STAT_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0)  ORDER BY  e.CMATCHDATETIME asc";
+                                    queryString = "select  e.EMATCHID eid,   e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_STAT_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0)  ORDER BY  e.CMATCHDATETIME asc";
+                                    //queryString = "select  e.EMATCHID eid,   e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_STAT_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + "WED" + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0)  ORDER BY  e.CMATCHDATETIME asc";
                                 }
                                 else if (i == 1)
                                 {
                                     //ANALYSIS_HISTORY_INFO
-                                     queryString = "select    e.EMATCHID eid,    'CLEAGUEALIAS='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' and cdate='''||substring( replace( cast(a.START_DATE as date),'-','') FROM 1 FOR 6)||'''' ABC, e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_HISTORY_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in (select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 ) ORDER BY  a.imatch_cnt ,a.irec asc   ";
+                                    //queryString = "select    e.EMATCHID eid,    'CLEAGUEALIAS='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' and cdate='''||substring( replace( cast(a.START_DATE as date),'-','') FROM 1 FOR 6)||'''' ABC, e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_HISTORY_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT   where a.IMATCH_CNT in (select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 ) ORDER BY  a.imatch_cnt ,a.irec asc   ";
+                                    queryString = "select  c.id ,c.name cname, c.alias calias, l.CLEAGUE_NAME lCLEAGUE_NAME,   e.EMATCHID eid,    'CLEAGUEALIAS='''|| CASE WHEN  c.alias IS NULL THEN  C.NAME ELSE C.ALIAS END  ||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' and cdate='''||substring( replace( cast(a.START_DATE as date),'-','') FROM 1 FOR 6)||'''' ABC, e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_HISTORY_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT  left join COMPETITIONS c on c.id =a.LEAGUEALIASID left join LEAGUE_INFO l on  c.ALIAS=l.CLEAGUE_ALIAS_NAME   where a.IMATCH_CNT in (select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 ) ORDER BY  a.imatch_cnt ,a.irec asc   ";
+                                   // queryString = "select  c.id ,c.name cname, c.alias calias, l.CLEAGUE_NAME lCLEAGUE_NAME,   e.EMATCHID eid,    'CLEAGUEALIAS='''||  e.CLEAGUEALIAS_OUTPUT_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' and cdate='''||substring( replace( cast(a.START_DATE as date),'-','') FROM 1 FOR 6)||'''' ABC, e.CLEAGUE_HKJC_NAME,  e.CLEAGUEALIAS_OUTPUT_NAME, e.HKJCHOSTNAME_CN, e.HKJCGUESTNAME_CN, e.CMATCHDATETIME,  a.*   from ANALYSIS_HISTORY_INFO  a inner join EMATCHES e on e.EMATCHID =a.IMATCH_CNT  left join COMPETITIONS c on c.id =a.LEAGUEALIASID left join LEAGUE_INFO l on  c.ALIAS=l.CLEAGUE_ALIAS_NAME   where a.IMATCH_CNT in (select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + "WED" + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 ) ORDER BY  a.imatch_cnt ,a.irec asc   ";
                                 }
                                 else if (i == 2)
                                 {
                                     //ANALYSIS_RECENT_INFO
-                                    queryString = "select  e.EMATCHID eid,   'CLEAGUE='''||  e.CLEAGUE_HKJC_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_HKJC_NAME CLEAGUE,  e.CLEAGUEALIAS_OUTPUT_NAME , e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 )  ORDER BY  a.IMATCH_CNT ,a.irec asc";
+                                     queryString = "select  e.EMATCHID eid,   'CLEAGUE='''||  e.CLEAGUE_HKJC_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_HKJC_NAME CLEAGUE,  e.CLEAGUEALIAS_OUTPUT_NAME , e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 )  ORDER BY  a.IMATCH_CNT ,a.irec asc";
+                                    //queryString = "select  e.EMATCHID eid,   'CLEAGUE='''||  e.CLEAGUE_HKJC_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_HKJC_NAME CLEAGUE,  e.CLEAGUEALIAS_OUTPUT_NAME , e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + "WED" + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 )  ORDER BY  a.IMATCH_CNT ,a.irec asc";
                                 }
 
                                 Files.WriteLog("Sql: " + queryString); 
@@ -238,16 +242,20 @@ namespace ScoutDBProvider
                                                                 DateTime dt2 = DateTime.Now;
                                                                 foreach (DataRow dr2 in ds.Tables[0].Rows)
                                                                 {
-                                                                    DataRow[] drs = data.Tables["data"].Select("CLEAGUE='" + dr2["CLEAGUE_HKJC_NAME"] + "' AND CHOST='" + dr2["HKJCHOSTNAME_CN"] + "' AND CGUEST='" + dr2["HKJCGUESTNAME_CN"] + "' and cdate='" + (dr2["START_DATE"] is DBNull ? dr2["IMATCHYEAR"].ToString() + dr2["IMATCHMONTH"].ToString().PadLeft(2, '0') : Convert.ToDateTime(dr2["START_DATE"]).ToString("yyyyMM")) + "'");
-                                                                    DataRow[] drs2 = data.Tables["data"].Select("CLEAGUE='" + dr2["CLEAGUE_HKJC_NAME"] + "' AND CHOST='" + dr2["HKJCHOSTNAME_CN"] + "' AND CGUEST='" + dr2["HKJCGUESTNAME_CN"] + "'");
+                                                                      DataRow[] drs = data.Tables["data"].Select("CHOST='" + dr2["HKJCHOSTNAME_CN"] + "' AND CGUEST='" + dr2["HKJCGUESTNAME_CN"] + "' and cdate='" + (dr2["START_DATE"] is DBNull ? dr2["IMATCHYEAR"].ToString() + dr2["IMATCHMONTH"].ToString().PadLeft(2, '0') : Convert.ToDateTime(dr2["START_DATE"]).ToString("yyyyMM")) + "'");
+                                                                    // DataRow[] drs2 = data.Tables["data"].Select("CLEAGUE='" + dr2["CLEAGUE_HKJC_NAME"] + "' AND CHOST='" + dr2["HKJCHOSTNAME_CN"] + "' AND CGUEST='" + dr2["HKJCGUESTNAME_CN"] + "'");
+                                                                    DataRow[] drs2 = data.Tables["data"].Select("CHOST='" + dr2["HKJCHOSTNAME_CN"] + "' AND CGUEST='" + dr2["HKJCGUESTNAME_CN"] + "'");
 
-                                                                    if (drs.Length > 0 || drs2.Length > 4) continue;
+                                                                    if (drs.Length > 0 || drs2.Length > 4) continue; 
+                                                                   // if ( drs2.Length > 4) continue;
                                                                     DataRow dr3 = data.Tables["data"].NewRow();
-                                                                    dr3[0] = dr2["CLEAGUE_HKJC_NAME"];
+                                                                    // dr3[0] = dr2["CLEAGUE_HKJC_NAME"];
+                                                                    dr3[0] = dr2["lCLEAGUE_NAME"] is DBNull ? dr2["cname"] : dr2["lCLEAGUE_NAME"];
                                                                     dr3[1] = dr2["HKJCHOSTNAME_CN"];
                                                                     dr3[2] = dr2["HKJCGUESTNAME_CN"];
                                                                     dr3[3] = dr2["START_DATE"] is DBNull ? dr2["IMATCHYEAR"].ToString() + dr2["IMATCHMONTH"].ToString().PadLeft(2, '0') : Convert.ToDateTime(dr2["START_DATE"]).ToString("yyyyMM");
-                                                                    dr3[4] = dr2["CLEAGUEALIAS_OUTPUT_NAME"];
+                                                                    //dr3[4] = dr2["CLEAGUEALIAS_OUTPUT_NAME"];calias
+                                                                    dr3[4] = dr2["lCLEAGUE_NAME"] is DBNull ? dr2["cname"] : dr2["calias"];
                                                                     dr3[5] = dr2["IMATCHSTATUS"].ToString() == "0" ? "主" : "客";
                                                                     dr3[6] = dr2["IHOSTSCORE"];
                                                                     dr3[7] = dr2["IGUESTSCORE"];
@@ -515,7 +523,7 @@ namespace ScoutDBProvider
                     //      "  and e.CMATCHDATETIME < (SELECT first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   )+1" +
                     //     " and e.CMATCHDATETIME > (SELECT  first 1 CMATCHDATETIME FROM EMATCHES WHERE  cast(cast(CMATCHDATETIME as date) as varchar(10)) = cast(cast(current_timestamp as date) as varchar(10))   ) -1 order by e.HKJCMATCHNO asc " + ")" +
                     //     " ORDER BY E.CMATCHDATETIME DESC ";
-                    queryString = "SELECT   (select t.HKJC_NAME_CN from teams t  where t.id= r.HOME_ID) H,(select t.HKJC_NAME_CN from teams t  where t.id=r.GUEST_ID) G, " +
+                    queryString = "SELECT   (select first 1 t.HKJC_NAME_CN from teams t  where t.id= r.HOME_ID) H,(select first 1 t.HKJC_NAME_CN from teams t  where t.id=r.GUEST_ID) G, " +
                         "e.HKJCDAYCODE,e.HKJCMATCHNO,  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN,E.CMATCHDATETIME CMATCHDATE,E.CMATCHDATETIME CMATCHTIME,'H' CMATCHFIELD,'U' " +
                                  "CACTION,G.H_GOAL,G.G_GOAL,G.H_RED,G.G_RED,G.HH_GOAL,G.GH_GOAL,G.H_CONFIRM,G.G_CONFIRM,''CSONGID,''CALERT,G.GAMESTATUS,'' CCOMMENT,-1 " +
                                  "CTIMEOFGAME,current_timestamp TIMEFLAG,'0'IDEST FROM EVENTS r INNER JOIN  EMATCHES E ON E.EMATCHID = R.ID left JOIN GOALINFO G ON G.EMATCHID = " +
@@ -595,7 +603,7 @@ namespace ScoutDBProvider
                     //ANALYSISBGREMARK 
                     Files.WriteLog("Update ANALYSISBGREMARK");
                     queryString = "SELECT g.WC_8,e.HKJCDAYCODE,e.HKJCMATCHNO,  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN,E.CMATCHDATETIME CMATCHDATE, E.CMATCHDATETIME CMATCHTIME," +
-                        " '' CHANDICAP,'H' CMATCHFIELD,'' CHOSTROOT,   ''CGUESTROOT,''CVENUE,'' CTEMPERATURE,'' CWEATHERSTATUS,''CREMARK,current_timestamp  TIMEFLAG,'0'IDEST FROM EVENTS r" +
+                     " '' CHANDICAP,'H' CMATCHFIELD,'' CHOSTROOT,   ''CGUESTROOT,''CVENUE,'' CTEMPERATURE,'' CWEATHERSTATUS,''CREMARK,current_timestamp  TIMEFLAG,'0'IDEST FROM EVENTS r" +
                         " INNER JOIN  EMATCHES E ON E.EMATCHID = R.ID INNER JOIN EVENT_DETAILS G ON G.eventid = " +
                                  "E.EMATCHID WHERE R.ID in(select E.EMATCHID from EMATCHES E   WHERE e.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' " +
                                  " and cast(cast(CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10)) " +
@@ -1223,7 +1231,7 @@ namespace ScoutDBProvider
                                 }));
 
                                 queryString = "SELECT a.EVENTID, a.CLEAGUE aCLEAGUE, l.LEAGUE_CHI_NAME CLEAGUE, a.CTEAM, a.CTEAMTYPE, a.CACTION, a.CSHOTS, a.CFOULS, a.CCORNER_KICKS, a.COFFSIDES, a.CPOSSESSION, a.CYELLOW_CARDS, a.CRED_CARDS, a.CATTACKS, a.CSUBSTITUTIONS, a.CTHROWINS, a.CGOALKICKS, a.CTIMESTAMP FROM ANALYSIS_OTHERS a" +
-                                    " inner join  LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME  =a.CLEAGUE where a.EVENTID = " + ml.ToString() + " order by a.CTIMESTAMP desc ";
+                                   " inner join  LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME  =a.CLEAGUE where a.EVENTID = " + ml.ToString() + " order by a.CTIMESTAMP desc ";
 
                                 Files.WriteLog("Sql: " + queryString);
 
@@ -1408,7 +1416,7 @@ namespace ScoutDBProvider
                                 }));
 
                                 //LIVEGOALS
-                                queryString = "SELECT FIRST 1   (select t.HKJC_NAME_CN from teams t  where t.id= r.HOME_ID) H,(select t.HKJC_NAME_CN from teams t  where t.id=r.GUEST_ID) G,  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
+                                queryString = "SELECT FIRST 1   (select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id= r.HOME_ID) H,(select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id=r.GUEST_ID) G,  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
                                   " E.CMATCHDATETIME CMATCHDATE,E.CMATCHDATETIME CMATCHTIME,'H' CMATCHFIELD, 'U' CACTION,G.H_GOAL,G.G_GOAL,G.H_RED,G.G_RED,G.HH_GOAL,G.GH_GOAL,G.H_CONFIRM,G.G_CONFIRM,''CSONGID,''CALERT,G.GAMESTATUS, " +
                                   " ((select count(*) from MATCHDETAILS e where e.EMATCHID= " + ml.ToString() + " and (e.STATUS='Extratime 1st half' or e.STATUS='Extratime 2nd half') and e.CTYPE='goal' and e.TEAM_ID=r.HOME_ID)||'-'||" +
                                   " (select count(*) from MATCHDETAILS e where e.EMATCHID = " + ml.ToString() + " and(e.STATUS = 'Extratime 1st half' or e.STATUS = 'Extratime 2nd half') and e.CTYPE = 'goal' and e.TEAM_ID = r.GUEST_ID) || ';' ||" +
@@ -1491,9 +1499,9 @@ namespace ScoutDBProvider
 
                                 //GOALDETAILS 
                                 Files.WriteLog("Update GOALDETAILS " + ml.ToString());
-                                queryString = " SELECT distinct E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
+                                queryString = " SELECT distinct  (select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id=s.HOME_ID) H,(select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id=s.GUEST_ID) G, E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
                                             " 'F' CCURRENTSTATUS, '' CPK, 'U' CACTION, '' CALERT, R.CTYPE CRECORDTYPE, R.HG CRECORDBELONG,  r.STATUS CMATCHSTATUS, r.ELAPSED , (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='H'AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and (x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half'))  CSCOREHOST, (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='G' AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and (x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half'))  CSCOREGUEST, '-1' CSCORENUM,   '0' CSCOREOWNGOAL, r.PLAYERCHI CSCORER,r.PLAYER CSCORER2 , current_timestamp TIMEFLAG, '0' IDEST " +
-                                            "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID  INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString() + " AND (R.CTYPE='goal'  or r.CTYPE='rcard') AND (R.STATUS!='Penalty shootout' AND R.ELAPSED!=105) and ( r.STATUS!='Extratime 1st half' and r.STATUS!='Extratime 2nd half') AND   E.CMATCHDATETIME > dateadd (-" + AppFlag.LivePeriod + " day to current_timestamp)  order by r.ELAPSED asc";
+                                            "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID   INNER JOIN  events s ON s.id = r.EMATCHID   INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString() + " AND (R.CTYPE='goal'  or r.CTYPE='rcard') AND (R.STATUS!='Penalty shootout' AND R.ELAPSED!=105) and ( r.STATUS!='Extratime 1st half' and r.STATUS!='Extratime 2nd half') AND   E.CMATCHDATETIME > dateadd (-" + AppFlag.LivePeriod + " day to current_timestamp)  order by r.ELAPSED asc";
                                 Files.WriteLog("Sql: " + queryString);
 
                                 using (FbCommand cmd = new FbCommand(queryString, connection))
@@ -1533,8 +1541,8 @@ namespace ScoutDBProvider
                                                         cmd2.CommandType = CommandType.StoredProcedure;
                                                         cmd2.Parameters.Add("@CLEAGUEALIAS", drH["CLEAGUEALIAS_OUTPUT_NAME"]);
                                                         cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_HKJC_NAME"]);
-                                                        cmd2.Parameters.Add("@CHOST", drH["HKJCHOSTNAME_CN"]);
-                                                        cmd2.Parameters.Add("@CGUEST", drH["HKJCGUESTNAME_CN"]);
+                                                        cmd2.Parameters.Add("@CHOST", drH["H"]);
+                                                        cmd2.Parameters.Add("@CGUEST", drH["G"]);
                                                         cmd2.Parameters.Add("@CCURRENTSTATUS", drH["CCURRENTSTATUS"]);
                                                         cmd2.Parameters.Add("@CPK", drH["CPK"]);
                                                         cmd2.Parameters.Add("@CACTION", drH["CACTION"]);
@@ -2531,7 +2539,7 @@ namespace ScoutDBProvider
                                     }));
 
                                     Files.WriteLog("Update LIVEGOALS " + ml.ToString());
-                                    queryString = "SELECT FIRST 1 (select t.HKJC_NAME_CN from teams t  where t.id= r.HOME_ID) H,(select t.HKJC_NAME_CN from teams t  where t.id=r.GUEST_ID) G,  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
+                                    queryString = "SELECT FIRST 1 (select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id= r.HOME_ID) H,(select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id=r.GUEST_ID) G,  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
                                     "E.CMATCHDATETIME CMATCHDATE,E.CMATCHDATETIME CMATCHTIME,'H' CMATCHFIELD,'U' CACTION,G.H_GOAL,G.G_GOAL,G.H_RED,G.G_RED,G.HH_GOAL,G.GH_GOAL,G.H_CONFIRM,G.G_CONFIRM,''CSONGID,''CALERT,G.GAMESTATUS,  " +
                                       " ((select count(*) from MATCHDETAILS e where e.EMATCHID=" + ml.ToString() + " and (e.STATUS='Extratime 1st half' or e.STATUS='Extratime 2nd half') and e.CTYPE='goal' and e.TEAM_ID=r.HOME_ID)||'-'||" +
                                     " (select count(*) from MATCHDETAILS e where e.EMATCHID = " + ml.ToString() + " and(e.STATUS = 'Extratime 1st half' or e.STATUS = 'Extratime 2nd half') and e.CTYPE = 'goal' and e.TEAM_ID = r.GUEST_ID) || ';' ||" +
@@ -2613,9 +2621,9 @@ namespace ScoutDBProvider
                                     }));
 
                                     Files.WriteLog("Update GOALDETAILS " + ml.ToString());
-                                    queryString = " SELECT distinct  E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
+                                    queryString = " SELECT distinct  (select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id= s.HOME_ID) H,(select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id=s.GUEST_ID) G, E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
                                                 " 'F' CCURRENTSTATUS, '' CPK, 'U' CACTION, '' CALERT, R.CTYPE CRECORDTYPE, R.HG CRECORDBELONG,  r.STATUS CMATCHSTATUS, r.ELAPSED , (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='H'AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105) and ( x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half'))  CSCOREHOST, (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='G' AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and ( x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half'))  CSCOREGUEST, '-1' CSCORENUM,   '0' CSCOREOWNGOAL, r.PLAYERCHI CSCORER,r.PLAYER CSCORER2 , current_timestamp TIMEFLAG, '0' IDEST " +
-                                                "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID  INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString() + " AND (R.CTYPE='goal'  or r.CTYPE='rcard') AND (R.STATUS!='Penalty shootout' AND R.ELAPSED!=105)  and ( r.STATUS!='Extratime 1st half' and r.STATUS!='Extratime 2nd half') order by r.ELAPSED asc";
+                                                "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID   INNER JOIN  events s ON s.id = r.EMATCHID  INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString() + " AND (R.CTYPE='goal'  or r.CTYPE='rcard') AND (R.STATUS!='Penalty shootout' AND R.ELAPSED!=105)  and ( r.STATUS!='Extratime 1st half' and r.STATUS!='Extratime 2nd half') order by r.ELAPSED asc";
                                     Files.WriteLog("Sql: " + queryString);
 
                                     using (FbCommand cmd = new FbCommand(queryString, connection))
@@ -2651,8 +2659,8 @@ namespace ScoutDBProvider
                                                 cmd2.CommandType = CommandType.StoredProcedure;
                                                 cmd2.Parameters.Add("@CLEAGUEALIAS", drH["CLEAGUEALIAS_OUTPUT_NAME"]);
                                                 cmd2.Parameters.Add("@CLEAGUE", drH["CLEAGUE_HKJC_NAME"]);
-                                                cmd2.Parameters.Add("@CHOST", drH["HKJCHOSTNAME_CN"]);
-                                                cmd2.Parameters.Add("@CGUEST", drH["HKJCGUESTNAME_CN"]);
+                                                cmd2.Parameters.Add("@CHOST", drH["H"]);
+                                                cmd2.Parameters.Add("@CGUEST", drH["G"]);
                                                 cmd2.Parameters.Add("@CCURRENTSTATUS", drH["CCURRENTSTATUS"]);
                                                 cmd2.Parameters.Add("@CPK", drH["CPK"]);
                                                 cmd2.Parameters.Add("@CACTION", drH["CACTION"]);
@@ -2699,7 +2707,7 @@ namespace ScoutDBProvider
 
                                     Files.WriteLog("Update ANALYSISOTHER " + ml.ToString());
                                     queryString = "SELECT a.EVENTID, a.CLEAGUE aCLEAGUE, l.LEAGUE_CHI_NAME CLEAGUE, a.CTEAM, a.CTEAMTYPE, a.CACTION, a.CSHOTS, a.CFOULS, a.CCORNER_KICKS, a.COFFSIDES, a.CPOSSESSION, a.CYELLOW_CARDS, a.CRED_CARDS, a.CATTACKS, a.CSUBSTITUTIONS, a.CTHROWINS, a.CGOALKICKS, a.CTIMESTAMP FROM ANALYSIS_OTHERS a" +
-                                    " inner join  LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME  =a.CLEAGUE where a.EVENTID = " + ml.ToString() + " order by a.CTIMESTAMP desc ";
+                                   " inner join  LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME  =a.CLEAGUE where a.EVENTID = " + ml.ToString() + " order by a.CTIMESTAMP desc ";
                                     Files.WriteLog("Sql: " + queryString);
 
                                     using (FbCommand cmd = new FbCommand(queryString, connection))
@@ -3234,7 +3242,7 @@ namespace ScoutDBProvider
                                     }));
 
                                     queryString = "SELECT a.EVENTID, a.CLEAGUE aCLEAGUE, l.LEAGUE_CHI_NAME CLEAGUE, a.CTEAM, a.CTEAMTYPE, a.CACTION, a.CSHOTS, a.CFOULS, a.CCORNER_KICKS, a.COFFSIDES, a.CPOSSESSION, a.CYELLOW_CARDS, a.CRED_CARDS, a.CATTACKS, a.CSUBSTITUTIONS, a.CTHROWINS, a.CGOALKICKS, a.CTIMESTAMP FROM ANALYSIS_OTHERS a" +
-                                        " inner join  LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME  =a.CLEAGUE where a.EVENTID = " + ml.ToString() + " order by a.CTIMESTAMP desc ";
+                                       " inner join  LEAGUE_INFO l on l.CLEAGUE_ALIAS_NAME  =a.CLEAGUE where a.EVENTID = " + ml.ToString() + " order by a.CTIMESTAMP desc ";
 
                                     Files.WriteLog("Sql: " + queryString);
 
@@ -3360,10 +3368,11 @@ namespace ScoutDBProvider
                                             connection2.Open();
                                             foreach (DataRow dr in ds.Tables[0].Rows)
                                             {
+                                                if (dr["hkjc_name_cn"] is DBNull) continue;
                                                 try
                                                 {
                                                     using (FbCommand cmd2 = new FbCommand("PR_AddTeam", connection2))
-                                                    {
+                                                    { 
                                                         cmd2.CommandType = CommandType.StoredProcedure;
                                                         cmd2.Parameters.Add("@TEAM_ID", dr["tid"]);
                                                         cmd2.Parameters.Add("@TEAMNAME", dr["hkjc_name_cn"]);
