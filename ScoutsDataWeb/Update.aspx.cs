@@ -35,6 +35,7 @@
         protected Anthem.TextBox txtIHOSTORYRANK;
         protected Anthem.TextBox txtFrom;
         protected Anthem.TextBox txtTo;
+        protected Anthem.TextBox txtTeam;
         protected Anthem.Label lbIHEADER_ID;
         protected Anthem.Button btnEdit;
         protected Anthem.Label lbMsg;
@@ -477,8 +478,8 @@
             string dayCODE = ((Anthem.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text;
             string matchNo = ((Anthem.Label)e.Item.FindControl("lbHKJCMATCHNO")).Text;
            // string start_date = ((Anthem.Label)e.Item.FindControl("lbSTART_DATE")).Text;
-           // string sUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff");
-            string eventName = ((Anthem.Label)e.Item.FindControl("lbNAME")).Text;
+           // string sUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff"); 
+            string eventName = ((Anthem.Label)e.Item.FindControl("lbHNAME")).Text + "-" + ((Anthem.Label)e.Item.FindControl("lbGNAME")).Text;
             string lbHKJCHOSTNAME = ((Anthem.Label)e.Item.FindControl("lbHKJCHOSTNAME")).Text;
             string lbHKJCGUESTNAME = ((Anthem.Label)e.Item.FindControl("lbHKJCGUESTNAME")).Text;
             int id = 0;
@@ -555,24 +556,24 @@
                     lbtnEdit.CausesValidation = true;
                     lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure Sync？');";
                     // lbtnEdit.Attributes.Add("onclick", "javascript:OpenMapping(" + sID + ")");
-                    System.Web.UI.WebControls.LinkButton lbtnEdit2 = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
+                    System.Web.UI.WebControls.LinkButton lbtnEdit2 = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[21].Controls[0];
                     lbtnEdit2.Visible = false;
                 }
                 else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
                 {
                     e.Item.Attributes["style"] = "cursor:hand";
-                    System.Web.UI.WebControls.LinkButton link = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[2].Controls[3];
+                    System.Web.UI.WebControls.LinkButton link = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[1].Controls[3];
                     //e.Item.Attributes.Add("onclick", "this.style.backgroundColor='Gray';");
                     //href: "javascript:__doPostBack('dgRankDetails$ctl04$btnSelect','')"
                     e.Item.Attributes.Add("onclick", "javascript:return ClickLinkBtn(" + link.ClientID + ")");
                     if (((System.Web.UI.WebControls.Label)e.Item.FindControl("lbHKJCDAYCODE")).Text == "")
                     {
-                        System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
+                        System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[21].Controls[0];
                         lbtnEdit.Visible = false;
                     }
                     else
                     {
-                        System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[20].Controls[0];
+                        System.Web.UI.WebControls.LinkButton lbtnEdit = (System.Web.UI.WebControls.LinkButton)e.Item.Cells[21].Controls[0];
                         lbtnEdit.Visible = true;
                         lbtnEdit.Attributes["onclick"] = "return confirm('Are your sure Cancel？');";
                     }
@@ -632,7 +633,8 @@
             string matchNo= ((Anthem.TextBox)e.Item.FindControl("txtMATCHNO")).Text;
             string start_date= ((Anthem.Label)e.Item.FindControl("lbSTART_DATE")).Text;
             string sUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff");
-            string eventName= ((Anthem.Label)e.Item.FindControl("lbNAME")).Text;
+            string eventName= ((Anthem.Label)e.Item.FindControl("lbHNAME")).Text+"-"+ ((Anthem.Label)e.Item.FindControl("lbGNAME")).Text;
+            bool changePos=((Anthem.CheckBox)e.Item.FindControl("lbBooked2")).Checked;
             //string lbHKJCHOSTNAME = ((Anthem.Label)e.Item.FindControl("lbHKJCHOSTNAME")).Text;
             //string lbHKJCGUESTNAME = ((Anthem.Label)e.Item.FindControl("lbHKJCGUESTNAME")).Text;
             int id = 0;
@@ -647,6 +649,7 @@
                         cmd2.CommandType = CommandType.StoredProcedure;
                         cmd2.Connection = connection;
                         cmd2.Parameters.Add("@EMATCHID", eventId);
+                        cmd2.Parameters.Add("@ChangePos", changePos);
                         //cmd2.Parameters.Add("@OLDHKJCDAYCODE", oldDayCODE);
                         //cmd2.Parameters.Add("@OLDHKJCMATCHNO", oldMatchNo);
                         cmd2.Parameters.Add("@HKJCDAYCODE", dayCODE);
@@ -655,8 +658,13 @@
                         cmd2.Parameters.Add("@CMATCHDATETIME2", Convert.ToDateTime(start_date).AddHours(AppFlag.MarginOfDeviation).ToString("yyyy-MM-dd HH:mm:ss.fff"));
                         id = Convert.ToInt32(cmd2.ExecuteScalar());
                         // Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + lbHKJCHOSTNAME + "/" + lbHKJCGUESTNAME + " (" + eventName+")");
-                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName);
+                        Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss") + " [Success] " : DateTime.Now.ToString("HH:mm:ss") + " [Failure] ") + "Sync [" + eventId + "] EMATCHES[" + dayCODE + " " + matchNo + "] " + " " + eventName + ""+((changePos? ", changed home/guest: Yes." : ", changed home/guest: No.")));
                         this.dgRankDetails.EditItemIndex = -1;
+                        if(id>0)
+                        { 
+                            JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Send " + id.ToString() + " GotEvent.");
+                            string sReslut = JC_SoccerWeb.Common.ConfigManager.SendWinMsg(id.ToString(), "GotEvent");
+                        }
                         if (id > 0 && AppFlag.AutoMapping)
                         {
                             TeamMapping(eventId, dayCODE, matchNo, start_date, eventName);
@@ -830,10 +838,14 @@
                     // string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS , (select first 1 hkjc_name_cn from teams where id=r.home_id and r.id=e.EMATCHID) HKJCHOSTNAME_CN,(select first 1 hkjc_name_cn from teams where id= r.guest_id and r.id=e.EMATCHID) HKJCGUESTNAME_CN  "
                     //+ "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID"
                     //   + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'"+ (id.ToString ()=="-1"?"": " and STATUS_ID ="+dplLeague.SelectedValue) +  " order by r.START_DATE , r.id ASC  ";
-                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.CMATCHDATETIME,t.NAME, t.MAPPING_STATUS , e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN  ,c.SHORT_NAME,e.CLEAGUE_OUTPUT_NAME "
-                   + "from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id  inner join  teams t on t.id =r.HOME_ID inner join COMPETITIONS c on c.id =r.COMPETITION_ID "
-                      + " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'" + (id.ToString() == "-1" ? "" : " and STATUS_ID =" + dplLeague.SelectedValue) + " order by r.START_DATE , r.id ASC  ";
-
+                    string queryString = "select R.ID ,R.NAME ,r.STATUS_NAME ,R.START_DATE,G.H_GOAL,G.G_GOAL,G.H_YELLOW,G.G_YELLOW,G.H_RED,G.G_RED,E.HKJCHOSTNAME,E.HKJCGUESTNAME,E.HKJCDAYCODE,E.HKJCMATCHNO,r.CTIMESTAMP, r.booked,e.MAPPINGSTATUS, e.CMATCHDATETIME," +
+                        // "t.NAME, t.MAPPING_STATUS ," +
+                        "(select t.SHORT_NAME from teams t  where t.id = r.HOME_ID ) Hname,(select t.SHORT_NAME from teams t  where t.id = r.GUEST_ID ) Gname, ( case when(SELECT  count(*) FROM TEAMS t where ( t.id =r.HOME_ID or t.id =r.GUEST_ID) and t.MAPPING_STATUS =true) =2 then true else false end) MAPPING_STATUS," +
+                        "e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN  ,c.SHORT_NAME,e.CLEAGUE_OUTPUT_NAME from events r  LEFT join goalinfo g  on r.id = g.EMATCHID   LEFT join EMATCHES e on e.EMATCHID = r.id " +
+                      // "inner join  teams t on t.id =r.HOME_ID " +
+                      "inner join COMPETITIONS c on c.id =r.COMPETITION_ID " +
+                      " where (r.caction !='delete' or r.caction is null) and  r.START_DATE >= '" + txtFrom.Text.Trim() + ", 00:00:00.000' and r.START_DATE <= '" + txtTo.Text.Trim() + ", 23:59:59.000'" + (id.ToString() == "-1" ? "" : " and STATUS_ID =" + dplLeague.SelectedValue) +" "+(txtTeam.Text.Trim()!=""? "and(r.name like '%"+ txtTeam.Text.Trim() + "%' or e.HKJCHOSTNAME like '%"+ txtTeam.Text.Trim() + "%' or e.HKJCGUESTNAME like '%"+ txtTeam.Text.Trim() + "%')":"") + " order by r.START_DATE , r.id ASC  ";
+                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Sync Sql:" + queryString);
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())

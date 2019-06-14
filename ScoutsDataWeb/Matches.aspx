@@ -132,7 +132,7 @@
                                                     </asp:TemplateColumn>
                                                         <asp:TemplateColumn HeaderText="LEAGUE">
                                                         <HeaderStyle Wrap="true" HorizontalAlign="Left" Width="60px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbCLEAGUE_OUTPUT_NAME" runat="server" Width="60px" Text='<%# DataBinder.Eval(Container, "DataItem.CLEAGUE_OUTPUT_NAME") %>'></anthem:Label>
+                                                            <anthem:Label id="lbCLEAGUE_OUTPUT_NAME" runat="server" Width="60px" Text='<%# DataBinder.Eval(Container, "DataItem.CLEAGUE_HKJC_NAME") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="NAME" Visible ="true" >

@@ -97,13 +97,13 @@
         </HEAD>
         <body>
         <form id="fm1" method="post" runat="server">
-    <table cellSpacing="0" cellPadding="0" width="100%" border="0">
+    <table cellSpacing="0" cellPadding="0" width="100%" border="0"  >
         <tr>
             <td class="top_bar01_bg">
            <!--     <img src="resource/mango_logo_title.gif" width="359" height="49"> -->
             </td>
         </tr>
-        <tr>
+        <tr style="display:none" >
             <td class="top_bar02_bg" vAlign="top" height="15">
                 <P align="left">
                     <FONT color="#ffffff">
@@ -135,7 +135,7 @@
                             <Anthem:panel id="plRankDetails" runat="server">
                                 <TABLE style="BORDER-COLLAPSE: collapse;  WIDTH:1380px; HEIGHT:600px"
                                        cellSpacing="10" cellPadding="0" rules="none" align="left" border="0">
-                                    <TR style="display:none">
+                                    <TR  >
                                         <TD vAlign="top" align="left" colspan="5" height="5"></TD>
                                     </TR> 
 
@@ -143,15 +143,19 @@
 
                                     <TR  valign="bottom" >
                                         <TD    align="center"  height="1"    >
-                                        <span > <strong> From</strong></span> 
+                                        <span > <strong>START DATE From:</strong></span> 
                                       <anthem:TextBox ID="txtFrom" runat="server" onclick="SelectDate(this)"  Width="100px">        </anthem:TextBox>
                                        </TD>  
-                                        <TD   align="left" height="1"   > <span > <strong> To</strong></span>
+                                        <TD   align="left" height="1"   > <span > <strong> To:</strong></span>
                                              <anthem:TextBox ID="txtTo" runat="server" onclick="SelectDate(this)"   Width="100px">   </anthem:TextBox>
                                         </TD>
                                         <TD   align="center" height="1"> 
-                                            <anthem:DropDownList ID="dplLeague" runat="server" AutoCallBack="True" Width="100px" >
-                                            <asp:ListItem Selected="True" Value="All">All</asp:ListItem>    </anthem:DropDownList>      
+                                             TEAM like:
+                                             <anthem:TextBox ID="txtTeam" runat="server"  Width="100px">   </anthem:TextBox>
+                                            Status:
+                                            <anthem:DropDownList ID="dplLeague"  runat="server" AutoCallBack="True" Width="100px" >
+                                            <asp:ListItem Selected="True" Value="All">All</asp:ListItem>    </anthem:DropDownList>   
+                                             
                                         </TD>
                                         <TD   align="left" height="1">
                                             <anthem:Button ID="btnEdit" runat="server" Text="Get"     Width="60px" />  
@@ -179,23 +183,38 @@
                                                        <ASP:EDITCOMMANDCOLUMN EditText="Edit" HeaderText="EDIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" CancelText="Cancel" UpdateText="Update" ItemStyle-Font-Bold="True" ButtonType="LinkButton">
                                                         <HEADERSTYLE    Wrap="true" VerticalAlign="Middle" CssClass="grid-header" HorizontalAlign="Left"></HEADERSTYLE><ITEMSTYLE  CssClass="grid-item"></ITEMSTYLE>
                                                     </ASP:EDITCOMMANDCOLUMN> 
-                                                    <asp:TemplateColumn HeaderText="ID"    Visible="false">
+                                                <%--    <asp:TemplateColumn HeaderText="ID"    Visible="false">
                                                         <HeaderStyle HorizontalAlign="Left" Width="20px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle Width="30px" CssClass="grid-item"></ItemStyle>
                                                         <ItemTemplate>
                                                             <%#this.dgRankDetails.CurrentPageIndex * this.dgRankDetails.PageSize + Container.ItemIndex + 1%>
                                                         </ItemTemplate>
-                                                    </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="ID"   >
+                                                    </asp:TemplateColumn>--%>
+                                                    <asp:TemplateColumn HeaderText="ID"     >
                                                         <HeaderStyle HorizontalAlign="Left"  Wrap="true" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbID"   Visible="false"  runat="server" Width="50px"  Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'></anthem:Label>
                                                       <asp:LinkButton ID="btnSelect" runat="server"  CommandName="Select" Text='<%# DataBinder.Eval(Container, "DataItem.ID") %>'> </asp:LinkButton>
                                                             </ItemTemplate>
                                                     </asp:TemplateColumn>  
-                                                     <asp:TemplateColumn HeaderText="NAME" Visible ="true" >
+                                                        <asp:TemplateColumn HeaderText="Name" Visible ="true" >
+                                                        <HeaderStyle HorizontalAlign="Left" Width="100px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
+                                                           <anthem:Label id="lbNAME" runat="server" Width="100px" Text='<%# DataBinder.Eval(Container, "DataItem.NAME") %>'></anthem:Label> 
+                                                        </ItemTemplate>
+                                                    </asp:TemplateColumn> 
+                                                      <asp:TemplateColumn HeaderText="HOST" Visible ="true" >
+                                                        <HeaderStyle HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
+                                                                <anthem:Label id="lbHNAME" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.HNAME") %>'></anthem:Label> 
+                                                        </ItemTemplate>
+                                                    </asp:TemplateColumn> 
+                                                        <asp:TemplateColumn HeaderText="GUEST" Visible ="true" >
+                                                        <HeaderStyle HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
+                                                         <anthem:Label id="lbGNAME" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.GNAME") %>'></anthem:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateColumn> 
+                                                     <%--<asp:TemplateColumn HeaderText="NAME" Visible ="true" >
                                                         <HeaderStyle HorizontalAlign="Left" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbNAME" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.NAME") %>'></anthem:Label>
                                                         </ItemTemplate>
-                                                    </asp:TemplateColumn>
+                                                    </asp:TemplateColumn>--%>
                                                       <asp:TemplateColumn HeaderText="League&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" Visible ="true" >
                                                         <HeaderStyle HorizontalAlign="Left" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"   Width="120px"></ItemStyle><ItemTemplate>
                                                             <%--<anthem:Label id="lbSTATUS_NAME" runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>'></anthem:Label>--%>
@@ -259,15 +278,15 @@
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="JC HOST" Visible ="true" >
-                                                        <HeaderStyle HorizontalAlign="Left" Wrap="true" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="120px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJCHOSTNAME" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME") %>'></anthem:Label>
-                                                          <anthem:Label id="lbHKJCHOSTNAMEcn" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME_CN") %>'></anthem:Label>
+                                                        <HeaderStyle HorizontalAlign="Left" Wrap="true" Width="100px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="100px"></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbHKJCHOSTNAME" runat="server" Width="100px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME") %>'></anthem:Label>
+                                                          <anthem:Label id="lbHKJCHOSTNAMEcn" runat="server" Width="100px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCHOSTNAME_CN") %>'></anthem:Label>
                                                              </ItemTemplate>
                                                     </asp:TemplateColumn> 
                                                     <asp:TemplateColumn HeaderText="JC GUEST">
-                                                       <HeaderStyle Wrap="true" HorizontalAlign="Left"  Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="120px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJCGUESTNAME" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME") %>'></anthem:Label>
-                                                         <anthem:Label id="lbHKJCGUESTNAMEcn" runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME_CN") %>'></anthem:Label>
+                                                       <HeaderStyle Wrap="true" HorizontalAlign="Left"  Width="100px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="100px"></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbHKJCGUESTNAME" runat="server" Width="100px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME") %>'></anthem:Label>
+                                                         <anthem:Label id="lbHKJCGUESTNAMEcn" runat="server" Width="100px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCGUESTNAME_CN") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn><asp:TemplateColumn HeaderText="DAY CODE">
                                                         <HeaderStyle Wrap="true" HorizontalAlign="Left" Width="60px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
@@ -283,38 +302,38 @@
                                                                 <asp:ListItem>SAT</asp:ListItem>
                                                                 <asp:ListItem>SUN</asp:ListItem> 
                                                                 </anthem:DropDownList> 
-                                                            <anthem:Label Visible="false" id="lbDAYCODE" runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE") %>'></anthem:Label>
+                                                            <anthem:Label Visible="false" id="lbDAYCODE" runat="server" Width="60px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCDAYCODE") %>'></anthem:Label>
                                                         </EditItemTemplate> 
                                                     </asp:TemplateColumn>
-                                                    <asp:TemplateColumn HeaderText="MATCH NO">
-                                                        <HeaderStyle Wrap="true" HorizontalAlign="Left" Width="70px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbHKJCMATCHNO" runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'></anthem:Label>
+                                                    <asp:TemplateColumn HeaderText="NO">
+                                                        <HeaderStyle Wrap="true" HorizontalAlign="Left" Width="30px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
+                                                            <anthem:Label id="lbHKJCMATCHNO" runat="server" Width="30px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                         <EditItemTemplate>
-                                                             <anthem:TextBox id="txtMATCHNO"    runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'>
+                                                             <anthem:TextBox id="txtMATCHNO"    runat="server" Width="30px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'>
                                                             </anthem:TextBox>
-                                                            <anthem:Label id="lbMATCHNO" Visible="false"  runat="server" Width="70px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'></anthem:Label>
+                                                            <anthem:Label id="lbMATCHNO" Visible="false"  runat="server" Width="30px" Text='<%# DataBinder.Eval(Container, "DataItem.HKJCMATCHNO") %>'></anthem:Label>
                                                         </EditItemTemplate> 
-
                                                     </asp:TemplateColumn>  
-   
-
-                                                 <asp:TemplateColumn HeaderText="DateTime">
+                                                 <asp:TemplateColumn HeaderText="DateTime" Visible="true">
                                                         <HeaderStyle HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbCTIMESTAMP" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.CMATCHDATETIME ") %>'></anthem:Label>
                                                         </ItemTemplate>
-                                                    </asp:TemplateColumn>
-                                                    
-                                                       <asp:TemplateColumn HeaderText="Booked" Visible="false">
-                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbBooked" runat="server" Width="40px" Text='<%# DataBinder.Eval(Container, "DataItem.booked") %>'></anthem:Label>
+                                                    </asp:TemplateColumn>                                                    
+                                                       <asp:TemplateColumn HeaderText="換主/客" Visible="true">
+                                                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="50px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
+                                                            <anthem:checkbox id="lbBooked" Enabled="false" runat="server" Width="50px" checked='<%# DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS") is DBNull? false:DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS") %>'></anthem:checkbox>
                                                         </ItemTemplate>
+                                                              <EditItemTemplate>
+                                                             <anthem:checkbox id="lbBooked2"  Enabled="true"  runat="server" Width="50px" checked='<%# DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS") is DBNull? false:DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS") %>'>
+                                                            </anthem:checkbox>
+                                                          </EditItemTemplate> 
                                                          </asp:TemplateColumn>
                                                       <asp:TemplateColumn HeaderText="Action">
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="80px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"  Width="80px"></ItemStyle><ItemTemplate>
                                                           <a href=# onclick="window.open('MatchDetails.aspx?Type=STATSCORE&ID=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=900,height=400, top=200,left=200')" >																	
 																		<b>Goals</b>	</a>
-                                                              <a href=# onclick="window.open('TeamMapping.aspx?Type=STATSCORE&id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=650,height=280, top=200,left=200')" >																	
+                                                              <a href=# onclick="window.open('TeamMapping.aspx?Type=HKJC&id=<%# DataBinder.Eval(Container, "DataItem.ID") %>','','scrollbars=yes, resizable=yes, Width=650,height=280, top=200,left=200')" >																	
 																		<b><%# DataBinder.Eval(Container, "DataItem.MAPPING_STATUS")==DBNull.Value? "Mapping" :Convert.ToBoolean(DataBinder.Eval(Container, "DataItem.MAPPING_STATUS"))? "Mapped":"Mapping"  %> </b>	</a>
                                                                                                                                                                                                                               </ItemTemplate>
                                                          </asp:TemplateColumn>

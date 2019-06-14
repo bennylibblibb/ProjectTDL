@@ -83,7 +83,7 @@
              ///   list.Add(new TabItem("更改密碼", Global.GetApplicationPath(base.Request) + "/ChangePassword.aspx?csIndex=" + list.Count));
 
             }
-            list.Add(new TabItem("登出", Global.GetApplicationPath(base.Request) + "/Logout.aspx?csIndex=" + list.Count));
+            list.Add(new TabItem("登出 (" + this.Context.User.Identity.Name+")", Global.GetApplicationPath(base.Request) + "/Logout.aspx?csIndex=" + list.Count));
             //if (Session["eventID"] != null)
             //{
             //    list.Add(new TabItem("陣容2", Global.GetApplicationPath(base.Request) + "/sports/PlayersRetrieval.aspx?csIndex=" + list.Count + "&eventid=" + Session["eventID"].ToString()));
@@ -128,7 +128,7 @@
                 {
                     if (hl != null && hl.Text != "STATSCORE")
                     {
-                        if (hl.Text != "數據" && hl.Text != "登出")
+                        if (hl.Text != "數據" && hl.Text != "登出 (" + this.Context.User.Identity.Name + ")")
                         {
                             hl.Attributes.Add("onclick", "javascript:" + (Session["eventID"] == null ? "alert('請選擇賽事!');return false;" : "return true;"));
                         }

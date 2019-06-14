@@ -67,11 +67,11 @@ namespace DataOfScouts
 
 
         [DllImport("user32.dll", EntryPoint = "FindWindow")]
-          public static extern int FindWindow(string lpClassName, string lpWindowName);
+        public static extern int FindWindow(string lpClassName, string lpWindowName);
         //public static extern int FindWindow(String text, String class_name);
         private const int SUCCESS_CODE = 100000;
         private static readonly uint uiSkSvrNotify2 = RegisterWindowMessage(AppFlag.SkSvrNotify);
-
+        private static readonly uint m_ExternID = RegisterWindowMessage(AppFlag.WndProcNotify);
         private static System.Threading.Timer analysisTimer;
 
         public IReceiver Receiver { get; set; }
@@ -566,6 +566,28 @@ namespace DataOfScouts
             //} 
         }
 
+        protected override void WndProc(ref Message m)
+        {
+            try
+            {
+                if (m_ExternID == m.Msg)
+                {
+                    int mw = (int)m.WParam;
+                    int ml = (int)m.LParam; 
+                    Files.WriteLog(" [Success] recevied " + m.Msg + "-" + mw.ToString() + "/" + ml.ToString());
+                    if (mw == 0)
+                    {
+                        InsertData("events.show4", true, ml.ToString(), true);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                Files.WriteError(DateTime.Now.ToString("HH:mm:ss fff ") + " WndProc() ;  Error: " + exp.ToString());
+            }
+            base.WndProc(ref m);
+        }
+
         private void alertTimerTask(object timerState)
         {
             Files.WriteLog("Alert Matches.");
@@ -633,7 +655,7 @@ namespace DataOfScouts
                 if (ds1.Tables["Matches"].Rows.Count > 0)
                 {
                     List<string> strL = ds1.Tables[0].AsEnumerable().Select(d => d.Field<string>("ABC")).ToList<string>().Distinct().ToList();
-                    string strs = string.Concat("", string.Join(" \r\n", strL), "");
+                    string strs = string.Concat("", string.Join(Environment.NewLine, strL), "");
                     Files.WriteLog("Alert: " + strs);
                     string title = "";
                    // string title = string.Concat("", string.Join(" \r\n(", ds1.Tables[0].AsEnumerable().Select(d => d.Field<string>("title")).ToList<string>().Distinct().ToList()), " ");
@@ -651,7 +673,7 @@ namespace DataOfScouts
                     client.UseDefaultCredentials = false;
                     client.Host = AppFlag.AlertEmailSMTP;
                     mail.Subject = "Scouts Alert Matches " + title;
-                    mail.Body = strs;
+                    mail.Body = "Scouts Alert Matches. " + Environment.NewLine + Environment.NewLine + strs;
                     mail.Priority = MailPriority.High;
                     client.Send(mail);
                 }
@@ -1118,6 +1140,23 @@ namespace DataOfScouts
                                     {
                                         using (FbCommand cmd2 = new FbCommand())
                                         {
+                                            cmd2.CommandText = "ADD_TEAM3";
+                                            cmd2.CommandType = CommandType.StoredProcedure;
+                                            cmd2.Connection = connection;
+                                            cmd2.Parameters.Add("@ID", api.data.@event.participants[i].id);
+                                            cmd2.Parameters.Add("@NAME", api.data.@event.participants[i].name);
+                                            cmd2.Parameters.Add("@SHORT_NAME", api.data.@event.participants[i].short_name);
+                                            cmd2.Parameters.Add("@ACRONYM", api.data.@event.participants[i].acronym);
+                                            cmd2.Parameters.Add("@GENDER", (api.data.@event.gender.ToLower() == "male") ? true : false);
+                                            cmd2.Parameters.Add("@AREA_ID", api.data.@event.participants[i].area_id);
+                                            cmd2.Parameters.Add("@UT", api.data.@event.participants[i].ut); 
+                                            cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                            id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                            Files.WriteLog(id > 0 ? " [Success] Update (Team) [" + api.data.@event.participants[i].id + "] " + api.data.@event.participants[i].name : " [Success] Insert (Team) [" + api.data.@event.participants[i].id + "] " + api.data.@event.participants[i].name);
+                                        }
+
+                                        using (FbCommand cmd2 = new FbCommand())
+                                        {
                                             cmd2.CommandText = "PR_participant_results";
                                             cmd2.CommandType = CommandType.StoredProcedure;
                                             cmd2.Connection = connection;
@@ -1138,7 +1177,7 @@ namespace DataOfScouts
                                             cmd2.Parameters.Add("@CACTION", api.data.@event.action);
                                             cmd2.Parameters.Add("@TEAMTYPE", api.data.@event.participants[i].counter == 1 ? "H" : "G");
                                             id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                            Files.WriteLog((id > 0 ? " [Success] Insert participant_results" : " [Failure] Insert participant_results") + "[" + api.data.@event.id + "/" + api.data.@event.participants[0].id + "].");
+                                            Files.WriteLog((id > 0 ? " [Success] Insert participant_results" : " [Failure] Insert participant_results") + "[" + api.data.@event.id + "/" + api.data.@event.participants[i].id + "].");
                                         }
 
                                         using (FbCommand cmd2 = new FbCommand())
@@ -1193,7 +1232,7 @@ namespace DataOfScouts
                                             cmd2.Parameters.Add("@CACTION", api.data.@event.action);
                                             cmd2.Parameters.Add("@TEAMTYPE", api.data.@event.participants[i].counter == 2 ? "G" : "H");
                                             id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                            Files.WriteLog((id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_stats") + "[" + api.data.@event.id + "/" + api.data.@event.participants[0].id + "].");
+                                            Files.WriteLog((id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_stats") + "[" + api.data.@event.id + "/" + api.data.@event.participants[i].id + "].");
                                             //   Files.WriteLog( " [Success] Insert participant_stats"  + "[" + api.data.@event.id + "/" + api.data.@event.participants[0].id + "].");
                                             //  if (id > 0) done = true; 
                                             //  Thread.Sleep(20);
@@ -1786,7 +1825,9 @@ namespace DataOfScouts
                                          incidentJson.data.incident.incident_id == 404// || incidentJson.data.incident.incident_id == 402
                                          || incidentJson.data.incident.incident_id == 414 || incidentJson.data.incident.incident_id == 415 ||
                                          (429 < incidentJson.data.@event.status_id && incidentJson.data.@event.status_id < 452)))
-                                    { SendAlertMsg(AppFlag.GOALDETAILS); }
+                                    {
+                                      ///  SendAlertMsg(AppFlag.GOALDETAILS);
+                                    }
                                 }
                                 //    else
                                 //    {
@@ -1901,33 +1942,33 @@ namespace DataOfScouts
             }
         }
 
-        public static bool SendAlertMsg(int sBroadcast)
-        {
-            bool SUCCESS_CODE = false;
-            int iResultCode = 0;
-            try
-            {
-                IntPtr handle = PostMessage(HWND_BROADCAST, uiSkSvrNotify, new Random().Next(), sBroadcast);
-                iResultCode = (int)handle;
+        //public static bool SendAlertMsg(int sBroadcast)
+        //{
+        //    bool SUCCESS_CODE = false;
+        //    int iResultCode = 0;
+        //    try
+        //    {
+        //        IntPtr handle = PostMessage(HWND_BROADCAST, uiSkSvrNotify, new Random().Next(), sBroadcast);
+        //        iResultCode = (int)handle;
 
-                if (iResultCode != 0)
-                {
-                    SUCCESS_CODE = true;
-                    Files.WriteLog(" [Success] Send " + sBroadcast.ToString());
-                }
-                else
-                {
-                    iResultCode = GetLastError();
-                    throw (new Exception("GetLastError()"));
-                }
-            }
-            catch (Exception ex)
-            {
-                SUCCESS_CODE = false;
-                Files.WriteError("SendAlertMsg(),error:" + ex.ToString());
-            }
-            return SUCCESS_CODE;
-        }
+        //        if (iResultCode != 0)
+        //        {
+        //            SUCCESS_CODE = true;
+        //            Files.WriteLog(" [Success] Send " + sBroadcast.ToString());
+        //        }
+        //        else
+        //        {
+        //            iResultCode = GetLastError();
+        //            throw (new Exception("GetLastError()"));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        SUCCESS_CODE = false;
+        //        Files.WriteError("SendAlertMsg(),error:" + ex.ToString());
+        //    }
+        //    return SUCCESS_CODE;
+        //}
 
         //public struct COPYDATASTRUCT
         //{
@@ -3311,7 +3352,7 @@ namespace DataOfScouts
                                                         cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                         cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                         cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                         cmd2.Parameters.Add("@UT", participant.ut);
                                                         cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                         cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -3422,7 +3463,7 @@ namespace DataOfScouts
                             //                cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                             //                cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                             //                cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                            //                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                            //                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                             //                cmd2.Parameters.Add("@UT", participant.ut);
                             //                cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                             //                cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -3447,7 +3488,7 @@ namespace DataOfScouts
                             //                cmd2.Parameters.Add("@BIRTHDATE", participant.area_id);
                             //                cmd2.Parameters.Add("@POSITION_NAME", participant.area_id);
                             //                cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                            //                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                            //                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                             //                cmd2.Parameters.Add("@UT", participant.ut);
                             //                cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                             //                cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -3545,7 +3586,7 @@ namespace DataOfScouts
                                                         cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                         cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                         cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                         cmd2.Parameters.Add("@UT", participant.ut);
                                                         cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                         cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -3711,7 +3752,7 @@ namespace DataOfScouts
                                             //                            cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                             //                            cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                             //                            cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                            //                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                            //                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                             //                            cmd2.Parameters.Add("@UT", participant.ut);
                                             //                            cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                             //                            cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -4758,7 +4799,7 @@ namespace DataOfScouts
                                                 cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                 cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                 cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                 cmd2.Parameters.Add("@UT", participant.ut);
                                                 cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                 cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -4783,7 +4824,7 @@ namespace DataOfScouts
                                                 cmd2.Parameters.Add("@BIRTHDATE", participant.area_id);
                                                 cmd2.Parameters.Add("@POSITION_NAME", participant.area_id);
                                                 cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                 cmd2.Parameters.Add("@UT", participant.ut);
                                                 cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                 cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -4943,7 +4984,7 @@ namespace DataOfScouts
                                                             cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                             cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                             cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                             cmd2.Parameters.Add("@UT", participant.ut);
                                                             cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                             cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -5168,7 +5209,7 @@ namespace DataOfScouts
                                 //                cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                 //                cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                 //                cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                //                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                //                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                 //                cmd2.Parameters.Add("@UT", participant.ut);
                                 //                cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                 //                cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -5193,7 +5234,7 @@ namespace DataOfScouts
                                 //                cmd2.Parameters.Add("@BIRTHDATE", participant.area_id);
                                 //                cmd2.Parameters.Add("@POSITION_NAME", participant.area_id);
                                 //                cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                //                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                //                cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                 //                cmd2.Parameters.Add("@UT", participant.ut);
                                 //                cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                 //                cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -5315,7 +5356,7 @@ namespace DataOfScouts
                                                             cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                             cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                             cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                             cmd2.Parameters.Add("@UT", participant.ut);
                                                             cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                             cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -5514,7 +5555,7 @@ namespace DataOfScouts
                                                 //                            cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                 //                            cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                 //                            cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                //                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                //                            cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                 //                            cmd2.Parameters.Add("@UT", participant.ut);
                                                 //                            cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                 //                            cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -5898,6 +5939,18 @@ namespace DataOfScouts
                                                 foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEvent sevent in events)
                                                 {
                                                     if (sevent == null) continue;
+                                                    using (FbCommand cmd2 = new FbCommand())
+                                                    {
+                                                        cmd2.CommandText = "PR_XML_event";
+                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                        cmd2.Connection = connection;
+                                                        cmd2.Parameters.Add("@ID", sevent.id);
+                                                        cmd2.Parameters.Add("@HOME_ID", sevent.participants.Count() > 0 ? sevent.participants[0].id : "-1");
+                                                        cmd2.Parameters.Add("@GUEST_ID", sevent.participants.Count() > 0 ? sevent.participants[1].id : "-1");
+                                                        cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                        Files.WriteLog((id > 0 ? " [Success] Update event " : " [Failure] Update event ") + "[" + sevent.id + "] " + sevent.participants[0].name + "-" + sevent.participants[1].name + " " + sevent.participants[0].id + "/" + sevent.participants[1].id);
+                                                    }
 
                                                     string sName = "";
                                                     string sPlayers = "";
@@ -5926,7 +5979,7 @@ namespace DataOfScouts
                                                         //    cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                         //    cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                         //    cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                        //    cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                        //    cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                         //    cmd2.Parameters.Add("@UT", participant.ut);
                                                         //    cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                         //    cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -6112,7 +6165,7 @@ namespace DataOfScouts
                                                     //        cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                     //        cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                     //        cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                    //        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                    //        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                     //        cmd2.Parameters.Add("@UT", participant.ut);
                                                     //        cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                     //        cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -6145,6 +6198,69 @@ namespace DataOfScouts
                                                     //        }
                                                     //    }
                                                     //}
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                connection.Close();
+                            }
+                            break;
+                        }
+                    case "events.show4":
+                        {
+                            using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
+                            {
+                                connection.Open();
+                                for (int i = 1; i < 2 && Convert.ToBoolean(arr[0]) == true && arr[1].ToString() != ""; i++)
+                                {
+                                    var responseValue = clientTest.GetAccessData(strToken, "events.show", arr[1]);
+                                    var strResponseValue = responseValue.Result;
+                                     if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
+                                    string strName = arr[1].ToString() + "_" + type + "-" + i + "_" + DateTime.Now.ToString("HHmmss");
+
+                                    DOSEvents2.api apis = XmlUtil.Deserialize(typeof(DOSEvents2.api), strResponseValue) as DOSEvents2.api;
+                                    if (apis == null) break;
+
+                                    Files.WriteXml(strName, strResponseValue);
+                                    Files.WriteLog("Get " + strName + ".xml.");
+
+                                    DOSEvents2.apiDataCompetition competition = (apis.data == null || apis.data.Length == 0) ? null : apis.data[0];
+                                    if (competition == null) break;
+
+                                    string strCompetition_id = competition.id;
+                                    string strArea_id = competition.area_id;
+
+                                    DOSEvents2.apiDataCompetitionSeason[] seasons = competition.seasons;
+                                    if (seasons == null) continue;
+                                    foreach (DOSEvents2.apiDataCompetitionSeason season in seasons)
+                                    {
+                                        DOSEvents2.apiDataCompetitionSeasonStage[] stages = season.stages;
+                                        if (stages == null) continue;
+
+                                        foreach (DOSEvents2.apiDataCompetitionSeasonStage stage in stages)
+                                        {
+                                            DOSEvents2.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
+                                            if (groups == null) continue;
+                                            foreach (DOSEvents2.apiDataCompetitionSeasonStageGroup group in groups)
+                                            {
+                                                DOSEvents2.apiDataCompetitionSeasonStageGroupEvent[] events = group.events;
+                                                if (events == null) continue;
+                                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEvent sevent in events)
+                                                {
+                                                    if (sevent == null) continue;
+                                                    using (FbCommand cmd2 = new FbCommand())
+                                                    {
+                                                        cmd2.CommandText = "PR_XML_event";
+                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                        cmd2.Connection = connection;
+                                                        cmd2.Parameters.Add("@ID", sevent.id);
+                                                        cmd2.Parameters.Add("@HOME_ID", sevent.participants.Count() > 0 ? sevent.participants[0].id : "-1");
+                                                        cmd2.Parameters.Add("@GUEST_ID", sevent.participants.Count() > 0 ? sevent.participants[1].id : "-1");
+                                                        cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                        Files.WriteLog((id > 0 ? " [Success] Update event " : " [Failure] Update event ") + "[" + sevent.id + "] " + sevent.participants[0].name + "-" + sevent.participants[1].name + " " + sevent.participants[0].id + "/" + sevent.participants[1].id+" (Team)");
+                                                    } 
                                                 }
                                             }
                                         }
@@ -6436,7 +6552,7 @@ namespace DataOfScouts
                                                                 //        cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                                 //        cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                                 //        cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                                //        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                                //        cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                                 //        cmd2.Parameters.Add("@UT", participant.ut);
                                                                 //        cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                                 //        cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -6518,7 +6634,7 @@ namespace DataOfScouts
                                                                     cmd2.Parameters.Add("@ACRONYM", participant.acronym);
                                                                     cmd2.Parameters.Add("@GENDER", (participant.gender.ToLower() == "male") ? true : false);
                                                                     cmd2.Parameters.Add("@AREA_ID", participant.area_id);
-                                                                    cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "male") ? true : false);
+                                                                    cmd2.Parameters.Add("@BNATIONAL", (participant.national.ToLower() == "yes") ? true : false);
                                                                     cmd2.Parameters.Add("@UT", participant.ut);
                                                                     cmd2.Parameters.Add("@OLD_PARTICIPANT_ID", participant.old_participant_id == "" ? "-1" : participant.old_participant_id);
                                                                     cmd2.Parameters.Add("@SLUG", participant.slug);
@@ -10250,7 +10366,7 @@ namespace DataOfScouts
 
                                                     if (id > 0)
                                                     {
-                                                        SendAlertMsg(AppFlag.LIVEGOALS);
+                                                      ///  SendAlertMsg(AppFlag.LIVEGOALS);
                                                     }
 
                                                     if (!backgroundWorker.IsBusy && id > 0)
@@ -10306,7 +10422,9 @@ namespace DataOfScouts
                                                 sID = Convert.ToInt32(cmd2.ExecuteScalar());
                                                 Files.WriteLog((sID > -1 ? " [Success] Insert INCIDENTS " : " [Failure] Insert INCIDENTS ") + "[" + incidentJson.data.@event.id + "]," + strName + ".json");
 
-                                                if (sID > 0) { SendAlertMsg(AppFlag.GOALDETAILS); }
+                                                if (sID > 0) {
+                                                  //  SendAlertMsg(AppFlag.GOALDETAILS);
+                                                }
 
                                                 if (!backgroundWorker.IsBusy && sID > 0)
                                                 {
@@ -10999,7 +11117,7 @@ namespace DataOfScouts
 
                                                     if (id > 0)
                                                     {
-                                                        SendAlertMsg(AppFlag.LIVEGOALS);
+                                                    ///    SendAlertMsg(AppFlag.LIVEGOALS);
                                                     }
 
                                                     if (!backgroundWorker.IsBusy && id > 0)
@@ -11078,7 +11196,9 @@ namespace DataOfScouts
                                                 sID = Convert.ToInt32(cmd2.ExecuteScalar());
                                                 Files.WriteLog((sID > -1 ? " [Success] Insert INCIDENTS " : " [Failure] Insert INCIDENTS ") + "[" + incidentJson.data.@event.id + "]," + strName + ".json");
 
-                                                if (sID > 0) { SendAlertMsg(AppFlag.GOALDETAILS); }
+                                                if (sID > 0) {
+                                                  //  SendAlertMsg(AppFlag.GOALDETAILS);
+                                                }
 
                                                 if (!backgroundWorker.IsBusy && sID > 0)
                                                 {

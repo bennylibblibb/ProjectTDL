@@ -86,7 +86,7 @@ namespace DataOfScouts
         public static string AlertEmailPwd = ConfigurationSettings.AppSettings["AlertEmailPwd"];
         public static string AlertEmailTo = ConfigurationSettings.AppSettings["AlertEmailTo"];
         public static string AlertEmailSMTP = ConfigurationSettings.AppSettings["AlertEmailSMTP"];
-         
+        internal static string WndProcNotify = ConfigurationManager.AppSettings["WndProcNotify"];
     }
 
     public enum InformationType
