@@ -940,7 +940,7 @@ namespace ScoutDBProvider
                                                                         dr3[9] = dr2["GAMES"];
                                                                         dr3[10] = dr2["IWON"] + "/" + dr2["IDRAW"] + "/" + dr2["ILOST"];
                                                                         dr3[11] = "1";
-                                                                        dr3[12] = DateTime.Now;
+                                                                        dr3[12] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
                                                                         dr3[13] = "0";
                                                                         data.Tables["data"].Rows.Add(dr3);
                                                                     }
@@ -983,7 +983,7 @@ namespace ScoutDBProvider
                                                                         dr3[3] = dr2["CPLAYER_NAME_cn"].Equals(DBNull.Value) || dr2["CPLAYER_NAME_cn"].Equals("") ? (dr2["pcname"].Equals(DBNull.Value) || dr2["pcname"].Equals("") ? dr2["CPLAYER_NAME"] : dr2["pcname"]) : dr2["CPLAYER_NAME_cn"];
                                                                         dr3[4] = dr2["tcname"] == DBNull.Value || dr2["tcname"].ToString() == "" ? dr2["tname"] : dr2["tcname"];
                                                                         dr3[5] = dr2["IGOALS"];
-                                                                        dr3[6] = DateTime.Now;
+                                                                        dr3[6] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
                                                                         dr3[7] = "0";
                                                                         data.Tables["data"].Rows.Add(dr3);
                                                                     }
@@ -3119,7 +3119,7 @@ namespace ScoutDBProvider
                                                             dr3[9] = dr2["GAMES"];
                                                             dr3[10] = dr2["IWON"] + "/" + dr2["IDRAW"] + "/" + dr2["ILOST"];
                                                             dr3[11] = "1";
-                                                            dr3[12] = DateTime.Now;
+                                                            dr3[12] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
                                                             dr3[13] = "0";
                                                             data.Tables["data"].Rows.Add(dr3);
                                                         }
@@ -3208,7 +3208,7 @@ namespace ScoutDBProvider
                                                             dr3[3] = dr2["CPLAYER_NAME_cn"].Equals(DBNull.Value) || dr2["CPLAYER_NAME_cn"].Equals("") ? (dr2["pcname"].Equals(DBNull.Value) || dr2["pcname"].Equals("") ? dr2["CPLAYER_NAME"] : dr2["pcname"]) : dr2["CPLAYER_NAME_cn"];
                                                             dr3[4] = dr2["tcname"] == DBNull.Value || dr2["tcname"].ToString() == "" ? dr2["tname"] : dr2["tcname"];
                                                             dr3[5] = dr2["IGOALS"];
-                                                            dr3[6] = DateTime.Now;
+                                                            dr3[6] =  DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
                                                             dr3[7] = "0";
                                                             data.Tables["data"].Rows.Add(dr3);
                                                         }
