@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Gosts UserName="GOSTS" DateTime="2013/09/06 12:58">
+  <Windows> 
+    <Window Type="4" Code="">
+      <Locked>0</Locked>
+      <Height>209</Height>
+      <Width>326</Width>
+      <Position>0,0</Position>
+    </Window>
+    <Window Type="5" Code="">
+      <Locked>0</Locked>
+      <Height>364</Height>
+      <Width>991</Width>
+      <Position>326,0</Position>
+    </Window>
+    <Window Type="6" Code="">
+      <Locked>0</Locked>
+      <Height>244</Height>
+      <Width>326</Width>
+      <Position>0,364</Position>
+    </Window>
+    <Window Type="3" Code="">
+      <Locked>0</Locked>
+      <Height>138</Height>
+      <Width>326</Width>
+      <Position>0,608</Position>
+    </Window>
+    <Window Type="8" Code="">
+      <Locked>0</Locked>
+      <Height>246</Height>
+      <Width>225</Width>
+      <Position>1095,500</Position>
+    </Window>
+    <Window Type="9" Code="">
+      <Locked>0</Locked>
+      <Height>155</Height>
+      <Width>326</Width>
+      <Position>0,209</Position>
+    </Window>
+    <Window Type="1" Code="">
+      <Locked>0</Locked>
+      <Height>NaN</Height>
+      <Width>993</Width>
+      <Position>326,364</Position>
+      <ArrayMode>Horizontal</ArrayMode>
+    </Window>
+    <Window Type="0" Code="1">
+      <Locked>0</Locked>
+      <Height>246</Height>
+      <Width>771</Width>
+      <Position>326,500</Position>
+      <Items>
+        <Item Name="One">
+          <Codes><![CDATA[]]></Codes>
+        </Item>
+      </Items>
+    </Window>
+  </Windows>
+</Gosts>

@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="GOSTS.Preference.AccPRF"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid >
+        <Grid.Background>
+            
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <!--<GradientStop Color="#FFF1F1F1" Offset="0.042"/>
+                    <GradientStop Color="#FFA7B4B3" Offset="0.925"/>-->
+                    <GradientStop Color="#FFF2F2F8" Offset="0.8"/>
+                    <GradientStop Color="#FFB8BBD0" Offset="0"/>
+                </LinearGradientBrush>
+             
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="80"></ColumnDefinition>
+            <ColumnDefinition Width="120"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Content="{Cult:LabelText AccMask_Prefix, DefaultValue='Prefix'}" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
+        <Label Content="{Cult:LabelText AccMask_Length, DefaultValue='Length'}" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" />
+        <Label Content="{Cult:LabelText AccMask_Suffix, DefaultValue='Suffix'}" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" />
+        <TextBox Name="txtPre"  Grid.Row="1" Grid.Column="2"/>
+        <TextBox Name="txtLen"  Grid.Row="2" Grid.Column="2"/>
+        <TextBox Name="txtSuf"  Grid.Row="3" Grid.Column="2"/>
+
+        <Button Content="{Cult:LabelText AccMask_btnOk, DefaultValue='OK'}" Name="btnSave" Click="btnSave_Click_1" Grid.Row="4" Grid.Column="2" Width="45" Margin="0,0,75,0">
+        <Button.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="White"/>
+                <GradientStop Color="DarkGray" Offset="1"/>
+            </LinearGradientBrush>
+        </Button.Background>
+        </Button>
+        <Button Content="{Cult:LabelText AccMast_btnClear, DefaultValue='Clear'}" Name="btnClear" Click="btnCancel_Click_1" Grid.Row="4" Grid.Column="2"  Width="45" HorizontalAlignment="Right">
+        <Button.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="White"/>
+                <GradientStop Color="DarkGray" Offset="1"/>
+            </LinearGradientBrush>
+        </Button.Background>
+        </Button>
+
+    </Grid>
+</UserControl>

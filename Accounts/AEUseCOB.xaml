@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="GOSTS.AEUseCOB"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Name="CustomStyle" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <Image Name="img" Source="/GOSTS;component/Images/ribbtn_lock_open.png"/>
+                            <TextBlock Text="ToggleButton"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                <Setter TargetName="img" Property="Source" Value="/GOSTS;component/Images/ribbtn_lock_locked.png"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"  VerticalAlignment="Top" Width="auto" Orientation="Horizontal">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ToggleButton Height="20" Visibility="Collapsed" Name="tbnLockUser" Width="20" VerticalContentAlignment="Stretch" Margin="10,0,0,0" ></ToggleButton>
+            <Image Width="30" Height="30" Source="..\Images\account.png"></Image>
+            <Label Content="{Cult:LabelText AccCmbText, DefaultValue='Acc'}" Grid.Column="1" Padding="3,5,3,5"/>
+            <ComboBox IsEditable="True" Grid.Column="2" Margin="0,1,0,1" Visibility="Visible" HorizontalAlignment="Left" Name="cbbUsers" Width="80" />
+        </Grid>
+        <!--<ToggleButton Height="20" Name="tbnLockUser" Width="20" VerticalContentAlignment="Stretch" Margin="10,0,0,0" >
+        </ToggleButton>
+        <Label Content="Acc" Padding="3,5,3,5" Width="30"/>
+        <ComboBox IsEditable="True"   Visibility="Visible" HorizontalAlignment="Left" Name="cbbUsers" VerticalAlignment="Center"  Width="80" />-->
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,160 @@
+﻿<UserControl x:Class="GOSTS.WPFControls.ProductsControl" Name="ProductsControl1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mdi="clr-namespace:WPF.MDI;assembly=WPF.MDI"
+             xmlns:local="clr-namespace:GOSTS.Common"
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+             mc:Ignorable="d"    Unloaded="UserControl_Unloaded" 
+             >
+
+    <UserControl.Resources >
+        <local:GOSDateTimeConverter x:Key="GOSDateTimeConverter" />
+        <local:GOSPercentConverter x:Key="GOSPercentConverter" />
+        <local:GOSRowHeaderConverter x:Key="GOSRowHeaderConverter" />
+        <local:GOSProdNameConverter x:Key="GOSProdNameConverter" />
+        <Style x:Key="IDHeaderStyle"   TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <!--<GradientStop Color="LightGray" Offset="0.042"/>
+                        <GradientStop Color="LightGray" Offset="0.925"/>-->
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalAlignment" Value="left"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="ToolTip" Value="Product Code"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="IDStyle"   TargetType="{x:Type DataGridCell}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <GradientStop Color="LightGray"  Offset="0.042"/>
+                        <GradientStop Color="LightGray" Offset="0.925"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True"  >
+                    <Setter Property="Foreground" Value="black"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <DataGridTextColumn x:Key="MarketTime"
+                             Binding="{Binding Path=Datetime,StringFormat=\{0:HH:mm:ss\} }" Header="{Cult:LabelText MkTime, DefaultValue='Time'}"  MinWidth="0"  
+                            Visibility="{Binding isDealerHidden, Source={x:Reference ProductsControl1}}"/>
+
+        <Style x:Key="dgCell" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="right"/>
+        </Style>
+        <Style x:Key="dgCellCenter" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch "  Margin="0,0,0,0">
+        <DataGrid  Name="dgProducts" IsReadOnly="true"  Margin="0,0,0,0" MinHeight="46" MinWidth="400" ItemsSource="{Binding Path=MarketPriceItems}" 
+             Background="White"   BorderBrush="Transparent"  AlternatingRowBackground="LightYellow"  BorderThickness="0" HeadersVisibility="All"  ColumnHeaderHeight="30" FontSize="13" 
+             AutoGenerateColumns="False"   AllowDrop="True" DragDrop.DragOver="OnDragOver" DragDrop.Drop="OnDrop"   SelectedCellsChanged="dgProducts_SelectedCellsChanged" 
+             SelectionMode="Single" SelectionUnit="CellOrRowHeader" PreviewKeyDown="PreviewKeyDownHandler" SelectionChanged="dgProducts_SelectionChanged">
+             <DataGrid.RowHeaderStyle >
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="MinWidth" Value="60"/>
+                    <Setter Property="Content" Value="{Binding ProductCode, Converter={StaticResource GOSRowHeaderConverter}}" />
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridRowHeader_PreviewMouseLeftButtonDown"></EventSetter>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+
+            <!--<DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="resultDataGrid_MouseDoubleClick"/>
+                </Style>
+            </DataGrid.RowStyle>-->
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+
+                        <Trigger Property="IsSelected" Value="True"  >
+                            <Setter Property="Background" Value="LightGreen"/>
+                            <Setter Property="Foreground" Value="black"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                        </Trigger>
+                        <!--<Trigger Property="IsMouseOver" Value="true">
+                        <Setter   Property="Cursor" Value="Hand" />
+                            <Setter Property="Background" Value="Green" /> 
+                        </Trigger>-->
+                    </Style.Triggers>
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown"></EventSetter>
+                </Style>
+            </DataGrid.CellStyle>
+
+            <DataGrid.Columns  >
+                <DataGridTextColumn  CellStyle="{StaticResource IDStyle}" HeaderStyle="{StaticResource IDHeaderStyle}" Binding="{Binding Path=ProductCode}" Header="ID" MinWidth="60"  Visibility="Collapsed"  >
+                </DataGridTextColumn>
+                <!--<DataGridTextColumn Binding="{Binding Path=ProductName}" Header="{Cult:LabelText MkName, DefaultValue='Name'}"  MinWidth="50"  />-->
+                <DataGridTextColumn Binding="{Binding Path=ProductCode, Converter={StaticResource GOSProdNameConverter}}" Header="{Cult:LabelText MkName, DefaultValue='Name'}"  MinWidth="50"  />
+                <DataGridTextColumn Binding="{Binding Path=ProductStatus}" Header="{Cult:LabelText MkState, DefaultValue='State'}" MinWidth="0"  ElementStyle="{StaticResource dgCellCenter}" />
+                <DataGridTextColumn Binding="{Binding Path=BQty}" Header="{Cult:LabelText MkBQty, DefaultValue='BQty'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}" Foreground="Blue" />
+                <DataGridTextColumn Binding="{Binding Bid}" Header="{Cult:LabelText MkBid, DefaultValue='Bid'}"  MinWidth="0" Foreground="Blue" ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn Binding="{Binding Ask}" Header="{Cult:LabelText MkAsk, DefaultValue='Ask'}"  MinWidth="0" Foreground="Red"  ElementStyle="{StaticResource dgCell}" />
+                <DataGridTextColumn Binding="{Binding Path=AQty}" Header="{Cult:LabelText MkAQty, DefaultValue='AQty'}" MinWidth="0" ElementStyle="{StaticResource dgCell}"  Foreground="Red"   />
+                <DataGridTextColumn Binding="{Binding Path=Last}" Header="{Cult:LabelText MkLast, DefaultValue='Last'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}"   />
+                <StaticResource ResourceKey="MarketTime"/>
+                <DataGridTextColumn Binding="{Binding Path=EP}" Visibility="Collapsed" Header="{Cult:LabelText MkEP, DefaultValue='EP'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn Binding="{Binding Path=LQty}" Header="{Cult:LabelText MkLQty, DefaultValue='LQty'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn Binding="{Binding Path=Change}" Header="{Cult:LabelText MkChg, DefaultValue='Chg'}" MinWidth="0"   ElementStyle="{StaticResource dgCell}"   />
+                <!--<DataGridTextColumn Binding="{Binding Path=ChangePer,StringFormat=\{0\}% }" Header="Chg%" MinWidth="0"  />-->
+                <DataGridTextColumn Binding="{Binding ChangePer, Converter={StaticResource GOSPercentConverter}}" Header="{Cult:LabelText MkChgPer, DefaultValue='Chg%'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn Binding="{Binding Path=Volume}" Header="{Cult:LabelText MkVolume, DefaultValue='Volume'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn Binding="{Binding High}" Header="{Cult:LabelText MkHigh, DefaultValue='High'}" MinWidth="0" ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn  Binding="{Binding Low}" Header="{Cult:LabelText MkLow, DefaultValue='Low'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}" />
+                <DataGridTextColumn  Binding="{Binding Open}" Header="{Cult:LabelText MkOpen, DefaultValue='Open'}" MinWidth="0"   ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn Binding="{Binding Path=PreClose}" Header="{Cult:LabelText MkPreClose, DefaultValue='Pre Close'}" MinWidth="0"    ElementStyle="{StaticResource dgCell}" />
+                <!--<DataGridTextColumn  Binding="{Binding CloseDate}" Header="CloseDate" MinWidth="0"   />-->
+                <DataGridTextColumn Binding="{Binding CloseDate, Converter={StaticResource GOSDateTimeConverter},StringFormat=\{0:MM/dd\} }" Header="{Cult:LabelText MkCloseDate, DefaultValue='Close Date'}" MinWidth="0" ElementStyle="{StaticResource dgCellCenter}"   />
+                <DataGridTextColumn Binding="{Binding Path=Strike}" Header="{Cult:LabelText MkStrike, DefaultValue='Strike'}" MinWidth="0"    ElementStyle="{StaticResource dgCell}"  />
+            </DataGrid.Columns>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu MenuItem.Click="MenuItemClick" >
+                    <ContextMenu.Background >
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="White"/>
+                            <GradientStop Color="DarkGray" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ContextMenu.Background>
+                    <MenuItem  Header="{Cult:LabelText MkMIIp, DefaultValue='Insert Price        Ins'}" Tag="Insert" />
+                    <MenuItem  Header="{Cult:LabelText MkMIRp, DefaultValue='Remove Price     Del'}" Tag="Remove"/>
+                    <MenuItem  Header="{Cult:LabelText MkMICpl, DefaultValue='Clear Price List'}"  Tag="Clear"/>
+                    <MenuItem  Header="{Cult:LabelText MkMIRpl, DefaultValue='Rename Price List'}"  Tag="Rename"/>
+                    <!--<Line Style="{StaticResource SeparatorLineStyle}" > </Line>-->
+                    <Separator />
+                    <MenuItem   Header="{Cult:LabelText MkMIPriceDepth, DefaultValue='Price Depth'}" Tag="PriceDepth"/>
+                    <!--<MenuItem   Header="Long Price Depth" Tag="LongPriceDepth"/>-->
+                    <MenuItem  Header="{Cult:LabelText MkMITicker, DefaultValue='Ticker'}" Tag="Ticker"/>
+                    <MenuItem   Header="{Cult:LabelText MkMIEnterOrder, DefaultValue='Enter Order'}" Tag="EnterOrder"/>
+                    <!--<MenuItem  Header="Click To Trade"/>-->
+                    <!--<MenuItem   Header="Quote Request"/>-->
+                    <MenuItem  Header="{Cult:LabelText MkMIOm, DefaultValue='Option Matrix'}" Tag="OptionMaster"/>
+                    <MenuItem   Header="{Cult:LabelText MkMIApa, DefaultValue='Add Price Alert'}" Tag="AddPriceAlert" />
+                    <Separator />
+                    <MenuItem  Header="{Cult:LabelText MkMICa, DefaultValue='Chart Analysis'}" Tag="Chart"/>
+                    <!--<Separator />-->
+                    <!--<MenuItem  Header="Product Information"/>-->
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+</UserControl>

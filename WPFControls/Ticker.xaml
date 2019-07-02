@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="GOSTS.WPFControls.Ticker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:GOSTS"  
+             xmlns:local="clr-namespace:GOSTS.Common"
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+            mc:Ignorable="d" d:DesignHeight="160" d:DesignWidth="310"   Unloaded="UserControl_Unloaded" Loaded="UserControl_Loaded"  >
+    <Grid      >
+        <Grid.Resources >
+            <local:MultiValueStringFormatByDepInPriceConvertor x:Key="MultiValueStringFormatConvertor" />
+            
+            <Style TargetType="DataGridCell">
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True"  >
+                        <Setter Property="Background" Value="LightGreen"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition  />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition   /> 
+        </Grid.ColumnDefinitions>
+        <!--<Viewbox   Margin="0,0,0,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Left" >-->
+            <DataGrid   SelectionUnit="Cell"  IsReadOnly="True" CanUserReorderColumns="False"   CanUserSortColumns="False" CanUserResizeRows="False"  ItemsSource="{Binding TickerList}"  AutoGenerateColumns="False"       Background="White"  Margin="0,0,0,0"  x:Name="dgTicker">
+            <DataGrid.RowHeaderStyle >
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Width" Value="0"/>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+            <DataGrid.Columns>
+                    <!--  ItemsSource="{Binding TickerList}" -->
+                    <!--<DataGridTextColumn Binding="{Binding Path=productCode}" Header="Product" MinWidth="60"    />-->
+                <DataGridTextColumn Binding="{Binding Path=qty}" Header="{Cult:LabelText TickerQty, DefaultValue='Qty'}"  MinWidth="40" />
+                <DataGridTextColumn   Header="{Cult:LabelText TickerPrice, DefaultValue='Price'}"  MinWidth="60">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor}">
+                            <Binding Path="price"></Binding>
+                            <Binding Path="DepInPrice"></Binding>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=logTime,StringFormat=\{0:HH:mm:ss\}}" Header="{Cult:LabelText TickerLogTime, DefaultValue='Log Time'}"  MinWidth="80"  />
+                <DataGridTextColumn Binding="{Binding Path=dealSrc}" Header="{Cult:LabelText TickerDes, DefaultValue='Description'}"  Width="*"  MinWidth="80"/>
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu MenuItem.Click="MenuItemClick" Loaded="ContextMenu_Loaded">
+                    <ContextMenu.Background >
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="White"/>
+                            <GradientStop Color="DarkGray" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ContextMenu.Background>
+                        <MenuItem  Name="miLocked"  Header="Lock ID" Tag="Lock ID"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid> 
+        <!--</Viewbox>-->
+    </Grid>
+</UserControl>

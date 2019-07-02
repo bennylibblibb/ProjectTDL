@@ -1,0 +1,598 @@
+﻿<UserControl Name="UserControlChartAnalysis"
+             x:Class="GOSTS.WPFControls.Chart.SCI.SCIChartAnalysis"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:SciChart="http://schemas.abtsoftware.co.uk/scichart"
+             xmlns:local="clr-namespace:GOSTS.WPFControls.Chart.SCI"
+             Loaded="SCIChartAnalysis_OnLoaded"
+             Unloaded="SCIChartAnalysis_OnUnLoaded">
+
+    <UserControl.Resources>
+        <local:InvertedBooleanConverter x:Key="InvertedBooleanConverter"/>
+        <local:ChartPeriodToBoolConverter x:Key="ChartPeriodToBoolConverter"/>
+        <local:ChartThemeToBoolConverter x:Key="ChartThemeToBoolConverter"/>
+        <local:MarketPriceStateToColourConverter x:Key="MarketPriceStateToColourConverter"/>
+        <local:MarketPriceChangeToBackgroundColourConverter x:Key="MarketPriceChangeToBackgroundColourConverter"/>
+        <local:MarketPriceChangeToForegroundColourConverter x:Key="MarketPriceChangeToForegroundColourConverter"/>
+
+        <SolidColorBrush x:Key="GlyphBrush" Color="#444"/>
+
+        <Style x:Key="VerticalSeparatorStyle" 
+       TargetType="{x:Type Separator}"
+       BasedOn="{StaticResource {x:Type Separator}}">
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <TransformGroup>
+                        <TransformGroup.Children>
+                            <TransformCollection>
+                                <RotateTransform Angle="90"/>
+                            </TransformCollection>
+                        </TransformGroup.Children>
+                    </TransformGroup>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Name="gridChartAnalysis">
+        <Grid.RowDefinitions>
+            <!-- Toolbar -->
+            <RowDefinition Name="ToolbarRowDefinition" Height="32"/>
+            <!-- Market Price -->
+            <RowDefinition Name="MarketPriceRowDefinition" Height="41"/>
+            <!-- Chart Overview -->
+            <RowDefinition Name="ChartOverviewRowDefinition" Height="38"/>
+            <!-- Candlestick Chart -->
+            <RowDefinition Name="CandlestickRowDefinition" Height="4*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+            <local:DoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
+        </Grid.Resources>
+
+        <!-- Toolbar -->
+        <StackPanel Grid.Row="{local:GridDefinition ToolbarRowDefinition}" Name="ChartStackPanel" Width="auto" Height="24" HorizontalAlignment="Stretch"  VerticalAlignment="Center" Orientation="Horizontal">
+            <Label Content="ID" Width="29" Padding="4,4,2,4" FontSize="12"/>
+            <TextBox Name="tbProductCode" CharacterCasing="Upper" TextWrapping="NoWrap" Text="{Binding productCode}" MinWidth="60" MaxWidth="130" FontSize="12" KeyDown="tbProductCodeOnKeyDown" LostFocus="tbProductCodeLostFocus" />
+            <Label  Name="lbProdName" Content="{Binding ProductName}" Padding="2,4,2,4" FontSize="12" MinWidth="100"/>
+            <CheckBox Name="checkBoxLockProduct" Content="{Binding checkBoxLockProductText}" IsEnabled="True" IsChecked="{Binding IsLockProductEnabled, Mode=OneWay}" Click="checkBoxLockProduct_Click" VerticalAlignment="Center"/>
+
+            <Line Margin="8" Stroke="Gray" Y1="2" Y2="30" StrokeThickness="4"/>
+
+            <local:LockableToggleButton x:Name="toggleButtonZoomPan"
+                                        IsChecked="{Binding IsPanEnabled, Mode=OneWay}" 
+                                        Click="toggleButtonZoomPan_Click"
+                                        LockToggle="{Binding IsPanEnabled, Mode=OneWay}"
+                                        MinWidth="32">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding toggleButtonZoomPanText, Mode=OneWay}" />
+                </StackPanel>
+            </local:LockableToggleButton>
+            <local:LockableToggleButton x:Name="toggleButtonRubberBandZoom"
+                                        IsChecked="{Binding IsPanEnabled, Converter={StaticResource InvertedBooleanConverter}, Mode=OneWay}"
+                                        Click="toggleButtonRubberBandZoom_Click"
+                                        LockToggle="{Binding IsPanEnabled, Converter={StaticResource InvertedBooleanConverter}, Mode=OneWay}"
+                                        MinWidth="32">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding toggleButtonRubberBandZoomText, Mode=OneWay}"/>
+                </StackPanel>
+            </local:LockableToggleButton>
+            <Button Name="buttonZoomExtents"
+                    Click="buttonZoomExtents_Click"
+                    MinWidth="32">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding buttonZoomExtentsText, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button Name="buttonChartResetXPosition"
+                    Click="buttonChartResetXPosition_Click"
+                    MinWidth="32">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding buttonChartResetXPositionText, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+
+            <Line Margin="8" Stroke="Gray" Y1="2" Y2="30" StrokeThickness="4"/>
+
+            <ToggleButton Name="toggleButtonTickerLine"
+                          IsChecked="{Binding IsTickerLineEnabled, Mode=OneWay}"
+                          Click="toggleButtonTickerLine_Clicked"
+                          MinWidth="32">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding toggleButtonTickerLineText, Mode=OneWay}"/>
+                </StackPanel>
+            </ToggleButton>
+
+            <Line Margin="8" Stroke="Gray" Y1="2" Y2="30" StrokeThickness="4"/>
+
+            <ToggleButton Name="toggleButtonChartOverview"
+                          IsChecked="{Binding IsChartOverviewEnabled, Mode=OneWay}"
+                          Click="toggleButtonChartOverview_Click"
+                          MinWidth="32">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding toggleButtonChartOverviewText, Mode=OneWay}"/>
+                </StackPanel>
+            </ToggleButton>
+            <Button Name="buttonIndicatorMenu"
+                    Click="buttonIndicatorMenu_Click"
+                    ContextMenuService.IsEnabled="False"
+                    MinWidth="32">
+                <Grid>
+                    <StackPanel Width="auto" Height="32" HorizontalAlignment="Stretch"  VerticalAlignment="Center" Orientation="Horizontal">
+                        <Label Content="{Binding buttonIndicatorMenuText, Mode=OneWay}" VerticalAlignment="Center" Width="Auto" Padding="1,1,1,1"/>
+                        <Path Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z"  Height="5" Margin="3,2,2,0"/>
+                    </StackPanel>
+                </Grid>
+                <Button.ContextMenu>
+                    <ContextMenu Name="indicatorMenu">
+                        <MenuItem Name="indicatorMenuItemVolume"
+                                  Header="{Binding indicatorMenuItemVolumeText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding showVolumeIndicator, Mode=OneWay}"
+                                  Click="indicatorMenuItemVolume_Click"/>
+                        <MenuItem Name="indicatorMenuItemBollingerBands"
+                                  Header="{Binding indicatorMenuItemBollingerBandsText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding showBBIndicator, Mode=OneWay}"
+                                  Click="indicatorMenuItemBollingerBands_Click"/>
+                        <MenuItem Name="indicatorMenuItemSMA" Header="{Binding indicatorMenuItemSMAText, Mode=OneWay}">
+                            <MenuItem Name="indicatorMenuItemSMA1"
+                                      Header="{Binding indicatorMenuItemSMA1Text, Mode=OneWay}"
+                                      IsCheckable="True"
+                                      IsChecked="{Binding showSMA1Indicator, Mode=OneWay}"
+                                      Click="indicatorMenuItemSMA1_Click"
+                                      Foreground="{Binding sma1Colour}"/>
+                            <MenuItem Name="indicatorMenuItemSMA2"
+                                      Header="{Binding indicatorMenuItemSMA2Text, Mode=OneWay}"                                      
+                                      IsCheckable="True"
+                                      IsChecked="{Binding showSMA2Indicator, Mode=OneWay}"
+                                      Click="indicatorMenuItemSMA2_Click"
+                                      Foreground="{Binding sma2Colour}"/>
+                            <MenuItem Name="indicatorMenuItemSMA3"
+                                      Header="{Binding indicatorMenuItemSMA3Text, Mode=OneWay}"
+                                      IsCheckable="True"
+                                      IsChecked="{Binding showSMA3Indicator, Mode=OneWay}"
+                                      Click="indicatorMenuItemSMA3_Click"
+                                      Foreground="{Binding sma3Colour}"/>
+                        </MenuItem>
+                        <MenuItem Name="indicatorMenuItemMACD"
+                                  Header="{Binding indicatorMenuItemMACDText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding showMACDIndicator, Mode=OneWay}"
+                                  Click="indicatorMenuItemMACD_Click"/>
+                        <MenuItem Name="indicatorMenuItemRSI"
+                                  Header="{Binding indicatorMenuItemRSIText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding showRSIIndicator, Mode=OneWay}"
+                                  Click="indicatorMenuItemRSI_Click"/>
+                        <MenuItem Name="indicatorMenuItemWilliamsR"
+                                  Header="{Binding indicatorMenuItemWilliamsRText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding showWilliamsRIndicator, Mode=OneWay}"
+                                  Click="indicatorMenuItemWilliamsR_Click" />
+                        <Separator/>
+                        <MenuItem Name="indicatorMenuItemRemoveAll" Header="{Binding indicatorMenuItemRemoveAllText, Mode=OneWay}" Click="indicatorMenuItemRemoveAll_Click"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+
+            <Line Margin="8" Stroke="Gray" Y1="2" Y2="30" StrokeThickness="4"/>
+
+            <Button Name="buttonSCIChartTheme"
+                    Click="buttonSCIChartTheme_Click"
+                    ContextMenuService.IsEnabled="False"
+                    MinWidth="32">
+                <Grid>
+                    <StackPanel Width="auto" Height="32" HorizontalAlignment="Stretch"  VerticalAlignment="Center" Orientation="Horizontal">
+                        <Label Content="{Binding sciChartThemeText, Mode=OneWay}" VerticalAlignment="Center" Width="Auto" Padding="1,1,1,1"/>
+                        <Path Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z"  Height="5" Margin="3,2,2,0"/>
+                    </StackPanel>
+                </Grid>
+                <Button.ContextMenu>
+                    <ContextMenu Name="sciChartThemeMenu">
+                        <MenuItem Name="sciChartThemeLight"
+                                  Header="{Binding sciChartThemeLightText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding sciChartSelectedTheme, Converter={StaticResource ChartThemeToBoolConverter}, ConverterParameter='Chrome', Mode=OneWay}"
+                                  Click="sciChartThemeLight_Click"/>
+                        <MenuItem Name="sciChartThemeDark"
+                                  Header="{Binding sciChartThemeDarkText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding sciChartSelectedTheme, Converter={StaticResource ChartThemeToBoolConverter}, ConverterParameter='BlackSteel', Mode=OneWay}"
+                                  Click="sciChartThemeDark_Click"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+
+            <Line Margin="8" Stroke="Gray" Y1="2" Y2="30" StrokeThickness="4"/>
+
+            <Button Name="buttonChartPeriodMenu"
+                    Click="buttonChartPeriodMenu_Click"
+                    ContextMenuService.IsEnabled="False"
+                    MinWidth="32">
+                <Grid>
+                    <StackPanel Width="auto" Height="32" HorizontalAlignment="Stretch"  VerticalAlignment="Center" Orientation="Horizontal">
+                        <Label Content="{Binding chartPeriodMenuText, Mode=OneWay}" VerticalAlignment="Center" Width="Auto" Padding="1,1,1,1"/>
+                        <Path Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z"  Height="5" Margin="3,2,2,0"/>
+                    </StackPanel>
+                </Grid>
+                <Button.ContextMenu>
+                    <ContextMenu Name="chartPeriodMenu">
+                        <MenuItem Name="chartPeriodMenu1Sec"
+                                  Header="{Binding chartPeriodMenu1SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=1, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="1"/>
+                        <MenuItem Name="chartPeriodMenu5Sec"
+                                  Header="{Binding chartPeriodMenu5SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=5, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="5"/>
+                        <MenuItem Name="chartPeriodMenu10Sec"
+                                  Header="{Binding chartPeriodMenu10SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=10, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="10"/>
+                        <MenuItem Name="chartPeriodMenu15Sec"
+                                  Header="{Binding chartPeriodMenu15SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=15, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="15"/>
+                        <MenuItem Name="chartPeriodMenu30Sec"
+                                  Header="{Binding chartPeriodMenu30SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=30, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="30"/>
+                        <MenuItem Name="chartPeriodMenu60Sec"
+                                  Header="{Binding chartPeriodMenu60SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=60, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="60"/>
+                        <!--                        <MenuItem Name="chartPeriodMenu300Sec"
+                                  Header="{Binding chartPeriodMenu300SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=300, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="300"/>
+                        <MenuItem Name="chartPeriodMenu600Sec"
+                                  Header="{Binding chartPeriodMenu600SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=600, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="600"/>
+                        <MenuItem Name="chartPeriodMenu900Sec"
+                                  Header="{Binding chartPeriodMenu900SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=900, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="900"/>
+                        <MenuItem Name="chartPeriodMenu1800Sec"
+                                  Header="{Binding chartPeriodMenu1800SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=1800, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="1800"/>
+                        <MenuItem Name="chartPeriodMenu3600Sec"
+                                  Header="{Binding chartPeriodMenu3600SecText, Mode=OneWay}"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding chartPeriod, Converter={StaticResource ChartPeriodToBoolConverter}, ConverterParameter=3600, Mode=OneWay}"
+                                  Click="chartPeriodMenu_Click"
+                                  CommandParameter="3600"/>-->
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="{local:GridDefinition MarketPriceRowDefinition}" Name="marketPriceGrid" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="1" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Market Price Heading -->
+            <StackPanel Grid.Row="0" Background="White" Name="marketPriceHeadingStackPanel" Width="auto" Height="20" HorizontalAlignment="Stretch"  VerticalAlignment="Center" Orientation="Horizontal">
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceStateLabel" Text="{Binding marketPriceStateLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="65" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceTimeLabel" Text="{Binding marketPriceTimeLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceLastLabel" Text="{Binding marketPriceLastLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceChangeLabel" Text="{Binding marketPriceChangeLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="60" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceChangePercentLabel" Text="{Binding marketPriceChangePercentLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceLastQuantityLabel" Text="{Binding marketPriceLastQuantityLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceBidQuantityLabel" Text="{Binding marketPriceBidQuantityLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceBidLabel" Text="{Binding marketPriceBidLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceAskLabel" Text="{Binding marketPriceAskLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceAskQuantityLabel" Text="{Binding marketPriceAskQuantityLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceVolumeLabel" Text="{Binding marketPriceVolumeLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceHighLabel" Text="{Binding marketPriceHighLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceLowLabel" Text="{Binding marketPriceLowLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceOpenLabel" Text="{Binding marketPriceOpenLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPricePreviousCloseLabel" Text="{Binding marketPricePreviousCloseLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="65" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceCloseDateLabel" Text="{Binding marketPriceCloseDateLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceStrikeLabel" Text="{Binding marketPriceStrikeLabel}" FontSize="11"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+            </StackPanel>
+
+            <!-- Seperator -->
+            <GridSplitter Grid.Row="1" IsEnabled="False" Background="LightGray" Width="auto" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0"/>
+
+            <!-- Market Price Values -->
+            <StackPanel Grid.Row="2" Background="White" Name="marketPriceValuesStackPanel" Width="auto" Height="20" HorizontalAlignment="Stretch"  VerticalAlignment="Center" Orientation="Horizontal">
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceStateValue" Text="{Binding marketPriceStateValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="65" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceTimeValue" Text="{Binding marketPriceTimeValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Background="{Binding marketPriceChangeValue, Converter={StaticResource MarketPriceChangeToBackgroundColourConverter}, Mode=OneWay}" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceLastValue" Text="{Binding marketPriceLastValue}" Foreground="{Binding marketPriceChangeValue, Converter={StaticResource MarketPriceChangeToForegroundColourConverter}, Mode=OneWay}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Background="{Binding marketPriceChangeValue, Converter={StaticResource MarketPriceChangeToBackgroundColourConverter}, Mode=OneWay}" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceChangeValue" Text="{Binding marketPriceChangeValue}" Foreground="{Binding marketPriceChangeValue, Converter={StaticResource MarketPriceChangeToForegroundColourConverter}, Mode=OneWay}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="60" Background="{Binding marketPriceChangeValue, Converter={StaticResource MarketPriceChangeToBackgroundColourConverter}, Mode=OneWay}" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceChangePercentValue" Text="{Binding marketPriceChangePercentValue}" Foreground="{Binding marketPriceChangeValue, Converter={StaticResource MarketPriceChangeToForegroundColourConverter}, Mode=OneWay}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceLastQuantityValue" Text="{Binding marketPriceLastQuantityValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceBidQuantityValue" Text="{Binding marketPriceBidQuantityValue}" Foreground="Blue" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceBidValue" Text="{Binding marketPriceBidValue}" Foreground="Blue" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceAskValue" Text="{Binding marketPriceAskValue}" Foreground="Red" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceAskQuantityValue" Text="{Binding marketPriceAskQuantityValue}" Foreground="Red" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceVolumeValue" Text="{Binding marketPriceVolumeValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceHighValue" Text="{Binding marketPriceHighValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceLowValue" Text="{Binding marketPriceLowValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceOpenValue" Text="{Binding marketPriceOpenValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPricePreviousCloseValue" Text="{Binding marketPricePreviousCloseValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="65" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceCloseDateValue" Text="{Binding marketPriceCloseDateValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+                <Border Width="55" Padding="3,0,3,0">
+                    <Viewbox StretchDirection="DownOnly">
+                        <TextBlock Name="lbMarketPriceStrikeValue" Text="{Binding marketPriceStrikeValue}" FontSize="12"/>
+                    </Viewbox>
+                </Border>
+                <Separator Style="{DynamicResource VerticalSeparatorStyle}" Background='LightGray'/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Overview chart -->
+        <Grid Grid.Row="{local:GridDefinition ChartOverviewRowDefinition}" Name="overviewChartGrid" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <GridSplitter Grid.Row="0" IsEnabled="False" Background="Gray" Width="Auto" Height="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0"/>
+
+            <Grid Grid.Row="1" Name="sciOverviewChartGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="{Binding YAxis.ActualWidth, ElementName=sciChart, Mode=OneWay, Converter={StaticResource DoubleToGridLengthConverter}}"/>
+                    <ColumnDefinition Width="15" />
+                </Grid.ColumnDefinitions>
+
+                <SciChart:SciChartOverview Name="sciChartOverview"
+                                           Grid.Column="1"
+                                           ParentSurface="{Binding ElementName=sciChart, Mode=OneWay}"
+                                           SelectedRange="{Binding XVisibleRange, Mode=OneWay}"
+                                           Padding="0"/>
+            </Grid>
+        </Grid>
+
+        <!--  Candlestick Chart  -->
+        <Grid Grid.Row="{local:GridDefinition CandlestickRowDefinition}" Name="candlestickChartGrid" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <GridSplitter Grid.Row="0" IsEnabled="False" Background="Gray" Width="Auto" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0"/>
+
+            <SciChart:SciStockChart Grid.Row="1"
+                                Name="sciChart"                                
+                                SciChart:ThemeManager.Theme="{Binding sciChartSelectedTheme, Mode=OneWay}"
+                                SciChart:SciChartGroup.VerticalChartGroup="myCharts"
+                                XAxisVisibleRange="{Binding XVisibleRange, Mode=TwoWay}"
+                                MouseDoubleClick="sciChart_MouseDoubleClick">
+                <SciChart:SciChartSurface.RenderableSeries>
+                    <SciChart:FastCandlestickRenderableSeries AntiAliasing="False" DataPointWidth="0.65">
+                    </SciChart:FastCandlestickRenderableSeries>
+                </SciChart:SciChartSurface.RenderableSeries>
+                <!--  Create an X Axis  -->
+                <SciChart:SciChartSurface.XAxis>
+                    <SciChart:CategoryDateTimeAxis VisibleRange="{Binding XVisibleRange, Mode=OneWay}" DrawMinorGridLines="False" DrawMinorTicks="False"/>
+                </SciChart:SciChartSurface.XAxis>
+
+                <!--  Create a Y Axis with GrowBy  -->
+                <SciChart:SciChartSurface.YAxis>
+                    <SciChart:NumericAxis GrowBy="0.05, 0.05" DrawMinorGridLines="False"  DrawMinorTicks="False"/>
+                </SciChart:SciChartSurface.YAxis>
+
+                <SciChart:SciChartSurface.ChartModifier>
+                    <SciChart:ModifierGroup SciChart:MouseManager.MouseEventGroup="MySharedMouseGroup">
+                        <SciChart:ZoomPanModifier IsEnabled="{Binding IsPanEnabled, Mode=OneWay}" ZoomExtentsY="False"/>
+                        <SciChart:RubberBandXyZoomModifier IsEnabled="{Binding IsPanEnabled, Converter={StaticResource InvertedBooleanConverter}, Mode=OneWay}" IsXAxisOnly="True"/>
+                        <SciChart:MouseWheelZoomModifier/>
+                        <SciChart:CursorModifier IsEnabled="{Binding IsMouseCursorEnabled, Mode=OneWay}"
+                                                    ShowAxisLabels="True"
+                                                    ShowTooltip="True"
+                                                    ReceiveHandledEvents="True"/>
+                    </SciChart:ModifierGroup>
+                </SciChart:SciChartSurface.ChartModifier>
+            </SciChart:SciStockChart>
+        </Grid>
+    </Grid>
+</UserControl>

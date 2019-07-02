@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="GOSTS.Preference.GeneralPreference"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"   >
+    <Grid Height="300" Width="400" Margin="-4,-2,0,0" >
+        <Grid.Background> 
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FFF2F2F8" Offset="0.8"/>
+                <GradientStop Color="#FFB8BBD0" Offset="0"/>
+            </LinearGradientBrush> 
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120*"></RowDefinition>
+            <RowDefinition Height="40*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220*"></ColumnDefinition>
+            <ColumnDefinition Width="180*"></ColumnDefinition> 
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column=" 0" Grid.Row=" 0" Margin="0,0,4,0"  Header="Alert" Name="groupBoxAlert">
+            <Grid Margin="0,0,0,0"  Width="auto" Height="auto"  >
+                <Grid.RowDefinitions >
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.684*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.158*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.158*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row=" 0" Grid.Column=" 1" HorizontalAlignment="Center" >Text</TextBlock>
+                <TextBlock Grid.Row=" 0" Grid.Column=" 2" HorizontalAlignment="Center">Sound</TextBlock>
+                <TextBlock Grid.Row=" 1" Grid.Column=" 0" HorizontalAlignment="Right">Order Confirm </TextBlock>
+                <CheckBox Name="isOrderConfirmT"  IsChecked="{Binding isOrderConfirmT }" Grid.Row=" 1" Grid.Column=" 1" HorizontalAlignment="Center"> </CheckBox>
+                <CheckBox Name="isOrderConfirmS" IsChecked="{Binding isOrderConfirmS }" Grid.Row=" 1" Grid.Column=" 2"  HorizontalAlignment="Center"> </CheckBox>
+                <TextBlock Grid.Row=" 2" Grid.Column=" 0" HorizontalAlignment="Right">Request Accepted Alert</TextBlock>
+                <CheckBox Name="isReqAccAlertT" IsChecked="{Binding isReqAccAlertT }" Grid.Row=" 2" Grid.Column=" 1" HorizontalAlignment="Center" ></CheckBox>
+                <CheckBox Name="isReqAccAlertS" IsChecked="{Binding isReqAccAlertS }" Grid.Row=" 2" Grid.Column=" 2"  HorizontalAlignment="Center"></CheckBox>
+                <TextBlock Grid.Row=" 3" Grid.Column=" 0" HorizontalAlignment="Right">Request Error Alert</TextBlock>
+                <CheckBox  Name="isReqErrAlertT" IsChecked="{Binding isReqErrAlertT }"  Grid.Row=" 3" Grid.Column=" 1"  HorizontalAlignment="Center"></CheckBox>
+                <CheckBox Name="isReqErrAlertS"  IsChecked="{Binding isReqErrAlertS }" Grid.Row=" 3" Grid.Column=" 2"  HorizontalAlignment="Center"></CheckBox>
+                <TextBlock Grid.Row=" 4" Grid.Column=" 0" HorizontalAlignment="Right">Trade Alert</TextBlock>
+                <CheckBox  Name="isTradeAlertT"  IsChecked="{Binding isTradeAlertT }" Grid.Row=" 4" Grid.Column=" 1"  HorizontalAlignment="Center"></CheckBox>
+                <CheckBox  Name="isTradeAlertS"  IsChecked="{Binding isTradeAlertS }" Grid.Row=" 4" Grid.Column=" 2"  HorizontalAlignment="Center"></CheckBox>
+                <TextBlock Grid.Row=" 5" Grid.Column=" 0" HorizontalAlignment="Right">New Approval Alert</TextBlock>
+                <CheckBox Name="isNewAppAlertS" IsChecked="{Binding isNewAppAlertS }" Grid.Row=" 5" Grid.Column=" 2" HorizontalAlignment="Center" ></CheckBox>
+                <TextBlock Grid.Row=" 6" Grid.Column=" 0" HorizontalAlignment="Right" >Time Correction Alert</TextBlock>
+                <CheckBox  Name="isTimeCorrAlertT" IsChecked="{Binding isTimeCorrAlertT }" Grid.Row=" 6" Grid.Column=" 1" HorizontalAlignment="Center" ></CheckBox>
+                <TextBlock Grid.Row=" 7"  Grid.Column=" 0" HorizontalAlignment="Right" >Notification Level</TextBlock>
+                <TextBox  Name="txtNotifyLevel" Grid.Row=" 7" Text="{Binding NotifyLevel,UpdateSourceTrigger=PropertyChanged}" Grid.Column=" 1"  Margin="8,0,0,0"/>
+            </Grid>
+        </GroupBox>
+        <Button Grid.Row="2"  Grid.Column="0" Height="23" Width="50" VerticalAlignment="Top" HorizontalAlignment="Right"   Content="Save" Click="Save_Click" >
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="DarkGray" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button Grid.Row="2" Grid.Column="1"  Height="23" Width="50" VerticalAlignment="Top" HorizontalAlignment="Left"    Content="Close" Click="Cancel_Click" Margin="15,0,0,0" >
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="DarkGray" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <GroupBox  Grid.Column="1" Margin="0,0,0,0"  Header="Click Method" Height="auto" HorizontalAlignment="Left" Name="groupBoxClick" VerticalAlignment="Top" Width="auto">
+            <Grid Margin="0,5,0,0"  Width="auto" Height="auto"  >
+                <Grid.RowDefinitions >
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                 <RadioButton   IsChecked="{Binding isSingleClick}"  Grid.Row=" 0" Grid.Column=" 0" HorizontalAlignment="Left"     >Single Click</RadioButton>
+                <RadioButton  IsChecked="{Binding isDoubleClick}"   Grid.Row=" 1" Grid.Column=" 0" HorizontalAlignment="Left"    >Double Click</RadioButton>
+            </Grid>
+        </GroupBox>
+        <GroupBox Visibility="Collapsed"   Grid.Column="1" Margin="0,0,0,0"  Header="Inactive Timeout" Height="auto" HorizontalAlignment="Left" Name="groupBoxTime" VerticalAlignment="Bottom" Width="auto">
+            <Grid Margin="0,5,0,0"  Width="auto" Height="auto"  >
+                <Grid.RowDefinitions >
+                <RowDefinition Height="20"></RowDefinition>
+                <RowDefinition Height="20"></RowDefinition> 
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions> 
+                <ColumnDefinition Width="80"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+            </Grid.ColumnDefinitions> 
+                <TextBlock Grid.Row=" 0" Grid.Column=" 0" HorizontalAlignment="Left" >TimeOut Delay</TextBlock>
+                <TextBox  Grid.Row=" 0" Grid.Column=" 1" HorizontalAlignment="Center" Width="60"  ></TextBox>
+            </Grid>
+    </GroupBox>
+        <CheckBox  Margin="0,15,0,0"  x:Name="chkWheelSet" IsChecked="{Binding isEnableWheel}" Content="Price Up/Down by Wheel" Grid.Column="1" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" RenderTransformOrigin="-3.967,4.15" Grid.Row="1" />
+    </Grid>
+</UserControl>

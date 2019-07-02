@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="GOSTS.Accounts.OrderHistory"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="450">
+    <Grid Name="gdContainer" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6"></ColumnDefinition>             
+                <ColumnDefinition Width="Auto"></ColumnDefinition>                
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Cult:LabelText OHist_Tb_OrderNo, DefaultValue='Order No:'}" Grid.Column="1"></TextBlock>
+            <TextBlock Name="tbOrderNo" Grid.Column="2"></TextBlock>
+            <TextBlock Text="{Cult:LabelText OHist_Tb_AccNo, DefaultValue='Acc No:'}" Grid.Column="4"></TextBlock>
+            <TextBlock Name="tbAccNo" Grid.Column="5"></TextBlock>
+        </Grid>
+        <DataGrid Grid.Row="1" Background="White" Name="dgOHist" Height="auto" AutoGenerateColumns="False" CanUserAddRows="False"  ColumnHeaderHeight="25" Width="Auto"  Margin="6,6,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsReadOnly="true" RowHeaderWidth="0" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" AlternationCount="2" ItemsSource="{Binding}" SelectedIndex="-1" SelectionMode="Single" FontSize="12">
+          
+                <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=histTime}" Header="{Cult:LabelText OHist_ColHead_Time, DefaultValue='Time'}" MinWidth="120" />
+                <!--Time-->
+                <DataGridTextColumn Binding="{Binding Path=user_id}"     Header="{Cult:LabelText OHist_ColHead_User, DefaultValue='Operator'}" MinWidth="50" />
+                <!--Delear-->
+                <DataGridTextColumn Binding="{Binding Path=detail}"    Header="{Cult:LabelText OHist_ColHead_Action, DefaultValue='Detail'}" MinWidth="54" />
+                <!--Action Details-->
+               
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="GOSTS.AccPreference"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             d:DesignHeight="420" d:DesignWidth="550">
+    <Grid Background="White" >
+        <GroupBox Header="Account Master" HorizontalAlignment="Left" Margin="23,21,0,0" VerticalAlignment="Top" Height="308" Width="240">
+            <Grid>
+                <Label Content="Prefix" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top" Width="51"/>
+                <Label Content="Lenght" HorizontalAlignment="Left" Margin="82,23,0,0" VerticalAlignment="Top" Width="56"/>
+                <Label Content="Suffix" HorizontalAlignment="Left" Margin="158,23,0,0" VerticalAlignment="Top" Width="48"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Name="txtPre" Margin="10,52,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="51"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="82,52,0,0" TextWrapping="Wrap" Name="txtLen" Text="" VerticalAlignment="Top" Width="56"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="158,52,0,0" TextWrapping="Wrap" Name="txtSuf" Text="" VerticalAlignment="Top" Width="60"/>
+
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Account List" HorizontalAlignment="Left" Margin="285,23,0,0" VerticalAlignment="Top" Height="306" Width="236"/>
+        <Button Content="OK" Name="btnSave" Click="btnSave_Click_1" HorizontalAlignment="Left" Margin="235,349,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Cancel" Name="btnCancel" Click="btnCancel_Click_1" HorizontalAlignment="Left" Margin="360,349,0,0" VerticalAlignment="Top" Width="75"/>
+
+    </Grid>
+</UserControl>

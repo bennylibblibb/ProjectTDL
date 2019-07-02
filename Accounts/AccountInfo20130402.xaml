@@ -1,0 +1,102 @@
+﻿<src:IDelearUser x:Class="GOSTS.AccountInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+             xmlns:src="clr-namespace:GOSTS" Unloaded="IDelearUser_Unloaded_1">   
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/GOSTS;Component/Accounts/AccTheme/DataGridCell.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!--<Style TargetType="DataGridCell" >
+                <Setter Property="Background" Value="Transparent" />
+               
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="Yellow"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>-->
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Width="auto" Name="gd" >
+        <Grid.Resources>           
+            <Style  TargetType="DataGridRow">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Height" Value="20"/>
+            </Style>
+            
+            <Style TargetType="DataGridCell" x:Key="dgcellStyle_withBgTransparent">
+                <Setter Property="Background" Value="Transparent" /><!--Transparent-->
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="Yellow"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <Style TargetType="DataGridCell"  x:Key="dgCellStyle_WithBgGrandient">
+                <Setter Property="Background" Value="{StaticResource BrushGradient_DGCell}" />
+                <!--Transparent-->
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="Yellow"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        </Grid.Resources>
+       
+        <Grid.RowDefinitions>
+            <RowDefinition Height ="auto" />
+            <RowDefinition Height ="* " />
+            <RowDefinition Height ="10 " />
+        </Grid.RowDefinitions>
+       
+        <src:AEUseCOB x:Name="cbbUsers" Grid.Row="0" Grid.Column="0"></src:AEUseCOB>
+
+        <TabControl Grid.Row="1" Background="Transparent" Name="tbc1">
+            <TabItem Header="{Cult:LabelText TabAccInfo, DefaultValue='Account Info'}" Name="tabInfo" Background="Transparent">
+                <!--Account Info-->
+                <DataGrid MinHeight="50" Height="auto" HeadersVisibility="None"  Name="dg_AccountInfo"  Width="auto" CellStyle="{StaticResource dgCellStyle_WithBgGrandient}"
+                         ItemsSource="{Binding}" IsReadOnly="true" SelectionUnit="Cell" CanUserAddRows="False" FontSize="12" AutoGenerateColumns="False" Background="Transparent">
+                    <!--ItemsSource="{Binding DT}"-->
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=sname}" MinWidth="100" CanUserReorder="False" CanUserResize="False" ClipboardContentBinding="{Binding}" >
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Path=value}" MinWidth="100" Width="*" CanUserReorder="False" CanUserResize="False" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="{Cult:LabelText TabCashInfo, DefaultValue='Cash Info'}" Background="Transparent" >
+                <!--Cash Info user info-->
+                <DataGrid  Height="auto" Background="Transparent" 
+                           CellStyle="{StaticResource dgCellStyle_WithBgGrandient}" Name="dg_CashInfo"  Width="auto"   ItemsSource="{Binding}" IsReadOnly="true" AutoGenerateColumns="False"  HeadersVisibility="None" CanUserAddRows="False"  FontSize="12">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=sname}"  MinWidth="100"  CanUserReorder="False" CanUserResize="False"/>
+                        <DataGridTextColumn Binding="{Binding Path=value}" Width="*" MinWidth="100"  CanUserReorder="False" CanUserResize="False"/>
+                        <!--<DataGridTemplateColumn Width="0.1"/>-->
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="{Cult:LabelText TabClientInfo, DefaultValue='Client Info'}" Name="tabClientInfo"  Background="Transparent">
+                <!--Client Info-->
+                <DataGrid  Height="auto" Background="Transparent" CellStyle="{StaticResource dgCellStyle_WithBgGrandient}" 
+                           Name="dg_acMast"  Width="auto" ItemsSource="{Binding}" IsReadOnly="true" AutoGenerateColumns="False"  HeadersVisibility="None" CanUserAddRows="False"  FontSize="12">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=sname}"  MinWidth="100"  CanUserReorder="False" CanUserResize="False"/>
+                        <DataGridTextColumn Binding="{Binding Path=value}" Width="*" MinWidth="100"  CanUserReorder="False" CanUserResize="False"/>
+                        <!--<DataGridTemplateColumn Width="0.1"/>-->
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</src:IDelearUser>

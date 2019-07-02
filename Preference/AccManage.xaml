@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="GOSTS.Preference.AccManage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Background="White">
+    <Grid>
+        <Grid.Background> 
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="LightGray"/>
+                <GradientStop Color="DarkGray" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="60"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Cult:LabelText AccM_Acc, DefaultValue='Account:'}"></TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="2" Name="txtAcc" BorderThickness="1"     BorderBrush="#FF646262" ></TextBox>
+        <Button Content="{Cult:LabelText AccM_btnSave, DefaultValue='Add'}" Grid.Row="2" Grid.Column="2" Width="60" Name="btnAdd" HorizontalAlignment="Center" Click="btnAdd_Click_1">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="DarkGray" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+
+        <ListBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="1" Name="lsAcc" BorderThickness="1" BorderBrush="#FF646262" ></ListBox>
+        <Button Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Width="60" Content="{Cult:LabelText AccM_btnDel, DefaultValue='Delete'}" Name="btnDel" Click="btnDel_Click_1">
+            <Button.Background> 
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="DarkGray" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+    </Grid>
+</UserControl>

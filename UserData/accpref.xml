@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<settings>
+  <Customizes>
+    <Customize ID="DEFAULT">
+      <Account>
+        <Prefix></Prefix>
+        <MidLen></MidLen>
+        <Suffix></Suffix>
+      </Account>
+      <MarginColors NoColor="false">
+        <Per Color="#FF008000">80</Per>
+        <Per Color="#FFADFF2F">50</Per>
+        <Per Color="#FFFFFF00">30</Per>
+        <Per Color="#FFFFA500">20</Per>
+        <Per Color="#FF800080">10</Per>
+        <Per Color="#FF7E8976">5</Per>
+        <Per Color="#FFFF0000">-2147483648</Per>
+      </MarginColors>
+      <Alert>
+        <OrderConfirm Text="true" Sound="true"/>
+        <ReqAccAlert Text="true" Sound="true"/>
+        <ReqErrAlert Text="true" Sound="true"/>
+        <TradeAlert Text="true" Sound="true"/>
+        <NewAppAlert Sound="true"/>
+        <TimeCorrAlert Text="true"  />
+        <NotifyLevel>6</NotifyLevel>
+        <EnableWheel>True</EnableWheel>
+        <ClickMethod>Double</ClickMethod>
+      </Alert>
+      <OrderDeviation>
+        <Price>4</Price>
+        <Qty>5</Qty>
+      </OrderDeviation>
+    </Customize>
+  </Customizes>
+</settings>
