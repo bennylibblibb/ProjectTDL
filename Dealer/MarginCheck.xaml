@@ -1,0 +1,119 @@
+<UserControl
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+      xmlns:local="clr-namespace:GOSTS.Common"
+    mc:Ignorable="d" x:Class="GOSTS.Dealer.MarginCheck" xmlns:my="clr-namespace:GOSTS.Dealer"
+     Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <local:Base64Utf8Converter x:Key="Base64Utf8Converter" />
+        <LinearGradientBrush x:Key="LightBrush" StartPoint="0,0" EndPoint="0,1">
+            <LinearGradientBrush.GradientStops>
+                <GradientStopCollection>
+                    <GradientStop Color="#FFF" Offset="0.0"/>
+                    <GradientStop Color="#EEE" Offset="1.0"/>
+                </GradientStopCollection>
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
+        <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
+        <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
+        <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
+        <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+       
+        <Style x:Key="dgCell" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="right"/>
+        </Style>
+
+    </UserControl.Resources> 
+    <Grid  >
+         
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200*" MinHeight="40"    />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition MinWidth="100"  Width="200*"   ></ColumnDefinition>
+            <ColumnDefinition  MinWidth="100" Width="200*"></ColumnDefinition>
+        </Grid.ColumnDefinitions> 
+        
+        <DataGrid   IsReadOnly=" true" AutoGenerateColumns="False" 
+        	Name="dgMarginAE"  ItemsSource="{Binding MarginCheckAEDataes}"
+            Margin="0, 0, 0, 0"    
+            Grid.Row=" 0"  Grid.Column="0" Background="{x:Null}">
+            <DataGrid.RowStyle>
+            <Style TargetType="{x:Type DataGridRow}">
+                <EventSetter Event="MouseDoubleClick" Handler="dgAE_MouseDoubleClick"/>
+            </Style>
+            </DataGrid.RowStyle> 
+            <DataGrid.Columns  >
+                <DataGridTextColumn Binding="{Binding Path=AE}" Header="{Cult:LabelText MclAE, DefaultValue='AE'}"   MinWidth="0"  />
+                <DataGridTextColumn Binding="{Binding Path=Ccy}" Header="{Cult:LabelText MclCcy, DefaultValue='Ccy'}" MinWidth="0"   />
+                <DataGridTextColumn Binding="{Binding Path=Call,  StringFormat= {}{0:N}}" ElementStyle="{StaticResource dgCell}" Header="{Cult:LabelText MclCall, DefaultValue='Call'}"   MinWidth="0" />
+                <DataGridTextColumn Binding="{Binding Path=IMargin,  StringFormat= {}{0:N}}" ElementStyle="{StaticResource dgCell}" Header="{Cult:LabelText MclIM, DefaultValue='IMargin'}" MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=MMargin,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclMM, DefaultValue='MMargin'}" ElementStyle="{StaticResource dgCell}"  MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=Cash,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclCash, DefaultValue='Cash'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"   />
+                <DataGridTextColumn Binding="{Binding Path=PL,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclPL, DefaultValue='PL'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=UpdateTime,StringFormat=\{0:yyyy-MM-dd HH:mm:ss\}}" Header="{Cult:LabelText MclUpdateTime, DefaultValue='UpdateTime'}"   MinWidth="0"    />
+                <!--<DataGridTextColumn Binding="{Binding Path=MLevel,  StringFormat=\{0\}%}" Header="MLevel"   MinWidth="0"  />-->
+                <DataGridTextColumn Binding="{Binding Path=BuyPower,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclBuyPower, DefaultValue='BuyPower'}"  ElementStyle="{StaticResource dgCell}" MinWidth="0"   />
+                <DataGridTextColumn Binding="{Binding Path=TradeLimit,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclTradeLimit, DefaultValue='TradeLimit'}"  ElementStyle="{StaticResource dgCell}" MinWidth="0"    />
+                <!--<DataGridTextColumn Binding="{Binding Path=MarginClass}" Header="MarginClass"   MinWidth="0"   />-->
+                <!--<DataGridTextColumn Binding="{Binding Path=TradeClass}" Header="TradeClass"    MinWidth="0"  />-->
+                <DataGridTextColumn Binding="{Binding Path=Nav,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclNav, DefaultValue='Nav'}"  ElementStyle="{StaticResource dgCell}" MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=Unpresented,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclUnp, DefaultValue='Unpresented'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=AvFund,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclAF, DefaultValue='AvFund'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"     />
+                <!--<DataGridTextColumn Binding="{Binding Path=CtrlLevel}" Header="CtrlLevel"    MinWidth="0"  />-->
+            </DataGrid.Columns> 
+        </DataGrid> 
+        
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Panel.ZIndex="2" Width="2">
+            <GridSplitter.Resources>
+                <Thickness x:Key="gridSplitter">1</Thickness>
+                <Color x:Key="Color1">#FF799B46</Color>
+            </GridSplitter.Resources>
+            <GridSplitter.Background>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Offset="1" Color="{DynamicResource {x:Static SystemColors.ActiveCaptionColorKey}}"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+        
+        <DataGrid   IsReadOnly=" true" AutoGenerateColumns="False" 
+	Name="dgMarginAcc"  ItemsSource="{Binding MarginCheckAccDataes}"
+	 Margin="0, 0, 0, 0"    
+	 Grid.Row="0"  Grid.Column="1" Background="{x:Null}">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <EventSetter Event="MouseDoubleClick" Handler="resultDataGrid_MouseDoubleClick"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns  >
+                <DataGridTextColumn Binding="{Binding Path=AccNo}" Header="{Cult:LabelText MclAccNo, DefaultValue='AccNo'}"   MinWidth="0"   />
+                <DataGridTextColumn Binding="{Binding Path=AccName}" Header="{Cult:LabelText MclAccName, DefaultValue='accName'}" MinWidth="0"   />
+                <DataGridTextColumn Binding="{Binding Path=Ccy}" Header="{Cult:LabelText MclCcy, DefaultValue='Ccy'}" MinWidth="0"   />
+                <DataGridTextColumn Binding="{Binding Path=Call,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclCall, DefaultValue='Call'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"  />
+                <DataGridTextColumn Binding="{Binding Path=IMargin,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclIM, DefaultValue='IMargin'}" ElementStyle="{StaticResource dgCell}"  MinWidth="0"  />
+                <DataGridTextColumn Binding="{Binding Path=MMargin,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclMM, DefaultValue='MMargin'}" ElementStyle="{StaticResource dgCell}"  MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=Cash,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclCash, DefaultValue='Cash'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"  />
+                <DataGridTextColumn Binding="{Binding Path=PL,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclPL, DefaultValue='PL'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=UpdateTime,StringFormat=\{0:yyyy-MM-dd HH:mm:ss\}}" Header="{Cult:LabelText MclUpdateTime, DefaultValue='UpdateTime'}"  MinWidth="0"     />
+                <DataGridTextColumn Binding="{Binding Path=MLevel,  StringFormat=\{0\}%}" Header="{Cult:LabelText MclMLevel, DefaultValue='MLevel'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=BuyPower,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclBuyPower, DefaultValue='BuyPower'}" ElementStyle="{StaticResource dgCell}"  MinWidth="0"  />
+                <DataGridTextColumn Binding="{Binding Path=TradeLimit,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclTradeLimit, DefaultValue='TradeLimit'}" ElementStyle="{StaticResource dgCell}"  MinWidth="0"  />
+                <DataGridTextColumn Binding="{Binding Path=MarginClass}" Header="{Cult:LabelText MclMC, DefaultValue='MarginClass'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}"   />
+                <DataGridTextColumn Binding="{Binding Path=TradeClass}" Header="{Cult:LabelText MclTC, DefaultValue='TradeClass'}"  MinWidth="0"  ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn Binding="{Binding Path=Nav,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclNav, DefaultValue='Nav'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}"  />
+                <DataGridTextColumn Binding="{Binding Path=Unpresented,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclUnp, DefaultValue='Unpresented'}"  ElementStyle="{StaticResource dgCell}" MinWidth="0"   />
+                <DataGridTextColumn Binding="{Binding Path=AvFund,  StringFormat= {}{0:N}}" Header="{Cult:LabelText MclAF, DefaultValue='AvFund'}" ElementStyle="{StaticResource dgCell}" MinWidth="0"    />
+                <DataGridTextColumn Binding="{Binding Path=CtrlLevel,  Converter={StaticResource Base64Utf8Converter}}" Header="{Cult:LabelText MclCL, DefaultValue='CtrlLevel'}" MinWidth="0"  ElementStyle="{StaticResource dgCell}"   />
+            </DataGrid.Columns> 
+        </DataGrid>
+    </Grid>  
+</UserControl>
+    
+
+

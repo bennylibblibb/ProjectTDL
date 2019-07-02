@@ -1,0 +1,382 @@
+﻿<src:IDelearUser x:Class="GOSTS.UserOrderInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:src="clr-namespace:GOSTS" Unloaded="IDelearUser_Unloaded_1"
+        xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+        Height="Auto" Loaded="Window_Loaded" >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>               
+               <ResourceDictionary Source="pack://application:,,,/GOSTS;Component/Accounts/AccTheme/DataGridCell.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!--<LinearGradientBrush x:Key="dgcellBgBrush" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FFF2F2F8" Offset="0.9"/>
+                <GradientStop Color="#FFD7DAF5" Offset="0"/>
+            </LinearGradientBrush>-->
+            <src:UnixToWinTimeConvertor x:Key="wintimeconvert"></src:UnixToWinTimeConvertor>
+            <src:FormatTimeConvertor x:Key="FormatTimeConvertor1"></src:FormatTimeConvertor>
+            <src:N0Format   x:Key="cyy0Format"></src:N0Format>
+            <src:DecCommaFormat  x:Key="decCommaFormat"></src:DecCommaFormat>
+            <src:OrderValidConvertor x:Key="ovalidconvertor"></src:OrderValidConvertor>
+            <src:zeroToBlankConvertor x:Key="zeroToBlankCT"></src:zeroToBlankConvertor>
+            <src:StatusBase64ToUIConvertor x:Key="StatusB64ToUIConvertor"></src:StatusBase64ToUIConvertor>
+
+            <src:OrderActiveConvertor x:Key="orderacitveconvertor"></src:OrderActiveConvertor>
+            <src:ValidTypeList x:Key="orderValidList"></src:ValidTypeList>
+            <Style x:Key="dgtxtCellRight" TargetType="TextBlock">
+                <Setter Property="TextAlignment" Value="Right" />
+            </Style>
+            <Style x:Name="CustomStyle" TargetType="ToggleButton">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <Image Name="img" Source="/GOSTS;component/Images/ribbtn_lock_open.png"/>
+                                <TextBlock Text="ToggleButton"/>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                    <Setter TargetName="img" Property="Source" Value="/GOSTS;component/Images/ribbtn_lock_locked.png"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style  TargetType="DataGridRow">
+                <Setter Property="Background" Value="#F2F2F2" />
+                <Setter Property="Height" Value="25"/>
+                <!--<Setter Property="Foreground" Value="Black" />-->
+                <Style.Triggers>
+                    <!--隔行换色e7e7e7#FFFFDA89-->
+                    <Trigger Property="AlternationIndex" Value="0" >
+                        <Setter Property="Background" Value="#ffffff" />
+                    </Trigger>
+                    <Trigger Property="AlternationIndex" Value="1" >
+                        <Setter Property="Background" Value="LightYellow" />
+                    </Trigger>
+
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="LightGray"/>
+                        <!--<Setter Property="Foreground" LightYellow Value="White"/>-->
+                    </Trigger>
+
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Foreground" Value="Black"/>
+
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="DataGridCell" BasedOn="{StaticResource dgCellBg_Gradient}" x:Key="dgCellStyle_BS">               
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=bors}" Value="b">
+                        <Setter Property="DataGridCell.Foreground" Value="Blue" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=bors}" Value="s">
+                        <Setter Property="DataGridCell.Foreground" Value="Red" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=bors}" Value="o">
+                        <Setter Property="DataGridCell.Foreground" Value="Black" />
+                    </DataTrigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <!--<Setter Property="Foreground" Value="Black"/>-->
+                        <Setter Property="Background" Value="Yellow"/>
+                        <!--Yellow-->                       
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="DataGridCell"  BasedOn="{StaticResource dgCellBg_Gradient}" x:Key="dgCellStylePos">
+                <Setter Property="DataGridCell.Foreground" Value="Black"></Setter>
+                <!--<Setter Property="Background" Value="{StaticResource dgcellBgBrush}" />-->
+                <Style.Triggers>
+                    <!--<DataTrigger Binding="{Binding Path=bors}" Value="b">
+                    <Setter Property="DataGridCell.Foreground" Value="Blue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=bors}" Value="s">
+                    <Setter Property="DataGridCell.Foreground" Value="Red" />
+                </DataTrigger>-->
+                    <Trigger Property="IsSelected" Value="True">
+                        <!--<Setter Property="Foreground" Value="White"/>-->
+                        <Setter Property="Background" Value="Yellow"/>
+                        <!--WHEN UNSELECTED,FOREGROUND SHOULE LightGreen BE CHANGE LightGoldenrodYellow BACK,IF NOT,WHEN BACKGROUND WHITE,NOTHING SEEN-->
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="DataGridCell"  BasedOn="{StaticResource dgCellBg_Gradient}"  x:Key="dgCellNegativeStyle">
+                <!--<Setter Property="Background" Value="{StaticResource dgcellBgBrush}" />-->
+                <Setter Property="DataGridCell.HorizontalAlignment" Value="Stretch" />
+                <Setter Property="DataGridCell.HorizontalContentAlignment" Value="Right" />
+                <Setter Property="TextBlock.TextAlignment" Value="Right" />
+                <!--<Setter Property="TextBlock.TextAlignment" Value="Right" />-->
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=bNagativePL}" Value="true">
+                        <Setter Property="DataGridCell.Foreground" Value="Red"  />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=bNagativePL}" Value="False">
+                        <Setter Property="DataGridCell.Foreground" Value="Green" />
+                    </DataTrigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="Yellow"/>
+                        <!--WHEN UNSELECTED,FOREGROUND SHOULE LightGreen BE CHANGE LightGoldenrodYellow BACK,IF NOT,WHEN BACKGROUND WHITE,NOTHING SEEN-->
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>       
+    </UserControl.Resources>
+    <!--<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">-->
+    <Grid Width="auto" Height="auto">
+        <Grid.Resources>
+            <ResourceDictionary x:Key="rs1">
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/GOSTS;Component/Accounts/DicAccResource.xaml"/>
+                    <!--<ResourceDictionary Source="pack://application:,,,/GOSTS;Component/Accounts/AccTheme/DataGridCell.xaml"/>-->
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>           
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+        
+        <src:AEUseCOB x:Name="cbbUsers" Grid.Row="0" Grid.Column="0"></src:AEUseCOB>
+       
+            <Grid Grid.Column="1" Visibility="Collapsed" Name="gdOrderBtnContainer">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="{Cult:LabelText UOIBtnDelOrder, DefaultValue='Delete'}" Height="23" Grid.Column="1" Margin="10,1,1,1"   HorizontalAlignment="Left" Name="btn_Delete" VerticalAlignment="Top" Width="75" Click="btn_Delete_Click" >              
+            </Button>
+            <Button Content="{Cult:LabelText UOIBtnActivateOD, DefaultValue='Activate'}" Height="23" Grid.Column="2" Margin="1" HorizontalAlignment="Left"  Name="btn_Activate" VerticalAlignment="Top" Width="75" Click="btn_Activate_Click" >               
+            </Button>
+            <Button Content="{Cult:LabelText UOIBtnInactiveOD, DefaultValue='Inactivate'}" Height="23" Grid.Column="3" Margin="1" HorizontalAlignment="Left" Name="btn_Inactivate" VerticalAlignment="Top" Width="75" Click="btn_Inactivate_Click" >               
+            </Button>
+            <Button Content="{Cult:LabelText UOIBtnDelAllOD, DefaultValue='Delete All'}" Height="23" Grid.Column="4" Margin="1" HorizontalAlignment="Left"  Name="btn_DeleteAll" VerticalAlignment="Top" Width="99" Click="btn_DeleteAll_Click" >             
+            </Button>
+            <Button Content="{Cult:LabelText UOIBtnActiveODAll, DefaultValue='Activate All'}" Height="23" Grid.Column="5" Margin="1" HorizontalAlignment="Left"  Name="btn_ActivateAll" VerticalAlignment="Top" Width="99" Click="btn_ActivateAll_Click">              
+            </Button>
+            <Button Content="{Cult:LabelText UOIBtnInactODAll, DefaultValue='Inactivate All'}" Height="23" Grid.Column="6" Margin="1" HorizontalAlignment="Left"  Name="btn_InactivateAll" VerticalAlignment="Top" Width="99" Click="btn_InactivateAll_Click" >              
+            </Button>
+
+        </Grid>
+        <Grid Grid.Column="1" Visibility="Collapsed" Name="gdPositionBtnContainer">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>                 
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Name="btnPosClose" Width="90" Padding="6,5" Content="{Cult:LabelText UOIBtnClosePos, DefaultValue='Close Position'}" Click="btn_ClosePosition_Click">
+            </Button>
+        </Grid>
+
+        <TabControl Height="Auto" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Margin="2,2,2,2" Name="tabControl1" VerticalAlignment="Stretch" Width="Auto">
+            <TabItem Header="{Cult:LabelText TabUOIOrder, DefaultValue='Order'}" Name="tb_Order">
+                <Grid HorizontalAlignment="Left" >
+                  <Grid.RowDefinitions>
+                        <RowDefinition Height="*" Name="rowOrder" ></RowDefinition>
+                        <!--<RowDefinition Height="Auto"></RowDefinition>-->
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <!--<RowDefinition Height="Auto"></RowDefinition>-->
+                    </Grid.RowDefinitions>
+
+
+
+                    <Grid Grid.Row="0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" ></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                           
+                        </Grid.RowDefinitions>
+                        <DataGrid Background="White"  Height="auto" AutoGenerateColumns="False" CanUserAddRows="False"  ColumnHeaderHeight="25" Width="Auto"  Margin="6,6,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsReadOnly="true" Name="dg_OrderBook" CellStyle="{StaticResource dgCellStyle_BS}" RowHeaderWidth="0" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" AlternationCount="2" ItemsSource="{Binding}" SelectionChanged="dg_OrderBook_SelectionChanged"  MouseDoubleClick="dg_OrderBook_MouseDoubleClick" SelectedIndex="-1" SelectionMode="Single" FontSize="12">
+                                                      
+                                <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=internalOrderNo}" Header="{Cult:LabelText ORDHOrders, DefaultValue='Orders'}" MinWidth="48" /><!--買賣指示-->
+                                <DataGridTextColumn Binding="{Binding Path=productCode}" Header="{Cult:LabelText ORDHID, DefaultValue='ID'}" MinWidth="54" /> <!--代號-->
+                                <DataGridTextColumn Binding="{Binding Path=productName}" Header="{Cult:LabelText ORDHName, DefaultValue='Name'}" MinWidth="54" /> <!--名稱-->
+                                <DataGridTextColumn Binding="{Binding Path=osBQty,Converter={StaticResource zeroToBlankCT}}" ElementStyle="{StaticResource dgtxtCellRight}" CanUserSort="True" Header="{Cult:LabelText ORDHOSBQty, DefaultValue='OS BQty'}" MinWidth="20" /> <!--買入餘數-->
+                                <DataGridTextColumn CanUserSort="True" Binding="{Binding Path=osSQty,Converter={StaticResource zeroToBlankCT}}" ElementStyle="{StaticResource dgtxtCellRight}" Header="{Cult:LabelText ORDHOSSQty, DefaultValue='OS SQty'}" MinWidth="20" /> <!--沽出餘數-->
+                                <DataGridTextColumn Binding="{Binding Path=strNFPrice}"  ElementStyle="{StaticResource dgtxtCellRight}" Header="{Cult:LabelText Price, DefaultValue='Price'}" MinWidth="54" /> <!--價格-->
+
+                                <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" Binding="{Binding Path=cond}" Header="{Cult:LabelText Trs_Ord_Cond, DefaultValue='Cond.'}" MinWidth="54" />
+                                <DataGridTextColumn Binding="{Binding Path=status,Converter={StaticResource StatusB64ToUIConvertor}}" Header="{Cult:LabelText Status, DefaultValue='Status'}" MinWidth="54" /> <!--狀況-->
+                                <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" Binding="{Binding Path=traded}" Header="{Cult:LabelText Traded, DefaultValue='Traded'}" MinWidth="66" /> <!--已成交-->
+                                <DataGridTextColumn Binding="{Binding Path=initiator}" Header="{Cult:LabelText Initiator, DefaultValue='Initiator'}" MinWidth="66" /> <!--原發者-->
+                                <DataGridCheckBoxColumn Header="{Cult:LabelText Trs_Ord_Tone, DefaultValue='T+1'}" Binding="{Binding Path=tOne,Converter={StaticResource orderacitveconvertor}}" CanUserSort="False"></DataGridCheckBoxColumn>
+
+                                <DataGridTextColumn Binding="{Binding Path=tStamp,Converter={StaticResource FormatTimeConvertor1}}" Header="{Cult:LabelText T.Stamp, DefaultValue='T.Stamp'}" MinWidth="78" /> <!--時間標記-->
+                                <DataGridTextColumn Binding="{Binding Path=externalOrderNo}" Header="{Cult:LabelText Ext.Order#, DefaultValue='Ext.Order#'}" MinWidth="84" /> <!--外部指示-->
+                                
+                                <DataGridTextColumn Binding="{Binding Path=valid}" Header="{Cult:LabelText ORDHValid, DefaultValue='Valid'}" MinWidth="66" /> <!--有效-->
+                                <DataGridTextColumn Binding="{Binding Path=specTime,Converter={StaticResource wintimeconvert}}" Header="{Cult:LabelText ORDHSpecTime, DefaultValue='specDate'}" MinWidth="130"/>
+                                <DataGridTextColumn Binding="{Binding Path=refNo}" Header="{Cult:LabelText refNo, DefaultValue='Ref'}" MinWidth="54" />
+                                <!--參考-->
+                            </DataGrid.Columns>
+                    </DataGrid>
+
+                        <!--<src:ucPagingDG Grid.Row="1" x:Name="PgOrderBook" Height="20"></src:ucPagingDG>-->
+                    </Grid> 
+                  
+
+                    <GridSplitter Height="5"  VerticalAlignment="Stretch" Margin="3,3,3,0" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"   Grid.Row="1" Grid.Column="0">
+                        <GridSplitter.Background>                            
+                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Color="#FFF2F2F8" Offset="0"/>
+                                <GradientStop Color="#9999cc" Offset="0.5"/> <!--FFB8BBD0-->
+                                <GradientStop Color="#FFF2F2F8" Offset="1"/>
+                            </LinearGradientBrush>                            
+                        </GridSplitter.Background>
+                    </GridSplitter>
+
+                    <Grid Grid.Row="2" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" ></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        
+                        <!--<ScrollViewer HorizontalAlignment="Stretch" Name="scrollViewer1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">-->
+                        <Grid Grid.Row="0" >
+                            <Grid >
+                                <DataGrid AutoGenerateColumns="False" Background="White" CanUserAddRows="False" ColumnHeaderHeight="25" Height="Auto"  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsReadOnly="true" Margin="6,6,0,0"  Name="dg_tabOrder_ClearTrade" CellStyle="{StaticResource dgCellStyle_BS}" RowHeaderWidth="0" VerticalAlignment="Stretch" AlternationCount="2" FontSize="12" MinHeight="30" VerticalContentAlignment="Stretch" Width="Auto" ItemsSource="{Binding}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=productCode}" Header="{Cult:LabelText ORDHID, DefaultValue='ID'}" MinWidth="60" />
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=productName}" Header="{Cult:LabelText ORDHName, DefaultValue='Name'}" MinWidth="90" />
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=bQty,Converter={StaticResource zeroToBlankCT}}" ElementStyle="{StaticResource dgtxtCellRight}" Header="{Cult:LabelText CDHBQty, DefaultValue='BQty'}" MinWidth="42" />
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=sQty,Converter={StaticResource zeroToBlankCT}}" ElementStyle="{StaticResource dgtxtCellRight}" Header="{Cult:LabelText CDHSQty, DefaultValue='SQty'}" MinWidth="42" />
+                                        <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True"  Binding="{Binding Path=strNFPrice}" Header="{Cult:LabelText CDHTradePrc, DefaultValue='TradePrc'}" MinWidth="66" />
+                                        <!--tradePrice-->
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=internalTradeNo}" Header="{Cult:LabelText CDHTradeNo, DefaultValue='Trade#'}" MinWidth="54" />
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=status,Converter={StaticResource StatusB64ToUIConvertor}}" Header="{Cult:LabelText CDHStatus, DefaultValue='Status'}" MinWidth="54" />
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=initiator}" Header="{Cult:LabelText CDHInitiator, DefaultValue='Initiator'}" MinWidth="66" />
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=refNo}" Header="{Cult:LabelText CDHRef, DefaultValue='Ref'}" MinWidth="54" />
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=tradeTime,Converter={StaticResource FormatTimeConvertor1}}" Header="{Cult:LabelText CDHTime, DefaultValue='Time'}" MinWidth="120" />
+                                        <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True"  Binding="{Binding Path=orderPrice}" Header="{Cult:LabelText CDHOrderPrc, DefaultValue='OrderPrc'}" MinWidth="66" />
+                                        <DataGridTextColumn CanUserResize="True" ElementStyle="{StaticResource dgtxtCellRight}" Binding="{Binding Path=internalOrderNo}" Header="{Cult:LabelText CDHOrderNo, DefaultValue='Order#'}" MinWidth="60" />
+                                        <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=externalOrderNo}" Header="{Cult:LabelText CDHExtOrder, DefaultValue='Ext.Order#'}" MinWidth="150" Width="*"/> <!--MinWidth="130"-->
+                                                                                
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                            <!--<DataGrid AutoGenerateColumns="False" Background="White" CanUserAddRows="False" ColumnHeaderHeight="25" Height="Auto"  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsReadOnly="true" Margin="6,6,0,0" Name="dg_OrderDoneTrade"  CellStyle="{StaticResource dgCellStyle_BS}"  RowHeaderWidth="0" VerticalAlignment="Stretch" AlternationCount="2" FontSize="12" MinHeight="30" VerticalContentAlignment="Stretch" Width="Auto" ItemsSource="{Binding}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn CanUserResize="True" Binding="{Binding Path=productCode}" Header="ID" MinWidth="54" >
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True" Binding="{Binding Path=bQty,Converter={StaticResource zeroToBlankCT}}" Header="BQty" MinWidth="66" />
+                                    <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True"  Binding="{Binding Path=sQty,Converter={StaticResource zeroToBlankCT}}" Header="SQty" MinWidth="66" />
+                                    <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True"  Binding="{Binding Path=strNFPrice}" Header="TradePrc" MinWidth="66" />
+                                    <DataGridTextColumn CanUserResize="True" Binding="{Binding Path=time,Converter={StaticResource FormatTimeConvertor1}}" Header="Time" MinWidth="135" />
+                                    <DataGridTextColumn CanUserResize="True" ElementStyle="{StaticResource dgtxtCellRight}"  Binding="{Binding Path=internalOrderNo}" Header="Order#" MinWidth="60" />
+                                    <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=externalOrderNo}" Header="Ext.Order#" MinWidth="130"/>
+                                </DataGrid.Columns>
+                            </DataGrid>-->
+                    </Grid>
+                    <!--</ScrollViewer>-->
+                    <!--<src:ucPagingDG Grid.Row="1" x:Name="PgClearTrade" Height="20"></src:ucPagingDG>-->
+                        </Grid> 
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Cult:LabelText TabUOIPos, DefaultValue='Position'}" Name="tb_Position">
+                <Grid HorizontalAlignment="Left">
+                    <!--<TabControl Width="Auto" Height="Auto" HorizontalAlignment="Stretch" Margin="6,6,0,0" Name="tbc_Position" VerticalAlignment="Stretch" ItemsSource="{Binding}">
+                        <TabControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type TabItem}">
+                                <Setter Property="Header" Value="Header"/>
+                                <Setter Property="ContentTemplate" Value="{Binding}"/>
+                            </Style>
+                        </TabControl.ItemContainerStyle>
+                    </TabControl>-->
+
+                    <DataGrid AutoGenerateColumns="False" Background="White" CellStyle="{StaticResource dgCellStylePos}" AlternationCount="2" IsReadOnly="True" Name="dgPosition" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=ProductCode}" Header="{Cult:LabelText ORDHID, DefaultValue='ID'}" MinWidth="60" />
+                            <DataGridTextColumn Binding="{Binding Path=productName}" Header="{Cult:LabelText ORDHName, DefaultValue='Name'}" MinWidth="54" />
+                            <DataGridTextColumn CanUserSort="False" Binding="{Binding Path=Header}" Header="{Cult:LabelText POSHNet, DefaultValue='Net'}" MinWidth="85" />
+                            <DataGridTextColumn Binding="{Binding Path=strMktPrice}" ElementStyle="{StaticResource dgtxtCellRight}"  Header="{Cult:LabelText POSHMKTPrice, DefaultValue='Mkt.Price'}" MinWidth="54" /><!--MktPrice-->
+                            <!--<DataGridTextColumn Binding="{Binding Path=BaseMktPrice}" Header="BaseMktPrice" MinWidth="54" />-->
+
+                            <DataGridTextColumn Binding="{Binding Path=strDecPL}"  Header="{Cult:LabelText POSHPL, DefaultValue='PL'}" MinWidth="54" CellStyle="{StaticResource dgCellNegativeStyle}"><!--ElementStyle="{StaticResource dgtxtCellRight}"-->
+                            </DataGridTextColumn>
+                            <!--<DataGridTextColumn Binding="{Binding Path=BasePL}" ,Converter={StaticResource cyy0Format} Header="BasePL" MinWidth="54" />-->
+
+                            <DataGridTextColumn CanUserSort="False" Binding="{Binding Path=PrevInfo}" Header="{Cult:LabelText POSHPrev, DefaultValue='Prev'}" MinWidth="54" />
+                            <DataGridTextColumn CanUserSort="False" Binding="{Binding Path=InOutInfo}" Header="{Cult:LabelText POSHOI, DefaultValue='In/Out'}" MinWidth="54" />
+                            <DataGridTextColumn CanUserSort="False" Binding="{Binding Path=DayLongInfo}" Header="{Cult:LabelText POSHDayLong, DefaultValue='DayLong'}" MinWidth="54" />
+                            <DataGridTextColumn CanUserSort="False" Binding="{Binding Path=DayShortInfo}" Header="{Cult:LabelText POSHDayShort, DefaultValue='DayShort'}" MinWidth="54" />
+                            <!--<DataGridTextColumn Binding="{Binding Path=Net}" Header="Net" MinWidth="54" />-->
+                            <DataGridTextColumn CanUserSort="False" Binding="{Binding Path=DayNetInfo}" Header="{Cult:LabelText POSHDayNet, DefaultValue='DayNet'}" MinWidth="54" />
+                            <DataGridTextColumn Binding="{Binding Path=Ref}" Header="{Cult:LabelText POSHRef, DefaultValue='Ref'}" MinWidth="54" />
+                            <DataGridTextColumn Binding="{Binding Path=Contract}" Header="{Cult:LabelText POSHContract, DefaultValue='Contract'}" MinWidth="100" />
+                           
+                            <!--<DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="btnClosePos" Click="btn_ClosePosition_Click" Content="close" Tag="{Binding Path=ProductCode}" IsEnabled="{Binding Path=bCanClose}"></Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate> 
+                            </DataGridTemplateColumn>-->
+                        
+                        </DataGrid.Columns> 
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Cult:LabelText TabUOIClearTd, DefaultValue='Clear Trade'}" Name="tb_ClearTrade">
+                <Grid  HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid AutoGenerateColumns="False" Background="White" CanUserAddRows="False" ColumnHeaderHeight="30" Height="Auto" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsReadOnly="true" Margin="6,6,0,0" Name="dg_ClearTrade" CellStyle="{StaticResource dgCellStyle_BS}" RowHeaderWidth="0" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"  AlternationCount="2"   ItemsSource="{Binding}" Width="Auto" Grid.ColumnSpan="2">                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=productCode}" Header="{Cult:LabelText ORDHID, DefaultValue='ID'}" MinWidth="60" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=productName}" Header="{Cult:LabelText ORDHName, DefaultValue='Name'}" MinWidth="60" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=bQty,Converter={StaticResource zeroToBlankCT}}" ElementStyle="{StaticResource dgtxtCellRight}" Header="{Cult:LabelText CDHBQty, DefaultValue='BQty'}" MinWidth="20" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=sQty,Converter={StaticResource zeroToBlankCT}}" ElementStyle="{StaticResource dgtxtCellRight}" Header="{Cult:LabelText CDHSQty, DefaultValue='SQty'}" MinWidth="20" />
+                            <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True"  Binding="{Binding Path=strNFPrice}" Header="{Cult:LabelText CDHTradePrc, DefaultValue='TradePrc'}" MinWidth="66" />  <!--tradePrice-->
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=internalTradeNo}" Header="{Cult:LabelText CDHTradeNo, DefaultValue='Trade#'}" MinWidth="54" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=status,Converter={StaticResource StatusB64ToUIConvertor}}" Header="{Cult:LabelText CDHStatus, DefaultValue='Status'}" MinWidth="54" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=initiator}" Header="{Cult:LabelText CDHInitiator, DefaultValue='Initiator'}" MinWidth="66" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=refNo}" Header="{Cult:LabelText CDHRef, DefaultValue='Ref'}" MinWidth="54" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=tradeTime,Converter={StaticResource FormatTimeConvertor1}}" Header="{Cult:LabelText CDHTime, DefaultValue='Time'}" MinWidth="120" />
+                            <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True"  Binding="{Binding Path=orderPrice}" Header="{Cult:LabelText CDHOrderPrc, DefaultValue='OrderPrc'}" MinWidth="66" />
+                            <DataGridTextColumn CanUserResize="True" ElementStyle="{StaticResource dgtxtCellRight}" Binding="{Binding Path=internalOrderNo}" Header="{Cult:LabelText CDHOrderNo, DefaultValue='Order#'}" MinWidth="60" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=externalOrderNo}" Header="{Cult:LabelText CDHExtOrder, DefaultValue='Ext.Order#'}" MinWidth="130"/>                           
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <!--<src:ucPagingDG Grid.Row="1" x:Name="PgClearTrade1" Height="20"></src:ucPagingDG>-->
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Cult:LabelText Done Trade, DefaultValue='Done Trade'}" Name="tb_DoneTrade" Visibility="Collapsed">
+                <Grid HorizontalAlignment="Left">
+                    <DataGrid AutoGenerateColumns="False" Background="White" CanUserAddRows="False" ColumnHeaderHeight="30" Height="Auto" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsReadOnly="true" Margin="6,6,0,0" Name="dg_DoneTrade"  CellStyle="{StaticResource dgCellStyle_BS}"  RowHeaderWidth="0" VerticalAlignment="Stretch"  AlternationCount="2"  VerticalContentAlignment="Stretch" Width="Auto" ItemsSource="{Binding}">                      
+                            <DataGrid.Columns>
+                            <DataGridTextColumn CanUserResize="True" Binding="{Binding Path=productCode}" Header="ID" MinWidth="54" >                               
+                            </DataGridTextColumn>
+                            <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True" Binding="{Binding Path=bQty,Converter={StaticResource zeroToBlankCT}}" Header="BQty" MinWidth="66" />
+                            <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True"  Binding="{Binding Path=sQty,Converter={StaticResource zeroToBlankCT}}" Header="SQty" MinWidth="66" />
+                            <DataGridTextColumn ElementStyle="{StaticResource dgtxtCellRight}" CanUserResize="True"  Binding="{Binding Path=strNFPrice}" Header="TradePrc" MinWidth="66" />
+                            <DataGridTextColumn CanUserResize="True" Binding="{Binding Path=time,Converter={StaticResource FormatTimeConvertor1}}" Header="Time" MinWidth="135" />
+                            <DataGridTextColumn CanUserResize="True" ElementStyle="{StaticResource dgtxtCellRight}"  Binding="{Binding Path=internalOrderNo}" Header="Order#" MinWidth="60" />
+                            <DataGridTextColumn CanUserResize="True"  Binding="{Binding Path=externalOrderNo}" Header="Ext.Order#" MinWidth="130"/>
+                          
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+    <!--</ScrollViewer>-->
+</src:IDelearUser> 

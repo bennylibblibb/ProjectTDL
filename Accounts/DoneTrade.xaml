@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="GOSTS.Accounts.DoneTrade"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:src="clr-namespace:GOSTS"
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+    <UserControl.Resources>
+        <src:FormatTimeConvertor x:Key="FormatTimeConvertor1"></src:FormatTimeConvertor>
+        <src:zeroToBlankConvertor x:Key="zeroToBlankCT"></src:zeroToBlankConvertor>
+        <src:TrimBlankConvertor x:Key="TrimBlankConvertor2"></src:TrimBlankConvertor>
+    </UserControl.Resources>
+    <Grid Name="gridContainer">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="120"></ColumnDefinition>
+                <ColumnDefinition Width="21"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="90"></ColumnDefinition>
+                <ColumnDefinition Width="90"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Cult:LabelText DoneTrade_SearchDate, DefaultValue='Date:'}" Grid.Column="1"></TextBlock>
+            <TextBlock Text="{Cult:LabelText DoneTrade_SearchAcc, DefaultValue='Account:'}" Grid.Column="4"></TextBlock>
+            <TextBox Grid.Column="5" Text="{Binding Acc}"></TextBox>
+            <Button Grid.Column="6" Content="{Cult:LabelText DoneTrade_SearchButton, DefaultValue='Search'}" Name="btnSearch"></Button>
+            <DatePicker Grid.Column="2" HorizontalAlignment="Left" SelectedDate="{Binding DtDone}" VerticalAlignment="Top" Width="115" />
+        </Grid>
+            <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>           
+        </Grid>
+        <DataGrid Grid.Row="2" Background="White" Name="dgOHist" Height="auto" AutoGenerateColumns="False" CanUserAddRows="False"  ColumnHeaderHeight="25" Width="Auto"  Margin="6,6,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsReadOnly="true" RowHeaderWidth="0" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" AlternationCount="2" ItemsSource="{Binding}" SelectedIndex="-1" SelectionMode="Single" FontSize="12">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=dtTradeTime,Converter={StaticResource FormatTimeConvertor1}}" Header="{Cult:LabelText DoneTrade_Col_TradeTime, DefaultValue='Trade Time'}" MinWidth="142" />
+                <!--Time-->
+                <DataGridTextColumn Binding="{Binding Path=acc_no}"   Header="{Cult:LabelText DoneTrade_Col_AccNo, DefaultValue='Acc No.'}" MinWidth="50" />
+                <!--Delear-->
+                <DataGridTextColumn Binding="{Binding Path=prod_code}"    Header="{Cult:LabelText DoneTrade_Col_ProdCode, DefaultValue='Product'}" MinWidth="60" />
+                <!--Action Details-->
+                <DataGridTextColumn Binding="{Binding Path=Long,Converter={StaticResource zeroToBlankCT}}"    Header="{Cult:LabelText DoneTrade_Col_Long, DefaultValue='Long'}" MinWidth="42" />
+                <DataGridTextColumn Binding="{Binding Path=Short,Converter={StaticResource zeroToBlankCT}}"    Header="{Cult:LabelText DoneTrade_Col_Short, DefaultValue='Short'}" MinWidth="42" />
+                <DataGridTextColumn Binding="{Binding Path=TradePriceWithDec}"    Header="{Cult:LabelText DoneTrade_Col_Price, DefaultValue='Price'}" MinWidth="54" />
+                <DataGridTextColumn Binding="{Binding Path=trade_no}"    Header="{Cult:LabelText DoneTrade_Col_TradeNo, DefaultValue='Trade#'}" MinWidth="75" />
+                <DataGridTextColumn Binding="{Binding Path=acc_order_no}"    Header="{Cult:LabelText DoneTrade_Col_OrderNo, DefaultValue='Order#'}" MinWidth="54" />
+                <DataGridTextColumn Binding="{Binding Path=gw_code,Converter={StaticResource TrimBlankConvertor2}}"    Header="{Cult:LabelText DoneTrade_Col_GW, DefaultValue='GW'}" MinWidth="54" />
+
+                <DataGridTextColumn Binding="{Binding Path=aoh_initiator,Converter={StaticResource TrimBlankConvertor2}}"    Header="{Cult:LabelText DoneTrade_Col_Initiator, DefaultValue='Initiator'}" MinWidth="65" />
+                <DataGridTextColumn Binding="{Binding Path=ext_no_format}"    Header="{Cult:LabelText DoneTrade_Col_ExtOrderNo, DefaultValue='Ext Order No'}" MinWidth="132" />
+                <DataGridTextColumn Binding="{Binding Path=ref,Converter={StaticResource TrimBlankConvertor2}}"    Header="{Cult:LabelText DoneTrade_Col_Ref, DefaultValue='Ref'}" MinWidth="35" />
+                <DataGridTextColumn Binding="{Binding Path=aoh_channel_text}"    Header="{Cult:LabelText DoneTrade__Col_Channel, DefaultValue='Channel'}" MinWidth="72" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

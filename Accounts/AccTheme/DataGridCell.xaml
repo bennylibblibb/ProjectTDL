@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <LinearGradientBrush x:Key="BrushGradient_DGCell" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+        <GradientStop Color="#FFF2F2F8" Offset="0.9"/>
+        <GradientStop Color="#FFD7DAF5" Offset="0"/>
+    </LinearGradientBrush>
+    <!--<SolidColorBrush x:Key="BrushGradient_DGCell" Color="Transparent" />-->
+    <SolidColorBrush x:Key="BrushTransparent" Color="Transparent" />
+    <Style TargetType="DataGridCell" x:Key="dgCellBg_Gradient">
+        <Setter Property="Background" Value="{StaticResource BrushGradient_DGCell}" />       
+    </Style>   
+</ResourceDictionary>

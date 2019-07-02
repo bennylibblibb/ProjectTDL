@@ -1,0 +1,24 @@
+﻿<Window x:Class="GOSTS.MsgForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MsgForm" Height="320" Width="320" FontSize="{Binding Path=fontsize}" 
+        xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+        xmlns:Acc="clr-namespace:GOSTS.Accounts"  ShowInTaskbar="False" xmlns:GOS="clr-namespace:GOSTS"  WindowStartupLocation="CenterOwner" >
+    <Grid Margin="5,5,5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+           
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Name="txtMsg" Grid.ColumnSpan="2" TextWrapping="Wrap"/>
+        <Button Content="{Cult:LabelText MsgForm_BtnYes, DefaultValue='Yes'}" Name="BtnYes"  Click="btnYes_Click"  Grid.Row="1" Width="60"/>
+        <Button Content="{Cult:LabelText MsgForm_BtnCancel, DefaultValue='Cancel'}" Name="BtnCancal"  Click="btnCancel_Click" Grid.Row="1" Grid.Column="1" Width="60"/>
+       
+        
+      
+    </Grid>
+</Window>

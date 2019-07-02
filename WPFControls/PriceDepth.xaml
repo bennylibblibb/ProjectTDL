@@ -1,0 +1,267 @@
+﻿<UserControl x:Class="GOSTS.WPFControls.PriceDepth"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:vm="clr-namespace:GOSTS"  
+             xmlns:local="clr-namespace:GOSTS.Common"
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+              Loaded="UserControl_Loaded"
+             mc:Ignorable="d"   Unloaded="UserControl_Unloaded"  >
+    <UserControl.Resources >
+         <local:GOSConverter x:Key="GOSConverter" />  
+            <!--<local:MultiValueStringFormatConvertor x:Key="MultiValueStringFormatConvertor" />-->
+        <local:MultiValueStringFormatConvertor x:Key="MultiValueStringFormatConvertor2" />
+        <local:GOSConverterStringFormatConvertor x:Key="GOSConverterStringFormatConvertor2" />
+        <local:GOSConverterItemLanguage x:Key="GOSConverterItemLanguage" />
+        <Style TargetType="{x:Type DataGridCell}">
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True"  >
+                        <Setter Property="Background" Value="LightGreen"/>
+                        <Setter Property="Foreground" Value="black"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Trigger>
+                </Style.Triggers>
+                <!--<EventSetter Event="MouseDoubleClick" Handler="PriceDepthPrice_MouseDoubleClick"/>-->
+            </Style>   
+            <SolidColorBrush x:Key="clBr" Color="Blue" />
+            <Style x:Key="BuyHeaderStyle"   TargetType="{x:Type DataGridColumnHeader}">  
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                <GradientStop Color="#FFD7F6F9" Offset="0.042"/>
+                                <GradientStop Color="#FF43CBC2" Offset="0.925"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontSize" Value="15"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="ToolTip" Value="BQty"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>  
+            <Style x:Key="BuyStyle"   TargetType="{x:Type DataGridCell}"> 
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                <GradientStop Color="#FFD7F6F9" Offset="0.042"/>
+                                <GradientStop Color="#FF43CBC2" Offset="0.925"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="PriceDepthPrice_MouseDoubleClick"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True"  >
+                            <Setter Property="Background" Value="LightGreen"/>
+                            <Setter Property="Foreground" Value="black"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                        </Trigger> 
+                    </Style.Triggers> 
+                </Style>
+            <Style x:Key="SellHeaderStyle"   TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                            <GradientStop Color="#FFF3DCF3" Offset="0"/>
+                            <GradientStop Color="#FFE299D8" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="ToolTip" Value="BQty"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>  
+            <Style x:Key="SellStyle"   TargetType="{x:Type DataGridCell}">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                            <GradientStop Color="#FFF3DCF3" Offset="0"/>
+                            <GradientStop Color="#FFE299D8" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <EventSetter Event="MouseDoubleClick" Handler="PriceDepthPrice_MouseDoubleClick"/>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True"  >
+                        <Setter Property="Background" Value="LightGreen"/>
+                        <Setter Property="Foreground" Value="black"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+    </UserControl.Resources>
+        <Grid   HorizontalAlignment="Left"  VerticalAlignment="Top"   >
+        <Grid.ContextMenu  >
+            <ContextMenu MenuItem.Click="MenuItemClick" Loaded="ContextMenu_Loaded">
+                <ContextMenu.Background >
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="White"/>
+                        <GradientStop Color="DarkGray" Offset="1"/>
+                    </LinearGradientBrush>
+                </ContextMenu.Background>
+                <MenuItem  Name="miLocked"  Header="Lock ID" Tag="Lock ID"/>
+                <Separator />
+                <MenuItem  Name="miVertical"  Header="Vertical" Tag="Vertical"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
+        <Grid.RowDefinitions>
+            <RowDefinition  Height="*"  Name="drLV"   />
+            <RowDefinition  Height="*"  Name="drDG"  /> 
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition  Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions> 
+        <Viewbox    Margin="0,0,0,0"  Grid.Row="0"  HorizontalAlignment="Left" VerticalAlignment="Top" Name="vbList"  >
+            <!--ItemsSource="{Binding DataList}"-->
+            <DataGrid    SelectedCellsChanged="PriceDepth_SelectedCellsChanged" IsReadOnly="True" CanUserReorderColumns="False" CanUserSortColumns="False"  CanUserResizeRows="False"    AutoGenerateColumns="False"  HorizontalAlignment="Left" VerticalAlignment="Top"   MinWidth="440"    Height="auto"   Background="White"  Margin="0,0,0,0"  SelectionUnit="CellOrRowHeader"    x:Name="lvPriceDepth"    >
+                <DataGrid.RowHeaderStyle >
+                    <Style TargetType="{x:Type DataGridRowHeader}">
+                        <Setter Property="Width" Value="0"/>
+                    </Style>
+                </DataGrid.RowHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn  Binding="{Binding Path=Item, Converter={StaticResource GOSConverterItemLanguage}}" Header=""  MinWidth="20" />
+                    <!--<DataGridTextColumn Binding="{Binding Path=DepInPrice}" Header="DepInPrice"  MinWidth="60"/>-->
+                    <DataGridTextColumn  Header="B5"  MinWidth="50" CellStyle="{StaticResource BuyStyle}" HeaderStyle="{StaticResource BuyHeaderStyle}">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="B5"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn  Header="B4"  MinWidth="50" CellStyle="{StaticResource BuyStyle}" HeaderStyle="{StaticResource BuyHeaderStyle}">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="B4"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn   Header="B3"  MinWidth="50" CellStyle="{StaticResource BuyStyle}" HeaderStyle="{StaticResource BuyHeaderStyle}" >
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="B3"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn  Header="B2"  MinWidth="50" CellStyle="{StaticResource BuyStyle}" HeaderStyle="{StaticResource BuyHeaderStyle}">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="B2"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="B1" Width="50" CellStyle="{StaticResource BuyStyle}" HeaderStyle="{StaticResource BuyHeaderStyle}">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="B1"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding> 
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="A1"  MinWidth="50"  CellStyle="{StaticResource SellStyle}" HeaderStyle="{StaticResource SellHeaderStyle}">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="A1"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn   Header="A2"  MinWidth="50" CellStyle="{StaticResource SellStyle}" HeaderStyle="{StaticResource SellHeaderStyle}" >
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="A2"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn   Header="A3"  MinWidth="50" CellStyle="{StaticResource SellStyle}" HeaderStyle="{StaticResource SellHeaderStyle}" >
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="A3"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn   Header="A4"  MinWidth="50" CellStyle="{StaticResource SellStyle}" HeaderStyle="{StaticResource SellHeaderStyle}" >
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="A4"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn   Header="A5"  MinWidth="50" CellStyle="{StaticResource SellStyle}" HeaderStyle="{StaticResource SellHeaderStyle}" >
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="A5"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>  </DataGrid.Columns>
+            </DataGrid> 
+            <!--<Viewbox.ContextMenu >
+                <ContextMenu MenuItem.Click="MenuItemClick" >
+                    <MenuItem  Name="miHLocked"  Header="Lock ID" Tag="Lock ID"/>
+                    <Separator />
+                    <MenuItem  Header="Vertical" Tag="Vertical"/>
+                </ContextMenu>
+            </Viewbox.ContextMenu>-->
+        </Viewbox> 
+        <Viewbox  Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="vbGrid" Grid.Row="1">
+            <!--ItemsSource="{Binding DataList2}"-->
+            <DataGrid  SelectedCellsChanged="PriceDepth_SelectedCellsChanged"   IsReadOnly="True"   CanUserReorderColumns="False" CanUserSortColumns="False"  CanUserResizeRows="False"    AutoGenerateColumns="False"   HorizontalAlignment="Left" VerticalAlignment="Top"  MinWidth="240"  Height="auto"      Margin="0,0,0,0"  SelectionUnit="CellOrRowHeader"     x:Name="dgPriceDepth"    >
+                <DataGrid.RowHeaderStyle >
+                    <Style TargetType="{x:Type DataGridRowHeader}">
+                        <Setter Property="Width" Value="0"/>
+                    </Style>
+                </DataGrid.RowHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=BQty, Converter={StaticResource GOSConverterStringFormatConvertor2}}"  Header="{Cult:LabelText MkBQty, DefaultValue='BQty'}"   MinWidth="60"  CellStyle="{StaticResource BuyStyle}" HeaderStyle="{StaticResource BuyHeaderStyle}"  >  
+                     </DataGridTextColumn>
+                    <DataGridTextColumn  Header="{Cult:LabelText MkBid, DefaultValue='Bid'}"  MinWidth="60" CellStyle="{StaticResource BuyStyle}" HeaderStyle="{StaticResource BuyHeaderStyle}">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="Bid"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="{Cult:LabelText MkAsk, DefaultValue='Ask'}"   MinWidth="60"  CellStyle="{StaticResource SellStyle}" HeaderStyle="{StaticResource SellHeaderStyle}" >
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource MultiValueStringFormatConvertor2}">
+                                <Binding Path="Ask"></Binding>
+                                <Binding Path="DepInPrice"></Binding>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Path=AQty, Converter={StaticResource GOSConverterStringFormatConvertor2}}" Header="{Cult:LabelText MkAQty, DefaultValue='AQty'}"   MinWidth="60"  CellStyle="{StaticResource SellStyle}" HeaderStyle="{StaticResource SellHeaderStyle}" >
+                     </DataGridTextColumn>
+                </DataGrid.Columns>
+                </DataGrid>
+            <!--</Border>-->
+            <!--<Viewbox.ContextMenu  >
+                <ContextMenu MenuItem.Click="MenuItemClick" >
+                    <MenuItem Name="miVLocked"  Header="Lock ID" Tag="Lock ID"/>
+                    <Separator />
+                    <MenuItem  Header="Horizontal" Tag="Horizontal"/>
+                </ContextMenu>
+            </Viewbox.ContextMenu>--> 
+ </Viewbox>
+    </Grid> 
+</UserControl>

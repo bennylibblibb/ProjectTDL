@@ -1,0 +1,1154 @@
+﻿<GOS:IDelearUser x:Class="GOSTS.OrderEntry"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Loaded="Window_Loaded" Unloaded="UserControl_Unloaded"
+         xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+          xmlns:src="clr-namespace:GOSTS.Accounts"   xmlns:GOS="clr-namespace:GOSTS" >
+    <!--MinWidth="312" MinHeight="250"-->
+    <UserControl.Resources>
+        <GOS:ZeroConvertor x:Key="zerotoblank"></GOS:ZeroConvertor>
+        <GOS:IntValidate x:Key="invalidator"></GOS:IntValidate>
+        <Style x:Name="CustomStyle" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <Image Name="img" Source="/GOSTS;component/Images/ribbtn_lock_open.png"/>
+                            <TextBlock Text="ToggleButton"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                <Setter TargetName="img" Property="Source" Value="/GOSTS;component/Images/ribbtn_lock_locked.png"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style TargetType="Button"  x:Key="accTradeBtn">
+            <Setter Property="Button.Foreground" Value="#FFF7F5F5"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Control.Foreground" Value="Black" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+    <!--<Viewbox>-->
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Rectangle Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <!--<GradientStop Color="#FFF1F1F1" Offset="0.042"/>
+                    <GradientStop Color="#FFA7B4B3" Offset="0.925"/>-->
+                    <GradientStop Color="#FFF2F2F8" Offset="0"/>
+                    <GradientStop Color="#FFB8BBD0" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <!--<GradientStop Color="#FFF1F1F1" Offset="0.042"/>
+                    <GradientStop Color="#FF51B441" Offset="0.925"/>-->
+                    <GradientStop Color="#FFF2F2F8" Offset="0"/>
+                    <GradientStop Color="#FFB8BBD0" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <StackPanel HorizontalAlignment="Stretch"  VerticalAlignment="Top" Width="auto" Orientation="Horizontal">
+            <Grid Name="gdAccInfo">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1"></RowDefinition>
+                    <RowDefinition Height="32"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <GOS:AEUseCOB x:Name="cbbUsers" Grid.Row="1" Grid.Column="0"></GOS:AEUseCOB>
+            </Grid>
+            <!--<GOS:AEUseCOB FontSize="10" x:Name="cbbUsers" Grid.Row="0" Grid.Column="0"></GOS:AEUseCOB>
+            <Button Height="20" Width="20" Margin="10,0,0,0">
+                <Image Source="/GOSTS;component/Images/ribbtn_user.png" Stretch="Fill"/>
+            </Button>
+            <Label Name="lbUserID"  Content="" Padding="25,5,5,5" FontSize="10"/>-->
+        </StackPanel>
+        <Grid Grid.Row="1" Name="gdProdInfo">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+            </Grid.ColumnDefinitions>
+            <ToggleButton Height="20" Width="20" Visibility="Collapsed" VerticalContentAlignment="Stretch" Margin="10,0,0,0" Name="tbuCode" >
+            </ToggleButton>
+            <Label Grid.Column="1" Content="{Cult:LabelText ET_ProdCod, DefaultValue='ID'}" Width="29" Padding="3,5,3,5"/>
+            <TextBox Grid.Column="2" Name="txt_OrderID" CharacterCasing="Upper" TextWrapping="Wrap" Text="{Binding Path=ProductCode,UpdateSourceTrigger=PropertyChanged}" MinWidth="60" MaxWidth="120" FontSize="12" Margin="2,2,0,4" TextChanged="txt_OrderID_TextChanged"  KeyDown="txt_OrderID_KeyDown_1"/>
+            <Label  Grid.Column="3"  Name="lbProdName" Content="{Binding Path=ProductName,UpdateSourceTrigger=PropertyChanged}" Padding="0,5,0,5" FontSize="12"/>
+
+        </Grid>
+        <!--<StackPanel HorizontalAlignment="Stretch"  VerticalAlignment="Top" Width="auto" Orientation="Horizontal" Grid.Row="1">
+        </StackPanel>-->
+
+
+        <DockPanel HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" Width="auto" Grid.Row="2">
+            <TabControl Name="tabc" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,2,0,0">
+                <TabItem  Height="20" FontSize="12">
+                    <TabItem.Header>
+                        <TextBlock TextAlignment="Left" Text="{Cult:LabelText ET_TabNormal, DefaultValue='Normal Trade'}" ></TextBlock>
+                    </TabItem.Header>
+                    <Border BorderBrush="Silver" BorderThickness="1" Height="auto" Name="borderNT" Width="auto" >
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                <GradientStop Color="#FFF2F2F8" Offset="0"/>
+                                <GradientStop Color="#FFB8BBD0" Offset="0.5"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+
+                        <Viewbox Stretch="Fill">
+                            <!-- test  StretchDirection="UpOnly"beg-->
+                            <!--begin-->
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextBlock.FontSize="12">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" MinHeight="90"/>
+                                    <RowDefinition Height="3"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- 上方输入控件等begin-->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" MinWidth="120"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <!--left beg-->
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="20"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Cult:LabelText ET_TbN_Price, DefaultValue='Price'}" Grid.Row="0" Grid.RowSpan="2"  VerticalAlignment="Center" Margin="5,8"/>
+                                        <src:ucTBNumber  FontSize="13" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" x:Name="txt_Price_NT"  Width="auto" HorizontalContentAlignment="Stretch" VerticalAlignment="Center" Height="30" MinWidth="60" Margin="0,2,1,2" UpBound="99999" DownBound="-99999"/>
+                                        <!--<TextBox FontSize="13" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Name="txt_Price_NT" TextWrapping="Wrap"  KeyUp="tbDecimal_KeyUp" Width="auto" HorizontalContentAlignment="Stretch" VerticalAlignment="Center" Height="30" MinWidth="60" Margin="0,2,1,2">
+                                        </TextBox>-->
+                                        <src:ucBtnNumSub  Grid.Column="2" Grid.Row="1" x:Name="btnPrDow"  Width="20" Height="20"  TNumBox="{Binding ElementName=txt_Price_NT}"></src:ucBtnNumSub>
+                                        <src:ucBtnNumAdd x:Name="btnPrAdd" Grid.Column="2" Width="20" Height="20" TNumBox="{Binding ElementName=txt_Price_NT}"></src:ucBtnNumAdd>
+                                        <!--<src:ContinuousButtonAdd UpBound="99999" Step="1" x:Name="btnPrAdd" Grid.Column="2" Width="20" Height="20" 
+TBoxNum="{Binding ElementName=txt_Price_NT}" />-->
+                                        <!--<src:ContinuousButtonSub Grid.Column="2" Step="1" DownBound="-99999" Grid.Row="1" x:Name="btnPrDow"  Width="20" 
+Height="20" TBoxNum="{Binding ElementName=txt_Price_NT}" />-->
+
+                                        <TextBlock Text="{Cult:LabelText ET_TbN_Qty, DefaultValue='Qty'}" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="Center"  
+Margin="5,8"></TextBlock>
+
+                                        <TextBox Name="txt_Count_NT" TextWrapping="Wrap" InputMethod.IsInputMethodEnabled="False"  Grid.Row="2"  Grid.RowSpan="2" Grid.Column="1" Text="{Binding 
+Path=Count,UpdateSourceTrigger=PropertyChanged}" Width="auto"   HorizontalContentAlignment="Stretch" Height="30" Margin="0,2,1,2"/>
+
+                                        <src:ContinuousButtonAdd UpBound="999999" x:Name="btnQtyUp" Grid.Row="2" Grid.Column="3" Width="20" Height="20" TBoxNum="{Binding ElementName=txt_Count_NT}" Margin="0,2,0,3" HorizontalAlignment="Left"/>
+                                        <src:ContinuousButtonSub x:Name="btnQtyDown" Grid.Row="3" Grid.Column="3" DownBound="1" Width="20"
+Height="20" TBoxNum="{Binding ElementName=txt_Count_NT}" Margin="0"/>
+                                    </Grid>
+                                    <!--left end-->
+
+                                    <!--right beg-->
+                                    <Grid Grid.Column="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="5"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <ComboBox HorizontalAlignment="Left" Name="ntValid"  Width="75" Grid.Row="0" Grid.Column="0">
+                                            <ComboBoxItem Tag="Today" IsSelected="True">
+                                                <TextBlock Text="{Cult:LabelText ValidType_today, DefaultValue='Today'}"/>
+                                            </ComboBoxItem>
+                                            <ComboBoxItem Tag="FAK">
+                                                <TextBlock Text="{Cult:LabelText ValidType_fak, DefaultValue='FAK'}"/>
+                                            </ComboBoxItem>
+                                            <ComboBoxItem Tag="FOK">
+                                                <TextBlock Text="{Cult:LabelText ValidType_fok, DefaultValue='FOK'}"/>
+                                            </ComboBoxItem>
+                                            <ComboBoxItem Tag="GTC">
+                                                <TextBlock Text="{Cult:LabelText ValidType_gtc, DefaultValue='GTC'}"/>
+                                            </ComboBoxItem>
+                                            <ComboBoxItem Tag="specTime">
+                                                <TextBlock Text="{Cult:LabelText ValidType_specDate, DefaultValue='SPEC DATE'}"/>
+                                            </ComboBoxItem>
+                                        </ComboBox>
+                                        <DatePicker HorizontalAlignment="Left" Name="ntSecTime" SelectedDate="{Binding 
+Path=dtSpecialTime,UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2" IsEnabled="False" Grid.ColumnSpan="2" />
+
+                                        <CheckBox Content="{Cult:LabelText comm_AO, DefaultValue='AO'}" Name="chkAO" Margin="0"  Checked="chkAO_Checked" Unchecked="chkAO_Unchecked" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"  Grid.Column="0" Padding="0" />
+
+                                        <CheckBox Content="{Cult:LabelText ET_TbN_Inactive, DefaultValue='Inactive'}" Name="chkNTActive"  Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="1"  Grid.Column="2" Padding="0" IsChecked="{Binding Path=Active,UpdateSourceTrigger=PropertyChanged}"/>
+
+                                        <Grid Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Content="{Cult:LabelText ET_TbN_Ref, DefaultValue='Ref'}"  Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <TextBox Name="txt_NT_ref" TextWrapping="Wrap" Text="{Binding 
+Path=Ref,UpdateSourceTrigger=PropertyChanged}" Width="auto" Grid.Column="1" Margin="0,0,3,0"
+HorizontalContentAlignment="Stretch" />
+                                        </Grid>
+
+                                    </Grid>
+                                    <!--right end-->
+                                </Grid>
+                                <!-- 上方输入控件等end-->
+
+                                <!-- 下方提交按钮begin -->
+                                <Grid Grid.Row="2" VerticalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition MinWidth="10"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition MinWidth="10"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition MinWidth="10"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition ></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+                                    <Button Name="btn_NTbuy" Width="65" Content="{Cult:LabelText ET_TbN_Buy, DefaultValue='Buy'}" FontSize="13" FontWeight="Bold" Style="{StaticResource 
+accTradeBtn}"   Grid.Column="1"  Click="btn_NTbuy_Click" Focusable="True" >
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/GOSTS;component/Images/img_button_blue.png"/>
+                                        </Button.Background>
+                                    </Button>
+                                    <Button Name="btn_NTsell" Width="65" MinHeight="30" Content="{Cult:LabelText ET_TbN_Sell, DefaultValue='Sell'}" FontSize="13" FontWeight="Bold" Style="{StaticResource 
+accTradeBtn}" Grid.Row="0" Grid.Column="3" Click="btn_NTsell_Click" Focusable="True"  >
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/GOSTS;component/Images/img_button_red.png"/>
+                                        </Button.Background>
+                                    </Button>
+                                </Grid>
+                                <!-- 下方提交按钮end -->
+                            </Grid>
+                            <!--end -->
+
+
+                            <!-- test end-->
+
+                        </Viewbox>
+                    </Border>
+                </TabItem>
+                <TabItem Height="20" FontSize="11" Name="tbQuickTrade">
+                    <TabItem.Header>
+                        <TextBlock TextAlignment="Left" Text="{Cult:LabelText EN_TabQuickTrade, DefaultValue='Quick Trade'}" Height="12" VerticalAlignment="Top" ></TextBlock>
+                    </TabItem.Header>
+                    <Border BorderBrush="Silver" BorderThickness="1"  Name="borderQT" Width="auto" >
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                <GradientStop Color="#FFF2F2F8" Offset="0"/>
+                                <GradientStop Color="#FFB8BBD0" Offset="0.5"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Viewbox Stretch="Fill" >
+                            <!--<StackPanelStretchDirection="UpOnly">-->
+
+                            <Grid TextBlock.FontSize="12">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="{Cult:LabelText EN_TabQ_Ticks, DefaultValue='Ticks'}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                <!--追價點數-->
+                                <!--<Button Grid.Column="1" Focusable="False"  Height="25" Width="25">
+                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                </Button>-->
+                                <src:ContinuousButtonSub  Grid.Column="1" x:Name="btnTickDown" DownBound="0" Width="25" Height="25" TBoxNum="{Binding ElementName=txtQTradeTicks}" />
+                                <TextBox TextWrapping="Wrap" Name="txtQTradeTicks" InputMethod.IsInputMethodEnabled="False"  Text="{Binding Path=Ticks,UpdateSourceTrigger=PropertyChanged}" Width="auto" MinWidth="45" Grid.Column="2" HorizontalContentAlignment="Stretch"/>
+                                <!--<Button Grid.Column="3" Focusable="False" Height="25" Width="25" >
+                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png"  Stretch="Fill"/>
+                                </Button>-->
+                                <src:ContinuousButtonAdd UpBound="99999" x:Name="btnTickUp" Grid.Column="3" Focusable="False" Height="25" Width="25" TBoxNum="{Binding ElementName=txtQTradeTicks}" />
+
+                                <Label Content="{Cult:LabelText EN_TbN_Type, DefaultValue='Type'}" VerticalAlignment="Center" VerticalContentAlignment="Center" Grid.Column="4" HorizontalAlignment="Left"/>
+                                <!--種     類-->
+                                <Label Content="{Cult:LabelText EN_TabQ_Qty, DefaultValue='Qty'}" Grid.Row="1"/>
+                                <!--手數-->
+                                <!--<Button Grid.Column="1" Grid.Row="1" Focusable="False" Height="25" Width="25" >
+                                    <Image  Source="/GOSTS;component/Images/ribbtn_down.png"  Stretch="Fill"/>
+                                </Button>-->
+                                <src:ContinuousButtonSub   Grid.Column="1" Grid.Row="1" Focusable="False" DownBound="1" Width="25" Height="25" TBoxNum="{Binding ElementName=txtQTradeCount}" />
+                                <TextBox TextWrapping="Wrap" Name="txtQTradeCount" InputMethod.IsInputMethodEnabled="False"  Text="{Binding Path=Count,UpdateSourceTrigger=PropertyChanged}" Width="auto" MinWidth="45" Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Stretch" />
+                                <!--<Button Grid.Column="3" Grid.Row="1" Focusable="False" Height="25" Width="25" >
+                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png"  Stretch="Fill"/>
+                                </Button>-->
+                                <src:ContinuousButtonAdd UpBound="99999"   Grid.Column="3" Grid.Row="1" Focusable="False"  Height="25" Width="25" TBoxNum="{Binding ElementName=txtQTradeCount}" />
+                                <ComboBox Grid.Column="4" Grid.Row="1" HorizontalAlignment="Right" Name="cmbQuickValid">
+                                    <ComboBoxItem Tag="Today" IsSelected="True">
+                                        <TextBlock Text="{Cult:LabelText ValidType_today, DefaultValue='Today'}"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="FaK">
+                                        <TextBlock Text="{Cult:LabelText ValidType_fak, DefaultValue='FAK'}"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="FoK">
+                                        <TextBlock Text="{Cult:LabelText ValidType_fok, DefaultValue='FOK'}"/>
+                                    </ComboBoxItem>
+                                </ComboBox>
+
+                                <UniformGrid  Columns="2" Grid.Row="2" Grid.ColumnSpan="5">
+                                    <Button Name="btnQuickBuy"  FontSize="11" Click="btnQuickBuy_Click_1" FontWeight="Bold" Margin="10,5" Padding="1,3" Style="{StaticResource accTradeBtn}" Focusable="True" >
+                                        <TextBlock><TextBlock Text="{Cult:LabelText EN_TabQ_BtnHitBuy, DefaultValue='Hit Buy'}"/> <!--追價買入-->  <TextBlock Text="{Binding Path=Ask}"></TextBlock><LineBreak/><!--追價至-->(<TextBlock Text="{Cult:LabelText EN_TabQ_BtnHitBuy_To, DefaultValue='To'}"/><TextBlock Text="{Binding Path=AskTo}"></TextBlock>)</TextBlock>
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/GOSTS;component/Images/img_button_blue.png"/>
+                                            <!--<Image  Source="Images/img_button_blue.png" Stretch="None"/>-->
+                                        </Button.Background>
+                                    </Button>
+                                    <Button Name="btnQTradeSell" Click="btnQTradeSell_Click_1" FontSize="11" FontWeight="Bold" Style="{StaticResource accTradeBtn}" Grid.Column="1" Margin="10,5" Padding="1,3" Focusable="True" >
+                                        <!--#FFF5EDED-->
+                                        <TextBlock><!--追價沽出--><TextBlock Text="{Cult:LabelText EN_TabQ_BtnHitSell, DefaultValue='Hit Sell'}"/><TextBlock Text="{Binding Path=Bid}"></TextBlock><LineBreak/>(<!--追價至--><TextBlock Text="{Cult:LabelText EN_TabQ_BtnHitSell_To, DefaultValue='To'}"/><TextBlock Text="{Binding Path=BidTo}"></TextBlock>)</TextBlock>
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/GOSTS;component/Images/img_button_red.png"/>
+                                        </Button.Background>
+                                        <!--<Image  Source="Images/img_button_red.png" Stretch="None"/>-->
+                                    </Button>
+                                </UniformGrid>
+
+                            </Grid>
+
+                            <!--</StackPanel>-->
+                        </Viewbox>
+                    </Border>
+                </TabItem>
+                <TabItem Visibility="Visible" Height="20" FontSize="11">
+                    <TabItem.Header>
+                        <TextBlock TextAlignment="Left" Text="{Cult:LabelText EN_TabCondTrade, DefaultValue='Conditional Trade'}" >
+                        </TextBlock>
+                    </TabItem.Header>
+                    <Border BorderBrush="Silver" BorderThickness="1" Height="Auto" Name="borderCT" Width="Auto" >
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                <GradientStop Color="#FFF2F2F8" Offset="0"/>
+                                <GradientStop Color="#FFB8BBD0" Offset="0.5"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel HorizontalAlignment="Stretch"  Width="auto">
+
+
+                            <!--1111111111111111111111111111111111111111111111111111111=======================================================-->
+                            <Grid  TextBlock.FontSize="12">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" MinHeight="90"/>
+                                    <RowDefinition Height="3"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+                                <!-- 上方输入控件等begin-->
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid Margin="0,0,0,2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="20"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Cult:LabelText EN_TabC_Price, DefaultValue='Price'}" Grid.Row="0"  VerticalAlignment="Center" Margin="5,8"/>
+                                        <src:ucTBNumber  FontSize="13" Grid.Row="0"  Grid.Column="1" x:Name="txt_Price_CT"  HorizontalContentAlignment="Stretch" VerticalAlignment="Center" Height="30" MinWidth="60" UpBound="99999" DownBound="-99999"/>
+                                        <src:ucBtnNumSub  Grid.Column="2" Grid.Row="0" x:Name="btn_Price_CT_down"  Margin="0,20,0,0"  Width="20" Height="20"  TNumBox="{Binding ElementName=txt_Price_CT}"></src:ucBtnNumSub>
+                                        <src:ucBtnNumAdd x:Name="btn_Price_CT_up" Grid.Column="2" Margin="0,0,0,25" Width="20" Height="20" TNumBox="{Binding ElementName=txt_Price_CT}"  ></src:ucBtnNumAdd>
+
+                                        <TextBlock Text="{Cult:LabelText EN_TabC_Qty, DefaultValue='Qty'}" Grid.Row="1" Grid.RowSpan="1"  VerticalAlignment="Center"  
+Margin="5,8"></TextBlock>
+
+                                        <TextBox Name="txt_Count_CT" TextWrapping="Wrap" InputMethod.IsInputMethodEnabled="False"  Grid.Row="1"  Grid.RowSpan="1" Grid.Column="1" Text="{Binding 
+Path=Count,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Stretch" Height="30" />
+
+                                        <src:ContinuousButtonAdd UpBound="999999" x:Name="btn_Count_CT_UP" Grid.Row="1" Grid.Column="3" Width="20" Height="20" TBoxNum="{Binding ElementName=txt_Count_CT}" Margin="0,0,0,25" HorizontalAlignment="Left"/>
+                                        <src:ContinuousButtonSub x:Name="btn_Count_CT_down" Grid.Row="1" Grid.Column="3" DownBound="1" Width="20"
+Height="20" TBoxNum="{Binding ElementName=txt_Count_CT}" Margin="0,25,0,0"/>
+
+
+                                        <CheckBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Content="{Cult:LabelText EN_TabC_Inactive, DefaultValue='Inactive'}" Margin="0" Name="ChkCtGeneralInactive" HorizontalAlignment="Right" Padding="0" />
+                                        <!--IsChecked="{Binding Path=Active,UpdateSourceTrigger=PropertyChanged}"-->
+                                        <CheckBox Content="{Cult:LabelText comm_AO, DefaultValue='AO'}" Name="ChkCTGeneralAO" Margin="0"  Checked="chkAO_Checked" Unchecked="chkAO_Unchecked" HorizontalAlignment="Left"  Visibility="Collapsed" Grid.Row="2" Grid.Column="0" Padding="0" />
+
+                                        <Label Content="{Cult:LabelText EN_TabC_Ref, DefaultValue='Ref'}" Grid.Row="3"  Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="3"  Name="cdGeneralRef" TextWrapping="Wrap"  Width="auto" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,3,0"/>
+                                        <!--Text="{Binding 
+Path=Ref,UpdateSourceTrigger=PropertyChanged}"-->
+                                    </Grid>
+                                    <!--left end-->
+
+
+                                    <!--right beg-->
+                                    <Grid Grid.Column="2" Margin="1,2,2,1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <!--===============================================================condition Tab=======================================================-->
+
+                                        <TabControl Grid.RowSpan="3" Name="tbConditionType">
+                                            <!--Height="138"-->
+                                            <TabItem Header="{Cult:LabelText EN_TabC_A_General, DefaultValue='General'}">
+                                                <Border BorderBrush="Silver" BorderThickness="1" Height="Auto" Name="borderType" Width="Auto" >
+                                                    <Border.Background>
+                                                        <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                                            <GradientStop Color="#FFF1F1F1" Offset="0.042"/>
+                                                            <GradientStop Color="#FFA7B4B3" Offset="0.925"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <UniformGrid Columns="1">
+
+                                                        <GroupBox Header="{Cult:LabelText EN_TabC_A_StopTr, DefaultValue='Stop/Trigger'}"  Width="auto" >
+                                                            <!--Margin="5,5,0,5"-->
+                                                            <Grid >
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="5"></RowDefinition>
+                                                                    <RowDefinition Height="*"></RowDefinition>
+                                                                    <RowDefinition Height="5"></RowDefinition>
+                                                                    <RowDefinition Height="*"></RowDefinition>
+                                                                    <RowDefinition Height="5"></RowDefinition>
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                    <ColumnDefinition Width="1"></ColumnDefinition>
+                                                                </Grid.ColumnDefinitions>
+                                                                <ComboBox  Grid.Row="1" Name="cbbstop">
+                                                                    <ComboBoxItem  Tag="stopLoss" IsSelected="True">
+                                                                        <TextBlock Text="{Cult:LabelText cbItemStopLoss, DefaultValue='Stop Loss'}"/>
+                                                                    </ComboBoxItem>
+                                                                    <ComboBoxItem Tag="upTrigger">
+                                                                        <TextBlock Text="{Cult:LabelText cbItemUpTriggler, DefaultValue='Up Trigger'}"/>
+                                                                    </ComboBoxItem>
+                                                                    <ComboBoxItem Tag="downTrigger">
+                                                                        <TextBlock Text="{Cult:LabelText cbItemDownTr, DefaultValue='Down Trigger'}"/>
+                                                                    </ComboBoxItem>
+                                                                </ComboBox>
+
+                                                                <Grid Grid.Row="3" Grid.Column="0">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="41"/>
+                                                                        <ColumnDefinition Width="20"/>
+                                                                        <ColumnDefinition Width="*" MinWidth="50"/>
+                                                                        <ColumnDefinition Width="20"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Label Content="{Cult:LabelText EN_TabC_Price, DefaultValue='Price'}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                                                    <src:ucBtnNumSub  Grid.Column="1" Focusable="False"  Height="20" Width="20"  TNumBox="{Binding ElementName=txt_StopPrice_CT}"></src:ucBtnNumSub>
+                                                                    <src:ucTBNumber  x:Name="txt_StopPrice_CT" UpBound="99999" DownBound="-99999" Width="auto" MinWidth="55" MinHeight="30"  Grid.Column="2"/>
+                                                                    <src:ucBtnNumAdd  Grid.Column="3" Focusable="False"  Height="20" Width="20"  TNumBox="{Binding ElementName=txt_StopPrice_CT}"></src:ucBtnNumAdd>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </GroupBox>
+                                                    </UniformGrid>
+                                                </Border>
+                                            </TabItem>
+                                            <TabItem Header="Enhanced Stop" Visibility="Collapsed">
+                                                <!--增強止損-->
+                                                <Border BorderBrush="Silver" BorderThickness="1" Height="Auto" Name="borderTypeSL" Width="Auto" >
+                                                    <Border.Background>
+                                                        <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                                            <GradientStop Color="#FFF1F1F1" Offset="0.042"/>
+                                                            <GradientStop Color="#FFA7B4B3" Offset="0.925"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <UniformGrid Columns="2">
+                                                        <GroupBox Header="" Margin="5,5,0,5" Width="auto">
+                                                            <Grid >
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="3*"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Label Content="Stop Loss" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                                                <!--止損價-->
+                                                                <Button Grid.Column="1" Focusable="False"  Height="25" Width="25" >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <TextBox TextWrapping="Wrap" Text="" Width="auto" MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2"/>
+                                                                <Button Grid.Column="3" Focusable="False"  Height="25" Width="25">
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <Label Content="Chase Price" VerticalAlignment="Center" VerticalContentAlignment="Center" Grid.Row="1"/>
+                                                                <!--追價-->
+                                                                <Button Grid.Column="1" Grid.Row="1" Focusable="False"   Height="25" Width="25">
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <TextBox TextWrapping="Wrap" Text="" Width="auto" MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2" Grid.Row="1"/>
+                                                                <Button Grid.Column="3" Grid.Row="1" Focusable="False"  Height="25" Width="25">
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png" Stretch="Fill"/>
+                                                                </Button>
+                                                            </Grid>
+                                                        </GroupBox>
+                                                        <GroupBox Header="" Margin="5,5,0,5" Width="auto" >
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="3*"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <!--追蹤止損-->
+                                                                <CheckBox Content="Trailing Stop" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Grid.ColumnSpan="4"/>
+                                                                <Label Content="Step" VerticalAlignment="Center" VerticalContentAlignment="Center" Grid.Row="1"/>
+                                                                <Button Grid.Column="1" Grid.Row="1" Focusable="False"  Height="25" Width="25" >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <TextBox TextWrapping="Wrap" Text="" Width="auto" MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2" Grid.Row="1"/>
+                                                                <Button Grid.Column="3" Grid.Row="1" Focusable="False"  Height="25" Width="25">
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png" Stretch="Fill"/>
+                                                                </Button>
+                                                            </Grid>
+
+                                                        </GroupBox>
+                                                    </UniformGrid>
+                                                </Border>
+                                            </TabItem>
+                                            <TabItem Header="OCO"  Visibility="Collapsed">
+                                                <!--雙向限價盤-->
+                                                <Border BorderBrush="Silver" BorderThickness="1" Height="Auto" Name="borderType2W" Width="Auto" >
+                                                    <Border.Background>
+                                                        <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                                            <GradientStop Color="#FFF1F1F1" Offset="0.042"/>
+                                                            <GradientStop Color="#FFA7B4B3" Offset="0.925"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <UniformGrid>
+                                                        <GroupBox Header="" Margin="5,5,0,5" Width="auto">
+                                                            <Grid >
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition></RowDefinition>
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="4*"/>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                    <ColumnDefinition Width="4*"/>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Label Content="Stop Price" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                                                <!--止損價-->
+                                                                <!--<Button Grid.Column="1" Focusable="False"  Height="25" Width="25" >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                                                </Button>-->
+                                                                <!--<TextBox TextWrapping="Wrap" Text="" Width="auto" MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2"/>-->
+                                                                <!--<Button Grid.Column="3" Focusable="False" Height="25" Width="25" >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png" Stretch="Fill"/>
+                                                                </Button>-->
+
+                                                                <src:ucTBNumber  x:Name="txt_StopPrice_OCO"  MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2" UpBound="99999" DownBound="-99999"/>
+                                                                <src:ucBtnNumSub Grid.Column="1" Height="25" Width="25" x:Name="btn_StopPrice_OCO_down"   TNumBox="{Binding ElementName=txt_StopPrice_OCO}"></src:ucBtnNumSub>
+                                                                <src:ucBtnNumAdd x:Name="btn_StopPrice_CT_OCO_up" Grid.Column="3"   Height="25" Width="25" TNumBox="{Binding ElementName=txt_StopPrice_OCO}"  ></src:ucBtnNumAdd>
+
+
+                                                                <Label Content="Hit   Price" VerticalAlignment="Center" VerticalContentAlignment="Center" Grid.Row="1"/>
+                                                                <!--<Button Grid.Column="1" Grid.Row="1" Focusable="False"  Height="25" Width="25" >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <TextBox TextWrapping="Wrap" Text="" Width="auto" MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2" Grid.Row="1"/>
+                                                                <Button Grid.Column="3" Grid.Row="1" Focusable="False" Height="25" Width="25" >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png" Stretch="Fill"/>
+                                                                </Button>-->
+                                                                <src:ucTBNumber Grid.Row="1"  x:Name="txt_AttractPrice_OCO"  MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2" UpBound="99999" DownBound="-99999"/>
+                                                                <src:ucBtnNumSub Grid.Row="1" Grid.Column="1" Height="25" Width="25"    TNumBox="{Binding ElementName=txt_AttractPrice_OCO}"></src:ucBtnNumSub>
+                                                                <src:ucBtnNumAdd Grid.Row="1" Grid.Column="3"   Height="25" Width="25" TNumBox="{Binding ElementName=txt_AttractPrice_OCO}"  ></src:ucBtnNumAdd>
+
+
+
+                                                                <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Text="成交後取消另一個 (OCO)"  Margin="4,0"  VerticalAlignment="Center"  />
+                                                            </Grid>
+                                                        </GroupBox>
+
+                                                    </UniformGrid>
+                                                </Border>
+                                            </TabItem>
+                                            <TabItem Header="Bull Bear"  Visibility="Collapsed">
+                                                <!--牛市與熊市-->
+                                                <Border BorderBrush="Silver" BorderThickness="1" Height="Auto" Name="borderTypeBB" Width="Auto" >
+                                                    <Border.Background>
+                                                        <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                                            <GradientStop Color="#FFF1F1F1" Offset="0.042"/>
+                                                            <GradientStop Color="#FFA7B4B3" Offset="0.925"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <UniformGrid Columns="2">
+                                                        <GroupBox Header="" Margin="5,5,0,5" Width="auto">
+                                                            <Grid >
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="5*"/>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                    <ColumnDefinition Width="4*"/>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Label Content="有效期" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                                                <TextBox TextWrapping="Wrap" Text="即日" Width="auto" HorizontalContentAlignment="Stretch" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                                                <Label Content="止損追價" VerticalAlignment="Center" VerticalContentAlignment="Center" Grid.Row="1"/>
+                                                                <Button Grid.Column="1" Grid.Row="1" Focusable="False" Height="25" Width="25"  >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <TextBox TextWrapping="Wrap" Text="" Width="auto" MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2" Grid.Row="1"/>
+                                                                <Button Grid.Column="3" Grid.Row="1" Focusable="False"  Height="25" Width="25">
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png" Stretch="Fill"/>
+                                                                </Button>
+                                                            </Grid>
+                                                        </GroupBox>
+                                                        <GroupBox Header="" Margin="5,5,0,5" Width="auto" >
+                                                            <Grid >
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="3*"/>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                    <ColumnDefinition Width="4*"/>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Label Content="止賺" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                                                <Button Grid.Column="1" Focusable="False" Height="25" Width="25"  >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <TextBox TextWrapping="Wrap" Text="" Width="auto" MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2"/>
+                                                                <Button Grid.Column="3" Focusable="False" Height="25" Width="25" >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <Label Content="止損" VerticalAlignment="Center" VerticalContentAlignment="Center" Grid.Row="1"/>
+                                                                <Button Grid.Column="1" Grid.Row="1" Focusable="False"  Height="25" Width="25" >
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_down.png" Stretch="Fill"/>
+                                                                </Button>
+                                                                <TextBox TextWrapping="Wrap" Text="" Width="auto" MinWidth="45" HorizontalContentAlignment="Stretch" Grid.Column="2" Grid.Row="1"/>
+                                                                <Button Grid.Column="3" Grid.Row="1" Focusable="False"  Height="25" Width="25">
+                                                                    <Image Source="/GOSTS;component/Images/ribbtn_up.png" Stretch="Fill"/>
+                                                                </Button>
+                                                            </Grid>
+
+                                                        </GroupBox>
+                                                    </UniformGrid>
+                                                </Border>
+                                            </TabItem>
+                                            <TabItem Header="預定時間發盤"  Visibility="Collapsed">
+                                                <Border BorderBrush="Silver" BorderThickness="1" Height="Auto" Name="borderTypeTime" Width="Auto" >
+                                                    <Border.Background>
+                                                        <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                                            <GradientStop Color="#FFF1F1F1" Offset="0.042"/>
+                                                            <GradientStop Color="#FFA7B4B3" Offset="0.925"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <UniformGrid Columns="2">
+                                                        <GroupBox Header="" Margin="5,5,0,5" Width="auto">
+                                                            <Grid HorizontalAlignment="Stretch" Height="111" VerticalAlignment="Top" Width="auto">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition/>
+                                                                    <ColumnDefinition Width="3*"/>
+                                                                    <ColumnDefinition/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                </Grid.RowDefinitions>
+                                                                <Label Content="Date" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                                <DatePicker HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                                                <Label Content="Time" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1,39,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+                                                                <TextBox TextWrapping="Wrap" Text="12:21" Width="auto" HorizontalContentAlignment="Stretch" Grid.Column="1" Margin="0,41,0,15" Grid.RowSpan="2" />
+
+                                                            </Grid>
+                                                        </GroupBox>
+                                                        <TextBlock Text="Keep with server time" Margin="25,25,0,21" VerticalAlignment="Center"  />
+                                                        <!--以侍服器時間作準 synchronise-->
+                                                    </UniformGrid>
+                                                </Border>
+                                            </TabItem>
+                                        </TabControl>
+
+
+
+
+
+
+
+                                        <!--===============================================================condition tab End====================================================================-->
+
+
+                                        <ComboBox HorizontalAlignment="Left" Name="CbbValid" Visibility="Collapsed"  Grid.Row="0" Grid.Column="0">
+                                            <ComboBoxItem Tag="Today" IsSelected="True">Today</ComboBoxItem>
+                                            <ComboBoxItem Tag="FAK">FAK</ComboBoxItem>
+                                            <ComboBoxItem Tag="FOK">FOK</ComboBoxItem>
+                                            <ComboBoxItem Tag="GTC">GTC</ComboBoxItem>
+                                            <ComboBoxItem Tag="specTime">SPEC DATE</ComboBoxItem>
+                                        </ComboBox>
+                                        <DatePicker HorizontalAlignment="Left" Name="dt_CT_GN_SpecTime" Visibility="Collapsed" SelectedDate="{Binding 
+Path=dtSpecialTime,UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2" IsEnabled="False" Grid.ColumnSpan="2" />
+
+
+
+
+
+                                        <!--<Grid Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                           
+                                        </Grid>-->
+
+                                    </Grid>
+                                    <!--right end-->
+
+
+                                    <!--<CheckBox Content="Keep Setting" Name="ChkCtGeneralKeepSetting" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2"/>
+                                    <CheckBox Content="Bid" Name="ChkCtGeneralBid" VerticalContentAlignment="Center" Height="20" Margin="10,0,0,25" Grid.Column="4"/>-->
+
+                                </Grid>
+
+
+                                <!-- 下方提交按钮begin -->
+                                <Grid Grid.Row="2" VerticalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition MinWidth="10"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition MinWidth="10"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition MinWidth="10"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition ></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+                                    <Button Name="btn_CTbuy" Width="65" Content="{Cult:LabelText EN_TabC_Btn_Buy, DefaultValue='Buy'}" FontSize="13" FontWeight="Bold" Style="{StaticResource 
+accTradeBtn}"   Grid.Column="1"  Click="btn_CTbuy_Click_1" Focusable="True" >
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/GOSTS;component/Images/img_button_blue.png"/>
+                                        </Button.Background>
+                                    </Button>
+                                    <Button Name="btn_CTsell" Width="65" MinHeight="30" Content="{Cult:LabelText EN_TabC_Btn_Sell, DefaultValue='Sell'}" FontSize="13" FontWeight="Bold" Style="{StaticResource 
+accTradeBtn}" Grid.Row="0" Grid.Column="3" Click="btn_CTsell_Click_1" Focusable="True" >
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/GOSTS;component/Images/img_button_red.png"/>
+                                        </Button.Background>
+                                    </Button>
+                                </Grid>
+                                <!-- 下方提交按钮end -->
+                            </Grid>
+
+
+                            <!--="======================================================================================="-->
+
+                            <!---old one===============================================================================================================-->
+
+                            <!--<Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="40*"/>
+                                    <ColumnDefinition Width="64*"/>
+                                    <ColumnDefinition Width="39*"/>
+                                    <ColumnDefinition Width="71*"/>
+                                    <ColumnDefinition Width="51*"/>
+                                    <ColumnDefinition Width="71"/>
+                                </Grid.ColumnDefinitions>-->
+                            <!--<Label Content="Price" VerticalAlignment="Center" VerticalContentAlignment="Center"/>-->
+                            <!--<src:ucBtnNumSub Grid.Column="1" Focusable="False" x:Name="btn_Price_CT_down"   Height="25" Width="25"  TNumBox="{Binding ElementName=txt_Price_CT}"></src:ucBtnNumSub>-->
+                            <!--<src:ucTBNumber  x:Name="txt_Price_CT" Width="auto" MinWidth="45" Grid.Column="2" HorizontalContentAlignment="Stretch" Height="32" VerticalAlignment="Top" UpBound="99999" DownBound="-99999"/>-->
+                            <!--<src:ucBtnNumAdd x:Name="btn_Price_CT_up" Grid.Column="3" Focusable="False"  Height="25" Width="25"  TNumBox="{Binding ElementName=txt_Price_CT}"></src:ucBtnNumAdd>-->
+
+                            <!--<CheckBox Content="Bid" Name="ChkCtGeneralBid" VerticalContentAlignment="Center" Height="20" Margin="10,0,0,25" Grid.Column="4"/>-->
+
+                            <!--<CheckBox Content="AO" Name="ChkCTGeneralAO" VerticalContentAlignment="Center" Height="20" Margin="10,25,0,0" Grid.Column="4"/>-->
+                            <!--<Label Content="Ref"  VerticalAlignment="Center" VerticalContentAlignment="Center" Grid.Column="5"/>-->
+                            <!--<TextBox TextWrapping="Wrap" Name="cdGeneralRef" Width="auto" MinWidth="45" Grid.Column="6" HorizontalContentAlignment="Stretch" Margin="0,5,5,5"/>-->
+                            <!--<Label Content="Qty" Grid.Row="1"/>-->
+
+                            <!--<src:ContinuousButtonSub x:Name="btn_Count_CT_down" Grid.Column="1" Grid.Row="1" Focusable="False"  DownBound="1" Height="25" Width="25" TBoxNum="{Binding ElementName=txt_Count_CT}" />-->
+                            <!--<TextBox Name="txt_Count_CT" TextWrapping="Wrap"  Width="auto" MinWidth="45" Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Stretch"  />-->
+
+                            <!--<src:ContinuousButtonAdd UpBound="999999" x:Name="btn_Count_CT_UP" Grid.Column="3" Grid.Row="1" Focusable="False" Width="25" Height="25" TBoxNum="{Binding ElementName=txt_Count_CT}"/>-->
+
+                            <!--<CheckBox Content="Keep Setting" Name="ChkCtGeneralKeepSetting" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2"/>-->
+                            <!--<CheckBox Content="Inactive" Margin="0,0,0,0" Name="ChkCtGeneralInactive" VerticalAlignment="Center" VerticalContentAlignment="Center" Grid.Column="6" Grid.Row="1"/>-->
+                            <!-- <UniformGrid Columns="2" Grid.Row="2" Grid.ColumnSpan="7" >
+                                   <Button Name="btn_CTbuy"  Content="Buy" MinWidth="100" FontSize="22" FontWeight="Bold" Style="{StaticResource accTradeBtn}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="30,5" Click="btn_CTbuy_Click_1" Focusable="False" >
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/GOSTS;component/Images/img_button_blue.png"/>                                          
+                                        </Button.Background>
+                                    </Button>-->
+                            <!--<Button Style="{StaticResource accTradeBtn}" Name="btn_CTsell"  Content="Sell" MinWidth="100" FontSize="22" FontWeight="Bold" Grid.Row="2" Grid.Column="5" Grid.ColumnSpan="2" Margin="30,5" Click="btn_CTsell_Click_1" Focusable="False" >
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/GOSTS;component/Images/img_button_red.png"/>
+                                        </Button.Background>                                   
+                                    </Button>
+                                </UniformGrid>-->
+                            <!--</Grid>-->
+                            <!---end old one===============================================================================================================-->
+                            <!--end1111111111111111111111========================================================================================-->
+                        </StackPanel>
+                    </Border>
+                </TabItem>
+            </TabControl>
+        </DockPanel >
+        <StackPanel HorizontalAlignment="Stretch" Height="auto" Grid.Row="3" VerticalAlignment="Top" Width="auto">
+            <Border BorderBrush="Silver" BorderThickness="1" Height="Auto" Name="borderPD" Width="Auto" >
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                        <GradientStop Color="#FFF2F2F8" Offset="0"/>
+                        <GradientStop Color="#FFB8BBD0" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Expander Name="DataExp" Visibility="Collapsed"  Header="Price Depth &amp; Ticker" FontSize="12" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed">
+                    <StackPanel>
+                        <Grid Height="0" Width="auto" Margin="20,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20*"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="20*"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="20*"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <Rectangle Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF3F3F3" Offset="0.042"/>
+                                        <GradientStop Color="#FF43CBC2" Offset="0.925"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF3F3F3" Offset="0.042"/>
+                                        <GradientStop Color="#FF43CBC2" Offset="0.925"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <!--<Rectangle Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="6" Fill="#FF94DEE6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>-->
+                            <Rectangle Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFD7F6F9" Offset="0.042"/>
+                                        <GradientStop Color="#FF43CBC2" Offset="0.925"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <!--<Rectangle Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="1" Fill="#FF94DEE6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>-->
+                            <Rectangle Grid.Column="1" Grid.ColumnSpan="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFD7F6F9" Offset="0.042"/>
+                                        <GradientStop Color="#FF43CBC2" Offset="0.925"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <!--<Rectangle Grid.Column="1" Grid.ColumnSpan="1" Grid.RowSpan="1" Fill="#FF94DEE6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>-->
+                            <Rectangle Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF5F3F5" Offset="0"/>
+                                        <GradientStop Color="#FFE299D8" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <!--<Rectangle Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="6" Fill="#FFF3A7E2" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>-->
+                            <Rectangle Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF5F3F5" Offset="0"/>
+                                        <GradientStop Color="#FFE299D8" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <!--<Rectangle Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="6" Fill="#FFF3A7E2" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>-->
+                            <Rectangle Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF3DCF3" Offset="0"/>
+                                        <GradientStop Color="#FFE299D8" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <!--<Rectangle Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="1" Fill="#FFF3A7E2" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>-->
+                            <Rectangle Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF3DCF3" Offset="0"/>
+                                        <GradientStop Color="#FFE299D8" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <!--<Rectangle Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="1" Fill="#FFF3A7E2" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>-->
+
+
+                            <Rectangle Grid.Column="4" Grid.ColumnSpan="1" Grid.RowSpan="6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF1F1F1" Offset="0"/>
+                                        <GradientStop Color="#FFA7B4B3" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle Grid.Column="5" Grid.ColumnSpan="1" Grid.RowSpan="6" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF1F1F1" Offset="0"/>
+                                        <GradientStop Color="#FFA7B4B3" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle Grid.Column="4" Grid.ColumnSpan="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF1F1F1" Offset="0"/>
+                                        <GradientStop Color="#FFA7B4B3" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle Grid.Column="5" Grid.ColumnSpan="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Height="auto"  Stroke="Black" VerticalAlignment="Stretch" Width="auto">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF1F1F1" Offset="0"/>
+                                        <GradientStop Color="#FFA7B4B3" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+
+
+
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="買入量" VerticalAlignment="Top" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="買入價" VerticalAlignment="Top" Grid.Column="1" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="沽出價" VerticalAlignment="Top" Grid.Column="2" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="沽出量" VerticalAlignment="Top" Grid.Column="3" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="成交價" VerticalAlignment="Top" Grid.Column="4" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="成交量" VerticalAlignment="Top" Grid.Column="5" Margin="2,1,2,1"/>
+
+                            <TextBlock HorizontalAlignment="Center" Text="2" Grid.Row="1" TextWrapping="Wrap"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22366" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22368" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="4" VerticalAlignment="Top" Grid.Column="3" Grid.Row="1" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22368" VerticalAlignment="Top" Grid.Column="4" Grid.Row="1" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Grid.Column="5" Grid.Row="1" Margin="2,1,2,1"/>
+
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="14" VerticalAlignment="Top" Grid.Row="2" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22365" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22369" VerticalAlignment="Top" Grid.Column="2" Grid.Row="2" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Grid.Column="3" Grid.Row="2" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22366" VerticalAlignment="Top" Grid.Column="4" Grid.Row="2" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="4" VerticalAlignment="Top" Grid.Column="5" Grid.Row="2" Margin="2,1,2,1"/>
+
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Grid.Row="3" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22364" VerticalAlignment="Top" Grid.Column="1" Grid.Row="3" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22370" VerticalAlignment="Top" Grid.Column="2" Grid.Row="3" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Grid.Column="3" Grid.Row="3" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22366" VerticalAlignment="Top" Grid.Column="4" Grid.Row="3" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Grid.Column="5" Grid.Row="3" Margin="2,1,2,1"/>
+
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="9" VerticalAlignment="Top" Grid.Row="4" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22363" VerticalAlignment="Top" Grid.Column="1" Grid.Row="4" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22371" VerticalAlignment="Top" Grid.Column="2" Grid.Row="4" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Grid.Column="3" Grid.Row="4" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22365" VerticalAlignment="Top" Grid.Column="4" Grid.Row="4" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Grid.Column="5" Grid.Row="4" Margin="2,1,2,1"/>
+
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Grid.Row="5" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22362" VerticalAlignment="Top" Grid.Column="1" Grid.Row="5" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22372" VerticalAlignment="Top" Grid.Column="2" Grid.Row="5" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="7" VerticalAlignment="Top" Grid.Column="3" Grid.Row="5" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="22364" VerticalAlignment="Top" Grid.Column="4" Grid.Row="5" Margin="2,1,2,1"/>
+                            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Grid.Column="5" Grid.Row="5" Margin="2,1,2,1"/>
+                        </Grid>
+                        <!--<Image Height="150" Name="image1" Stretch="Fill" Width="200" Grid.ColumnSpan="3" Margin="64,0,32,-48" Grid.RowSpan="5" Grid.Row="1" />-->
+
+                        <UniformGrid Columns="1" Margin="20,0,20,10" >
+                            <WrapPanel >
+                                <DataGrid RowHeaderWidth="0" AutoGenerateColumns="False"  IsReadOnly="True"  HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="0,0,0,0" x:Name="dgPriceDepth" ItemsSource="{Binding DataList2}" Width="282">
+                                    <DataGrid.Columns>
+                                        <!--<DataGridTextColumn  Binding="{Binding Path=CurrentTime}" Header="CurrentTime" MinWidth="60"  Visibility="Hidden"   />
+                                        <DataGridTextColumn Binding="{Binding Path=Reserve}" Header="Reserve" MinWidth="60" Visibility="Hidden"  />-->
+                                        <DataGridTextColumn Binding="{Binding Path=ProdCode}" Header="ProdCode" MinWidth="50"   />
+                                        <DataGridTextColumn Binding="{Binding Path=BQty}" Header="BQty"  MinWidth="60" />
+                                        <DataGridTextColumn Binding="{Binding Path=Bid}" Header="Bid"  MinWidth="80"/>
+                                        <DataGridTextColumn Binding="{Binding Path=Ask}" Header="Ask"  MinWidth="80" />
+                                        <DataGridTextColumn Binding="{Binding Path=AQty}" Header="AQty"  MinWidth="60"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <DataGrid RowHeaderWidth="0" ItemsSource="{Binding TickerList5}" IsReadOnly="True"  AutoGenerateColumns="False" x:Name="dgTicker" Width="262">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Path=productCode}" Header="Product" MinWidth="40"    />
+                                        <DataGridTextColumn Binding="{Binding Path=qty}" Header="Qty" MinWidth="60" />
+                                        <DataGridTextColumn Binding="{Binding Path=price}" Header="Price" MinWidth="80" />
+                                        <DataGridTextColumn Binding="{Binding Path=logTime}" Header="Log Time"  MinWidth="100"  />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </WrapPanel>
+                        </UniformGrid>
+
+
+                        <UniformGrid Columns="4" Margin="20,0,20,10">
+                            <WrapPanel >
+                                <Label Content="開" />
+                                <TextBlock Name="tbOpen" Width="80" TextWrapping="Wrap" Text="" VerticalAlignment="Center"/>
+                            </WrapPanel>
+                            <WrapPanel >
+                                <Label Content="收" />
+                                <TextBlock Name="tbClose" Width="80"  TextWrapping="Wrap" Text="" VerticalAlignment="Center"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="升跌" />
+                                <TextBlock Name="tbChange" Width="100"  FontSize="12"   TextWrapping="Wrap" Text="" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <CheckBox Content="自動跟價"   Width="80" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="高" />
+                                <TextBlock Name="tbHigh"  Width="80" TextWrapping="Wrap" Text="" VerticalAlignment="Center"/>
+                            </WrapPanel>
+                            <WrapPanel >
+                                <Label Content="低" />
+                                <TextBlock Name="tbLow"  Width="80" TextWrapping="Wrap" Text="" VerticalAlignment="Center"/>
+                            </WrapPanel>
+                            <WrapPanel >
+                                <Label Content="總數"  />
+                                <TextBlock Name="tbVolQty"  Width="80"  TextWrapping="Wrap" Text="" VerticalAlignment="Center"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="總額"/>
+                                <TextBlock  Name="tbVolume"  Width="80" TextWrapping="Wrap" Text="" VerticalAlignment="Center"/>
+                            </WrapPanel>
+                        </UniformGrid>
+
+                        <!--<UniformGrid Columns="4">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="開" />
+                            <TextBlock TextWrapping="Wrap" Text="21668" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="收" Margin="10,0,0,0" />
+                            <TextBlock TextWrapping="Wrap" Text="21723" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="升跌" Padding="10,5,5,5" />
+                            <TextBlock TextWrapping="Wrap" Text="23(0.1%)" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="自動跟價" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="高" />
+                            <TextBlock TextWrapping="Wrap" Text="21791" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="低" Margin="10,0,0,0" />
+                            <TextBlock TextWrapping="Wrap" Text="21660" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="總數" Margin="10,0,0,0" />
+                            <TextBlock TextWrapping="Wrap" Text="27.737K" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="總額" Margin="10,0,0,0" />
+                            <TextBlock TextWrapping="Wrap" Text=" "/>
+                        </StackPanel>
+                    </UniformGrid>-->
+
+                        <!--<StackPanel Height="30" VerticalAlignment="Top" Orientation="Horizontal">
+                     <Label Content="開" />
+                    <TextBlock TextWrapping="Wrap" Text="21668" VerticalAlignment="Center"/>
+                        <Label Content="收" Margin="10,0,0,0" />
+                        <TextBlock TextWrapping="Wrap" Text="21723" VerticalAlignment="Center"/>
+                        <Label Content="升跌" Padding="10,5,5,5" />
+                        <TextBlock TextWrapping="Wrap" Text="23(0.1%)" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                        <CheckBox Content="自動跟價" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
+
+                    </StackPanel>
+                    
+                    <StackPanel Height="30" VerticalAlignment="Top" Orientation="Horizontal">
+                        <Label Content="高" />
+                        <TextBlock TextWrapping="Wrap" Text="21791" VerticalAlignment="Center"/>
+                        <Label Content="低" Margin="10,0,0,0" />
+                        <TextBlock TextWrapping="Wrap" Text="21660" VerticalAlignment="Center"/>
+                        <Label Content="總數" Margin="10,0,0,0" />
+                        <TextBlock TextWrapping="Wrap" Text="27.737K" VerticalAlignment="Center"/>
+                        <Label Content="總額" Margin="10,0,0,0" />
+                        <TextBlock TextWrapping="Wrap" Text=" "/>
+                    </StackPanel>-->
+
+                    </StackPanel>
+                </Expander>
+            </Border>
+        </StackPanel>
+        <CheckBox Content="{Cult:LabelText comm_TOne, DefaultValue='T+1'}" FontSize="14" HorizontalAlignment="Right" Name="chkT1" Margin="0,1,10,0" Grid.Row="0" VerticalAlignment="Top"/>
+    </Grid>
+    <!--</Viewbox>-->
+</GOS:IDelearUser >

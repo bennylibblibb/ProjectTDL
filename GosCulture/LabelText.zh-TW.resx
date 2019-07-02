@@ -1,0 +1,1690 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccCmbText" xml:space="preserve">
+    <value>戶口</value>
+  </data>
+  <data name="AccInfo_TabCli_accname" xml:space="preserve">
+    <value>姓名</value>
+  </data>
+  <data name="AccInfo_TabCli_accno" xml:space="preserve">
+    <value>帳號</value>
+  </data>
+  <data name="accountinfoTitle" xml:space="preserve">
+    <value>戶口資料|  - {0}| 代理|:{1}</value>
+  </data>
+  <data name="acc_tabClient" xml:space="preserve">
+    <value>---------------------</value>
+  </data>
+  <data name="AccInfo_TabCli_active" xml:space="preserve">
+    <value>戶口狀況</value>
+  </data>
+  <data name="AccInfo_TabCli_address" xml:space="preserve">
+    <value>地址</value>
+  </data>
+  <data name="AccInfo_TabAcc_ae" xml:space="preserve">
+    <value>經紀</value>
+  </data>
+  <data name="AccInfo_TabCli_aeid" xml:space="preserve">
+    <value>經紀</value>
+  </data>
+  <data name="AccInfo_TabCli_basecurrency" xml:space="preserve">
+    <value>基本貨幣</value>
+  </data>
+  <data name="AccInfo_TabAcc_buyingpower" xml:space="preserve">
+    <value>購買力</value>
+  </data>
+  <data name="AccInfo_TabCash_cash" xml:space="preserve">
+    <value>現金結餘</value>
+  </data>
+  <data name="AccInfo_TabCash_cash(baseccy)" xml:space="preserve">
+    <value>現金(基本貨幣)</value>
+  </data>
+  <data name="AccInfo_TabAcc_cashbalance" xml:space="preserve">
+    <value>現金結餘</value>
+  </data>
+  <data name="AccInfo_TabCash_cashbf" xml:space="preserve">
+    <value>上日結餘</value>
+  </data>
+  <data name="AccInfo_TabCash_ccy" xml:space="preserve">
+    <value>貨幣</value>
+  </data>
+  <data name="AccInfo_TabAcc_commoditypl" xml:space="preserve">
+    <value>商品盈虧</value>
+  </data>
+  <data name="Trs_Ord_Cond" xml:space="preserve">
+    <value>條件</value>
+  </data>
+  <data name="AccInfo_TabCli_contactinfo" xml:space="preserve">
+    <value>聯絡資料</value>
+  </data>
+  <data name="AccInfo_TabAcc_ctrllevel" xml:space="preserve">
+    <value>控制級別</value>
+  </data>
+  <data name="AccInfo_TabCli_emailaddress" xml:space="preserve">
+    <value>電郵</value>
+  </data>
+  <data name="Ext.Order#" xml:space="preserve">
+    <value>外部指示</value>
+  </data>
+  <data name="AccInfo_TabCli_home" xml:space="preserve">
+    <value>住宅電話</value>
+  </data>
+  <data name="AccInfo_TabCli_idbrno" xml:space="preserve">
+    <value>身份證</value>
+  </data>
+  <data name="AccInfo_TabAcc_imargin" xml:space="preserve">
+    <value>基本保証金</value>
+  </data>
+  <data name="Initiator" xml:space="preserve">
+    <value>原發者</value>
+  </data>
+  <data name="AccInfo_TabAcc_margincall" xml:space="preserve">
+    <value>追收金額</value>
+  </data>
+  <data name="AccInfo_TabCli_marginclass" xml:space="preserve">
+    <value>保証金類別</value>
+  </data>
+  <data name="AccInfo_TabAcc_mgnclass" xml:space="preserve">
+    <value>保証金類別</value>
+  </data>
+  <data name="AccInfo_TabAcc_mlevel" xml:space="preserve">
+    <value>保証金水平</value>
+  </data>
+  <data name="AccInfo_TabAcc_mmargin" xml:space="preserve">
+    <value>維持保証金</value>
+  </data>
+  <data name="AccInfo_TabCli_mobile" xml:space="preserve">
+    <value>手提電話</value>
+  </data>
+  <data name="AccInfo_TabAcc_nav" xml:space="preserve">
+    <value>資產淨值</value>
+  </data>
+  <data name="AccInfo_TabCli_office" xml:space="preserve">
+    <value>公司電話</value>
+  </data>
+  <data name="ORDHID" xml:space="preserve">
+    <value>代號</value>
+  </data>
+  <data name="ORDHName" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="ORDHOrders" xml:space="preserve">
+    <value>買賣指示</value>
+  </data>
+  <data name="ORDHOSBQty" xml:space="preserve">
+    <value>買入餘數</value>
+  </data>
+  <data name="ORDHOSSQty" xml:space="preserve">
+    <value>沽出餘數</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>價格</value>
+  </data>
+  <data name="AccInfo_TabCash_reffxrate" xml:space="preserve">
+    <value>參考匯率</value>
+  </data>
+  <data name="refNo" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="AccInfo_TabCli_sex" xml:space="preserve">
+    <value>性別</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>狀況</value>
+  </data>
+  <data name="T.Stamp" xml:space="preserve">
+    <value>時間標記</value>
+  </data>
+  <data name="TabAccInfo" xml:space="preserve">
+    <value>戶口信息</value>
+  </data>
+  <data name="TabCashInfo" xml:space="preserve">
+    <value>帳戶信息</value>
+  </data>
+  <data name="TabClientInfo" xml:space="preserve">
+    <value>客戶資料</value>
+  </data>
+  <data name="TabUOIClearTd" xml:space="preserve">
+    <value>成交</value>
+  </data>
+  <data name="TabUOIDoneTd" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+  <data name="TabUOIOrder" xml:space="preserve">
+    <value>買賣指示</value>
+  </data>
+  <data name="TabUOIPos" xml:space="preserve">
+    <value>持倉</value>
+  </data>
+  <data name="AccInfo_TabCash_todayinout" xml:space="preserve">
+    <value>今日存取</value>
+  </data>
+  <data name="Trs_Ord_Tone" xml:space="preserve">
+    <value>夜市</value>
+  </data>
+  <data name="AccInfo_TabCli_tradeclass" xml:space="preserve">
+    <value>交易類別</value>
+  </data>
+  <data name="Traded" xml:space="preserve">
+    <value>已成交</value>
+  </data>
+  <data name="AccInfo_TabCash_unpresented" xml:space="preserve">
+    <value>未兌現</value>
+  </data>
+  <data name="AccInfo_TabCash_unsettle" xml:space="preserve">
+    <value>未交收</value>
+  </data>
+  <data name="userorderinfoTitle" xml:space="preserve">
+    <value>買賣記錄| - [{0}&lt;{1} {2}{3}&gt;]</value>
+  </data>
+  <data name="AccInfo_TabCash_withdrawalreq" xml:space="preserve">
+    <value>提取請求</value>
+  </data>
+  <data name="orderentryTitle" xml:space="preserve">
+    <value>交易輸入| - {0}({1})</value>
+  </data>
+  <data name="CDHBQty" xml:space="preserve">
+    <value>買入</value>
+  </data>
+  <data name="CDHExtOrder" xml:space="preserve">
+    <value>外部指示</value>
+  </data>
+  <data name="CDHInitiator" xml:space="preserve">
+    <value>初始者</value>
+  </data>
+  <data name="CDHOrderNo" xml:space="preserve">
+    <value>指示#</value>
+  </data>
+  <data name="CDHOrderPrc" xml:space="preserve">
+    <value>指示價</value>
+  </data>
+  <data name="CDHRef" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="CDHSQty" xml:space="preserve">
+    <value>賣出</value>
+  </data>
+  <data name="CDHStatus" xml:space="preserve">
+    <value>狀態</value>
+  </data>
+  <data name="CDHTime" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="CDHTradeNo" xml:space="preserve">
+    <value>交易號</value>
+  </data>
+  <data name="CDHTradePrc" xml:space="preserve">
+    <value>交易價</value>
+  </data>
+  <data name="ORDHSpecTime" xml:space="preserve">
+    <value>指定日期</value>
+  </data>
+  <data name="ORDHValid" xml:space="preserve">
+    <value>有效期</value>
+  </data>
+  <data name="POSHContract" xml:space="preserve">
+    <value>合約</value>
+  </data>
+  <data name="POSHDayLong" xml:space="preserve">
+    <value>今日長倉</value>
+  </data>
+  <data name="POSHDayNet" xml:space="preserve">
+    <value>今日淨倉</value>
+  </data>
+  <data name="POSHDayShort" xml:space="preserve">
+    <value>今日短倉</value>
+  </data>
+  <data name="POSHMKTPrice" xml:space="preserve">
+    <value>市價</value>
+  </data>
+  <data name="POSHNet" xml:space="preserve">
+    <value>淨倉</value>
+  </data>
+  <data name="POSHOI" xml:space="preserve">
+    <value>存取</value>
+  </data>
+  <data name="POSHPL" xml:space="preserve">
+    <value>盈損</value>
+  </data>
+  <data name="POSHPrev" xml:space="preserve">
+    <value>上日</value>
+  </data>
+  <data name="POSHRef" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="possumaryTitle" xml:space="preserve">
+    <value>持倉概覽| - {0}</value>
+  </data>
+  <data name="MkAQty" xml:space="preserve">
+    <value>沽出量</value>
+  </data>
+  <data name="MkAsk" xml:space="preserve">
+    <value>沽出價</value>
+  </data>
+  <data name="MkBid" xml:space="preserve">
+    <value>買入價</value>
+  </data>
+  <data name="MkBQty" xml:space="preserve">
+    <value>買入量</value>
+  </data>
+  <data name="MkChg" xml:space="preserve">
+    <value>升跌</value>
+  </data>
+  <data name="MkChgPer" xml:space="preserve">
+    <value>升跌%</value>
+  </data>
+  <data name="MkCloseDate" xml:space="preserve">
+    <value>收市日期</value>
+  </data>
+  <data name="MkEP" xml:space="preserve">
+    <value>EP</value>
+  </data>
+  <data name="MkHigh" xml:space="preserve">
+    <value>最高</value>
+  </data>
+  <data name="MkLast" xml:space="preserve">
+    <value>成交價</value>
+  </data>
+  <data name="MkLow" xml:space="preserve">
+    <value>最低</value>
+  </data>
+  <data name="MkLQty" xml:space="preserve">
+    <value>成交量</value>
+  </data>
+  <data name="MkMIApa" xml:space="preserve">
+    <value>添加報價提示</value>
+  </data>
+  <data name="MkMICa" xml:space="preserve">
+    <value>圖表分析</value>
+  </data>
+  <data name="MkMICpl" xml:space="preserve">
+    <value>清除價格列表</value>
+  </data>
+  <data name="MkMIEnterOrder" xml:space="preserve">
+    <value>輸入交易指示</value>
+  </data>
+  <data name="MkMIIp" xml:space="preserve">
+    <value>插入價格       Ins</value>
+  </data>
+  <data name="MkMIOm" xml:space="preserve">
+    <value>期權</value>
+  </data>
+  <data name="MkMIPriceDepth" xml:space="preserve">
+    <value>價格深度</value>
+  </data>
+  <data name="MkMIRp" xml:space="preserve">
+    <value>移除價格       Del</value>
+  </data>
+  <data name="MkMIRpl" xml:space="preserve">
+    <value>價格列表命名</value>
+  </data>
+  <data name="MkMITicker" xml:space="preserve">
+    <value>市場成交記錄</value>
+  </data>
+  <data name="MkName" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="MkOpen" xml:space="preserve">
+    <value>開市</value>
+  </data>
+  <data name="MkPreClose" xml:space="preserve">
+    <value>前收市</value>
+  </data>
+  <data name="MkState" xml:space="preserve">
+    <value>状况</value>
+  </data>
+  <data name="MkStrike" xml:space="preserve">
+    <value>行使價</value>
+  </data>
+  <data name="MkTime" xml:space="preserve">
+    <value>时间</value>
+  </data>
+  <data name="MkVolume" xml:space="preserve">
+    <value>總成交量</value>
+  </data>
+  <data name="MpcAp" xml:space="preserve">
+    <value>增加項</value>
+  </data>
+  <data name="MpcRMp" xml:space="preserve">
+    <value>删除項</value>
+  </data>
+  <data name="MpcRNp" xml:space="preserve">
+    <value>重命名項</value>
+  </data>
+  <data name="TickerDes" xml:space="preserve">
+    <value>交易来源</value>
+  </data>
+  <data name="TickerLogTime" xml:space="preserve">
+    <value>記錄時間</value>
+  </data>
+  <data name="TickerPrice" xml:space="preserve">
+    <value>價格</value>
+  </data>
+  <data name="TickerQty" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="UOIBtnActivateOD" xml:space="preserve">
+    <value>生效</value>
+  </data>
+  <data name="UOIBtnActiveODAll" xml:space="preserve">
+    <value>全部生效</value>
+  </data>
+  <data name="UOIBtnClosePos" xml:space="preserve">
+    <value>平倉</value>
+  </data>
+  <data name="UOIBtnDelAllOD" xml:space="preserve">
+    <value>全部刪除</value>
+  </data>
+  <data name="UOIBtnDelOrder" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="UOIBtnInactiveOD" xml:space="preserve">
+    <value>無效</value>
+  </data>
+  <data name="UOIBtnInactODAll" xml:space="preserve">
+    <value>全部無效</value>
+  </data>
+  <data name="MclAE" xml:space="preserve">
+    <value>經紀</value>
+  </data>
+  <data name="MclAccNo" xml:space="preserve">
+    <value>帳戶號</value>
+  </data>
+  <data name="MclAccName" xml:space="preserve">
+    <value>帳戶名</value>
+  </data>
+  <data name="MclMLevel" xml:space="preserve">
+    <value>保証金水平</value>
+  </data>
+  <data name="MclCash" xml:space="preserve">
+    <value>現金結餘</value>
+  </data>
+  <data name="MclNav" xml:space="preserve">
+    <value>資產淨值</value>
+  </data>
+  <data name="MclBuyPower" xml:space="preserve">
+    <value>購買力</value>
+  </data>
+  <data name="MclCcy" xml:space="preserve">
+    <value>貨幣</value>
+  </data>
+  <data name="MclCall" xml:space="preserve">
+    <value>追收金額</value>
+  </data>
+  <data name="MclIM" xml:space="preserve">
+    <value>基本保証金</value>
+  </data>
+  <data name="MclMM" xml:space="preserve">
+    <value>維持保証金</value>
+  </data>
+  <data name="MclPL" xml:space="preserve">
+    <value>商品盈虧</value>
+  </data>
+  <data name="MclUpdateTime" xml:space="preserve">
+    <value>更新時間</value>
+  </data>
+  <data name="MclTradeLimit" xml:space="preserve">
+    <value>交易限額</value>
+  </data>
+  <data name="MclMC" xml:space="preserve">
+    <value>保証金類別</value>
+  </data>
+  <data name="MclTC" xml:space="preserve">
+    <value>交易類別</value>
+  </data>
+  <data name="MclUnp" xml:space="preserve">
+    <value>未兌現</value>
+  </data>
+  <data name="MclAF" xml:space="preserve">
+    <value>AvFund</value>
+  </data>
+  <data name="MclCL" xml:space="preserve">
+    <value>控制級別</value>
+  </data>
+  <data name="cbItemDownTr" xml:space="preserve">
+    <value>下跌觸發</value>
+  </data>
+  <data name="cbItemStopLoss" xml:space="preserve">
+    <value>止損</value>
+  </data>
+  <data name="cbItemUpTriggler" xml:space="preserve">
+    <value>上升觸發</value>
+  </data>
+  <data name="EN_TabCondTrade" xml:space="preserve">
+    <value>條件買賣</value>
+  </data>
+  <data name="EN_TabC_A_General" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="EN_TabC_A_StopTr" xml:space="preserve">
+    <value>止損/觸發</value>
+  </data>
+  <data name="EN_TabC_Btn_Buy" xml:space="preserve">
+    <value>買</value>
+  </data>
+  <data name="EN_TabC_Btn_Sell" xml:space="preserve">
+    <value>賣</value>
+  </data>
+  <data name="EN_TabC_Inactive" xml:space="preserve">
+    <value>無效</value>
+  </data>
+  <data name="EN_TabC_Price" xml:space="preserve">
+    <value>價格</value>
+  </data>
+  <data name="EN_TabC_Qty" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="EN_TabC_Ref" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="EN_TabQuickTrade" xml:space="preserve">
+    <value>快速交易</value>
+  </data>
+  <data name="EN_TabQ_HitBuy" xml:space="preserve">
+    <value>Hit 買</value>
+  </data>
+  <data name="EN_TabQ_HitSell" xml:space="preserve">
+    <value>Hit 賣</value>
+  </data>
+  <data name="EN_TabQ_Qty" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="EN_TabQ_Ticks" xml:space="preserve">
+    <value>點數</value>
+  </data>
+  <data name="ET_ProdCod" xml:space="preserve">
+    <value>代號</value>
+  </data>
+  <data name="ET_TabNormal" xml:space="preserve">
+    <value>一般交易</value>
+  </data>
+  <data name="ET_TbN_Buy" xml:space="preserve">
+    <value>買入</value>
+  </data>
+  <data name="ET_TbN_Inactive" xml:space="preserve">
+    <value>無效</value>
+  </data>
+  <data name="ET_TbN_Price" xml:space="preserve">
+    <value>價格</value>
+  </data>
+  <data name="ET_TbN_Qty" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="ET_TbN_Ref" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="ET_TbN_Sell" xml:space="preserve">
+    <value>賣出</value>
+  </data>
+  <data name="ValidType_fak" xml:space="preserve">
+    <value>成交並取消</value>
+  </data>
+  <data name="ValidType_fok" xml:space="preserve">
+    <value>成交或取消</value>
+  </data>
+  <data name="ValidType_gtc" xml:space="preserve">
+    <value>到期日</value>
+  </data>
+  <data name="ValidType_specDate" xml:space="preserve">
+    <value>指定日期</value>
+  </data>
+  <data name="ValidType_today" xml:space="preserve">
+    <value>即日</value>
+  </data>
+  <data name="CHODAcc" xml:space="preserve">
+    <value>戶口:</value>
+  </data>
+  <data name="CHODID" xml:space="preserve">
+    <value>代號:</value>
+  </data>
+  <data name="CHOD_Price" xml:space="preserve">
+    <value>價格</value>
+  </data>
+  <data name="CHOD_Qty" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="CHOD_Ref" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="CHOD_StopTrig" xml:space="preserve">
+    <value>止損</value>
+  </data>
+  <data name="changeorderTitle" xml:space="preserve">
+    <value>更改/刪除訂單| 訂單號 #{0}-{1}</value>
+  </data>
+  <data name="CHOD_btnBuy" xml:space="preserve">
+    <value>更改買</value>
+  </data>
+  <data name="CHOD_btnDel" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="CHOD_btnSell" xml:space="preserve">
+    <value>更改賣</value>
+  </data>
+  <data name="CHOD_buyConfirm" xml:space="preserve">
+    <value>戶口：{1}
+指令:買
+產品代號：{0}
+價格：{2}
+數量：{3}
+有效:{4}</value>
+  </data>
+  <data name="CHOD_BuyConfTitle" xml:space="preserve">
+    <value>買入確認</value>
+  </data>
+  <data name="CHOD_CHbuyConfirm" xml:space="preserve">
+    <value>更改訂單確認
+
+戶口:[{0}]
+單號:{1}
+指令:買
+產品代號:{2}
+價格:{3}
+數量:{4}
+
+有效:{5}</value>
+  </data>
+  <data name="CHOD_CHBuyConfTitle" xml:space="preserve">
+    <value>更改訂單確認</value>
+  </data>
+  <data name="CHOD_ChSellConfirm" xml:space="preserve">
+    <value>更改訂單確認
+
+戶口:[{0}]
+單號:{1}
+指令:賣
+產品代號:{2}
+價格:{3}
+數量:{4}
+
+有效:{5}</value>
+  </data>
+  <data name="CHOD_CHSellConfTitle" xml:space="preserve">
+    <value>更改訂單確認</value>
+  </data>
+  <data name="CHOD_DelConf" xml:space="preserve">
+    <value>刪除單確認
+
+戶口:[{0}]
+單號:{1}
+指令:{2}
+產品代號:{3}
+價格:{4}
+數量:{5}
+
+有效:{6}</value>
+  </data>
+  <data name="CHOD_Err" xml:space="preserve">
+    <value>錯誤</value>
+  </data>
+  <data name="CHOD_Invalid_price" xml:space="preserve">
+    <value>無效價格!</value>
+  </data>
+  <data name="CHOD_Invalid_Qty" xml:space="preserve">
+    <value>無效数量!</value>
+  </data>
+  <data name="CHOD_InValid_Stop_Price" xml:space="preserve">
+    <value>無效的停止價格</value>
+  </data>
+  <data name="CHOD_noChange" xml:space="preserve">
+    <value>沒有作任何改變在更改單窗體</value>
+  </data>
+  <data name="CHOD_plesaeInput" xml:space="preserve">
+    <value>請輸入!</value>
+  </data>
+  <data name="CHOD_Pls_Price" xml:space="preserve">
+    <value>請輸入價格!</value>
+  </data>
+  <data name="CHOD_PLS_Qty" xml:space="preserve">
+    <value>請輸入數量!</value>
+  </data>
+  <data name="input_trgStop_Pls" xml:space="preserve">
+    <value>請輸入止損價格</value>
+  </data>
+  <data name="CHOD_PLS_Val_Digit" xml:space="preserve">
+    <value>請輸入有效數量!</value>
+  </data>
+  <data name="CHOD_sellConfirm" xml:space="preserve">
+    <value>戶口：{1}
+操作:賣
+產品代號：{0}
+價格：{2}
+數量：{3}
+有效:{4}</value>
+  </data>
+  <data name="CHOD_sellConfirmTitle" xml:space="preserve">
+    <value>賣出确认</value>
+  </data>
+  <data name="CHOD_SL_Sell_Price_Must_EqOrLow_TrPrice" xml:space="preserve">
+    <value>賣出價必須小於等於觸發價.</value>
+  </data>
+  <data name="CHOD_SL_Sell_TrPrie_MustLow_MktPrice" xml:space="preserve">
+    <value>觸發價必須小於市場價.</value>
+  </data>
+  <data name="CHOD_StopLoss_BuyPrice_Must_EqOrMore_MktPrice" xml:space="preserve">
+    <value>價格必須大於或等於觸發價.</value>
+  </data>
+  <data name="CHOD_TrPrice_Must_High_MktPrice" xml:space="preserve">
+    <value>觸發價必須高於市場價.</value>
+  </data>
+  <data name="CHOD_TrPrice_Must_Low_MktPrice" xml:space="preserve">
+    <value>觸發價必須低於市場價.</value>
+  </data>
+  <data name="MsgForm_BtnCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="MsgForm_BtnYes" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="Price_Shlnot_LowLimit" xml:space="preserve">
+    <value>價格不應低於下限{0}</value>
+  </data>
+  <data name="Price_Shlnot_ULimit" xml:space="preserve">
+    <value>價格不應超過上限{0}</value>
+  </data>
+  <data name="Qty_ShdNot_LessThan_LowLimit" xml:space="preserve">
+    <value>數量不應該小於下限 {0}</value>
+  </data>
+  <data name="Qty_UP_Limit" xml:space="preserve">
+    <value>數量超過上限 {0}</value>
+  </data>
+  <data name="BuyOrder_Fail" xml:space="preserve">
+    <value>買入下單失敗</value>
+  </data>
+  <data name="closepositionTitle" xml:space="preserve">
+    <value>清仓| - {0}</value>
+  </data>
+  <data name="CLPos_btnHitBuy" xml:space="preserve">
+    <value>追價買入</value>
+  </data>
+  <data name="CLPos_btn_hitSell" xml:space="preserve">
+    <value>追價賣出</value>
+  </data>
+  <data name="CLPos_Err_initErr" xml:space="preserve">
+    <value>錯誤的價格或數量</value>
+  </data>
+  <data name="CLPos_Qty" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="CLPos_Tab1_Price" xml:space="preserve">
+    <value>價格</value>
+  </data>
+  <data name="CLPOs_Tab2_Ticks" xml:space="preserve">
+    <value>點數</value>
+  </data>
+  <data name="CLPos_Tab_QuickTrade" xml:space="preserve">
+    <value>快速交易</value>
+  </data>
+  <data name="CLPos_Tab_Trade" xml:space="preserve">
+    <value>交易</value>
+  </data>
+  <data name="CLPos_Type" xml:space="preserve">
+    <value>類型</value>
+  </data>
+  <data name="confirm_SellOrder" xml:space="preserve">
+    <value>戶口：{0}
+指令：賣
+產品：{1}
+價格：{2}
+數量：{3}
+有效：{4}</value>
+  </data>
+  <data name="confirm_BuyOrder_Title" xml:space="preserve">
+    <value>買入確認</value>
+  </data>
+  <data name="confirm_SellOrder_Title" xml:space="preserve">
+    <value>賣出確認</value>
+  </data>
+  <data name="EN_TabQ_BtnHitBuy" xml:space="preserve">
+    <value>追價買入</value>
+  </data>
+  <data name="EN_TabQ_BtnHitSell" xml:space="preserve">
+    <value>追價沽出</value>
+  </data>
+  <data name="EN_TabQ_BtnHitSell_To" xml:space="preserve">
+    <value>追價至</value>
+  </data>
+  <data name="EN_TabQ_BtnHitTo" xml:space="preserve">
+    <value>追價至</value>
+  </data>
+  <data name="Order_Invalid_Price" xml:space="preserve">
+    <value>無效的價格</value>
+  </data>
+  <data name="Order_Pls_Price" xml:space="preserve">
+    <value>請輸入價格</value>
+  </data>
+  <data name="ORL_Limit_Warnning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="PosS_ID" xml:space="preserve">
+    <value>代號</value>
+  </data>
+  <data name="PosS_Long" xml:space="preserve">
+    <value>長倉</value>
+  </data>
+  <data name="PosS_Net" xml:space="preserve">
+    <value>淨倉</value>
+  </data>
+  <data name="PosS_Prev" xml:space="preserve">
+    <value>上日</value>
+  </data>
+  <data name="PosS_Short" xml:space="preserve">
+    <value>短倉</value>
+  </data>
+  <data name="Price_Deviation_Exceed" xml:space="preserve">
+    <value>
+ 價格高於指定偏離幅度，要繼續交易嗎?</value>
+  </data>
+  <data name="Price_Deviation_Low" xml:space="preserve">
+    <value>
+ 價格低於指定偏離幅度，要繼續交易嗎?</value>
+  </data>
+  <data name="Qty_Deviation_MoreThan" xml:space="preserve">
+    <value>數量大於指定偏離限度，要繼續交易嗎？</value>
+  </data>
+  <data name="SellOrder_Fail" xml:space="preserve">
+    <value>賣出下單失敗</value>
+  </data>
+  <data name="Order_Qty_Invalid" xml:space="preserve">
+    <value>無效的數量</value>
+  </data>
+  <data name="Order_Qty_Pls" xml:space="preserve">
+    <value>請輸入數量</value>
+  </data>
+  <data name="buy" xml:space="preserve">
+    <value>買</value>
+  </data>
+  <data name="confirm_BuyOrder" xml:space="preserve">
+    <value>戶口：{0}
+指令：買
+產品：{1}
+價格：{2}
+數量：{3}
+有效：{4}</value>
+  </data>
+  <data name="input_Acc_pls" xml:space="preserve">
+    <value>請選擇或者輸入戶口</value>
+  </data>
+  <data name="Input_order_specDate_pls" xml:space="preserve">
+    <value>有效類型為指定日期，请选择一个日期</value>
+  </data>
+  <data name="input_priceDec_only_sLen_allowed" xml:space="preserve">
+    <value>產品'{1}'僅允許{0}位小數</value>
+  </data>
+  <data name="input_price_no_allow_dec" xml:space="preserve">
+    <value>產品{0}的價格不充許有小數部分</value>
+  </data>
+  <data name="input_prod_pls" xml:space="preserve">
+    <value>請輸入產品代號</value>
+  </data>
+  <data name="input_stoptype_error" xml:space="preserve">
+    <value>錯誤的止損類型</value>
+  </data>
+  <data name="input_ticks_invalid" xml:space="preserve">
+    <value>無效點數</value>
+  </data>
+  <data name="Order_AccNotEqual" xml:space="preserve">
+    <value>'{0}'和當前戶口'{1}'不一致,用當前戶口'{1}'繼續下單?</value>
+  </data>
+  <data name="Sell" xml:space="preserve">
+    <value>賣</value>
+  </data>
+  <data name="AccMask_btnOk" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="AccMask_Clear_Failed" xml:space="preserve">
+    <value>清除配置失敗</value>
+  </data>
+  <data name="AccMask_Clear_Successfully" xml:space="preserve">
+    <value>清除成功</value>
+  </data>
+  <data name="AccMask_Length" xml:space="preserve">
+    <value>長度</value>
+  </data>
+  <data name="AccMask_length_invalid" xml:space="preserve">
+    <value>無效的長度</value>
+  </data>
+  <data name="AccMask_Prefix" xml:space="preserve">
+    <value>前綴</value>
+  </data>
+  <data name="AccMask_Suffix" xml:space="preserve">
+    <value>後綴</value>
+  </data>
+  <data name="AccMast_btnClear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="AccM_Acc" xml:space="preserve">
+    <value>戶口</value>
+  </data>
+  <data name="AccM_btnDel" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="AccM_btnSave" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="confirm_StopTrgOrder" xml:space="preserve">
+    <value>{0}
+止損:{2}
+{1}</value>
+  </data>
+  <data name="EN_TabQ_BtnHitBuy_To" xml:space="preserve">
+    <value>追價至</value>
+  </data>
+  <data name="input_acc_exists" xml:space="preserve">
+    <value>戶口已經存在</value>
+  </data>
+  <data name="input_add_failed" xml:space="preserve">
+    <value>添加失敗</value>
+  </data>
+  <data name="input_del_failed" xml:space="preserve">
+    <value>刪除失敗</value>
+  </data>
+  <data name="input_err_saveFailed" xml:space="preserve">
+    <value>保存失敗</value>
+  </data>
+  <data name="Input_Save_failed" xml:space="preserve">
+    <value>保存失敗</value>
+  </data>
+  <data name="input_save_success" xml:space="preserve">
+    <value>保存成功</value>
+  </data>
+  <data name="input_stoptypeItem_normal" xml:space="preserve">
+    <value>正常下單</value>
+  </data>
+  <data name="input_trgStopPrice_invalid" xml:space="preserve">
+    <value>無效的止損價</value>
+  </data>
+  <data name="Menu_AccInfo" xml:space="preserve">
+    <value>戶口信息</value>
+  </data>
+  <data name="Menu_Bs" xml:space="preserve">
+    <value>交易</value>
+  </data>
+  <data name="Menu_Change_PWD" xml:space="preserve">
+    <value>更改密碼</value>
+  </data>
+  <data name="Menu_Chart_Analysis" xml:space="preserve">
+    <value>圖表分析</value>
+  </data>
+  <data name="Menu_Clock" xml:space="preserve">
+    <value>時鍾</value>
+  </data>
+  <data name="Menu_DeskTop_Default_Load" xml:space="preserve">
+    <value>重置桌面布局</value>
+  </data>
+  <data name="Menu_DeskTop_Load" xml:space="preserve">
+    <value>載入桌面布局</value>
+  </data>
+  <data name="Menu_Desktop_Save" xml:space="preserve">
+    <value>保存桌面布局</value>
+  </data>
+  <data name="Menu_Desktop_SaveAs" xml:space="preserve">
+    <value>布局保存為</value>
+  </data>
+  <data name="Menu_Inst_Test" xml:space="preserve">
+    <value>測試指令</value>
+  </data>
+  <data name="Menu_Login" xml:space="preserve">
+    <value>登入</value>
+  </data>
+  <data name="Menu_Logout" xml:space="preserve">
+    <value>登出</value>
+  </data>
+  <data name="Menu_MarginCallList" xml:space="preserve">
+    <value>追收保證金列表</value>
+  </data>
+  <data name="Menu_MarginCheck" xml:space="preserve">
+    <value>保證金查核</value>
+  </data>
+  <data name="Menu_MktPrice" xml:space="preserve">
+    <value>市價資訊</value>
+  </data>
+  <data name="Menu_Option_Matrix" xml:space="preserve">
+    <value>期權</value>
+  </data>
+  <data name="Menu_posSumary" xml:space="preserve">
+    <value>持倉概覽</value>
+  </data>
+  <data name="Menu_Preference" xml:space="preserve">
+    <value>個性化設置</value>
+  </data>
+  <data name="Menu_PriceAlert" xml:space="preserve">
+    <value>價格提醒</value>
+  </data>
+  <data name="Menu_PriceDepth" xml:space="preserve">
+    <value>價格深度</value>
+  </data>
+  <data name="Menu_QuickBs" xml:space="preserve">
+    <value>快速交易</value>
+  </data>
+  <data name="Menu_Ticker" xml:space="preserve">
+    <value>市場成交記錄</value>
+  </data>
+  <data name="Menu_TradeConfirmation" xml:space="preserve">
+    <value>成交覆盤</value>
+  </data>
+  <data name="Menu_Transactions" xml:space="preserve">
+    <value>買賣記錄</value>
+  </data>
+  <data name="OLR_Invalid_Price" xml:space="preserve">
+    <value>無效的價格,保存不成功</value>
+  </data>
+  <data name="OLR_Invalid_Qty" xml:space="preserve">
+    <value>無效的數量,保存不成功</value>
+  </data>
+  <data name="ORL_btnReset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="ORL_btnSave" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="ORL_DeviationPrice_Max" xml:space="preserve">
+    <value>價格最大變動幅度(%):</value>
+  </data>
+  <data name="ORL_DeviationQty_Max" xml:space="preserve">
+    <value>數量最大變動幅度:</value>
+  </data>
+  <data name="AppRef_AccList" xml:space="preserve">
+    <value>户口列表</value>
+  </data>
+  <data name="AppRef_AccMask" xml:space="preserve">
+    <value>户口掩码</value>
+  </data>
+  <data name="AppRef_General" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="AppRef_MarginColor" xml:space="preserve">
+    <value>留白颜色</value>
+  </data>
+  <data name="AppRef_OrderDeviation" xml:space="preserve">
+    <value>订单变幅</value>
+  </data>
+  <data name="ask_Save_Changes" xml:space="preserve">
+    <value>需要保存更改吗？</value>
+  </data>
+  <data name="confirmTitle" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="confirm_accMask_Ask_StaySave" xml:space="preserve">
+    <value>户口掩码设置有改动,停留在当前窗体保存吗?</value>
+  </data>
+  <data name="confirm_accMask_SaveAsk" xml:space="preserve">
+    <value>户口掩码设置有改动,需要保存吗?</value>
+  </data>
+  <data name="confirm_OrderDeviation_change_AskSave" xml:space="preserve">
+    <value>订单偏离幅度设置有改动,需要保存吗?</value>
+  </data>
+  <data name="confirm_OrderDeviation_change_Ask_StaySave" xml:space="preserve">
+    <value>订单偏离幅度设置有改动,停留在当前窗体保存吗?</value>
+  </data>
+  <data name="activeItem_active" xml:space="preserve">
+    <value>有效</value>
+  </data>
+  <data name="activeITem_inactive" xml:space="preserve">
+    <value>無效</value>
+  </data>
+  <data name="CHOD_DelConfTitle" xml:space="preserve">
+    <value>刪除訂單確認</value>
+  </data>
+  <data name="EN_Prod_InQuery" xml:space="preserve">
+    <value>正在查詢該產品信息，請稍候...,或者如果等待時間過長，你也可以另選其它產品</value>
+  </data>
+  <data name="EN_Prod_NotExist" xml:space="preserve">
+    <value>代號為'{0}'的產品不存在</value>
+  </data>
+  <data name="AppPreferenceTitle" xml:space="preserve">
+    <value>個性化 - [{0}]</value>
+  </data>
+  <data name="confirm_OrderActive_title" xml:space="preserve">
+    <value>生效指示確認</value>
+  </data>
+  <data name="confirm_OrderInActive_title" xml:space="preserve">
+    <value>無效指示確認</value>
+  </data>
+  <data name="confirm_Order_Active" xml:space="preserve">
+    <value>生效指示確認
+
+
+戶口:[{0}]
+單號:{1}
+指令:{2}
+產品:{3}
+價格:{4}
+數量:{5}</value>
+  </data>
+  <data name="confirm_Order_Del" xml:space="preserve">
+    <value>刪除訂單確認
+
+戶口:[{0}]
+單號:{1}
+指令:{2}
+產品:{3}
+價格:{4}
+數量:{5}</value>
+  </data>
+  <data name="confirm_Order_Inactive" xml:space="preserve">
+    <value>無效指示確認
+
+戶口:[{0}]
+單號:{1}
+指令:{2}
+產品:{3}
+價格:{4}
+數量:{5}</value>
+  </data>
+  <data name="confirm_sure_ActiveAllOrder" xml:space="preserve">
+    <value>全部生效確認</value>
+  </data>
+  <data name="confirm_Sure_DelAll" xml:space="preserve">
+    <value>確定要刪除所有嗎 ?</value>
+  </data>
+  <data name="confirm_sure_InActiveAllOrder" xml:space="preserve">
+    <value>全部無效確認</value>
+  </data>
+  <data name="UOI_Pls_selectRow" xml:space="preserve">
+    <value>请先選擇行</value>
+  </data>
+  <data name="changepwdTitle" xml:space="preserve">
+    <value>更改密碼</value>
+  </data>
+  <data name="CHPwd_btnCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="CHPwd_btnOk" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="CHPwd_newPwd" xml:space="preserve">
+    <value>新密碼</value>
+  </data>
+  <data name="CHPwd_oldPwd" xml:space="preserve">
+    <value>舊密碼</value>
+  </data>
+  <data name="CHPwd_Pwd_ChangeOK" xml:space="preserve">
+    <value>密碼更改成功</value>
+  </data>
+  <data name="CHPwd_Pwd_NotEqual" xml:space="preserve">
+    <value>密碼和確認密碼不一致</value>
+  </data>
+  <data name="CHPwd_Pwd_pls" xml:space="preserve">
+    <value>請輸入密碼</value>
+  </data>
+  <data name="CHPwd_retypePwd" xml:space="preserve">
+    <value>確認新密碼</value>
+  </data>
+  <data name="EN_TbN_Type" xml:space="preserve">
+    <value>有效類型</value>
+  </data>
+  <data name="PDPrice" xml:space="preserve">
+    <value>價格</value>
+  </data>
+  <data name="PDQty" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="WinTitleCustomizePref" xml:space="preserve">
+    <value>個性化</value>
+  </data>
+  <data name="WinTitleMarginCheck" xml:space="preserve">
+    <value>保證金查核</value>
+  </data>
+  <data name="WinTitleMarketPrice" xml:space="preserve">
+    <value>價格資訊</value>
+  </data>
+  <data name="WinTitleMCL" xml:space="preserve">
+    <value>追收保證金列表</value>
+  </data>
+  <data name="WinTitleOptionMatrix" xml:space="preserve">
+    <value>期權</value>
+  </data>
+  <data name="WinTitlePriceDepth" xml:space="preserve">
+    <value>價格深度</value>
+  </data>
+  <data name="WinTitleSCIChart" xml:space="preserve">
+    <value>圖表分析</value>
+  </data>
+  <data name="WinTitleTicker" xml:space="preserve">
+    <value>市場成交記錄</value>
+  </data>
+  <data name="WinTitleTradeConf" xml:space="preserve">
+    <value>成交覆盤</value>
+  </data>
+  <data name="WinTitleAddPriceAlert" xml:space="preserve">
+    <value>添加報價提示</value>
+  </data>
+  <data name="WinTitleClock" xml:space="preserve">
+    <value>電腦時鍾</value>
+  </data>
+  <data name="WinTitlePriceAlert" xml:space="preserve">
+    <value>報價提示</value>
+  </data>
+  <data name="WinTitleLogin" xml:space="preserve">
+    <value>登入</value>
+  </data>
+  <data name="WinTitleTradeConfDetails" xml:space="preserve">
+    <value>成交覆盤詳情</value>
+  </data>
+  <data name="TCaccNo" xml:space="preserve">
+    <value>帳戶</value>
+  </data>
+  <data name="TCavgTrdPrc" xml:space="preserve">
+    <value>交易均價</value>
+  </data>
+  <data name="TCbs" xml:space="preserve">
+    <value>買賣</value>
+  </data>
+  <data name="TCchannel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="TCcond" xml:space="preserve">
+    <value>條件</value>
+  </data>
+  <data name="TCextOrderNo" xml:space="preserve">
+    <value>外部指示#</value>
+  </data>
+  <data name="TCinitiator" xml:space="preserve">
+    <value>原發者</value>
+  </data>
+  <data name="TCinternalOrderNo" xml:space="preserve">
+    <value>買賣指示#</value>
+  </data>
+  <data name="TCorderNo" xml:space="preserve">
+    <value>指示#</value>
+  </data>
+  <data name="TCosBQty" xml:space="preserve">
+    <value>買入餘數</value>
+  </data>
+  <data name="TCosSQty" xml:space="preserve">
+    <value>沽出餘數</value>
+  </data>
+  <data name="TCtradedPrice" xml:space="preserve">
+    <value>交易價</value>
+  </data>
+  <data name="TCprice" xml:space="preserve">
+    <value>價格</value>
+  </data>
+  <data name="TCproductCode" xml:space="preserve">
+    <value>代號</value>
+  </data>
+  <data name="TCrecNo" xml:space="preserve">
+    <value>RecNo</value>
+  </data>
+  <data name="TCrefNo" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="TCreport" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="TCstatus" xml:space="preserve">
+    <value>狀況</value>
+  </data>
+  <data name="TCtOne" xml:space="preserve">
+    <value>夜市</value>
+  </data>
+  <data name="TCtraded" xml:space="preserve">
+    <value>已成交</value>
+  </data>
+  <data name="TCtradeNo" xml:space="preserve">
+    <value>交易号#</value>
+  </data>
+  <data name="TCtradeQty" xml:space="preserve">
+    <value>交易量</value>
+  </data>
+  <data name="TCtStamp" xml:space="preserve">
+    <value>时间标记</value>
+  </data>
+  <data name="TCvalid" xml:space="preserve">
+    <value>有效期</value>
+  </data>
+  <data name="Menu_Windows" xml:space="preserve">
+    <value>視窗</value>
+  </data>
+  <data name="OMbaseMode" xml:space="preserve">
+    <value>基本模式</value>
+  </data>
+  <data name="OMpos" xml:space="preserve">
+    <value>Pos</value>
+  </data>
+  <data name="OMsimpleMode" xml:space="preserve">
+    <value>精簡模式</value>
+  </data>
+  <data name="TCDaccName" xml:space="preserve">
+    <value>姓名</value>
+  </data>
+  <data name="TCDaccNo" xml:space="preserve">
+    <value>帐户</value>
+  </data>
+  <data name="TCDaeID" xml:space="preserve">
+    <value>經紀</value>
+  </data>
+  <data name="TCDAvgTrdPrc" xml:space="preserve">
+    <value>均价</value>
+  </data>
+  <data name="TCDbs" xml:space="preserve">
+    <value>BS</value>
+  </data>
+  <data name="TCDcontactInfo" xml:space="preserve">
+    <value>聯絡資料</value>
+  </data>
+  <data name="TCDExit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="TCDextOrderNo" xml:space="preserve">
+    <value>Ext.Order#</value>
+  </data>
+  <data name="TCDhome" xml:space="preserve">
+    <value>住宅電話</value>
+  </data>
+  <data name="TCDidBrNo" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="TCDInitiator" xml:space="preserve">
+    <value>初始者</value>
+  </data>
+  <data name="TCDmarginClass" xml:space="preserve">
+    <value>保証金類別</value>
+  </data>
+  <data name="TCDMarkAllReported" xml:space="preserve">
+    <value>Mark All Reported</value>
+  </data>
+  <data name="TCDmobile" xml:space="preserve">
+    <value>手提電話</value>
+  </data>
+  <data name="TCDoffice" xml:space="preserve">
+    <value>公司電話</value>
+  </data>
+  <data name="TCDOrderLog" xml:space="preserve">
+    <value>Order Log</value>
+  </data>
+  <data name="TCDorderNo" xml:space="preserve">
+    <value>單號</value>
+  </data>
+  <data name="TCDOrderPrc" xml:space="preserve">
+    <value>指示價</value>
+  </data>
+  <data name="TCDosBQty" xml:space="preserve">
+    <value>買入</value>
+  </data>
+  <data name="TCDosSQty" xml:space="preserve">
+    <value>賣出</value>
+  </data>
+  <data name="TCDproductCode" xml:space="preserve">
+    <value>代號</value>
+  </data>
+  <data name="TCDrecNo" xml:space="preserve">
+    <value>RecNo</value>
+  </data>
+  <data name="TCDrefNo" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="TCDRemainQty" xml:space="preserve">
+    <value>持有量</value>
+  </data>
+  <data name="TCDreport" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="TCDstatus" xml:space="preserve">
+    <value>状况</value>
+  </data>
+  <data name="TCDtradeClass" xml:space="preserve">
+    <value>交易類別</value>
+  </data>
+  <data name="TCDtraded" xml:space="preserve">
+    <value>已成交</value>
+  </data>
+  <data name="TCDtradeNo" xml:space="preserve">
+    <value>指示#</value>
+  </data>
+  <data name="TCDUnmarkAll" xml:space="preserve">
+    <value>Unmark All</value>
+  </data>
+  <data name="TCDUnmarkIndividual" xml:space="preserve">
+    <value>Unmark Individual</value>
+  </data>
+  <data name="TCDUpdateTime" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="TCTradePrc" xml:space="preserve">
+    <value>交易價</value>
+  </data>
+  <data name="comm_AO" xml:space="preserve">
+    <value>AO</value>
+  </data>
+  <data name="comm_TOne" xml:space="preserve">
+    <value>夜市有效</value>
+  </data>
+  <data name="confirm_Load_DefaultDesk" xml:space="preserve">
+    <value>这个操作將會关闭當前所有視窗,確定要現在載入默認視窗布局嗎?</value>
+  </data>
+  <data name="confirm_Load_DefaultDeskTitle" xml:space="preserve">
+    <value>确认载入默认视窗布局</value>
+  </data>
+  <data name="PosS_MenuNet" xml:space="preserve">
+    <value>仅淨倉</value>
+  </data>
+  <data name="PosS_MenuPosOnly" xml:space="preserve">
+    <value>僅未平倉</value>
+  </data>
+  <data name="loginAletConnect" xml:space="preserve">
+    <value>請檢查網絡連接!</value>
+  </data>
+  <data name="loginAletInvaildMsg" xml:space="preserve">
+    <value>無效IP地址或主機名！</value>
+  </data>
+  <data name="loginAletLogin" xml:space="preserve">
+    <value>登入失敗,</value>
+  </data>
+  <data name="loginAletPassword" xml:space="preserve">
+    <value>密碼！</value>
+  </data>
+  <data name="loginAletTitle" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="loginAletUser" xml:space="preserve">
+    <value>用户名！</value>
+  </data>
+  <data name="mainAletTitle" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="mainAlertLogout" xml:space="preserve">
+    <value>確認登出?</value>
+  </data>
+  <data name="mainAlertClose" xml:space="preserve">
+    <value>确認關閉 GOSTradeStation?</value>
+  </data>
+  <data name="mainDisclaimer" xml:space="preserve">
+    <value>聲明</value>
+  </data>
+  <data name="mainSyncTimeMsg" xml:space="preserve">
+    <value>同步? 您的本地電腦時間與服務器相差</value>
+  </data>
+  <data name="mainSyncTimeTitle" xml:space="preserve">
+    <value>同步服務器時間</value>
+  </data>
+  <data name="mainSyncTimeAlert" xml:space="preserve">
+    <value>未能調整本地電腦時間!</value>
+  </data>
+  <data name="loginServer" xml:space="preserve">
+    <value>服務器:</value>
+  </data>
+  <data name="loginName" xml:space="preserve">
+    <value>名稱:</value>
+  </data>
+  <data name="loginUserID" xml:space="preserve">
+    <value>用戶名:</value>
+  </data>
+  <data name="loginPassword" xml:space="preserve">
+    <value>密碼:</value>
+  </data>
+  <data name="loginSave" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="notificationMsg" xml:space="preserve">
+    <value>接收時間:</value>
+  </data>
+  <data name="VersionUpdateAlertTitle" xml:space="preserve">
+    <value>GOSTradeStation - 發現新版本</value>
+  </data>
+  <data name="VersionUpdateMsg" xml:space="preserve">
+    <value>當前版本: {0}.
+最新版本: {1}.
+
+是否更新到最新版本?</value>
+  </data>
+  <data name="VersionUpdateRequiredMsg" xml:space="preserve">
+    <value>當前版本: {0},
+昇級所需最低版本: {1}. 
+
+請下載最新版本!</value>
+  </data>
+  <data name="MkInsertProdMsg" xml:space="preserve">
+    <value>增加產品:</value>
+  </data>
+  <data name="MkRemoveProdAlertMsg" xml:space="preserve">
+    <value>確認移除{0}產品？　</value>
+  </data>
+  <data name="MkReNameProdListAlertMsg" xml:space="preserve">
+    <value>重命名產品列表</value>
+  </data>
+  <data name="MkClearProdAlertMsg" xml:space="preserve">
+    <value>確認清空此產品列表？</value>
+  </data>
+  <data name="MkProdCodeError" xml:space="preserve">
+    <value>產品代號</value>
+  </data>
+  <data name="MkProdCodeExisted" xml:space="preserve">
+    <value>產品已存在</value>
+  </data>
+  <data name="ProdListError" xml:space="preserve">
+    <value>產品列表名稱</value>
+  </data>
+  <data name="MkRemoveProdListAlertTitle" xml:space="preserve">
+    <value>移除產品列表</value>
+  </data>
+  <data name="MkRemoveProdListAlertMsg" xml:space="preserve">
+    <value>確認移除此產品列表？</value>
+  </data>
+  <data name="TreeUnderlying" xml:space="preserve">
+    <value>相關產品</value>
+  </data>
+  <data name="TreeFutures" xml:space="preserve">
+    <value>期貨</value>
+  </data>
+  <data name="TreeOptions" xml:space="preserve">
+    <value>期權</value>
+  </data>
+  <data name="TreeSpreads" xml:space="preserve">
+    <value>跨期</value>
+  </data>
+  <data name="TreeCall" xml:space="preserve">
+    <value>認購</value>
+  </data>
+  <data name="TreePut" xml:space="preserve">
+    <value>認沽</value>
+  </data>
+  <data name="OHistTitle" xml:space="preserve">
+    <value>訂單歷史</value>
+  </data>
+  <data name="OHist_ColHead_Action" xml:space="preserve">
+    <value>詳情</value>
+  </data>
+  <data name="OHist_ColHead_Time" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="OHist_ColHead_User" xml:space="preserve">
+    <value>代理</value>
+  </data>
+  <data name="CodeUnLocked" xml:space="preserve">
+    <value>解鎖</value>
+  </data>
+  <data name="CodeLocked" xml:space="preserve">
+    <value>鎖定</value>
+  </data>
+  <data name="VerticalView" xml:space="preserve">
+    <value>垂直</value>
+  </data>
+  <data name="HorizontalView" xml:space="preserve">
+    <value>水平</value>
+  </data>
+  <data name="OHist_Tb_AccNo" xml:space="preserve">
+    <value>戶口:</value>
+  </data>
+  <data name="OHist_Tb_OrderNo" xml:space="preserve">
+    <value>指示#:</value>
+  </data>
+  <data name="OHist_CMenuText_ToShow" xml:space="preserve">
+    <value>訂單歷史</value>
+  </data>
+  <data name="DoneTradeTitle" xml:space="preserve">
+    <value>已成交</value>
+  </data>
+  <data name="DoneTrade_Col_AccNo" xml:space="preserve">
+    <value>戶口</value>
+  </data>
+  <data name="DoneTrade_Col_ExtOrderNo" xml:space="preserve">
+    <value>外部指示</value>
+  </data>
+  <data name="DoneTrade_Col_GW" xml:space="preserve">
+    <value>閘口</value>
+  </data>
+  <data name="DoneTrade_Col_Initiator" xml:space="preserve">
+    <value>初始者</value>
+  </data>
+  <data name="DoneTrade_Col_Long" xml:space="preserve">
+    <value>賣入</value>
+  </data>
+  <data name="DoneTrade_Col_OrderNo" xml:space="preserve">
+    <value>指示#</value>
+  </data>
+  <data name="DoneTrade_Col_Price" xml:space="preserve">
+    <value>交易價</value>
+  </data>
+  <data name="DoneTrade_Col_ProdCode" xml:space="preserve">
+    <value>代號</value>
+  </data>
+  <data name="DoneTrade_Col_Ref" xml:space="preserve">
+    <value>參考</value>
+  </data>
+  <data name="DoneTrade_Col_Short" xml:space="preserve">
+    <value>買出</value>
+  </data>
+  <data name="DoneTrade_Col_TradeNo" xml:space="preserve">
+    <value>交易號</value>
+  </data>
+  <data name="DoneTrade_Col_TradeTime" xml:space="preserve">
+    <value>交易時間</value>
+  </data>
+  <data name="DoneTrade_OrderNo" xml:space="preserve">
+    <value>指示#</value>
+  </data>
+  <data name="DoneTrade_SearchAcc" xml:space="preserve">
+    <value>帳戶:</value>
+  </data>
+  <data name="DoneTrade_SearchDate" xml:space="preserve">
+    <value>日期:</value>
+  </data>
+  <data name="DoneTrade__Col_Channel" xml:space="preserve">
+    <value>交易渠道</value>
+  </data>
+  <data name="DoneTrade_SearchButton" xml:space="preserve">
+    <value>查詢</value>
+  </data>
+  <data name="Menu_DoneTrade" xml:space="preserve">
+    <value>已成交</value>
+  </data>
+</root>

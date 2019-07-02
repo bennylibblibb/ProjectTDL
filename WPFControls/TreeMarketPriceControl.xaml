@@ -1,0 +1,92 @@
+<UserControl 
+  x:Class="GOSTS.WPFControls.TreeMarketPriceControl"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"  
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+  mc:Ignorable="d"    
+  xmlns:local="clr-namespace:GOSTS.ViewModel"  Unloaded="UserControl_Unloaded" Loaded="UserControl_Loaded" >
+    <DockPanel>
+        <Grid x:Name="mTopLevelGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch "  Margin="0,0,0,0" >
+            <!--<TreeView ItemsSource="{Binding MarketCodeViewModel.Instmnts}" >-->
+            <TreeView Name="treeMarketCode"  MinHeight="46" MinWidth="150" ItemsSource="{Binding  Instmnts}" 
+             TreeViewItem.Expanded="TreeViewItem_Expanded"  Loaded="treeMarketCode_Loaded" Cursor="Hand"  TreeViewItem.Collapsed="TreeViewItem_Collapsed"  SelectedItemChanged="TreeView_SelectedItemChanged"  >  
+                <TreeView.ItemContainerStyle>
+                    <!-- 
+        This Style binds a TreeViewItem to a TreeViewItemViewModel. 
+        -->
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        <Setter Property="FontWeight" Value="Normal" />
+                        <Style.Triggers>
+                            <!--<MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                    <Condition Property="IsFocused" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            </MultiTrigger>-->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+
+                <TreeView.Resources>
+                    
+                    <HierarchicalDataTemplate 
+          DataType="{x:Type local:InstmntViewModel}" 
+          ItemsSource="{Binding Children}"
+          >
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="/Images/Instmnt.png" />
+                            <TextBlock Text="{Binding InstmntName}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate> 
+                    <HierarchicalDataTemplate 
+          DataType="{x:Type local:ProdTypeViewModel}" 
+          ItemsSource="{Binding Children}"
+          >
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="/Images/ProdType.png" />
+                            <TextBlock Text="{Binding ProdTypeName}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate> 
+                    <DataTemplate DataType="{x:Type local:ProdViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="/Images/Prod.png" />
+                            <TextBlock Text="{Binding ProdCode}" />
+                        </StackPanel>
+                    </DataTemplate>
+
+
+                    
+                    
+                    <HierarchicalDataTemplate        DataType="{x:Type local:ProdOptionViewModel}"        ItemsSource="{Binding Children}"          >
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="/Images/ProdType.png" />
+                            <TextBlock Text="{Binding ProdOptionName}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>   
+                    
+                    <HierarchicalDataTemplate  DataType="{x:Type local:ProdOptionTypeViewModel}" ItemsSource="{Binding Children}" >
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="/Images/ProdType.png" />
+                            <TextBlock Text="{Binding ProdOptionTypeName}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>  
+                    
+                    <DataTemplate DataType="{x:Type local:ProdsViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="/Images/Prod.png" />
+                            <TextBlock Text="{Binding ProdCode}" />
+                        </StackPanel>
+                    </DataTemplate>  
+                    
+                </TreeView.Resources>
+            </TreeView>
+        </Grid>
+    </DockPanel>
+</UserControl>

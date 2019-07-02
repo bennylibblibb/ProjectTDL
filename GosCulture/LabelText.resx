@@ -1,0 +1,1362 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccCmbText" xml:space="preserve">
+    <value>Acc</value>
+  </data>
+  <data name="AccInfo_TabCli_accname" xml:space="preserve">
+    <value>accName</value>
+  </data>
+  <data name="AccInfo_TabCli_accno" xml:space="preserve">
+    <value>accNo</value>
+  </data>
+  <data name="accountinfoTitle" xml:space="preserve">
+    <value>Account Info|  - {0}| AE|:{1}</value>
+  </data>
+  <data name="AccInfo_TabCli_active" xml:space="preserve">
+    <value>active</value>
+  </data>
+  <data name="AccInfo_TabCli_address" xml:space="preserve">
+    <value>address</value>
+  </data>
+  <data name="AccInfo_TabAcc_ae" xml:space="preserve">
+    <value>AE</value>
+  </data>
+  <data name="AccInfo_TabCli_aeid" xml:space="preserve">
+    <value>aeID</value>
+  </data>
+  <data name="AccInfo_TabCli_basecurrency" xml:space="preserve">
+    <value>baseCurrency</value>
+  </data>
+  <data name="AccInfo_TabAcc_buyingpower" xml:space="preserve">
+    <value>Buying Power</value>
+  </data>
+  <data name="AccInfo_TabCash_cash" xml:space="preserve">
+    <value>Cash</value>
+  </data>
+  <data name="AccInfo_TabCash_cash(baseccy)" xml:space="preserve">
+    <value>Cash(Base Ccy)</value>
+  </data>
+  <data name="AccInfo_TabAcc_cashbalance" xml:space="preserve">
+    <value>Cash Balance</value>
+  </data>
+  <data name="AccInfo_TabCash_cashbf" xml:space="preserve">
+    <value>Cash BF.</value>
+  </data>
+  <data name="AccInfo_TabCash_ccy" xml:space="preserve">
+    <value>Ccy</value>
+  </data>
+  <data name="AccInfo_TabAcc_commoditypl" xml:space="preserve">
+    <value>Commodity P/L</value>
+  </data>
+  <data name="Trs_Ord_Cond" xml:space="preserve">
+    <value>Cond.</value>
+  </data>
+  <data name="AccInfo_TabCli_contactinfo" xml:space="preserve">
+    <value>contactInfo</value>
+  </data>
+  <data name="AccInfo_TabAcc_ctrllevel" xml:space="preserve">
+    <value>Ctrl Level</value>
+  </data>
+  <data name="AccInfo_TabCli_emailaddress" xml:space="preserve">
+    <value>emailAddress</value>
+  </data>
+  <data name="Ext.Order#" xml:space="preserve">
+    <value>Ext.Order#</value>
+  </data>
+  <data name="AccInfo_TabCli_home" xml:space="preserve">
+    <value>home</value>
+  </data>
+  <data name="AccInfo_TabCli_idbrno" xml:space="preserve">
+    <value>idBrNo</value>
+  </data>
+  <data name="AccInfo_TabAcc_imargin" xml:space="preserve">
+    <value>I.Margin</value>
+  </data>
+  <data name="Initiator" xml:space="preserve">
+    <value>Initiator</value>
+  </data>
+  <data name="AccInfo_TabAcc_margincall" xml:space="preserve">
+    <value>Margin Call</value>
+  </data>
+  <data name="AccInfo_TabCli_marginclass" xml:space="preserve">
+    <value>MarginClass</value>
+  </data>
+  <data name="AccInfo_TabAcc_mgnclass" xml:space="preserve">
+    <value>Mgn Class</value>
+  </data>
+  <data name="AccInfo_TabAcc_mlevel" xml:space="preserve">
+    <value>M.Level</value>
+  </data>
+  <data name="AccInfo_TabAcc_mmargin" xml:space="preserve">
+    <value>M.Margin</value>
+  </data>
+  <data name="AccInfo_TabCli_mobile" xml:space="preserve">
+    <value>mobile</value>
+  </data>
+  <data name="AccInfo_TabAcc_nav" xml:space="preserve">
+    <value>NAV</value>
+  </data>
+  <data name="AccInfo_TabCli_office" xml:space="preserve">
+    <value>office</value>
+  </data>
+  <data name="ORDHID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="ORDHName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ORDHOrders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="ORDHOSBQty" xml:space="preserve">
+    <value>OS BQty</value>
+  </data>
+  <data name="ORDHOSSQty" xml:space="preserve">
+    <value>OS SQty</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="AccInfo_TabCash_reffxrate" xml:space="preserve">
+    <value>Ref.FX Rate</value>
+  </data>
+  <data name="refNo" xml:space="preserve">
+    <value>ref</value>
+  </data>
+  <data name="AccInfo_TabCli_sex" xml:space="preserve">
+    <value>Sex</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="T.Stamp" xml:space="preserve">
+    <value>T.Stamp</value>
+  </data>
+  <data name="TabAccInfo" xml:space="preserve">
+    <value>Account Info</value>
+  </data>
+  <data name="TabCashInfo" xml:space="preserve">
+    <value>Cash Info</value>
+  </data>
+  <data name="TabClientInfo" xml:space="preserve">
+    <value>Client Info</value>
+  </data>
+  <data name="TabUOIClearTd" xml:space="preserve">
+    <value>Clear Trade</value>
+  </data>
+  <data name="TabUOIDoneTd" xml:space="preserve">
+    <value>Done Trade</value>
+  </data>
+  <data name="TabUOIOrder" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="TabUOIPos" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="AccInfo_TabCash_todayinout" xml:space="preserve">
+    <value>Today In/Out</value>
+  </data>
+  <data name="Trs_Ord_Tone" xml:space="preserve">
+    <value>T+1</value>
+  </data>
+  <data name="AccInfo_TabCli_tradeclass" xml:space="preserve">
+    <value>tradeClass</value>
+  </data>
+  <data name="Traded" xml:space="preserve">
+    <value>Traded</value>
+  </data>
+  <data name="AccInfo_TabCash_unpresented" xml:space="preserve">
+    <value>Unpresented</value>
+  </data>
+  <data name="AccInfo_TabCash_unsettle" xml:space="preserve">
+    <value>Unsettle</value>
+  </data>
+  <data name="userorderinfoTitle" xml:space="preserve">
+    <value>Transactions| - [{0}&lt;{1} {2}{3}&gt;]</value>
+  </data>
+  <data name="AccInfo_TabCash_withdrawalreq" xml:space="preserve">
+    <value>Withdrawal req</value>
+  </data>
+  <data name="cbItemDownTr" xml:space="preserve">
+    <value>Down Trigger</value>
+  </data>
+  <data name="cbItemStopLoss" xml:space="preserve">
+    <value>Stop Loss</value>
+  </data>
+  <data name="cbItemUpTriggler" xml:space="preserve">
+    <value>Up Trigger</value>
+  </data>
+  <data name="CDHBQty" xml:space="preserve">
+    <value>BQty</value>
+  </data>
+  <data name="CDHExtOrder" xml:space="preserve">
+    <value>Ext.Order#</value>
+  </data>
+  <data name="CDHInitiator" xml:space="preserve">
+    <value>Initiator</value>
+  </data>
+  <data name="CDHOrderNo" xml:space="preserve">
+    <value>Order#</value>
+  </data>
+  <data name="CDHOrderPrc" xml:space="preserve">
+    <value>OrderPrc</value>
+  </data>
+  <data name="CDHRef" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="CDHSQty" xml:space="preserve">
+    <value>SQty</value>
+  </data>
+  <data name="CDHStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CDHTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="CDHTradeNo" xml:space="preserve">
+    <value>Trade#</value>
+  </data>
+  <data name="CDHTradePrc" xml:space="preserve">
+    <value>TradePrc</value>
+  </data>
+  <data name="EN_TabCondTrade" xml:space="preserve">
+    <value>Conditional Trade</value>
+  </data>
+  <data name="EN_TabC_AO" xml:space="preserve">
+    <value>AO</value>
+  </data>
+  <data name="EN_TabC_A_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="EN_TabC_A_StopTr" xml:space="preserve">
+    <value>Stop/Trigger</value>
+  </data>
+  <data name="EN_TabC_Btn_Buy" xml:space="preserve">
+    <value>Buy</value>
+  </data>
+  <data name="EN_TabC_Btn_Sell" xml:space="preserve">
+    <value>Sell</value>
+  </data>
+  <data name="EN_TabC_Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="EN_TabC_Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="EN_TabC_Qty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="EN_TabC_Ref" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="EN_TabQuickTrade" xml:space="preserve">
+    <value>Quick Trade</value>
+  </data>
+  <data name="EN_TabQ_HitBuy" xml:space="preserve">
+    <value>Hit Buy</value>
+  </data>
+  <data name="EN_TabQ_HitSell" xml:space="preserve">
+    <value>Hit Sell</value>
+  </data>
+  <data name="EN_TabQ_Qty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="EN_TabQ_Ticks" xml:space="preserve">
+    <value>Ticks</value>
+  </data>
+  <data name="ET_ProdCod" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="ET_TabNormal" xml:space="preserve">
+    <value>Normal Trade</value>
+  </data>
+  <data name="ET_TbN_AO" xml:space="preserve">
+    <value>AO</value>
+  </data>
+  <data name="ET_TbN_Buy" xml:space="preserve">
+    <value>Buy</value>
+  </data>
+  <data name="ET_TbN_Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="ET_TbN_Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ET_TbN_Qty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="ET_TbN_Ref" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="ET_TbN_Sell" xml:space="preserve">
+    <value>Sell</value>
+  </data>
+  <data name="orderentryTitle" xml:space="preserve">
+    <value>Enter Order| - {0}({1})</value>
+  </data>
+  <data name="ORDHSpecTime" xml:space="preserve">
+    <value>specDate</value>
+  </data>
+  <data name="ORDHValid" xml:space="preserve">
+    <value>Valid</value>
+  </data>
+  <data name="POSHContract" xml:space="preserve">
+    <value>Contract</value>
+  </data>
+  <data name="POSHDayLong" xml:space="preserve">
+    <value>DayLong</value>
+  </data>
+  <data name="POSHDayNet" xml:space="preserve">
+    <value>DayNet</value>
+  </data>
+  <data name="POSHDayShort" xml:space="preserve">
+    <value>DayShort</value>
+  </data>
+  <data name="POSHMKTPrice" xml:space="preserve">
+    <value>Mkt.Price</value>
+  </data>
+  <data name="POSHNet" xml:space="preserve">
+    <value>Net</value>
+  </data>
+  <data name="POSHOI" xml:space="preserve">
+    <value>In/Out</value>
+  </data>
+  <data name="POSHPL" xml:space="preserve">
+    <value>PL</value>
+  </data>
+  <data name="POSHPrev" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="POSHRef" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="possumaryTitle" xml:space="preserve">
+    <value>Position Summary| - {0}</value>
+  </data>
+  <data name="UOIBtnActivateOD" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+  <data name="UOIBtnActiveODAll" xml:space="preserve">
+    <value>Activate All</value>
+  </data>
+  <data name="UOIBtnClosePos" xml:space="preserve">
+    <value>Close Position</value>
+  </data>
+  <data name="UOIBtnDelAllOD" xml:space="preserve">
+    <value>Delete All</value>
+  </data>
+  <data name="UOIBtnDelOrder" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="UOIBtnInactiveOD" xml:space="preserve">
+    <value>Inactivate</value>
+  </data>
+  <data name="UOIBtnInactODAll" xml:space="preserve">
+    <value>Inactivate All</value>
+  </data>
+  <data name="ValidType_fak" xml:space="preserve">
+    <value>FAK</value>
+  </data>
+  <data name="ValidType_fok" xml:space="preserve">
+    <value>FOK</value>
+  </data>
+  <data name="ValidType_gtc" xml:space="preserve">
+    <value>GTC</value>
+  </data>
+  <data name="ValidType_specDate" xml:space="preserve">
+    <value>SpecDATE</value>
+  </data>
+  <data name="ValidType_today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="CHODAcc" xml:space="preserve">
+    <value>Acc:</value>
+  </data>
+  <data name="CHODID" xml:space="preserve">
+    <value>Id:</value>
+  </data>
+  <data name="CHOD_Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="CHOD_Qty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="CHOD_Ref" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="CHOD_StopTrig" xml:space="preserve">
+    <value>Stop/Trigger</value>
+  </data>
+  <data name="changeorderTitle" xml:space="preserve">
+    <value>Change/Delete Order| Order #{0}-{1}</value>
+  </data>
+  <data name="CHOD_btnBuy" xml:space="preserve">
+    <value>Change Buy</value>
+  </data>
+  <data name="CHOD_btnDel" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="CHOD_btnSell" xml:space="preserve">
+    <value>Change Sell</value>
+  </data>
+  <data name="CHOD_buyConfirm" xml:space="preserve">
+    <value>Acc：{1}
+Command:Buy
+ID：{0}
+Price：{2}
+Qty：{3}
+Validity:{4}</value>
+  </data>
+  <data name="CHOD_BuyConfTitle" xml:space="preserve">
+    <value>Buy Confirm</value>
+  </data>
+  <data name="CHOD_CHbuyConfirm" xml:space="preserve">
+    <value>Change Order Confirm
+
+Account:[{0}]
+Order#:{1}
+Command:Buy
+Id:{2}
+Price:{3}
+Qty:{4}
+
+Validity:{5}</value>
+  </data>
+  <data name="CHOD_CHBuyConfTitle" xml:space="preserve">
+    <value>Change Order Confirm</value>
+  </data>
+  <data name="CHOD_ChSellConfirm" xml:space="preserve">
+    <value>Change Order Confirm
+
+Account:[{0}]
+Order#:{1}
+Command:Sell
+Id:{2}
+Price:{3}
+Qty:{4}
+
+Validity:{5}</value>
+  </data>
+  <data name="CHOD_CHSellConfTitle" xml:space="preserve">
+    <value>Change Order Confirm</value>
+  </data>
+  <data name="CHOD_DelConf" xml:space="preserve">
+    <value>Delete Order Confirm
+
+Account:[{0}]
+Order#:{1}
+Command:{2}
+Id:{3}
+Price:{4}
+Qty:{5}
+
+Validity:{6}</value>
+  </data>
+  <data name="CHOD_DelConfTitle" xml:space="preserve">
+    <value>Delete Order Confirm</value>
+  </data>
+  <data name="CHOD_Err" xml:space="preserve">
+    <value>error</value>
+  </data>
+  <data name="CHOD_invalidInput" xml:space="preserve">
+    <value>input valid！</value>
+  </data>
+  <data name="CHOD_Invalid_price" xml:space="preserve">
+    <value>invalid price</value>
+  </data>
+  <data name="CHOD_Invalid_Qty" xml:space="preserve">
+    <value>invalid qty</value>
+  </data>
+  <data name="CHOD_noChange" xml:space="preserve">
+    <value>nothing changed on change order</value>
+  </data>
+  <data name="CHOD_plesaeInput" xml:space="preserve">
+    <value>please input！</value>
+  </data>
+  <data name="CHOD_Pls_Price" xml:space="preserve">
+    <value>please input price！</value>
+  </data>
+  <data name="CHOD_PLS_Qty" xml:space="preserve">
+    <value>please input qty！</value>
+  </data>
+  <data name="CHOD_PLS_Val_Digit" xml:space="preserve">
+    <value>please input valid digit！</value>
+  </data>
+  <data name="CHOD_sellConfirm" xml:space="preserve">
+    <value>Acc：{1}
+Command:Sell
+ID：{0}
+Price：{2}
+Qty：{3}
+Validity:{4}</value>
+  </data>
+  <data name="CHOD_sellConfirmTitle" xml:space="preserve">
+    <value>Sell Confirm</value>
+  </data>
+  <data name="Qty_ShdNot_LessThan_LowLimit" xml:space="preserve">
+    <value>qty should not less than lower limit {0}</value>
+  </data>
+  <data name="Qty_UP_Limit" xml:space="preserve">
+    <value>qty exceeded Upper limit {0}</value>
+  </data>
+  <data name="BuyOrder_Fail" xml:space="preserve">
+    <value>bought  failed</value>
+  </data>
+  <data name="CHOD_InValid_Stop_Price" xml:space="preserve">
+    <value>invalid stop price</value>
+  </data>
+  <data name="input_trgStop_Pls" xml:space="preserve">
+    <value>please input stop/triggle price</value>
+  </data>
+  <data name="CHOD_SL_Sell_Price_Must_EqOrLow_TrPrice" xml:space="preserve">
+    <value>Sell price must be equal to or lower than trigger price.</value>
+  </data>
+  <data name="CHOD_SL_Sell_TrPrie_MustLow_MktPrice" xml:space="preserve">
+    <value>Trigger price must be lower than market price.</value>
+  </data>
+  <data name="CHOD_StopLoss_BuyPrice_Must_EqOrMore_MktPrice" xml:space="preserve">
+    <value>Buy price must be equal to or higher than trigger price.</value>
+  </data>
+  <data name="CHOD_TrPrice_Must_High_MktPrice" xml:space="preserve">
+    <value>Trigger price must be higher than market price.</value>
+  </data>
+  <data name="CHOD_TrPrice_Must_Low_MktPrice" xml:space="preserve">
+    <value>Trigger price must be lower than market price.</value>
+  </data>
+  <data name="closepositionTitle" xml:space="preserve">
+    <value>Close Position| - {0}</value>
+  </data>
+  <data name="CLPos_btnHitBuy" xml:space="preserve">
+    <value>Hit Buy</value>
+  </data>
+  <data name="CLPos_btn_hitSell" xml:space="preserve">
+    <value>Hit Sell</value>
+  </data>
+  <data name="CLPos_Err_initErr" xml:space="preserve">
+    <value>Error Price Or Net Qty</value>
+  </data>
+  <data name="CLPos_Qty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="CLPos_Tab1_Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="CLPOs_Tab2_Ticks" xml:space="preserve">
+    <value>Ticks</value>
+  </data>
+  <data name="CLPos_Tab_QuickTrade" xml:space="preserve">
+    <value>Quick Trade</value>
+  </data>
+  <data name="CLPos_Tab_Trade" xml:space="preserve">
+    <value>Trade</value>
+  </data>
+  <data name="CLPos_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="confirm_SellOrder" xml:space="preserve">
+    <value>Account:{0}
+Command:Sell
+Id：{1}
+Price：{2}
+Qty：{3}
+Validity:{4}</value>
+  </data>
+  <data name="confirm_BuyOrder_Title" xml:space="preserve">
+    <value>Buy Confirm</value>
+  </data>
+  <data name="confirm_SellOrder_Title" xml:space="preserve">
+    <value>Sell Confirm</value>
+  </data>
+  <data name="EN_TabQ_BtnHitBuy" xml:space="preserve">
+    <value>Hit Buy</value>
+  </data>
+  <data name="EN_TabQ_BtnHitBuy_To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="EN_TabQ_BtnHitSell" xml:space="preserve">
+    <value>Hit Sell</value>
+  </data>
+  <data name="EN_TabQ_BtnHitSell_To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="MsgForm_BtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="MsgForm_BtnYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Order_Invalid_Price" xml:space="preserve">
+    <value>Invalid Price</value>
+  </data>
+  <data name="Order_Pls_Price" xml:space="preserve">
+    <value>Please input price！</value>
+  </data>
+  <data name="ORL_Limit_Warnning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="PosS_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="PosS_Long" xml:space="preserve">
+    <value>Long</value>
+  </data>
+  <data name="PosS_Net" xml:space="preserve">
+    <value>Net</value>
+  </data>
+  <data name="PosS_Prev" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="PosS_Short" xml:space="preserve">
+    <value>Short</value>
+  </data>
+  <data name="Price_Deviation_Exceed" xml:space="preserve">
+    <value>
+ price is over upper deviation {0} ,continue to trade?</value>
+  </data>
+  <data name="Price_Deviation_Low" xml:space="preserve">
+    <value>
+ price is over lower deviation {0} ,continue to trade?</value>
+  </data>
+  <data name="Price_Shlnot_LowLimit" xml:space="preserve">
+    <value>price should not less than lower limit {0}</value>
+  </data>
+  <data name="Price_Shlnot_ULimit" xml:space="preserve">
+    <value>price should not exceeded upper limit {0}</value>
+  </data>
+  <data name="Qty_Deviation_MoreThan" xml:space="preserve">
+    <value>qty is more than deviation qty {0},continue to trade?</value>
+  </data>
+  <data name="SellOrder_Fail" xml:space="preserve">
+    <value>Sale failed</value>
+  </data>
+  <data name="Order_Qty_Invalid" xml:space="preserve">
+    <value>Invalid qty</value>
+  </data>
+  <data name="Order_Qty_Pls" xml:space="preserve">
+    <value>Please input qty！</value>
+  </data>
+  <data name="buy" xml:space="preserve">
+    <value>Buy</value>
+  </data>
+  <data name="confirm_BuyOrder" xml:space="preserve">
+    <value>Account:{0}
+Command:Buy
+Id：{1}
+Price：{2}
+Qty：{3}
+Validity:{4}</value>
+  </data>
+  <data name="input_Acc_pls" xml:space="preserve">
+    <value>please select  an account</value>
+  </data>
+  <data name="Input_order_specDate_pls" xml:space="preserve">
+    <value>validity is specTime, please select date</value>
+  </data>
+  <data name="input_priceDec_only_sLen_allowed" xml:space="preserve">
+    <value>only {0} number of decimal part allowed for product '{1}'</value>
+  </data>
+  <data name="input_price_no_allow_dec" xml:space="preserve">
+    <value>no decimal part allowed for price of product '{0}'</value>
+  </data>
+  <data name="input_prod_pls" xml:space="preserve">
+    <value>please select a product</value>
+  </data>
+  <data name="input_stoptype_error" xml:space="preserve">
+    <value>error stoptype convert</value>
+  </data>
+  <data name="input_ticks_invalid" xml:space="preserve">
+    <value>Invalid ticks</value>
+  </data>
+  <data name="Order_AccNotEqual" xml:space="preserve">
+    <value>'{0}' not equal current acc '{1}',continue to place order with current acc '{1}'?</value>
+  </data>
+  <data name="Sell" xml:space="preserve">
+    <value>Sell</value>
+  </data>
+  <data name="AccMask_btnOk" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="AccMask_Clear_Failed" xml:space="preserve">
+    <value>Clear config fail</value>
+  </data>
+  <data name="AccMask_Clear_Successfully" xml:space="preserve">
+    <value>Clear successfullly</value>
+  </data>
+  <data name="AccMask_Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="AccMask_length_invalid" xml:space="preserve">
+    <value>Invalid Length</value>
+  </data>
+  <data name="AccMask_Prefix" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="AccMask_Suffix" xml:space="preserve">
+    <value>Suffix</value>
+  </data>
+  <data name="AccMast_btnClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="AccM_Acc" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="AccM_btnDel" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AccM_btnSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="AppRef_AccList" xml:space="preserve">
+    <value>Acc List</value>
+  </data>
+  <data name="AppRef_AccMask" xml:space="preserve">
+    <value>Acc Mask</value>
+  </data>
+  <data name="AppRef_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="AppRef_MarginColor" xml:space="preserve">
+    <value>Margin Color</value>
+  </data>
+  <data name="AppRef_OrderDeviation" xml:space="preserve">
+    <value>Order Deviation</value>
+  </data>
+  <data name="ask_Save_Changes" xml:space="preserve">
+    <value>Do you want to save the changes?</value>
+  </data>
+  <data name="confirmTitle" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="confirm_accMask_Ask_StaySave" xml:space="preserve">
+    <value>Acc mast config changed,stay to save?</value>
+  </data>
+  <data name="confirm_accMask_SaveAsk" xml:space="preserve">
+    <value>Acc mast config changed,save?</value>
+  </data>
+  <data name="confirm_OrderDeviation_change_AskSave" xml:space="preserve">
+    <value>Order deviation config changed,want to save?</value>
+  </data>
+  <data name="confirm_OrderDeviation_change_Ask_StaySave" xml:space="preserve">
+    <value>Order deviation config changed,stay to save?</value>
+  </data>
+  <data name="confirm_StopTrgOrder" xml:space="preserve">
+    <value>{0},
+Stop Trigger:{2}
+{1}</value>
+  </data>
+  <data name="input_acc_exists" xml:space="preserve">
+    <value>account already exits!</value>
+  </data>
+  <data name="input_add_failed" xml:space="preserve">
+    <value>Added fail</value>
+  </data>
+  <data name="input_del_failed" xml:space="preserve">
+    <value>Delete failed</value>
+  </data>
+  <data name="input_err_saveFailed" xml:space="preserve">
+    <value>saved failure</value>
+  </data>
+  <data name="Input_Save_failed" xml:space="preserve">
+    <value>Save failed</value>
+  </data>
+  <data name="input_save_success" xml:space="preserve">
+    <value>saved successfullly</value>
+  </data>
+  <data name="input_stoptypeItem_normal" xml:space="preserve">
+    <value>normal Order</value>
+  </data>
+  <data name="input_trgStopPrice_invalid" xml:space="preserve">
+    <value>invalid stop price</value>
+  </data>
+  <data name="Menu_AccInfo" xml:space="preserve">
+    <value>Account Info</value>
+  </data>
+  <data name="Menu_Bs" xml:space="preserve">
+    <value>Buy/Sell</value>
+  </data>
+  <data name="Menu_Change_PWD" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="Menu_Chart_Analysis" xml:space="preserve">
+    <value>Chart Analysis</value>
+  </data>
+  <data name="Menu_Clock" xml:space="preserve">
+    <value>Clock</value>
+  </data>
+  <data name="Menu_DeskTop_Default_Load" xml:space="preserve">
+    <value>Load Default Desktop</value>
+  </data>
+  <data name="Menu_DeskTop_Load" xml:space="preserve">
+    <value>Load Desktop</value>
+  </data>
+  <data name="Menu_Desktop_Save" xml:space="preserve">
+    <value>Save Desktop</value>
+  </data>
+  <data name="Menu_Desktop_SaveAs" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="Menu_Inst_Test" xml:space="preserve">
+    <value>Test Instruct</value>
+  </data>
+  <data name="Menu_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Menu_Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Menu_MarginCallList" xml:space="preserve">
+    <value>MarginCallList</value>
+  </data>
+  <data name="Menu_MarginCheck" xml:space="preserve">
+    <value>MarginCheck</value>
+  </data>
+  <data name="Menu_MktPrice" xml:space="preserve">
+    <value>Market Price</value>
+  </data>
+  <data name="Menu_Option_Matrix" xml:space="preserve">
+    <value>Option Matrix</value>
+  </data>
+  <data name="Menu_posSumary" xml:space="preserve">
+    <value>Position Summary</value>
+  </data>
+  <data name="Menu_Preference" xml:space="preserve">
+    <value>Preference</value>
+  </data>
+  <data name="Menu_PriceAlert" xml:space="preserve">
+    <value>Price Alert</value>
+  </data>
+  <data name="Menu_PriceDepth" xml:space="preserve">
+    <value>Price Depth</value>
+  </data>
+  <data name="Menu_QuickBs" xml:space="preserve">
+    <value>Quick Trade</value>
+  </data>
+  <data name="Menu_Ticker" xml:space="preserve">
+    <value>Ticker</value>
+  </data>
+  <data name="Menu_TradeConfirmation" xml:space="preserve">
+    <value>Trade Confirmation</value>
+  </data>
+  <data name="Menu_Transactions" xml:space="preserve">
+    <value>Transactions</value>
+  </data>
+  <data name="OLR_Invalid_Price" xml:space="preserve">
+    <value>Invalid Price,haven't saved</value>
+  </data>
+  <data name="OLR_Invalid_Qty" xml:space="preserve">
+    <value>Invalid Qty,haven't saved</value>
+  </data>
+  <data name="ORL_btnReset" xml:space="preserve">
+    <value>reset</value>
+  </data>
+  <data name="ORL_btnSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ORL_DeviationPrice_Max" xml:space="preserve">
+    <value>Max Price deviation (%):</value>
+  </data>
+  <data name="ORL_DeviationQty_Max" xml:space="preserve">
+    <value>Max qty:</value>
+  </data>
+  <data name="activeItem_active" xml:space="preserve">
+    <value>active</value>
+  </data>
+  <data name="activeITem_inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="AppPreferenceTitle" xml:space="preserve">
+    <value>Customize Preference - [{0}]</value>
+  </data>
+  <data name="confirm_OrderActive_title" xml:space="preserve">
+    <value>Activate Order Confirm</value>
+  </data>
+  <data name="confirm_OrderInActive_title" xml:space="preserve">
+    <value>Inactivate Order Confirm</value>
+  </data>
+  <data name="confirm_Order_Active" xml:space="preserve">
+    <value>Activate Order Confirm
+
+Account:[{0}]
+Order#:{1}
+Command:{2}
+Id:{3}
+Price:{4}
+Qty:{5}</value>
+  </data>
+  <data name="confirm_Order_Del" xml:space="preserve">
+    <value>Delete Order Confirm
+
+Account:[{0}]
+Order#:{1}
+Command:{2}
+Id:{3}
+Price:{4}
+Qty:{5}</value>
+  </data>
+  <data name="confirm_Order_Inactive" xml:space="preserve">
+    <value>Inactivate Order Confirm
+
+Account:[{0}]
+Order#:{1}
+Command:{2}
+Id:{3}
+Price:{4}
+Qty:{5}</value>
+  </data>
+  <data name="confirm_sure_ActiveAllOrder" xml:space="preserve">
+    <value>Activate ALL Orders ?</value>
+  </data>
+  <data name="confirm_Sure_DelAll" xml:space="preserve">
+    <value>Delete ALL Orders ?</value>
+  </data>
+  <data name="confirm_sure_InActiveAllOrder" xml:space="preserve">
+    <value>Inactivate ALL Orders ?</value>
+  </data>
+  <data name="EN_Prod_InQuery" xml:space="preserve">
+    <value>waiting for enquiry of product info...,or you can select another product</value>
+  </data>
+  <data name="EN_Prod_NotExist" xml:space="preserve">
+    <value>ID:{0} not exists</value>
+  </data>
+  <data name="UOI_Pls_selectRow" xml:space="preserve">
+    <value>please select row first</value>
+  </data>
+  <data name="changepwdTitle" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="CHPwd_btnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CHPwd_btnOk" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="CHPwd_newPwd" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="CHPwd_oldPwd" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="CHPwd_Pwd_ChangeOK" xml:space="preserve">
+    <value>password changed successfully</value>
+  </data>
+  <data name="CHPwd_Pwd_NotEqual" xml:space="preserve">
+    <value>new password not equal to retype password</value>
+  </data>
+  <data name="CHPwd_Pwd_pls" xml:space="preserve">
+    <value>please input new password</value>
+  </data>
+  <data name="CHPwd_retypePwd" xml:space="preserve">
+    <value>Retype Password</value>
+  </data>
+  <data name="EN_TbN_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="WinTitleCustomizePref" xml:space="preserve">
+    <value>Customize Preference</value>
+  </data>
+  <data name="WinTitleMarginCheck" xml:space="preserve">
+    <value>Margin Check</value>
+  </data>
+  <data name="WinTitleMarketPrice" xml:space="preserve">
+    <value>Market Price</value>
+  </data>
+  <data name="WinTitleMCL" xml:space="preserve">
+    <value>Margin Call List</value>
+  </data>
+  <data name="WinTitleOptionMatrix" xml:space="preserve">
+    <value>Option Matrix</value>
+  </data>
+  <data name="WinTitlePriceDepth" xml:space="preserve">
+    <value>Price Depth</value>
+  </data>
+  <data name="WinTitleSCIChart" xml:space="preserve">
+    <value>Chart Analysis</value>
+  </data>
+  <data name="WinTitleTicker" xml:space="preserve">
+    <value>Ticker</value>
+  </data>
+  <data name="WinTitleTradeConf" xml:space="preserve">
+    <value>Trade Confirmation</value>
+  </data>
+  <data name="MkAQty" xml:space="preserve">
+    <value>AQty</value>
+  </data>
+  <data name="MkAsk" xml:space="preserve">
+    <value>Ask</value>
+  </data>
+  <data name="MkBid" xml:space="preserve">
+    <value>Bid</value>
+  </data>
+  <data name="MkBQty" xml:space="preserve">
+    <value>BQty</value>
+  </data>
+  <data name="MkName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="PDPrice" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="PDQty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="WinTitleAddPriceAlert" xml:space="preserve">
+    <value>Price Alert Settings</value>
+  </data>
+  <data name="WinTitleClock" xml:space="preserve">
+    <value>Computer Clock</value>
+  </data>
+  <data name="WinTitlePriceAlert" xml:space="preserve">
+    <value>Price Alert</value>
+  </data>
+  <data name="WinTitleLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="WinTitleTradeConfDetails" xml:space="preserve">
+    <value>Trade Confirmation Details</value>
+  </data>
+  <data name="Menu_Windows" xml:space="preserve">
+    <value>Windows</value>
+  </data>
+  <data name="comm_AO" xml:space="preserve">
+    <value>AO</value>
+  </data>
+  <data name="comm_TOne" xml:space="preserve">
+    <value>T+1</value>
+  </data>
+  <data name="confirm_Load_DefaultDesk" xml:space="preserve">
+    <value>This will clear and reset windows layout now,sure to load default desktop?</value>
+  </data>
+  <data name="confirm_Load_DefaultDeskTitle" xml:space="preserve">
+    <value>Load default desktop confirm</value>
+  </data>
+  <data name="PosS_MenuNet" xml:space="preserve">
+    <value>Net only</value>
+  </data>
+  <data name="PosS_MenuPosOnly" xml:space="preserve">
+    <value>Open position only</value>
+  </data>
+  <data name="loginAletConnect" xml:space="preserve">
+    <value>Please check connection!</value>
+  </data>
+  <data name="loginAletInvaildMsg" xml:space="preserve">
+    <value>Invalid Ip or Domain！</value>
+  </data>
+  <data name="loginAletLogin" xml:space="preserve">
+    <value>Login failed,</value>
+  </data>
+  <data name="loginAletPassword" xml:space="preserve">
+    <value>Password！</value>
+  </data>
+  <data name="loginAletTitle" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="loginAletUser" xml:space="preserve">
+    <value>User ID！</value>
+  </data>
+  <data name="mainAletTitle" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="mainAlertLogout" xml:space="preserve">
+    <value>Are you sure to logout?</value>
+  </data>
+  <data name="mainAlertClose" xml:space="preserve">
+    <value>Are you sure to close GOSTradeStation?</value>
+  </data>
+  <data name="mainDisclaimer" xml:space="preserve">
+    <value>Disclaimer</value>
+  </data>
+  <data name="mainSyncTimeMsg" xml:space="preserve">
+    <value>Sync? Your PC's time difference to the server is </value>
+  </data>
+  <data name="mainSyncTimeTitle" xml:space="preserve">
+    <value>Sync Server Time</value>
+  </data>
+  <data name="mainSyncTimeAlert" xml:space="preserve">
+    <value>Cannot set LocalTime!</value>
+  </data>
+  <data name="loginServer" xml:space="preserve">
+    <value>Server:</value>
+  </data>
+  <data name="loginName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="loginUserID" xml:space="preserve">
+    <value>UserID:</value>
+  </data>
+  <data name="loginPassword" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="loginSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="notificationMsg" xml:space="preserve">
+    <value>Received at:</value>
+  </data>
+  <data name="VersionUpdateAlertTitle" xml:space="preserve">
+    <value>GOSTradeStation - NEW VERSION FOUND</value>
+  </data>
+  <data name="VersionUpdateMsg" xml:space="preserve">
+    <value>Your version: {0},
+Newest version: {1}. 
+
+Do you want to update?</value>
+  </data>
+  <data name="VersionUpdateRequiredMsg" xml:space="preserve">
+    <value>Your version: {0},
+Minimum Required version: {1}. 
+
+Please downlaod the newest version!</value>
+  </data>
+  <data name="MkInsertProdMsg" xml:space="preserve">
+    <value>Insert Product ID:</value>
+  </data>
+  <data name="MkRemoveProdAlertMsg" xml:space="preserve">
+    <value>Are you sure to remove {0} from list?</value>
+  </data>
+  <data name="MkReNameProdListAlertMsg" xml:space="preserve">
+    <value>Rename Product list:</value>
+  </data>
+  <data name="MkClearProdAlertMsg" xml:space="preserve">
+    <value>Are you sure to clear this list?</value>
+  </data>
+  <data name="MkProdCodeError" xml:space="preserve">
+    <value>Product ID</value>
+  </data>
+  <data name="MkProdCodeExisted" xml:space="preserve">
+    <value>Product ID existed</value>
+  </data>
+  <data name="ProdListError" xml:space="preserve">
+    <value>Product List Name</value>
+  </data>
+  <data name="MkRemoveProdListAlertTitle" xml:space="preserve">
+    <value>Remove Tab</value>
+  </data>
+  <data name="MkRemoveProdListAlertMsg" xml:space="preserve">
+    <value>Are You Sure To Remove the tab?</value>
+  </data>
+  <data name="TreeUnderlying" xml:space="preserve">
+    <value>Underlying</value>
+  </data>
+  <data name="TreeFutures" xml:space="preserve">
+    <value>Futures</value>
+  </data>
+  <data name="TreeOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="TreeSpreads" xml:space="preserve">
+    <value>Spreads</value>
+  </data>
+  <data name="TreeCall" xml:space="preserve">
+    <value>Call</value>
+  </data>
+  <data name="TreePut" xml:space="preserve">
+    <value>Put</value>
+  </data>
+  <data name="OHistTitle" xml:space="preserve">
+    <value>Order History</value>
+  </data>
+  <data name="OHist_ColHead_Action" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="OHist_ColHead_Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="OHist_ColHead_User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="CodeUnLocked" xml:space="preserve">
+    <value>UnLocked ID</value>
+  </data>
+  <data name="CodeLocked" xml:space="preserve">
+    <value>Locked ID</value>
+  </data>
+  <data name="VerticalView" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="HorizontalView" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="OHist_Tb_AccNo" xml:space="preserve">
+    <value>Acc No:</value>
+  </data>
+  <data name="OHist_Tb_OrderNo" xml:space="preserve">
+    <value>Order No:</value>
+  </data>
+  <data name="OHist_CMenuText_ToShow" xml:space="preserve">
+    <value>Order History</value>
+  </data>
+  <data name="DoneTradeTitle" xml:space="preserve">
+    <value>Done Trade</value>
+  </data>
+  <data name="DoneTrade_Col_AccNo" xml:space="preserve">
+    <value>Acc No.</value>
+  </data>
+  <data name="DoneTrade_Col_ExtOrderNo" xml:space="preserve">
+    <value>Ext Order No</value>
+  </data>
+  <data name="DoneTrade_Col_GW" xml:space="preserve">
+    <value>GW</value>
+  </data>
+  <data name="DoneTrade_Col_Initiator" xml:space="preserve">
+    <value>Initiator</value>
+  </data>
+  <data name="DoneTrade_Col_Long" xml:space="preserve">
+    <value>Long</value>
+  </data>
+  <data name="DoneTrade_Col_OrderNo" xml:space="preserve">
+    <value>Order#</value>
+  </data>
+  <data name="DoneTrade_Col_Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="DoneTrade_Col_ProdCode" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="DoneTrade_Col_Ref" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="DoneTrade_Col_Short" xml:space="preserve">
+    <value>Short</value>
+  </data>
+  <data name="DoneTrade_Col_TradeNo" xml:space="preserve">
+    <value>Trade#</value>
+  </data>
+  <data name="DoneTrade_Col_TradeTime" xml:space="preserve">
+    <value>Trade Time</value>
+  </data>
+  <data name="DoneTrade_OrderNo" xml:space="preserve">
+    <value>OrderNo</value>
+  </data>
+  <data name="DoneTrade__Col_Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="DoneTrade_SearchAcc" xml:space="preserve">
+    <value>Account:</value>
+  </data>
+  <data name="DoneTrade_SearchDate" xml:space="preserve">
+    <value>Date:</value>
+  </data>
+  <data name="Menu_DoneTrade" xml:space="preserve">
+    <value>Done Trade Report</value>
+  </data>
+  <data name="DoneTrade_SearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+</root>

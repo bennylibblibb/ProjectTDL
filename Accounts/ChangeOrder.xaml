@@ -1,0 +1,219 @@
+﻿<UserControl x:Class="GOSTS.ChangeOrder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"  xmlns:src="clr-namespace:GOSTS.Accounts" 
+             xmlns:GOS="clr-namespace:GOSTS"   
+             xmlns:Cult="clr-namespace:GOSTS.GosCulture"
+             Height="Auto" Width="Auto" Unloaded="UserControl_Unloaded_1">
+    <UserControl.Resources>
+        <GOS:ZeroConvertor x:Key="zerotoblank"></GOS:ZeroConvertor>
+        <Style TargetType="Button" x:Key="accTradeBtn">
+            <Setter Property="Button.Foreground" Value="#FFF7F5F5"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Control.Foreground" Value="Black" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>       
+    </UserControl.Resources>
+   
+    <Border Name="b_ChangeOrder" BorderBrush="Silver" BorderThickness="1" Height="Auto"  Width="Auto" >
+        <Border.Resources>
+            <ResourceDictionary Source="pack://application:,,,/GOSTS;Component/Accounts/DicAccResource.xaml"/>
+        </Border.Resources>
+        <Border.Background>
+            <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                <!--<GradientStop Color="#FFD7D9F0" Offset="0.042"/>
+                <GradientStop Color="#FF5187D4" Offset="0.925"/>-->
+                <GradientStop Color="#FFF3D0F3" Offset="0.042"/>
+                <GradientStop Color="#FFFF84EE" Offset="0.925"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <Viewbox Stretch="Fill">
+            <Grid Name="gd1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="38"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="2*" MinWidth="80"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="10"/>
+                <!--<ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="4*"/>-->
+            </Grid.ColumnDefinitions>
+
+           
+            <Grid Grid.ColumnSpan="5" >              
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1"/>                   
+                </Grid.ColumnDefinitions>
+                    <!--<Border BorderThickness="0,0,0,1" Stroke="#CCC" Grid.ColumnSpan="6">-->
+                        <Rectangle Grid.Column="0" HorizontalAlignment="Stretch" Name="rectAccInfo"  Grid.ColumnSpan="6" Height="auto"  VerticalAlignment="Stretch" Width="auto">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                <GradientStop Color="#fff" Offset="0"/><!--FFF2F2F8-->
+                                <GradientStop Color="#FFF3D0F3" Offset="0.5"/><!--FFB8BBD0-FFFF84EE-->
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    <!--</Border>-->
+                    <Label Content="{Cult:LabelText CHODAcc, DefaultValue='Acc:'}" Grid.Row="0" Grid.Column="0" FontSize="14"></Label>
+                <Label Content="order#" Name="lbl_Account"   Grid.Column="1" FontSize="15" />
+
+                    <Label Grid.Column="3"    Content="{Cult:LabelText CHODID, DefaultValue='Id:'}" FontSize="14"></Label>
+                <Label Content="order#" Name="lbl_Order"   Grid.Column="4" Grid.ColumnSpan="2" FontSize="15"/>
+               
+            </Grid>
+
+
+                <Grid Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                     
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  Width="10"></ColumnDefinition>
+                        <ColumnDefinition  Width="*"></ColumnDefinition>
+                        <ColumnDefinition  Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition  Width="2*"></ColumnDefinition>
+                        <ColumnDefinition  Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition  Width="10"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="{Cult:LabelText CHOD_Price, DefaultValue='Price'}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" HorizontalAlignment="Left"/>
+                    <src:ContinuousButtonSub  Grid.Column="2" Grid.Row="1" DownBound="-99999"   x:Name="btnDow" BTWidth="23" TBoxNum="{Binding ElementName=txt_Price}"/>
+                    <TextBox Name="txt_Price" TextWrapping="Wrap" FontSize="20" Text="" InputMethod.IsInputMethodEnabled="False" Width="auto" Grid.Column="3" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
+                    <src:ContinuousButtonAdd UpBound="99999" Grid.Row="1"  Grid.Column="4" x:Name="btnUp" BTWidth="23" TBoxNum="{Binding ElementName=txt_Price}"></src:ContinuousButtonAdd>
+
+                    <Label Content="{Cult:LabelText CHOD_Qty, DefaultValue='Qty'}" Grid.Row="2"  HorizontalAlignment="Left"  Grid.Column="1" />
+                    <src:ContinuousButtonSub  Grid.Column="2" DownBound="1"  Grid.Row="2" Focusable="False"  BTWidth="23" TBoxNum="{Binding ElementName=txt_Count}"/>
+                    <TextBox Name="txt_Count" TextWrapping="Wrap" Text=""  FontSize="20"  Width="auto" Grid.Column="3" Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False"  TextChanged="txt_Count_TextChanged" />
+                    <src:ContinuousButtonAdd UpBound="99999" Grid.Column="4" Grid.Row="2" BTWidth="23" TBoxNum="{Binding ElementName=txt_Count}"></src:ContinuousButtonAdd>
+
+
+                </Grid>
+             
+            
+            <Grid Grid.Row="4" Grid.ColumnSpan="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="1"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="1"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="10"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <CheckBox Content="T+1" IsEnabled="False" Margin="1,5,1,5"  Grid.Column="1"  HorizontalAlignment="Left" Name="chkT1"/>
+
+
+                    <Label Content="{Cult:LabelText CHOD_Ref, DefaultValue='Ref'}"   Grid.Column="3" />
+                <TextBox Name="txt_Ref" TextWrapping="Wrap" Text="" Width="auto" Margin="0,3"  Grid.Column="5" Grid.ColumnSpan="2" TextChanged="txt_Ref_TextChanged" />
+            </Grid>
+
+
+            <CheckBox Content="AO" IsEnabled="False"  Margin="11,5,1,5"   Grid.Row="3" Visibility="Visible" VerticalAlignment="Center"  HorizontalAlignment="Left" Name="chkAO"/>
+                <TextBlock Name="tbOrder" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center"  HorizontalAlignment="Left"></TextBlock>   
+                
+            <!--<Grid >-->
+                <GroupBox Visibility="Hidden"  Header="{Cult:LabelText CHOD_StopTrig, DefaultValue='Stop/Trigger'}" BorderThickness="0.5" Margin="10,1"  Grid.Row="3" Grid.ColumnSpan="5" Name="gdSTPrice" Width="auto" Height="50">
+                    <!--Margin="5,5,0,5"-->
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="1"></RowDefinition>                         
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>                         
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="1"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="1" Name="cbbstop" Grid.Row="1"  IsEnabled="False">
+                            <!--<ComboBoxItem  Tag="stopLoss" IsSelected="True">Stop Loss</ComboBoxItem>
+                            <ComboBoxItem Tag="upTrigger">Up Trigger</ComboBoxItem>
+                            <ComboBoxItem Tag="downTrigger">Down Trigger</ComboBoxItem>-->
+                            <ComboBoxItem  Tag="stopLoss" IsSelected="True">
+                                <TextBlock Text="{Cult:LabelText cbItemStopLoss, DefaultValue='Stop Loss'}"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem Tag="upTrigger">
+                                <TextBlock Text="{Cult:LabelText cbItemUpTriggler, DefaultValue='Up Trigger'}"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem Tag="downTrigger">
+                                <TextBlock Text="{Cult:LabelText cbItemDownTr, DefaultValue='Down Trigger'}"/>
+                            </ComboBoxItem>
+                        </ComboBox>
+
+                        <Grid  Grid.Column="2"  Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="41"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*" MinWidth="50"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="{Cult:LabelText CHOD_Price, DefaultValue='Price'}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                            <src:ucBtnNumSub  Grid.Column="1" Focusable="False"  Height="20" Width="20"  TNumBox="{Binding ElementName=txt_StopPrice_CT}"></src:ucBtnNumSub>
+                            <src:ucTBNumber  x:Name="txt_StopPrice_CT" UpBound="99999" DownBound="-99999" Width="auto" MinWidth="55" MinHeight="30"  Grid.Column="2"/>
+                            <src:ucBtnNumAdd  Grid.Column="3" Focusable="False"  Height="20" Width="20"  TNumBox="{Binding ElementName=txt_StopPrice_CT}"></src:ucBtnNumAdd>
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+            <!--</Grid>-->
+
+            <UniformGrid Columns="2" Grid.Row="5" Height="35"  Grid.ColumnSpan="5" Name="UG_buy" Visibility="Hidden">
+                <!--<Viewbox Stretch="Uniform">-->
+                    <Button Name="btn_buy_change" Style="{x:Null}"  Content="{Cult:LabelText CHOD_btnBuy, DefaultValue='Change Buy'}" FontWeight="Bold" Foreground="#FFF7F5F5"  Margin="10,3,10,3"  Focusable="False" Click="btn_buy_change_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="../Images/img_button_blue.png"/>
+                        </Button.Background>
+                    </Button>
+                <!--</Viewbox>-->
+                <!--<Viewbox Stretch="Uniform">-->
+                    <Button Name="btn_delete_buy" Style="{StaticResource accTradeBtn}"  Content="{Cult:LabelText CHOD_btnDel, DefaultValue='Delete'}" BorderThickness="1" FontWeight="Bold"       Margin="10,3,10,3" Focusable="False" Click="btn_Delete_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="../Images/img_button_blue.png"/>
+                        </Button.Background>
+                    </Button>
+                <!--</Viewbox>-->
+            </UniformGrid>
+            <UniformGrid Columns="2" Grid.Row="5" Grid.ColumnSpan="5" Height="35"  Visibility="Visible" Name="UG_sell">
+                <!--<Viewbox Stretch="Uniform">-->
+                    <Button Name="btn_Sell_Change" Content="{Cult:LabelText CHOD_btnSell, DefaultValue='Change Sell'}" FontWeight="Bold"  Style="{StaticResource accTradeBtn}" Margin="10,3"  Focusable="False" Click="btn_Sell_Change_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="../Images/img_button_red.png"/>
+                            <!--<Image  Source="../Images/img_button_blue.png" Stretch="None"/>-->
+                        </Button.Background>
+                    </Button>
+                <!--</Viewbox>-->
+
+                <!--<Viewbox Stretch="Uniform">-->
+                    <Button Name="btn_Delete_sell" Content="{Cult:LabelText CHOD_btnDel, DefaultValue='Delete'}" Style="{StaticResource accTradeBtn}"  FontWeight="Bold" BorderThickness="1"  MinWidth="65"     Margin="10,3,10,3" Focusable="False" Click="btn_Delete_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="../Images/img_button_red.png"/>                          
+                        </Button.Background>
+                    </Button>
+                <!--</Viewbox>-->
+            </UniformGrid>
+        </Grid>
+         </Viewbox>
+    </Border>
+    
+</UserControl>

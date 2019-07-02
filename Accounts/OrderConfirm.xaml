@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="GOSTS.OrderConfirm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Loaded="UserControl_Loaded"  > 
+    <Grid>
+        <!--<Grid.Resources >
+            <Style x:Key="Playwav" TargetType="Button">
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="PreviewMouseDown">
+                        <SoundPlayerAction Source="/GOSTS;component/Audio/OC.wav"/>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>-->
+        <Button Content="OK" Height="23" Width="75" Panel.ZIndex="1" HorizontalAlignment="Left" Margin="250,180,0,0" Name="btn_OK" VerticalAlignment="Top"  Click="btn_OK_Click" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <TextBlock   Name="lbl_Message"  Panel.ZIndex="0"  Height="Auto" HorizontalAlignment="Left" Margin="0,0,0,0"  VerticalAlignment="Top" FontSize="15"  Foreground="Green" />
+        </ScrollViewer>
+
+        <!--<Button   Style="{StaticResource Playwav}" Height="49" HorizontalAlignment="Left" Margin="74,151,0,0"   VerticalAlignment="Top" Width="113" Content="button" />-->
+         </Grid>
+</UserControl>

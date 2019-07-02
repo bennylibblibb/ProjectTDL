@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Servers>
+  <Server Selected="false">
+    <Name>HGSERVER</Name>
+    <Ip>192.168.86.35</Ip>
+  </Server>
+  <Server Selected="false">
+    <Name>HKSERVER</Name>
+    <Ip>128.128.6.234</Ip>
+  </Server>
+  <Server Selected="true">
+    <Name>HKSERVER2</Name>
+    <Ip>128.128.2.168</Ip>
+  </Server>
+</Servers>
