@@ -28,7 +28,7 @@
            <!--     <img src="resource/mango_logo_title.gif" width="359" height="49"> -->
             </td>
         </tr>
-        <tr>
+        <tr style="display:none" >
             <td class="top_bar02_bg" vAlign="top" height="15">
                 <P align="left">
                     <FONT color="#ffffff">
@@ -66,33 +66,32 @@
 
 
 
-                                    <TR  valign="bottom" >
-                                        <TD    align="center"  height="1"    >
-                                        <span > <strong> From</strong></span> 
+                                    <TR  style="height:30px" valign="middle"  >
+                                        <TD     align="center"     style="width:250px"   >
+                                        <span > <strong>START DATE From : </strong></span> 
                                       <anthem:TextBox ID="txtFrom" runat="server"   onclick="SelectDate(this)"   Width="100px">        </anthem:TextBox>
                                        </TD>  
-                                        <TD   align="left" height="1"   > <span > <strong> To</strong></span>
+                                        <TD   align="left"  style="width:150px"    > <span > <strong> To : </strong></span>
                                              <anthem:TextBox ID="txtTo" runat="server"    onclick="SelectDate(this)"  Width="100px">   </anthem:TextBox>
                                         </TD>
-                                        <TD   align="center" height="1"> 
+                                        <TD   align="center"   style="width:150px"    > 
                                             <anthem:DropDownList ID="dplLeague" runat="server" AutoCallBack="True" Width="100px" >
                                             <asp:ListItem Selected="True" Value="-1">All</asp:ListItem>
-                                                <asp:ListItem Value="notstarted">notstarted</asp:ListItem>  
+                                                <asp:ListItem Value="Not started">Not started</asp:ListItem>  
                                                 <asp:ListItem Value="inprogress">inprogress</asp:ListItem>  
-                                                <asp:ListItem Value="finished">finished</asp:ListItem>   
-                                                <asp:ListItem Value="interrupted">interrupted</asp:ListItem> 
-                                                <asp:ListItem Value="cancelled">cancelled</asp:ListItem> 
+                                                <asp:ListItem Value="Finished">Finished</asp:ListItem>   
+                                                <asp:ListItem Value="Interrupted">Interrupted</asp:ListItem> 
+                                                  <asp:ListItem Value="Abandoned">Abandoned</asp:ListItem> 
+                                                <asp:ListItem Value="Cancelled">Cancelled</asp:ListItem> 
                                                 <asp:ListItem Value="deleted">deleted</asp:ListItem>  
                                                 <asp:ListItem Value="unknown">unknown</asp:ListItem>  
                                             </anthem:DropDownList>      
                                         </TD>
-                                        <TD   align="left" height="1">
+                                        <TD   align="left"   style="width:150px"    >
                                             <anthem:Button ID="btnEdit" runat="server" Text="Get"     Width="60px" />  
-                                        </TD>
-                                        <TD  align="left"   style="width:600px" > 
-                                            <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="120px" Visible="false">  </anthem:Label>  
-                                          </strong>
-                                             <anthem:RadioButtonList ID="cbDay" runat="server"  RepeatDirection="Horizontal"  Width="200px"  AutoCallBack="true"  >
+                                         <strong>  <anthem:Label ID="lbMsg" runat="server" ForeColor="Red" Width="120px" Visible="false">  </anthem:Label>  </strong> </TD>
+                                        <TD  align="left"     style="width:600px" >  
+                                                                <anthem:RadioButtonList ID="cbDay" runat="server" RepeatDirection="Horizontal"  Width="200px"  AutoCallBack="true"  >
                                                                 <asp:ListItem Value ="-1" Selected="True">All</asp:ListItem>
                                                                 <asp:ListItem>MON</asp:ListItem> 
                                                                 <asp:ListItem>TUE</asp:ListItem>
@@ -101,7 +100,8 @@
                                                                 <asp:ListItem>FRI</asp:ListItem> 
                                                                 <asp:ListItem>SAT</asp:ListItem>
                                                                 <asp:ListItem>SUN</asp:ListItem>  
-                                             </anthem:RadioButtonList>  </TD>
+                                             </anthem:RadioButtonList> 
+                                        </TD>
                                         </TR> 
 
 
@@ -137,7 +137,7 @@
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="NAME" Visible ="true" >
                                                         <HeaderStyle HorizontalAlign="Left" Width="120px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item" Width="80px"></ItemStyle><ItemTemplate>
-                                                            <anthem:Label id="lbNAME"   runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.NAME") %>'></anthem:Label>
+                                                            <anthem:Label id="lbNAME" BackColor='<%#DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS") is DBNull?System.Drawing.Color.Empty:  Convert.ToBoolean(DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS")) == true ? System.Drawing.Color.Red:System.Drawing.Color.Empty %>'    runat="server" Width="120px" Text='<%# DataBinder.Eval(Container, "DataItem.NAME") %>'></anthem:Label>
                                                      </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn HeaderText="START DATE"   Visible ="true" >
@@ -247,7 +247,7 @@
                                                             <anthem:Label id="lbCTIMESTAMP" runat="server" Width="80px" Text='<%# DataBinder.Eval(Container, "DataItem.CMATCHDATETIME ") %>'></anthem:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
-   <asp:TemplateColumn HeaderText="Booked" Visible="false">
+   <asp:TemplateColumn HeaderText="Booked"  Visible="FALSE" >
                                                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="40px" CssClass="grid-header" VerticalAlign="Middle"></HeaderStyle><ItemStyle CssClass="grid-item"></ItemStyle><ItemTemplate>
                                                             <anthem:Label id="lbBooked" runat="server" Width="40px" Text='<%# DataBinder.Eval(Container, "DataItem.MAPPINGSTATUS") %>'></anthem:Label>
                                                         </ItemTemplate>

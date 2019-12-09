@@ -107,11 +107,6 @@
     <Compile Include="DataOfScouts.Designer.cs">
       <DependentUpon>DataOfScouts.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataSet1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataSet1.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Files.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="XmlType\DOSRank.cs" />
@@ -140,6 +135,7 @@
     <Compile Include="XmlUtil.cs" />
     <EmbeddedResource Include="DataOfScouts.resx">
       <DependentUpon>DataOfScouts.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -151,18 +147,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="database\backup.7z" />
-    <None Include="DataSet1.xsc">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
-    </None>
-    <None Include="DataSet1.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="DataSet1.xss">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
-    </None>
     <None Include="sql.json" />
     <None Include="index.json" />
     <None Include="packages.config">
@@ -202,6 +186,8 @@
   <ItemGroup>
     <Content Include="synctoyico.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="database\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

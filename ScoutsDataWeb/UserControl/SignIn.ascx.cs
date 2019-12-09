@@ -101,7 +101,7 @@
                 else
                 {
                     this.Message.Text = "<br>Login Failure！<br>";
-                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + str + "login failure.");
+                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " " + this.UserID.Text.ToUpper() + " login failure.");
                 }
             }
         }

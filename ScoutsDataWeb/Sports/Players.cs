@@ -67,8 +67,10 @@ namespace SportsUtil {
                 // retrieveQuery = "select team.team_id, team.teamname, leag.leagname from teaminfo team, leaginfo leag, id_info id ";
                 ///retrieveQuery = "select team.HKJC_ID, team.HKJC_NAME_CN, m.CLEAGUE_OUTPUT_NAME,m.HKJCHOSTNAME_CN||'/'||m.HKJCGUESTNAME_CN,m.CLEAGUEALIAS_OUTPUT_NAME, team.HKJC_NAME,  e.id  from teams team ";
                retrieveQuery = "select distinct team.id, team.HKJC_NAME_CN, m.CLEAGUE_OUTPUT_NAME,m.HKJCHOSTNAME_CN||'/'||m.HKJCGUESTNAME_CN,m.CLEAGUEALIAS_OUTPUT_NAME, team.HKJC_NAME,  e.id  from teams team ";
-                retrieveQuery += "inner join events e on e.HOME_ID = team.id or e.GUEST_ID = team.id inner join EMATCHES m on e.id=m.EMATCHID  and e.START_DATE =m.CMATCHDATETIME  " +
+                retrieveQuery += "inner join events e on e.HOME_ID = team.id or e.GUEST_ID = team.id inner join EMATCHES m on e.id=m.EMATCHID and      e.START_DATE  -1  < m.CMATCHDATETIME and m.CMATCHDATETIME <  e.START_DATE  +1 " +//  and e.START_DATE =m.CMATCHDATETIME  " +
                     " where e.id = '"+ sEventID + "'";
+               // JC_SoccerWeb.Common.Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss ") + "Sql: " + retrieveQuery);
+
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(retrieveQuery);
                 while (m_SportsOleReaderFb.Read())
                 {
@@ -397,8 +399,8 @@ namespace SportsUtil {
                             {
                                 if (sPlayID == "0")
                                 {
-                                    playerQuery = "insert into PLAYERS_INFO values(" + sTeamID + "," + new Random().Next(100000,1000000) +",";
-
+                                  // playerQuery = "insert into PLAYERS_INFO values(" + sTeamID + "," + new Random().Next(100000,1000000) +",";
+                                    playerQuery = "insert into PLAYERS_INFO values(" + sTeamID + "," + "-1" + ",";
                                     sTemp = arrNum[iIdx];
                                     if (!sTemp.Equals("")) playerQuery += sTemp;
                                     else playerQuery += sNULL;
@@ -421,7 +423,7 @@ namespace SportsUtil {
                                     playerQuery += sRoster + ",";
 
                                     if (arrEngName[iIdx].Trim().Equals("")) playerQuery += "null";
-                                    else playerQuery += "'" + arrEngName[iIdx].Trim() + "'";
+                                    else playerQuery += "'" + arrEngName[iIdx].Trim().Replace("'", "''") + "'";
                                     playerQuery += ",'";
                                     playerQuery += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
                                     playerQuery += "'";
@@ -454,7 +456,7 @@ namespace SportsUtil {
                                     playerQuery += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
                                     playerQuery += "'";
 
-                                    playerQuery += " where TEAM_ID=" + sTeamID + " and  PLAYER_ID=" + sPlayID + "" +( sPlayID=="-1"? " and CENGNAME='"+ arrEngName[iIdx] + "'" : "");
+                                    playerQuery += " where TEAM_ID=" + sTeamID + " and  PLAYER_ID=" + sPlayID + "" +( sPlayID=="-1"? " and CENGNAME='"+ arrEngName[iIdx].Replace("'","''") + "'" : "");
                                 }
                                 m_SportsDBMgrFb.ExecuteNonQuery(playerQuery);
                                 m_SportsDBMgrFb.Close();

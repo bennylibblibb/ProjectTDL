@@ -129,9 +129,14 @@ namespace SportsUtil
                 //SQLString.Append(" select first 15 s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b  from  SCORERS_INFO s  left join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
                 //SQLString.Append(sLeagID);
                 //SQLString.Append(" AND CACT='U' ORDER BY s.IRANK, s.IRID, s.CPLAYER_NAME");
-                SQLString.Append(" select first 15  distinct s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b ,s.PLAYER_ID,s.SEASON_ID ,s.CLEAG_ALIAS,S.CPLAYER_NAME_CN C from  SCORERS_INFO s  left join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
+                //20191118
+                //SQLString.Append(" select first 15  distinct s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,p.CPLAYER_NAME b ,s.PLAYER_ID,s.SEASON_ID ,s.CLEAG_ALIAS,S.CPLAYER_NAME_CN C from  SCORERS_INFO s  left join   PLAYERS_INFO p on p.PLAYER_ID = s.PLAYER_ID  and p.TEAM_ID = s.TEAM_ID  WHERE s.CLEAG_ID=");
+                //SQLString.Append(sLeagID);
+                //SQLString.Append(" AND CACT='U' ORDER BY s.IRANK, s.IRID, s.CPLAYER_NAME");
+                SQLString.Append(" select first 15  distinct s.TEAM_ID,  s.CTEAM_ABBR, s.CPLAYER_NAME ,  s.IRANK,  s.IGOALS ,s.CPLAYER_NAME_CN b ,s.PLAYER_ID,s.SEASON_ID ,s.CLEAG_ALIAS,S.CPLAYER_NAME_CN C from  SCORERS_INFO s   WHERE s.CLEAG_ID=");
                 SQLString.Append(sLeagID);
                 SQLString.Append(" AND CACT='U' ORDER BY s.IRANK, s.IRID, s.CPLAYER_NAME");
+
                 m_SportsOleReaderFb = m_SportsDBMgrFb.ExecuteQuery(SQLString.ToString());
                 while (m_SportsOleReaderFb.Read())
                 {

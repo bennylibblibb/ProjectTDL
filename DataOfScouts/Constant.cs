@@ -87,6 +87,8 @@ namespace DataOfScouts
         public static string AlertEmailTo = ConfigurationSettings.AppSettings["AlertEmailTo"];
         public static string AlertEmailSMTP = ConfigurationSettings.AppSettings["AlertEmailSMTP"];
         internal static string WndProcNotify = ConfigurationManager.AppSettings["WndProcNotify"];
+        internal static readonly ushort AmqpRefetchCount = Convert.ToUInt16(ConfigurationSettings.AppSettings["AmqpRefetchCount"]);
+        internal static readonly int SuspendCount = Convert.ToInt32(ConfigurationSettings.AppSettings["SuspendCount"]);
     }
 
     public enum InformationType
