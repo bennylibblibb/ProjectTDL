@@ -614,16 +614,26 @@
         private void dgSchedule_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
         {
             dgRankDetails.SelectedIndex = -1;
-            this.dgRankDetails.CurrentPageIndex = e.NewPageIndex;
-            DataSet data = (DataSet)this.Session["rankData"];
-            this.dgRankDetails.DataSource = data.Tables["events"].DefaultView;
-            this.dgRankDetails.PageSize = AppFlag.iPageSize;
-            this.dgRankDetails.DataBind();
-            this.dgRankDetails.UpdateAfterCallBack = true;
-           // btnEdit.Text = "Get";
-           // btnEdit.UpdateAfterCallBack = true;
-            lbMsg.Text = "";
-            lbMsg.UpdateAfterCallBack = true;
+            try
+            {
+                this.dgRankDetails.CurrentPageIndex = e.NewPageIndex;
+                DataSet data = (DataSet)this.Session["rankData"];
+                this.dgRankDetails.DataSource = data.Tables["events"].DefaultView;
+                this.dgRankDetails.PageSize = AppFlag.iPageSize;
+                this.dgRankDetails.DataBind();
+                this.dgRankDetails.UpdateAfterCallBack = true;
+                // btnEdit.Text = "Get";
+                // btnEdit.UpdateAfterCallBack = true;
+                lbMsg.Text = "";
+                lbMsg.UpdateAfterCallBack = true;
+            }
+            catch (Exception exp)
+            {
+                this.dgRankDetails.CurrentPageIndex = 0;
+                string exps = exp.ToString();
+                //  Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   dgSchedule_PageIndexChanged()  " + exps);
+                base.Response.Redirect("Default.aspx", false);
+            }
         }
 
         private void dgSchedule_UpdateCommand(object source, DataGridCommandEventArgs e)

@@ -383,6 +383,8 @@ namespace JC_SoccerWeb
             System.Web.UI.WebControls.Label lbStatus = (System.Web.UI.WebControls.Label)(this.eventDetails.Items[0].FindControl("lbGoalInfoStatus"));
             string sResult1 = ((System.Web.UI.WebControls.TextBox)this.eventDetails.Items[0].FindControl("txtResult1")).Text.Trim();
             string sResult2 = ((System.Web.UI.WebControls.TextBox)this.eventDetails.Items[0].FindControl("txtResult2")).Text.Trim();
+            string sResult3 = ((System.Web.UI.WebControls.TextBox)this.eventDetails.Items[0].FindControl("txtResult3")).Text.Trim();
+            string sResult4 = ((System.Web.UI.WebControls.TextBox)this.eventDetails.Items[0].FindControl("txtResult4")).Text.Trim();
             string sTimeOfGame = ((System.Web.UI.WebControls.TextBox)this.eventDetails.Items[0].FindControl("txtElapsed")).Text.Trim();
             string sAlert = chkAlert.Checked ? "1" : "0";
             string sToLive = chkToLive.Checked ? "1" : "0";
@@ -404,13 +406,15 @@ namespace JC_SoccerWeb
                             cmd.Parameters.Add("@Status", sStatus);
                             cmd.Parameters.Add("@Result1", sResult1==""?"0": sResult1);
                             cmd.Parameters.Add("@Result2", sResult2 == "" ? "0" : sResult2);
+                            cmd.Parameters.Add("@Result3", sResult3 == "" ? "0" : sResult3);
+                            cmd.Parameters.Add("@Result4", sResult4 == "" ? "0" : sResult4);
                             cmd.Parameters.Add("@TimeOfGame", sTimeOfGame == "" ? "-1" : sTimeOfGame);
                             cmd.Parameters.Add("@ALERT", sAlert);
                             cmd.Parameters.Add("@CCOMMENTS", sComments);
                             cmd.Parameters.Add("@TOLIVE", sToLive);
                             cmd.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                             int id = Convert.ToInt32(cmd.ExecuteScalar());
-                            Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss ") + "[Success] " : "[Failure] ") + "Update ["+ strEventid + "] Status: " + lbStatus.Text + " to " + dpl.SelectedItem.Text + "/" + sStatus+" "+ sResult1+":"+sResult2);
+                            Files.CicsWriteLog((id > 0 ? DateTime.Now.ToString("HH:mm:ss ") + "[Success] " : "[Failure] ") + "Update ["+ strEventid + "] Status: " + lbStatus.Text + " to " + dpl.SelectedItem.Text + "/" + sStatus+ "  全場(" + sResult1+":"+sResult2 + ") 上半場("+ sResult3 + ":" + sResult4 + ")");
                             if (id > 0) this.lbMsgResult.Text = "[Success]";
                         }
                         connection.Close();
@@ -784,13 +788,13 @@ namespace JC_SoccerWeb
                     //queryString = "select  e.id, e.NAME,e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,  e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,    d.FHSD_19, e.STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL RESULT from events e" +
                     //    " inner join  EMATCHES R on e.id =R.EMATCHID inner join  GOALINFO g   on r.EMATCHID=g.EMATCHID INNER JOIN  EVENT_DETAILS d ON  d.EVENTID = g.EMATCHID " +
                     //    " where E.ID=2893389 order by g.LASTTIME desc ";
-                    string queryString = (id == "-1") ? "select FIRST 1 g.tolive,g.alert,e.id, e.NAME,e.start_date, R.CMATCHDATETIME , e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,  e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,    d.FHSD_19, e.STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL RESULT,G.ELAPSED,G.CCOMMENTS from EMATCHES R " +
+                    string queryString = (id == "-1") ? "select FIRST 1 g.HH_GOAL,g.GH_GOAL,g.tolive,g.alert,e.id, e.NAME,e.start_date, R.CMATCHDATETIME , e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,  e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,    d.FHSD_19, e.STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL RESULT,G.ELAPSED,G.CCOMMENTS from EMATCHES R " +
                         "LEFT join  EVENTS E on e.id =R.EMATCHID LEFT join  GOALINFO g   on E.ID=g.EMATCHID LEFT JOIN  EVENT_DETAILS d ON  d.EVENTID = g.EMATCHID " +
                         "Where r.HKJCDAYCODE='" + Code.Substring(0, 3) + "' AND r.HKJCMATCHNO =" + Code.Substring(4, Code.Length - 4) + " order by  R.CMATCHDATETIME  desc "
-                        : "select FIRST 1 g.tolive,g.alert, e.id, e.NAME,e.start_date, e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,  e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,    d.FHSD_19, s.name STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL RESULT,G.ELAPSED,G.CCOMMENTS,g.startdate CMATCHDATETIME from events e " +
+                        : "select FIRST 1 g.HH_GOAL,g.GH_GOAL, g.tolive,g.alert, e.id, e.NAME,e.start_date, e.HOME_ID,(select  hkjc_name_cn from teams where  id =e.HOME_ID) HTName,  e.GUEST_ID,(select  hkjc_name_cn from teams   where  id =e.GUEST_ID) GTName,r.EMATCHID,r.HKJCDAYCODE,r.HKJCMATCHNO,r.HKJCHOSTNAME_CN,r.HKJCGUESTNAME_CN,r.HKJCHOSTNAME,r.HKJCGUESTNAME,    d.FHSD_19, s.name STATUS_NAME,g.GAMESTATUS,g.H_GOAL||':'||g.G_GOAL RESULT,G.ELAPSED,G.CCOMMENTS,g.startdate CMATCHDATETIME from events e " +
                         " LEFT join  EMATCHES R on e.id =R.EMATCHID LEFT join  GOALINFO g   on E.ID=g.EMATCHID inner join STATUSES s on s.id =g.HRUNSCOREID   LEFT JOIN  EVENT_DETAILS d ON  d.EVENTID = g.EMATCHID " +
                         "Where E.ID=" + id + " order by E.CTIMESTAMP desc ";
-                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " Sql1: " + queryString);
+                    Files.CicsWriteLog(DateTime.Now.ToString("HH:mm:ss") + " SqlOdds: " + queryString);
                     using (FbCommand cmd = new FbCommand(queryString))
                     {
                         using (FbDataAdapter fda = new FbDataAdapter())

@@ -11,9 +11,6 @@
 		 <LINK href="CentaSmsStyle.css" type="text/css" rel="stylesheet">
 		<script type="text/javascript">   
 		 
-    function ClickLinkBtn(obj) {  
-        return confirm('Are your sure dffd？');
-    }  
 		</script>
 	</HEAD>
 	<body >
@@ -46,12 +43,15 @@
 				      <%#DataBinder.Eval(Container, "DataItem.FHSD_19")==DBNull.Value?Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.CMATCHDATETIME")).ToString("yyyy/MM/dd HH:mm:ss"): Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19"))==DateTime.MinValue? Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.start_date")).ToString("yyyy/MM/dd HH:mm:ss"):Convert.ToDateTime (DataBinder.Eval(Container, "DataItem.FHSD_19")).ToString("yyyy/MM/dd HH:mm:ss") %>
 				        </ItemTemplate> </asp:TemplateColumn> 
                               <asp:TemplateColumn HeaderText="Result">  <HeaderStyle  CssClass="grid-header" Width="120px"/>  <ItemStyle  HorizontalAlign="Center"  CssClass="grid-item"></ItemStyle> <ItemTemplate>
-                       <asp:TextBox ID="txtResult1"   runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.RESULT")==DBNull.Value?"":DataBinder.Eval(Container, "DataItem.RESULT").ToString().Substring(0,DataBinder.Eval(Container, "DataItem.RESULT").ToString().IndexOf(":")) %>'></asp:TextBox>  
-				       :  <asp:TextBox ID="txtResult2"   runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.RESULT")==DBNull.Value?"":DataBinder.Eval(Container, "DataItem.RESULT").ToString().Substring(DataBinder.Eval(Container, "DataItem.RESULT").ToString().IndexOf(":")+1,DataBinder.Eval(Container, "DataItem.RESULT").ToString().Length-DataBinder.Eval(Container, "DataItem.RESULT").ToString().IndexOf(":")-1) %>'></asp:TextBox>  
-				      </ItemTemplate> </asp:TemplateColumn>
+                           全&nbsp;&nbsp;&nbsp;場:
+                           <asp:TextBox ID="txtResult1"   runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.RESULT")==DBNull.Value?"":DataBinder.Eval(Container, "DataItem.RESULT").ToString().Substring(0,DataBinder.Eval(Container, "DataItem.RESULT").ToString().IndexOf(":")) %>'></asp:TextBox>  
+		          : <asp:TextBox ID="txtResult2"   runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.RESULT")==DBNull.Value?"":DataBinder.Eval(Container, "DataItem.RESULT").ToString().Substring(DataBinder.Eval(Container, "DataItem.RESULT").ToString().IndexOf(":")+1,DataBinder.Eval(Container, "DataItem.RESULT").ToString().Length-DataBinder.Eval(Container, "DataItem.RESULT").ToString().IndexOf(":")-1) %>'></asp:TextBox>  
+			  <br>上半場:    
+                          <asp:TextBox ID="txtResult3"  Enabled="true" runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.HH_GOAL") %>'></asp:TextBox>
+                         : <asp:TextBox ID="txtResult4"  Enabled="true" runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.GH_GOAL") %>'></asp:TextBox>     </ItemTemplate> </asp:TemplateColumn>
                               <asp:TemplateColumn HeaderText="TimeOfGame">  <HeaderStyle  CssClass="grid-header" Width="100px" /> <ItemStyle  HorizontalAlign="Center"  CssClass="grid-item"/>  <ItemTemplate>
-				      <asp:TextBox ID="txtElapsed"   runat="server" Width="60px"  text='<%#(DataBinder.Eval(Container, "DataItem.ELAPSED")).ToString()=="-1"?"":DataBinder.Eval(Container, "DataItem.ELAPSED") %>'></asp:TextBox>  
-				   				    </ItemTemplate> </asp:TemplateColumn>
+				      <asp:TextBox ID="txtElapsed"   runat="server" Width="60px"  text='<%#(DataBinder.Eval(Container, "DataItem.ELAPSED")).ToString()=="-1"?"": "" %>'></asp:TextBox>  
+				   	 	 			    </ItemTemplate> </asp:TemplateColumn>
                               <asp:TemplateColumn HeaderText="Status">  <HeaderStyle  CssClass="grid-header" Width="100px"  />  <ItemTemplate>    
                              <asp:Label ID="lbGoalInfoStatus"   runat="server" Width="150px" text=' <%#DataBinder.Eval(Container, "DataItem.STATUS_NAME") %>'></asp:Label>  
                              <BR/> <asp:Label ID="lbGoalInfoStatus2"  Visible="false"  runat="server"  text='<%#DataBinder.Eval(Container, "DataItem.GAMESTATUS") %>'></asp:Label>  
@@ -71,7 +71,7 @@
                        <asp:ListItem Value="11">没</asp:ListItem>
                                </asp:DropDownList> 
                            </ItemTemplate> </asp:TemplateColumn> 
-                                <asp:TemplateColumn  HeaderText="Comments" Visible ="true" >  <HeaderStyle  Width="150px" CssClass="grid-header" /> <ItemStyle   VerticalAlign="Bottom"  CssClass="grid-item"/> 
+                                <asp:TemplateColumn  HeaderText="Comments" Visible ="true" >  <HeaderStyle  Width="150px" CssClass="grid-header" /> <ItemStyle    HorizontalAlign="Center"  CssClass="grid-item"/> 
                                      <ItemTemplate  > 
                                            <asp:TextBox ID="txtComments"   Visible="true" runat="server" Width="150px" text='<%#DataBinder.Eval(Container, "DataItem.CCOMMENTS") %>'></asp:TextBox> 
                                       </ItemTemplate> </asp:TemplateColumn>
@@ -87,7 +87,7 @@
                        </anthem:DataGrid> 
                         <p></p>
                            <div align="right"> 
-                           <anthem:CheckBox id="chkToLive"   Font-Bold="true"    AutoPostBack ="true" runat="server" Text="To Live" Width="100px"  Enabled="true" Visible="true"> </anthem:CheckBox>&nbsp;&nbsp;
+                           <anthem:CheckBox id="chkToLive"  Font-Bold="true"    AutoPostBack ="true" runat="server" Text="To Live" Width="100px"  Enabled="true" Visible="true"> </anthem:CheckBox>&nbsp;&nbsp;
                            <asp:CheckBox id="chkAlert" runat="server" Text="Alert"  Width="100px"  Enabled="true" Visible="true"> </asp:CheckBox>&nbsp;&nbsp;
                                <strong>  <anthem:Label ID="lbMsgResult" runat="server" ForeColor="Red" Width="80px"  >  </anthem:Label>  </strong>&nbsp;&nbsp;
                            <anthem:Button  ID="btnSavetoLive" runat="server" Text="Send to LiveGoal" Visible="true" /> 
@@ -215,16 +215,16 @@
 				    </ItemTemplate>  </asp:TemplateColumn> 
                                <asp:TemplateColumn HeaderStyle-Width="100px"  HeaderText="Player Name">  <HeaderStyle  CssClass="grid-header" /> <ItemStyle CssClass="grid-item" Width="180px"></ItemStyle> 
                            <ItemTemplate>
-                           <asp:label id ="lbPlayerName" Width="150px" runat="server" Visible="false" Text='<%# DataBinder.Eval(Container, "DataItem.player") %>'> </asp:label> 
-			               <asp:TextBox ID="txtPlayerName" MaxLength="100"   runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.player") %>' > </asp:TextBox>
+                           <asp:label id ="lbPlayerName" Width="150px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.player") %>'> </asp:label> 
+			               <asp:TextBox ID="txtPlayerName" MaxLength="100"  Visible="false"   runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.player") %>' > </asp:TextBox>
                                </ItemTemplate> </asp:TemplateColumn>
                                <asp:TemplateColumn HeaderStyle-Width="100px"   HeaderText="CN Name" >  <HeaderStyle  CssClass="grid-header" /> <ItemStyle CssClass="grid-item" Width="180px"></ItemStyle>  <ItemTemplate>
-                             <asp:TextBox ID="txtCNName" MaxLength="100"  Enabled="true" runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>' > </asp:TextBox>
-				         <asp:label id ="lbCNName" Visible ="false"  runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>'> </asp:label>
+                             <asp:TextBox ID="txtCNName" MaxLength="100"    Enabled="true" runat="server" Width="180px" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>' > </asp:TextBox>
+				         <asp:label id ="lbCNName" Visible ="false"   runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.PLAYERCHI") %>'> </asp:label>
                              </ItemTemplate> </asp:TemplateColumn> 
-                             <asp:TemplateColumn  HeaderStyle-Width="100px"   HeaderText="Result">  <HeaderStyle  CssClass="grid-header" Width="120px"/>  <ItemStyle  HorizontalAlign="Center"  CssClass="grid-item"></ItemStyle> <ItemTemplate>
-                             <asp:TextBox ID="txtResult1"  Enabled="true" runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.resultH") %>'></asp:TextBox>  : 
-                             <asp:TextBox ID="txtResult2"  Enabled="true" runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.resultG") %>'></asp:TextBox>  
+                             <asp:TemplateColumn  HeaderStyle-Width="100px"    HeaderText="Result">  <HeaderStyle  CssClass="grid-header" Width="120px"/>  <ItemStyle  HorizontalAlign="Center"  CssClass="grid-item"></ItemStyle> <ItemTemplate>
+                             <asp:TextBox ID="txtResult1"  Enabled="true" runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.RESULTH") %>'></asp:TextBox>  : 
+                             <asp:TextBox ID="txtResult2"  Enabled="true" runat="server" Width="30px" text='<%# DataBinder.Eval(Container, "DataItem.RESULTG") %>'></asp:TextBox>  
 				            </ItemTemplate> </asp:TemplateColumn>
                               <asp:TemplateColumn   HeaderStyle-Width="100px" HeaderText="At" >  <HeaderStyle  CssClass="grid-header" /> <ItemTemplate>
                               <asp:DropDownList ID="dplAt" Enabled="true" runat="server"  Width="80px" >
@@ -234,9 +234,9 @@
                               </asp:DropDownList>  	   
                                   <asp:label id ="lbMatchStatus" runat="server"  Visible="false"  Text='<%# DataBinder.Eval(Container, "DataItem.MatchStatus") %>'> </asp:label> 
 			                  </ItemTemplate> </asp:TemplateColumn>
-                          <asp:TemplateColumn  HeaderStyle-Width="80px" HeaderText="Elapsed">  <HeaderStyle  CssClass="grid-header" /> <ItemTemplate> 
+                          <asp:TemplateColumn  HeaderStyle-Width="80px"    HeaderText="Elapsed">  <HeaderStyle  CssClass="grid-header" /> <ItemTemplate> 
 		                  <asp:label id ="lbELAPSED" runat="server"  Visible="false"  Text='<%# DataBinder.Eval(Container, "DataItem.ELAPSED") %>'> </asp:label> 
-                          <asp:TextBox id ="txtElapsed" runat="server" Width="60px" Enabled="true" Text='<%# DataBinder.Eval(Container, "DataItem.ELAPSED") %>'> </asp:TextBox> 
+                          <asp:TextBox id ="txtElapsed" runat="server"    Width="60px" Enabled="true" Text='<%# DataBinder.Eval(Container, "DataItem.ELAPSED") %>'> </asp:TextBox> 
 				          </ItemTemplate>  </asp:TemplateColumn> 
                            <asp:TemplateColumn HeaderText="Own Goal">  <HeaderStyle  CssClass="grid-header" /> <ItemTemplate> 
 			               	 <asp:CheckBox id="chkOwnGoal" runat="server"  Enabled="true"></asp:CheckBox>

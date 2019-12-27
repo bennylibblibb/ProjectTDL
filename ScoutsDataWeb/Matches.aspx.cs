@@ -148,7 +148,8 @@
             {
                 this.dgRankDetails.CurrentPageIndex = 0;
                 string exps = exp.ToString();
-                Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   dgSchedule_PageIndexChanged()  " + exps);
+                //  Files.CicsWriteError(DateTime.Now.ToString("HH:mm:ss") + "   dgSchedule_PageIndexChanged()  " + exps);
+                base.Response.Redirect("Default.aspx", false);
             }
             this.dgRankDetails.UpdateAfterCallBack = true;
             lbMsg.Text = "";

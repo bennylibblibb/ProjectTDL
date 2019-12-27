@@ -86,7 +86,8 @@ namespace DataOfScouts
 
         private List<int> m_lstMatchid = new List<int>();
 
-        private ThreadSafeQueue<int> ampqXEids;
+        //  private ThreadSafeQueue<int> ampqXEids;
+        private ThreadSafeQueue<AmqpMessage> ampqXEids;
         object lockObjX;
         private Thread threadApiParserX = null;
 
@@ -176,7 +177,8 @@ namespace DataOfScouts
                 startParserS();
 
                 lockObjX = new object();
-                ampqXEids = new ThreadSafeQueue<int>();
+                // ampqXEids = new ThreadSafeQueue<int>();
+                ampqXEids = new ThreadSafeQueue<AmqpMessage>();
                 startParserX();
 
                 //  RunAMQPService();
@@ -1045,6 +1047,7 @@ namespace DataOfScouts
                 string[] fnArr = file.Split('\\');
                 strName = fnArr[fnArr.Length - 1];
                 string eid = fnArr[fnArr.Length - 1].Substring(0, fnArr[fnArr.Length - 1].IndexOf("-"));
+                int r =2;
                 try
                 {
                     using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
@@ -1072,361 +1075,784 @@ namespace DataOfScouts
                             string strArea_id = competition.area_id;
 
                             DOSEvents2.apiDataCompetitionSeason[] seasons = competition.seasons;
-                            if (seasons == null) continue;
-                            foreach (DOSEvents2.apiDataCompetitionSeason season in seasons)
+                            if (seasons == null) break;
+                           foreach (DOSEvents2.apiDataCompetitionSeason season in seasons)
+                        {
+                            DOSEvents2.apiDataCompetitionSeasonStage[] stages = season.stages;
+                            if (stages == null) continue;
+
+                            foreach (DOSEvents2.apiDataCompetitionSeasonStage stage in stages)
                             {
-                                DOSEvents2.apiDataCompetitionSeasonStage[] stages = season.stages;
-                                if (stages == null) continue;
+                                DOSEvents2.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
+                                if (groups == null) continue;
 
-                                foreach (DOSEvents2.apiDataCompetitionSeasonStage stage in stages)
+                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroup group in groups)
                                 {
-                                    DOSEvents2.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
-                                    if (groups == null) continue;
+                                    DOSEvents2.apiDataCompetitionSeasonStageGroupEvent[] events = group.events;
+                                    if (events == null) continue;
 
-                                    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroup group in groups)
+                                    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEvent sevent in events)
                                     {
-                                        DOSEvents2.apiDataCompetitionSeasonStageGroupEvent[] events = group.events;
-                                        if (events == null) continue;
+                                        if (sevent == null) continue;
 
-                                        foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEvent sevent in events)
+                                        #region 20191229  INCIDENTS  
+                                        try
                                         {
-                                            if (sevent == null) continue;
+                                            DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident[] events_incidents = sevent.events_incidents;
+                                            if (events_incidents == null || events_incidents.Count() == 0) continue;
 
-                                            #region  cancel update goalinfo at xml  
-                                            /*
+                                            using (FbCommand cmd2 = new FbCommand())
+                                            {
+                                                cmd2.CommandText = "DELETE_INCIDENTS_ByEventID";
+                                                cmd2.CommandType = CommandType.StoredProcedure;
+                                                cmd2.Connection = connection;
+                                                cmd2.Parameters.Add("@ID", sevent.id);
+                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                            }
+                                            Files.WriteLog(true, " Delete INCIDENTS [" + sevent.id + "]");
+
+                                            queryString = "select first 1 i.* from INCIDENTS i ";
+                                            using (FbCommand cmd = new FbCommand(queryString, connection))
+                                            {
+                                                using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                {
+                                                    using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
+                                                    {
+                                                        using (DataSet data = new DataSet())
+                                                        {
+                                                            data.Tables.Add(new DataTable("INCIDENTS"));
+                                                            fda.Fill(data.Tables["INCIDENTS"]);
+                                                            //  if (data.Tables["INCIDENTS"].Rows.Count > 0) data.Tables["INCIDENTS"].Rows.Remove(data.Tables["INCIDENTS"].Rows[0]);
+                                                            DataRow dr;
+                                                            DateTime dateTime = DateTime.Now;
+                                                            for (int j = 0; j < sevent.events_incidents.Length; j++)
+                                                            {
+                                                                dr = data.Tables["INCIDENTS"].NewRow();
+                                                                dr["ID"] = events_incidents[j].id;
+                                                                dr["EVENTID"] = sevent.id;
+                                                                dr["CACTION"] = "update";
+                                                                dr["INCIDENT_ID"] = events_incidents[j].incident_id;
+                                                                dr["INCIDENT_NAME"] = events_incidents[j].incident_name;
+                                                                dr["PARTICIPANT_ID"] = events_incidents[j].participant_id;
+                                                                dr["PARTICIPANT_NAME"] = events_incidents[j].participant_name;
+                                                                dr["SUBPARTICIPANT_ID"] = events_incidents[j].subparticipant_id;
+                                                                dr["SUBPARTICIPANT_NAME"] = events_incidents[j].subparticipant_name == "" ? (events_incidents[j].info != "" && events_incidents[j].incident_id == "413" ? events_incidents[j].info + "*" : "") : events_incidents[j].subparticipant_name;// events_incidents[j].subparticipant_name;
+                                                                dr["IMPORTANT_FOR_TRADER"] = true;
+                                                                dr["EVENT_TIME"] = events_incidents[j].event_time;
+                                                                dr["EVENT_STATUS_ID"] = events_incidents[j].event_status_id;
+                                                                dr["EVENT_STATUS_NAME"] = events_incidents[j].event_status_name;
+                                                                dr["UT"] = events_incidents[j].ut;
+                                                                dr["CTIMESTAMP"] = dateTime.AddMilliseconds(1);
+                                                                dateTime = dateTime.AddMilliseconds(1);
+                                                                dr["TEAMTYPE"] = events_incidents[j].participant_id != null && events_incidents[j].participant_id != "" ? (events_incidents[j].participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : events_incidents[j].participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "") : "";
+                                                                data.Tables["INCIDENTS"].Rows.Add(dr);
+                                                            }
+                                                            int k = fda.Update(data.Tables["INCIDENTS"]);
+                                                            Files.WriteLog(true, (k > 0 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + k);// + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception exp)
+                                        {
+                                            Files.WriteError("events.showJson " + strName + " INCIDENTS Error:" + exp);
+                                        }
+                                            #endregion
+
+                                            #region 20191229 update clocktime and status on xml  
+                                            // if (arr[1].ToString() == "1" || arr[1].ToString() == "2")
+                                            if (r== 2)
+                                            {
                                             string iClockTime = "0";
                                             iClockTime = sevent.clock_time == null || sevent.clock_time == "" ? "0" : Convert.ToInt32(sevent.clock_time) < 60 ? "1" : Math.Round(Convert.ToInt32(sevent.clock_time) / 60.0).ToString();
+
                                             using (FbCommand cmd2 = new FbCommand())
                                             {
                                                 //  cmd2.CommandText = "PR_XML_event"; 
-                                                cmd2.CommandText = "PR_XML_EVENTCLOCK";   //20191129 update clocktime on xml
+                                                cmd2.CommandText = "PR_JSONXML_EVENT";
                                                 cmd2.CommandType = CommandType.StoredProcedure;
                                                 cmd2.Connection = connection;
                                                 cmd2.Parameters.Add("@ID", sevent.id);
                                                 cmd2.Parameters.Add("@HOME_ID", sevent.participants.Count() > 0 ? sevent.participants[0].id : "-1");
                                                 cmd2.Parameters.Add("@GUEST_ID", sevent.participants.Count() > 0 ? sevent.participants[1].id : "-1");
+                                                cmd2.Parameters.Add("@STATUS_ID", sevent.status_id);
+                                                cmd2.Parameters.Add("@STATUS_NAME", sevent.status_name);
                                                 cmd2.Parameters.Add("@CLOCKTIME", sevent.clock_time);
                                                 cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                                 int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                Files.WriteLog((id > 0 ? " [Success] Update event " : " [Failure] Update event ") + "[" + sevent.id + "] " + sevent.participants[0].name + "-" + sevent.participants[1].name + " " + sevent.participants[0].id + "/" + sevent.participants[1].id);
+                                                Files.WriteLog(true, (id > 0 ? " [Success] Update event " : " [Failure] Update event ") + "[" + sevent.id + "] " + sevent.participants[0].name + "-" + sevent.participants[1].name + " " + sevent.participants[0].id + "/" + sevent.participants[1].id + " " + sevent.status_id + "/" + sevent.status_name);
                                             }
-                                            if (iClockTime == "0")
+
+                                            foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant participant in sevent.participants)
                                             {
-                                                string sName = "";
-                                                string sPlayers = "";
-
-                                                using (FbCommand cmd2 = new FbCommand("SELECT  r.EMATCHID , r.HKJCDAYCODE, r.HKJCMATCHNO,r.CMATCHDATETIME FROM EMATCHES r where r.EMATCHID='" + sevent.id + "'", connection))
+                                                if (participant == null || participant.lineups.Count() == 0) continue;
+                                                try
                                                 {
-                                                    FbDataReader reader = cmd2.ExecuteReader();
-                                                    while (reader.Read())
+                                                    DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup[] participantLineups = participant.lineups;
+                                                    using (FbCommand cmd2 = new FbCommand())
                                                     {
-                                                        var data = (IDataRecord)reader;
-                                                        sName = data[1] + "-" + data[2] + "-" + Convert.ToDateTime(data[3]).ToString("yyyyMMdd") + "-" + data[0];
+                                                        cmd2.CommandText = "DELETE_PLAYERS_BYID";
+                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                        cmd2.Connection = connection;
+                                                        cmd2.Parameters.Add("@TEAM_ID", participant.id);
+                                                        cmd2.Parameters.Add("@EVENT_ID", sevent.id);
+                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
                                                     }
-                                                    reader.Close();
-                                                }
-                                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant participant in sevent.participants)
-                                                {
-                                                    if (participant == null) continue;
+                                                    Files.WriteLog(true, " Delete PLAYERS [" + sevent.id + "] " + participant.id);
 
-                                                    sPlayers += (participant.lineups == null || participant.lineups.Count() == 0) ? "" : "\r\n" + (participant.counter == "1" ? "Host\r\n" : "Guest\r\n");
-
-                                                    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup lineup in participant.lineups)
+                                                    queryString = "select first 1 i.* from PLAYERS i ";
+                                                    using (FbCommand cmd = new FbCommand(queryString, connection))
                                                     {
-                                                        if (lineup == null) continue;
-
-                                                        sPlayers += (lineup.shirt_nr == "" ? "-1" : lineup.shirt_nr) + "  " + lineup.participant_name + "  " + (lineup.bench.ToLower() == "yes" ? "/Bench" : "     ") + "  " + (lineup.type.ToLower() == "coach" ? "/Coach" : "") + "\r\n";
-
-                                                        using (FbCommand cmd2 = new FbCommand())
+                                                        using (FbDataAdapter fda = new FbDataAdapter(cmd))
                                                         {
-                                                            cmd2.CommandText = "ADD_Player2";
-                                                            cmd2.CommandType = CommandType.StoredProcedure;
-                                                            cmd2.Connection = connection;
-                                                            cmd2.Parameters.Add("@ID", lineup.participant_id == "" ? "-1" : lineup.participant_id);
-                                                            cmd2.Parameters.Add("@NAME", lineup.participant_name);
-                                                            cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
-                                                            cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
-                                                            cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
-                                                            cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "-2" : (lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
-                                                            cmd2.Parameters.Add("@TEAM_ID", participant.id);
-                                                            cmd2.Parameters.Add("@SEASON_ID", season.id);
-                                                            cmd2.Parameters.Add("@EVENT_ID", sevent.id);
-                                                            cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
-                                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog(id > 0 ? " [Success] Insert players [" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name : "[" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name + " player exist.");
-                                                        }
-                                                    }
-                                                }
-
-                                                // if(sName!="" && Convert.ToBoolean(arr[2])&& sPlayers!=""&&DateTime.Now<Convert.ToDateTime(sevent.start_date))  Files.WriteLog(sName, true, sPlayers);
-                                                if (sName != "" && Convert.ToBoolean(arr[2]) && sPlayers != "")
-                                                {
-                                                    // if (DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1))
-                                                    if (sevent.status_id == "1" || sevent.status_id == "6" || DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1) || sevent.status_id == "33")
-                                                    {
-                                                        Files.WriteLog(sName, true, sevent.start_date + "\r\n" + sPlayers);
-                                                    }
-                                                    else
-                                                    {
-                                                        Files.WriteLog(sName + "_old", true, sevent.start_date + "\r\n" + sPlayers);
-                                                    }
-                                                }
-                                            }
-
-                                            string sH_YELLOW = "", sH_RED = "", sG_YELLOW = "", sG_RED = "", sH_GOAL = "", sG_GOAL = "", sSTATUS = "";
-                                            //merge one PR to store goalinfo data / matchtime  20191129
-                                            if (sevent.participants.Length == 2 && sevent.participants[0].stats.Length > 0)// && sevent.participants[0].results.Length > 0)
-                                            {
-
-                                                sH_YELLOW = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value;
-                                                sH_RED = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value;
-                                                sG_YELLOW = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value;
-                                                sG_RED = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value;
-                                            }
-
-                                            if (sevent.participants.Length == 2 && sevent.participants[0].results.Length > 0)//&& sevent.participants[0].stats.Length > 0)
-                                            {
-                                                sSTATUS = sevent.status_id;
-                                                sH_GOAL = sevent.participants[0].counter == "1" ? sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value;
-                                                sG_GOAL = sevent.participants[1].counter == "2" ? sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value;
-                                            }
-                                            if (sevent.status_id != "1")
-                                            {
-                                                using (FbCommand cmd2 = new FbCommand())
-                                                {
-                                                    cmd2.CommandText = "PR_Xml_StatsResult_GoalInfo";
-                                                    cmd2.CommandType = CommandType.StoredProcedure;
-                                                    cmd2.Connection = connection;
-                                                    cmd2.Parameters.Add("@EMATCHID", sevent.id);
-                                                    cmd2.Parameters.Add("@STATUS", sSTATUS);
-                                                    cmd2.Parameters.Add("@H_YELLOW", sH_YELLOW);
-                                                    cmd2.Parameters.Add("@H_RED", sH_RED);
-                                                    cmd2.Parameters.Add("@G_YELLOW", sG_YELLOW);
-                                                    cmd2.Parameters.Add("@G_RED", sG_RED);
-                                                    cmd2.Parameters.Add("@H_GOAL", sH_GOAL);
-                                                    cmd2.Parameters.Add("@G_GOAL", sG_GOAL);
-                                                    cmd2.Parameters.Add("@CLOCK_TIME", iClockTime);
-                                                    cmd2.Parameters.Add("@LASTTIME", DateTime.Now);
-                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                    Files.WriteLog((id > 0 ? " [Success] Update GoalInfo Goal " : " [Failure]  Update GoalInfo Goal") + "[" + sevent.id + "] " + sevent.participants[0].id + "/" + sevent.participants[1].id + "..");
-                                                }
-                                            }
-                                            */
-                                            #endregion
-                                            bool bDone = false;
-                                            try
-                                            {
-                                                DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident[] events_incidents = sevent.events_incidents;
-                                                if (events_incidents == null || events_incidents.Count() == 0) continue;
-                                                statusid =Convert.ToInt32( sevent.status_id);
-                                                using (FbCommand cmd2 = new FbCommand())
-                                                {
-                                                    cmd2.CommandText = "DELETE_INCIDENTS_ByEventID";
-                                                    cmd2.CommandType = CommandType.StoredProcedure;
-                                                    cmd2.Connection = connection;
-                                                    cmd2.Parameters.Add("@ID", sevent.id);
-                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                }
-                                                Files.WriteLog(true, " Delete INCIDENTS [" + sevent.id + "]");
-
-                                                queryString = "select first 1 i.* from INCIDENTS i ";
-                                                using (FbCommand cmd = new FbCommand(queryString, connection))
-                                                {
-                                                    using (FbDataAdapter fda = new FbDataAdapter(cmd))
-                                                    {
-                                                        using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
-                                                        {
-                                                            using (DataSet data = new DataSet())
+                                                            using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
                                                             {
-                                                                data.Tables.Add(new DataTable("INCIDENTS"));
-                                                                fda.Fill(data.Tables["INCIDENTS"]);
-                                                                //  if (data.Tables["INCIDENTS"].Rows.Count > 0) data.Tables["INCIDENTS"].Rows.Remove(data.Tables["INCIDENTS"].Rows[0]);
-                                                                DataRow dr;
-                                                                DateTime dateTime = DateTime.Now;
-                                                                for (int j = 0; j < sevent.events_incidents.Length; j++)
+                                                                using (DataSet data = new DataSet())
                                                                 {
-                                                                    dr = data.Tables["INCIDENTS"].NewRow();
-                                                                    dr["ID"] = events_incidents[j].id;
-                                                                    dr["EVENTID"] = sevent.id;
-                                                                    dr["CACTION"] = "update";
-                                                                    dr["INCIDENT_ID"] = events_incidents[j].incident_id;
-                                                                    dr["INCIDENT_NAME"] = events_incidents[j].incident_name;
-                                                                    dr["PARTICIPANT_ID"] = events_incidents[j].participant_id;
-                                                                    dr["PARTICIPANT_NAME"] = events_incidents[j].participant_name;
-                                                                    dr["SUBPARTICIPANT_ID"] = events_incidents[j].subparticipant_id;
-                                                                    dr["SUBPARTICIPANT_NAME"] = events_incidents[j].subparticipant_name == "" ? (events_incidents[j].info != "" && events_incidents[j].incident_id == "413" ? events_incidents[j].info + "*" : "") : events_incidents[j].subparticipant_name;// events_incidents[j].subparticipant_name;
-                                                                    dr["IMPORTANT_FOR_TRADER"] = true;
-                                                                    dr["EVENT_TIME"] = events_incidents[j].event_time;
-                                                                    dr["EVENT_STATUS_ID"] = events_incidents[j].event_status_id;
-                                                                    dr["EVENT_STATUS_NAME"] = events_incidents[j].event_status_name;
-                                                                    dr["UT"] = events_incidents[j].ut;
-                                                                    dr["CTIMESTAMP"] = dateTime.AddMilliseconds(1);
-                                                                    dateTime = dateTime.AddMilliseconds(1);
-                                                                    dr["TEAMTYPE"] = events_incidents[j].participant_id != null && events_incidents[j].participant_id != "" ? (events_incidents[j].participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : events_incidents[j].participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "") : "";
-                                                                    data.Tables["INCIDENTS"].Rows.Add(dr);
+                                                                    data.Tables.Add(new DataTable("PLAYERS"));
+                                                                    fda.Fill(data.Tables["PLAYERS"]);
+                                                                    DataRow dr;
+                                                                    DateTime dateTime = DateTime.Now;
+                                                                    for (int j = 0; j < participant.lineups.Length; j++)
+                                                                    {
+                                                                        dr = data.Tables["PLAYERS"].NewRow();
+                                                                        dr["ID"] = participant.lineups[j].participant_id == "" ? "-1" : participant.lineups[j].participant_id;
+                                                                        dr["NAME"] = participant.lineups[j].participant_name;
+                                                                        dr["AREA_ID"] = participant.lineups[j].participant_area_id == "" ? "-1" : participant.lineups[j].participant_area_id;
+                                                                        dr["SLUG"] = participant.lineups[j].participant_slug;
+                                                                        dr["BENCH"] = participant.lineups[j].bench.ToLower() == "yes" ? true : false;
+                                                                        dr["SHIRT_NR"] = participant.lineups[j].type == "coach" ? "-2" : (participant.lineups[j].shirt_nr == "" || participant.lineups[j].shirt_nr == "-") ? "-1" : participant.lineups[j].shirt_nr.Replace("-", "");
+                                                                        dr["TEAM_ID"] = participant.id;
+                                                                        dr["SEASON_ID"] = season.id;
+                                                                        dr["EVENT_ID"] = sevent.id;
+                                                                        dr["CTIMESTAMP"] = dateTime.AddMilliseconds(1);
+                                                                        dateTime = dateTime.AddMilliseconds(1);
+                                                                        data.Tables["PLAYERS"].Rows.Add(dr);
+                                                                    }
+                                                                    int k = fda.Update(data.Tables["PLAYERS"]);
+                                                                    Files.WriteLog(true, (k > 0 ? " [Success] Update PLAYERS " : " [Failure] Update PLAYERS ") + "[" + sevent.id + "] " + participant.id + " " + k);// + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
                                                                 }
-                                                                int k = fda.Update(data.Tables["INCIDENTS"]);
-                                                                Files.WriteLog(true, (k > 0 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + k);// + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
-                                                                if (k > 0) bDone = true;
                                                             }
                                                         }
                                                     }
                                                 }
-                                                if (bDone) SendAlertMsg("31", "X2", sevent.id);
+                                                catch (Exception exp)
+                                                {
+                                                    Files.WriteError("events.showJson " + strName + " PLAYERS Error:" + exp);
+                                                }
+                                            }
+                                                SendAlertMsg("12", "X", sevent.id);
+
+                                                #region
+
+
+                                                //if (iClockTime == "0")
+                                                //{
+                                                //    string sName = "";
+                                                //    string sPlayers = "";
+
+                                                //    using (FbCommand cmd2 = new FbCommand("SELECT  r.EMATCHID , r.HKJCDAYCODE, r.HKJCMATCHNO,r.CMATCHDATETIME FROM EMATCHES r where r.EMATCHID='" + sevent.id + "'", connection))
+                                                //    {
+                                                //        FbDataReader reader = cmd2.ExecuteReader();
+                                                //        while (reader.Read())
+                                                //        {
+                                                //            var data = (IDataRecord)reader;
+                                                //            sName = data[1] + "-" + data[2] + "-" + Convert.ToDateTime(data[3]).ToString("yyyyMMdd") + "-" + data[0];
+                                                //        }
+                                                //        reader.Close();
+                                                //    }
+                                                //    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant participant in sevent.participants)
+                                                //    {
+                                                //        if (participant == null) continue;
+
+                                                //        sPlayers += (participant.lineups == null || participant.lineups.Count() == 0) ? "" : "\r\n" + (participant.counter == "1" ? "Host\r\n" : "Guest\r\n");
+
+                                                //        foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup lineup in participant.lineups)
+                                                //        {
+                                                //            if (lineup == null) continue;
+
+                                                //            sPlayers += (lineup.shirt_nr == "" ? "-1" : lineup.shirt_nr) + "  " + lineup.participant_name + "  " + (lineup.bench.ToLower() == "yes" ? "/Bench" : "     ") + "  " + (lineup.type.ToLower() == "coach" ? "/Coach" : "") + "\r\n";
+
+                                                //            using (FbCommand cmd2 = new FbCommand())
+                                                //            {
+                                                //                cmd2.CommandText = "ADD_Player2";
+                                                //                cmd2.CommandType = CommandType.StoredProcedure;
+                                                //                cmd2.Connection = connection;
+                                                //                cmd2.Parameters.Add("@ID", lineup.participant_id == "" ? "-1" : lineup.participant_id);
+                                                //                cmd2.Parameters.Add("@NAME", lineup.participant_name);
+                                                //                cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
+                                                //                cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
+                                                //                cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
+                                                //                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "-2" : (lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                                                //                cmd2.Parameters.Add("@TEAM_ID", participant.id);
+                                                //                cmd2.Parameters.Add("@SEASON_ID", season.id);
+                                                //                cmd2.Parameters.Add("@EVENT_ID", sevent.id);
+                                                //                cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                                //                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                //                Files.WriteLog(id > 0 ? " [Success] Insert players [" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name : "[" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name + " player exist.");
+                                                //            }
+                                                //        }
+                                                //    }
+
+                                                //    // if(sName!="" && Convert.ToBoolean(arr[2])&& sPlayers!=""&&DateTime.Now<Convert.ToDateTime(sevent.start_date))  Files.WriteLog(sName, true, sPlayers);
+                                                //    if (sName != "" && Convert.ToBoolean(arr[2]) && sPlayers != "")
+                                                //    {
+                                                //        // if (DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1))
+                                                //        if (sevent.status_id == "1" || sevent.status_id == "6" || DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1) || sevent.status_id == "33")
+                                                //        {
+                                                //            Files.WriteLog(sName, true, sevent.start_date + "\r\n" + sPlayers);
+                                                //        }
+                                                //        else
+                                                //        {
+                                                //            Files.WriteLog(sName + "_old", true, sevent.start_date + "\r\n" + sPlayers);
+                                                //        }
+                                                //    }
+                                                //}
+
+                                                //string sH_YELLOW = "", sH_RED = "", sG_YELLOW = "", sG_RED = "", sH_GOAL = "", sG_GOAL = "", sSTATUS = "";
+                                                ////merge one PR to store goalinfo data / matchtime  20191129
+                                                //if (sevent.participants.Length == 2 && sevent.participants[0].stats.Length > 0)// && sevent.participants[0].results.Length > 0)
+                                                //{ 
+                                                //    sH_YELLOW = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value;
+                                                //    sH_RED = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value;
+                                                //    sG_YELLOW = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value;
+                                                //    sG_RED = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value;
+                                                //}
+
+                                                //if (sevent.participants.Length == 2 && sevent.participants[0].results.Length > 0)//&& sevent.participants[0].stats.Length > 0)
+                                                //{
+                                                //    sSTATUS = sevent.status_id;
+                                                //    sH_GOAL = sevent.participants[0].counter == "1" ? sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value;
+                                                //    sG_GOAL = sevent.participants[1].counter == "2" ? sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value;
+                                                //}
+                                                //if (sevent.status_id != "1")
+                                                //{
+                                                //    using (FbCommand cmd2 = new FbCommand())
+                                                //    {
+                                                //        cmd2.CommandText = "PR_Xml_StatsResult_GoalInfo";
+                                                //        cmd2.CommandType = CommandType.StoredProcedure;
+                                                //        cmd2.Connection = connection;
+                                                //        cmd2.Parameters.Add("@EMATCHID", sevent.id);
+                                                //        cmd2.Parameters.Add("@STATUS", sSTATUS);
+                                                //        cmd2.Parameters.Add("@H_YELLOW", sH_YELLOW);
+                                                //        cmd2.Parameters.Add("@H_RED", sH_RED);
+                                                //        cmd2.Parameters.Add("@G_YELLOW", sG_YELLOW);
+                                                //        cmd2.Parameters.Add("@G_RED", sG_RED);
+                                                //        cmd2.Parameters.Add("@H_GOAL", sH_GOAL);
+                                                //        cmd2.Parameters.Add("@G_GOAL", sG_GOAL);
+                                                //        cmd2.Parameters.Add("@CLOCK_TIME", iClockTime);
+                                                //        cmd2.Parameters.Add("@LASTTIME", DateTime.Now);
+                                                //        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                //        Files.WriteLog((id > 0 ? " [Success] Update GoalInfo Goal " : " [Failure]  Update GoalInfo Goal") + "[" + sevent.id + "] " + sevent.participants[0].id + "/" + sevent.participants[1].id + "..");
+                                                //    }
+                                                //}
+                                                #endregion cancel
+                                            }
+                                        #endregion
+
+                                        //do stats
+                                        if (amqpMessages.Count < AppFlag.SuspendCount)
+                                        {
+                                            try
+                                            {
+                                                if (sevent.details != null && sevent.details.Count() > 0)
+                                                {
+                                                    using (FbCommand cmd2 = new FbCommand())
+                                                    {
+                                                        cmd2.CommandText = "PR_event_details";
+                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                        cmd2.Connection = connection;
+                                                        cmd2.Parameters.Add("@EVENTID", sevent.id);
+                                                        cmd2.Parameters.Add("@WC_8", sevent.details.FirstOrDefault(c => c.id == "8").value);
+                                                        cmd2.Parameters.Add("@PC_36", sevent.details.FirstOrDefault(c => c.id == "36").value);
+                                                        cmd2.Parameters.Add("@PL_16", sevent.details.FirstOrDefault(c => c.id == "16").value);
+                                                        cmd2.Parameters.Add("@EPL_50", sevent.details.FirstOrDefault(c => c.id == "50").value);
+                                                        cmd2.Parameters.Add("@NOP_17", sevent.details.FirstOrDefault(c => c.id == "17").value);
+                                                        cmd2.Parameters.Add("@EPTC_58", sevent.details.FirstOrDefault(c => c.id == "58").value);
+                                                        cmd2.Parameters.Add("@IT_151", sevent.details.FirstOrDefault(c => c.id == "151").value);
+                                                        cmd2.Parameters.Add("@ATT_141", sevent.details.FirstOrDefault(c => c.id == "141").value);
+                                                        cmd2.Parameters.Add("@FHSD_19", sevent.details.FirstOrDefault(c => c.id == "19").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "19").value));
+                                                        cmd2.Parameters.Add("@SHSD_20", sevent.details.FirstOrDefault(c => c.id == "20").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "20").value));
+                                                        cmd2.Parameters.Add("@FEHSD_44", sevent.details.FirstOrDefault(c => c.id == "44").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "44").value));
+                                                        cmd2.Parameters.Add("@SEHSD_45", sevent.details.FirstOrDefault(c => c.id == "45").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "45").value));
+                                                        cmd2.Parameters.Add("@PSSD_150", sevent.details.FirstOrDefault(c => c.id == "150").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "150").value));
+                                                        cmd2.Parameters.Add("@FHIT_201", sevent.details.FirstOrDefault(c => c.id == "201").value);
+                                                        cmd2.Parameters.Add("@SHIT_202", sevent.details.FirstOrDefault(c => c.id == "202").value);
+                                                        cmd2.Parameters.Add("@FEHIT_203", sevent.details.FirstOrDefault(c => c.id == "203").value);
+                                                        cmd2.Parameters.Add("@SEHIT_204", sevent.details.FirstOrDefault(c => c.id == "204").value);
+                                                        cmd2.Parameters.Add("@HL_205", sevent.details.FirstOrDefault(c => c.id == "205").value);
+                                                        cmd2.Parameters.Add("@TD_124", sevent.details.FirstOrDefault(c => c.id == "124").value);
+                                                        cmd2.Parameters.Add("@BM_160", sevent.details.FirstOrDefault(c => c.id == "160").value);
+                                                        cmd2.Parameters.Add("@HF_178", sevent.details.FirstOrDefault(c => c.id == "178").value);
+                                                        cmd2.Parameters.Add("@UT", sevent.ut);
+                                                        cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                        Files.WriteLog(true, (id > 0 ? " [Success] Insert event_details " : id == 0 ? " Old details " : " [Failure] Insert event_details ") + "[" + sevent.id + "]");
+                                                    }
+                                                }
+                                                bool bDone = false;
+                                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant p in sevent.participants)
+                                                {
+                                                    if (p == null || p.stats == null || p.stats.Count() == 0) continue;
+                                                    using (FbCommand cmd2 = new FbCommand())
+                                                    {
+                                                        cmd2.CommandText = "PR_participant_stats";
+                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                        cmd2.Connection = connection;
+                                                        cmd2.Parameters.Add("@EVENTID", sevent.id);
+                                                        cmd2.Parameters.Add("@PARTICIPANTID", p.id);
+                                                        cmd2.Parameters.Add("@SOT_20", p.stats.FirstOrDefault(c => c.id == "20") == null ? null : p.stats.FirstOrDefault(c => c.id == "20").value);
+                                                        cmd2.Parameters.Add("@SOT_21", p.stats.FirstOrDefault(c => c.id == "21") == null ? null : p.stats.FirstOrDefault(c => c.id == "21").value);
+                                                        cmd2.Parameters.Add("@ATTACKS_10", p.stats.FirstOrDefault(c => c.id == "10") == null ? null : p.stats.FirstOrDefault(c => c.id == "10").value);
+                                                        cmd2.Parameters.Add("@DA_11", p.stats.FirstOrDefault(c => c.id == "11") == null ? null : p.stats.FirstOrDefault(c => c.id == "11").value);
+                                                        cmd2.Parameters.Add("@CORNERS_13", p.stats.FirstOrDefault(c => c.id == "13") == null ? null : p.stats.FirstOrDefault(c => c.id == "13").value);
+                                                        cmd2.Parameters.Add("@YELLOW_CARDS_8", p.stats.FirstOrDefault(c => c.id == "8") == null ? null : p.stats.FirstOrDefault(c => c.id == "8").value);
+                                                        cmd2.Parameters.Add("@RED_CARDS_9", p.stats.FirstOrDefault(c => c.id == "9") == null ? null : p.stats.FirstOrDefault(c => c.id == "9").value);
+                                                        cmd2.Parameters.Add("@TOTAL_SHOTS_19", p.stats.FirstOrDefault(c => c.id == "19") == null ? null : p.stats.FirstOrDefault(c => c.id == "19").value);
+                                                        cmd2.Parameters.Add("@FOULS_22", p.stats.FirstOrDefault(c => c.id == "22") == null ? null : p.stats.FirstOrDefault(c => c.id == "22").value);
+                                                        cmd2.Parameters.Add("@OFFSIDES_24", p.stats.FirstOrDefault(c => c.id == "24") == null ? null : p.stats.FirstOrDefault(c => c.id == "24").value);
+                                                        cmd2.Parameters.Add("@PS_14", p.stats.FirstOrDefault(c => c.id == "14") == null ? null : p.stats.FirstOrDefault(c => c.id == "14").value);
+                                                        cmd2.Parameters.Add("@PM_15", p.stats.FirstOrDefault(c => c.id == "15") == null ? null : p.stats.FirstOrDefault(c => c.id == "15").value);
+                                                        cmd2.Parameters.Add("@PG_16", p.stats.FirstOrDefault(c => c.id == "16") == null ? null : p.stats.FirstOrDefault(c => c.id == "16").value);
+                                                        cmd2.Parameters.Add("@FK_25", p.stats.FirstOrDefault(c => c.id == "25") == null ? null : p.stats.FirstOrDefault(c => c.id == "25").value);
+                                                        cmd2.Parameters.Add("@DFK_26", p.stats.FirstOrDefault(c => c.id == "26") == null ? null : p.stats.FirstOrDefault(c => c.id == "26").value);
+                                                        cmd2.Parameters.Add("@FKG_18", p.stats.FirstOrDefault(c => c.id == "18") == null ? null : p.stats.FirstOrDefault(c => c.id == "18").value);
+                                                        cmd2.Parameters.Add("@SW_27", p.stats.FirstOrDefault(c => c.id == "27") == null ? null : p.stats.FirstOrDefault(c => c.id == "27").value);
+                                                        cmd2.Parameters.Add("@SB_28", p.stats.FirstOrDefault(c => c.id == "28") == null ? null : p.stats.FirstOrDefault(c => c.id == "28").value);
+                                                        cmd2.Parameters.Add("@GS_29", p.stats.FirstOrDefault(c => c.id == "29") == null ? null : p.stats.FirstOrDefault(c => c.id == "29").value);
+                                                        cmd2.Parameters.Add("@GK_30", p.stats.FirstOrDefault(c => c.id == "30") == null ? null : p.stats.FirstOrDefault(c => c.id == "30").value);
+                                                        cmd2.Parameters.Add("@TI_32", p.stats.FirstOrDefault(c => c.id == "32") == null ? null : p.stats.FirstOrDefault(c => c.id == "32").value);
+                                                        cmd2.Parameters.Add("@SUBSTITUTIONS_31", p.stats.FirstOrDefault(c => c.id == "31") == null ? null : p.stats.FirstOrDefault(c => c.id == "31").value);
+                                                        cmd2.Parameters.Add("@GOALS_40", p.stats.FirstOrDefault(c => c.id == "40") == null ? null : p.stats.FirstOrDefault(c => c.id == "40").value);
+                                                        cmd2.Parameters.Add("@MP_34", p.stats.FirstOrDefault(c => c.id == "34") == null ? null : p.stats.FirstOrDefault(c => c.id == "34").value);
+                                                        cmd2.Parameters.Add("@OWN_GOALS_17", p.stats.FirstOrDefault(c => c.id == "17") == null ? null : p.stats.FirstOrDefault(c => c.id == "17").value);
+                                                        cmd2.Parameters.Add("@ADW_33", p.stats.FirstOrDefault(c => c.id == "33") == null ? null : p.stats.FirstOrDefault(c => c.id == "33").value);
+                                                        cmd2.Parameters.Add("@FORM_716", p.stats.FirstOrDefault(c => c.id == "716") == null ? null : p.stats.FirstOrDefault(c => c.id == "716").value);
+                                                        cmd2.Parameters.Add("@SKIN_718", p.stats.FirstOrDefault(c => c.id == "718") == null ? null : p.stats.FirstOrDefault(c => c.id == "718").value);
+                                                        cmd2.Parameters.Add("@PS_639", p.stats.FirstOrDefault(c => c.id == "639") == null ? null : p.stats.FirstOrDefault(c => c.id == "639").value);
+                                                        cmd2.Parameters.Add("@PU_697", p.stats.FirstOrDefault(c => c.id == "697") == null ? null : p.stats.FirstOrDefault(c => c.id == "697").value);
+                                                        cmd2.Parameters.Add("@GOALS115_772", p.stats.FirstOrDefault(c => c.id == "772") == null ? null : p.stats.FirstOrDefault(c => c.id == "772").value);
+                                                        cmd2.Parameters.Add("@GOALS1630_773", p.stats.FirstOrDefault(c => c.id == "773") == null ? null : p.stats.FirstOrDefault(c => c.id == "773").value);
+                                                        cmd2.Parameters.Add("@GOALS3145_774", p.stats.FirstOrDefault(c => c.id == "774") == null ? null : p.stats.FirstOrDefault(c => c.id == "774").value);
+                                                        cmd2.Parameters.Add("@GOALS4660_775", p.stats.FirstOrDefault(c => c.id == "775") == null ? null : p.stats.FirstOrDefault(c => c.id == "775").value);
+                                                        cmd2.Parameters.Add("@GOALS6175_776", p.stats.FirstOrDefault(c => c.id == "776") == null ? null : p.stats.FirstOrDefault(c => c.id == "776").value);
+                                                        cmd2.Parameters.Add("@GOALS7690_777", p.stats.FirstOrDefault(c => c.id == "777") == null ? null : p.stats.FirstOrDefault(c => c.id == "777").value);
+                                                        cmd2.Parameters.Add("@MPG_778", p.stats.FirstOrDefault(c => c.id == "778") == null ? null : p.stats.FirstOrDefault(c => c.id == "778").value);
+                                                        cmd2.Parameters.Add("@MPS_779", p.stats.FirstOrDefault(c => c.id == "779") == null ? null : p.stats.FirstOrDefault(c => c.id == "779").value);
+                                                        cmd2.Parameters.Add("@BP_770", p.stats.FirstOrDefault(c => c.id == "770") == null ? null : p.stats.FirstOrDefault(c => c.id == "770").value);
+                                                        cmd2.Parameters.Add("@BPP_771", p.stats.FirstOrDefault(c => c.id == "771") == null ? null : p.stats.FirstOrDefault(c => c.id == "771").value);
+                                                        cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                        cmd2.Parameters.Add("@CACTION", "update");
+                                                        cmd2.Parameters.Add("@TEAMTYPE", p.counter == "2" ? "G" : "H");
+                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                        Files.WriteLog(true, (id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_stats") + "[" + sevent.id + "/" + p.id + "]." + p.stats.FirstOrDefault(c => c.id == "771").value);
+                                                        if (id > 0) bDone = true;
+                                                    }
+                                                }
+                                                if (bDone) SendAlertMsg("62", "X", sevent.id);
                                             }
                                             catch (Exception exp)
                                             {
-                                                Files.WriteError("events.showJson " + strName + " INCIDENTS Error:" + exp);
+                                                Files.WriteError("events.showJson " + strName + " details/stats Error:" + exp);
                                             }
-                                            //do stats
-                                            if (amqpMessages.Count < AppFlag.SuspendCount)
-                                            {
-                                                try
-                                                {
-                                                    if (sevent.details != null && sevent.details.Count() > 0)
-                                                    {
-                                                        using (FbCommand cmd2 = new FbCommand())
-                                                        {
-                                                            cmd2.CommandText = "PR_event_details";
-                                                            cmd2.CommandType = CommandType.StoredProcedure;
-                                                            cmd2.Connection = connection;
-                                                            cmd2.Parameters.Add("@EVENTID", sevent.id);
-                                                            cmd2.Parameters.Add("@WC_8", sevent.details.FirstOrDefault(c => c.id == "8").value);
-                                                            cmd2.Parameters.Add("@PC_36", sevent.details.FirstOrDefault(c => c.id == "36").value);
-                                                            cmd2.Parameters.Add("@PL_16", sevent.details.FirstOrDefault(c => c.id == "16").value);
-                                                            cmd2.Parameters.Add("@EPL_50", sevent.details.FirstOrDefault(c => c.id == "50").value);
-                                                            cmd2.Parameters.Add("@NOP_17", sevent.details.FirstOrDefault(c => c.id == "17").value);
-                                                            cmd2.Parameters.Add("@EPTC_58", sevent.details.FirstOrDefault(c => c.id == "58").value);
-                                                            cmd2.Parameters.Add("@IT_151", sevent.details.FirstOrDefault(c => c.id == "151").value);
-                                                            cmd2.Parameters.Add("@ATT_141", sevent.details.FirstOrDefault(c => c.id == "141").value);
-                                                            cmd2.Parameters.Add("@FHSD_19", sevent.details.FirstOrDefault(c => c.id == "19").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "19").value));
-                                                            cmd2.Parameters.Add("@SHSD_20", sevent.details.FirstOrDefault(c => c.id == "20").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "20").value));
-                                                            cmd2.Parameters.Add("@FEHSD_44", sevent.details.FirstOrDefault(c => c.id == "44").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "44").value));
-                                                            cmd2.Parameters.Add("@SEHSD_45", sevent.details.FirstOrDefault(c => c.id == "45").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "45").value));
-                                                            cmd2.Parameters.Add("@PSSD_150", sevent.details.FirstOrDefault(c => c.id == "150").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "150").value));
-                                                            cmd2.Parameters.Add("@FHIT_201", sevent.details.FirstOrDefault(c => c.id == "201").value);
-                                                            cmd2.Parameters.Add("@SHIT_202", sevent.details.FirstOrDefault(c => c.id == "202").value);
-                                                            cmd2.Parameters.Add("@FEHIT_203", sevent.details.FirstOrDefault(c => c.id == "203").value);
-                                                            cmd2.Parameters.Add("@SEHIT_204", sevent.details.FirstOrDefault(c => c.id == "204").value);
-                                                            cmd2.Parameters.Add("@HL_205", sevent.details.FirstOrDefault(c => c.id == "205").value);
-                                                            cmd2.Parameters.Add("@TD_124", sevent.details.FirstOrDefault(c => c.id == "124").value);
-                                                            cmd2.Parameters.Add("@BM_160", sevent.details.FirstOrDefault(c => c.id == "160").value);
-                                                            cmd2.Parameters.Add("@HF_178", sevent.details.FirstOrDefault(c => c.id == "178").value);
-                                                            cmd2.Parameters.Add("@UT", sevent.ut);
-                                                            cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog(true, (id > 0 ? " [Success] Insert event_details " : id == 0 ? " Old details " : " [Failure] Insert event_details ") + "[" + sevent.id + "]");
-                                                        }
-                                                    }
-                                                    
-                                                    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant p in sevent.participants)
-                                                    {
-                                                        if (p == null || p.stats == null || p.stats.Count() == 0) continue;
-                                                        using (FbCommand cmd2 = new FbCommand())
-                                                        {
-                                                            cmd2.CommandText = "PR_participant_stats";
-                                                            cmd2.CommandType = CommandType.StoredProcedure;
-                                                            cmd2.Connection = connection;
-                                                            cmd2.Parameters.Add("@EVENTID", sevent.id);
-                                                            cmd2.Parameters.Add("@PARTICIPANTID", p.id);
-                                                            cmd2.Parameters.Add("@SOT_20", p.stats.FirstOrDefault(c => c.id == "20") == null ? null : p.stats.FirstOrDefault(c => c.id == "20").value);
-                                                            cmd2.Parameters.Add("@SOT_21", p.stats.FirstOrDefault(c => c.id == "21") == null ? null : p.stats.FirstOrDefault(c => c.id == "21").value);
-                                                            cmd2.Parameters.Add("@ATTACKS_10", p.stats.FirstOrDefault(c => c.id == "10") == null ? null : p.stats.FirstOrDefault(c => c.id == "10").value);
-                                                            cmd2.Parameters.Add("@DA_11", p.stats.FirstOrDefault(c => c.id == "11") == null ? null : p.stats.FirstOrDefault(c => c.id == "11").value);
-                                                            cmd2.Parameters.Add("@CORNERS_13", p.stats.FirstOrDefault(c => c.id == "13") == null ? null : p.stats.FirstOrDefault(c => c.id == "13").value);
-                                                            cmd2.Parameters.Add("@YELLOW_CARDS_8", p.stats.FirstOrDefault(c => c.id == "8") == null ? null : p.stats.FirstOrDefault(c => c.id == "8").value);
-                                                            cmd2.Parameters.Add("@RED_CARDS_9", p.stats.FirstOrDefault(c => c.id == "9") == null ? null : p.stats.FirstOrDefault(c => c.id == "9").value);
-                                                            cmd2.Parameters.Add("@TOTAL_SHOTS_19", p.stats.FirstOrDefault(c => c.id == "19") == null ? null : p.stats.FirstOrDefault(c => c.id == "19").value);
-                                                            cmd2.Parameters.Add("@FOULS_22", p.stats.FirstOrDefault(c => c.id == "22") == null ? null : p.stats.FirstOrDefault(c => c.id == "22").value);
-                                                            cmd2.Parameters.Add("@OFFSIDES_24", p.stats.FirstOrDefault(c => c.id == "24") == null ? null : p.stats.FirstOrDefault(c => c.id == "24").value);
-                                                            cmd2.Parameters.Add("@PS_14", p.stats.FirstOrDefault(c => c.id == "14") == null ? null : p.stats.FirstOrDefault(c => c.id == "14").value);
-                                                            cmd2.Parameters.Add("@PM_15", p.stats.FirstOrDefault(c => c.id == "15") == null ? null : p.stats.FirstOrDefault(c => c.id == "15").value);
-                                                            cmd2.Parameters.Add("@PG_16", p.stats.FirstOrDefault(c => c.id == "16") == null ? null : p.stats.FirstOrDefault(c => c.id == "16").value);
-                                                            cmd2.Parameters.Add("@FK_25", p.stats.FirstOrDefault(c => c.id == "25") == null ? null : p.stats.FirstOrDefault(c => c.id == "25").value);
-                                                            cmd2.Parameters.Add("@DFK_26", p.stats.FirstOrDefault(c => c.id == "26") == null ? null : p.stats.FirstOrDefault(c => c.id == "26").value);
-                                                            cmd2.Parameters.Add("@FKG_18", p.stats.FirstOrDefault(c => c.id == "18") == null ? null : p.stats.FirstOrDefault(c => c.id == "18").value);
-                                                            cmd2.Parameters.Add("@SW_27", p.stats.FirstOrDefault(c => c.id == "27") == null ? null : p.stats.FirstOrDefault(c => c.id == "27").value);
-                                                            cmd2.Parameters.Add("@SB_28", p.stats.FirstOrDefault(c => c.id == "28") == null ? null : p.stats.FirstOrDefault(c => c.id == "28").value);
-                                                            cmd2.Parameters.Add("@GS_29", p.stats.FirstOrDefault(c => c.id == "29") == null ? null : p.stats.FirstOrDefault(c => c.id == "29").value);
-                                                            cmd2.Parameters.Add("@GK_30", p.stats.FirstOrDefault(c => c.id == "30") == null ? null : p.stats.FirstOrDefault(c => c.id == "30").value);
-                                                            cmd2.Parameters.Add("@TI_32", p.stats.FirstOrDefault(c => c.id == "32") == null ? null : p.stats.FirstOrDefault(c => c.id == "32").value);
-                                                            cmd2.Parameters.Add("@SUBSTITUTIONS_31", p.stats.FirstOrDefault(c => c.id == "31") == null ? null : p.stats.FirstOrDefault(c => c.id == "31").value);
-                                                            cmd2.Parameters.Add("@GOALS_40", p.stats.FirstOrDefault(c => c.id == "40") == null ? null : p.stats.FirstOrDefault(c => c.id == "40").value);
-                                                            cmd2.Parameters.Add("@MP_34", p.stats.FirstOrDefault(c => c.id == "34") == null ? null : p.stats.FirstOrDefault(c => c.id == "34").value);
-                                                            cmd2.Parameters.Add("@OWN_GOALS_17", p.stats.FirstOrDefault(c => c.id == "17") == null ? null : p.stats.FirstOrDefault(c => c.id == "17").value);
-                                                            cmd2.Parameters.Add("@ADW_33", p.stats.FirstOrDefault(c => c.id == "33") == null ? null : p.stats.FirstOrDefault(c => c.id == "33").value);
-                                                            cmd2.Parameters.Add("@FORM_716", p.stats.FirstOrDefault(c => c.id == "716") == null ? null : p.stats.FirstOrDefault(c => c.id == "716").value);
-                                                            cmd2.Parameters.Add("@SKIN_718", p.stats.FirstOrDefault(c => c.id == "718") == null ? null : p.stats.FirstOrDefault(c => c.id == "718").value);
-                                                            cmd2.Parameters.Add("@PS_639", p.stats.FirstOrDefault(c => c.id == "639") == null ? null : p.stats.FirstOrDefault(c => c.id == "639").value);
-                                                            cmd2.Parameters.Add("@PU_697", p.stats.FirstOrDefault(c => c.id == "697") == null ? null : p.stats.FirstOrDefault(c => c.id == "697").value);
-                                                            cmd2.Parameters.Add("@GOALS115_772", p.stats.FirstOrDefault(c => c.id == "772") == null ? null : p.stats.FirstOrDefault(c => c.id == "772").value);
-                                                            cmd2.Parameters.Add("@GOALS1630_773", p.stats.FirstOrDefault(c => c.id == "773") == null ? null : p.stats.FirstOrDefault(c => c.id == "773").value);
-                                                            cmd2.Parameters.Add("@GOALS3145_774", p.stats.FirstOrDefault(c => c.id == "774") == null ? null : p.stats.FirstOrDefault(c => c.id == "774").value);
-                                                            cmd2.Parameters.Add("@GOALS4660_775", p.stats.FirstOrDefault(c => c.id == "775") == null ? null : p.stats.FirstOrDefault(c => c.id == "775").value);
-                                                            cmd2.Parameters.Add("@GOALS6175_776", p.stats.FirstOrDefault(c => c.id == "776") == null ? null : p.stats.FirstOrDefault(c => c.id == "776").value);
-                                                            cmd2.Parameters.Add("@GOALS7690_777", p.stats.FirstOrDefault(c => c.id == "777") == null ? null : p.stats.FirstOrDefault(c => c.id == "777").value);
-                                                            cmd2.Parameters.Add("@MPG_778", p.stats.FirstOrDefault(c => c.id == "778") == null ? null : p.stats.FirstOrDefault(c => c.id == "778").value);
-                                                            cmd2.Parameters.Add("@MPS_779", p.stats.FirstOrDefault(c => c.id == "779") == null ? null : p.stats.FirstOrDefault(c => c.id == "779").value);
-                                                            cmd2.Parameters.Add("@BP_770", p.stats.FirstOrDefault(c => c.id == "770") == null ? null : p.stats.FirstOrDefault(c => c.id == "770").value);
-                                                            cmd2.Parameters.Add("@BPP_771", p.stats.FirstOrDefault(c => c.id == "771") == null ? null : p.stats.FirstOrDefault(c => c.id == "771").value);
-                                                            cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                                                            cmd2.Parameters.Add("@CACTION", "update");
-                                                            cmd2.Parameters.Add("@TEAMTYPE", p.counter == "2" ? "G" : "H");
-                                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog(true, (id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_stats") + "[" + sevent.id + "/" + p.id + "]." + p.stats.FirstOrDefault(c => c.id == "771").value);
-                                                            if (id > 0) bDone = true;
-                                                        }
-                                                    }
-                                                    if (bDone) SendAlertMsg("62", "X", sevent.id);
-                                                }
-                                                catch (Exception exp)
-                                                {
-                                                    Files.WriteError("events.showJson " + strName + " details/stats Error:" + exp);
-                                                }
-                                            }
-
-                                            #region cancel insert one by one
-                                            /*
-                                        foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident Event_incident in sevent.events_incidents)
-                                        {
-                                            if (Event_incident == null) continue;
-
-                                            using (FbCommand cmd2 = new FbCommand())
-                                            {
-                                                cmd2.CommandText = "PR_INCIDENTS";
-                                                cmd2.CommandType = CommandType.StoredProcedure;
-                                                cmd2.Connection = connection;
-                                                cmd2.Parameters.Add("@ID", Event_incident.id);
-                                                cmd2.Parameters.Add("@EVENTID", sevent.id);
-                                                cmd2.Parameters.Add("@CACTION", "update");
-                                                cmd2.Parameters.Add("@INCIDENT_ID", Event_incident.incident_id);
-                                                cmd2.Parameters.Add("@INCIDENT_NAME", Event_incident.incident_name);
-                                                cmd2.Parameters.Add("@PARTICIPANT_ID", Event_incident.participant_id);
-                                                cmd2.Parameters.Add("@PARTICIPANT_NAME", Event_incident.participant_name);
-                                                cmd2.Parameters.Add("@SUBPARTICIPANT_ID", Event_incident.subparticipant_id);
-                                                cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", Event_incident.subparticipant_name == "" ? (Event_incident.info != "" && Event_incident.incident_id == "413" ? Event_incident.info + "*" : "") : Event_incident.subparticipant_name);
-                                                cmd2.Parameters.Add("@IMPORTANT_FOR_TRADER", true);// incidentJson.data.incident.important_for_trader == "yes" ? true : false);
-                                                cmd2.Parameters.Add("@EVENT_TIME", Event_incident.event_time);
-                                                cmd2.Parameters.Add("@EVENT_STATUS_ID", Event_incident.event_status_id);
-                                                cmd2.Parameters.Add("@EVENT_STATUS_NAME", Event_incident.event_status_name);
-                                                cmd2.Parameters.Add("@UT", Event_incident.ut);
-                                                cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                                                cmd2.Parameters.Add("@TEAMTYPE",
-                                                (Event_incident.participant_id == null || Event_incident.participant_id == "" ? "" : Event_incident.participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : Event_incident.participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "H"));
-                                                int sID = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                Files.WriteLog((sID > -1 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
-                                            } 
-
-                                    }
-                                    Files.WriteLog(" Update INCIDENTS " + "[" + sevent.id + "]," + strName + ".xml");
-
-                                        */
-                                            #endregion
                                         }
+
+                                        #region cancel insert one by one
+                                        /*
+                                    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident Event_incident in sevent.events_incidents)
+                                    {
+                                        if (Event_incident == null) continue;
+
+                                        using (FbCommand cmd2 = new FbCommand())
+                                        {
+                                            cmd2.CommandText = "PR_INCIDENTS";
+                                            cmd2.CommandType = CommandType.StoredProcedure;
+                                            cmd2.Connection = connection;
+                                            cmd2.Parameters.Add("@ID", Event_incident.id);
+                                            cmd2.Parameters.Add("@EVENTID", sevent.id);
+                                            cmd2.Parameters.Add("@CACTION", "update");
+                                            cmd2.Parameters.Add("@INCIDENT_ID", Event_incident.incident_id);
+                                            cmd2.Parameters.Add("@INCIDENT_NAME", Event_incident.incident_name);
+                                            cmd2.Parameters.Add("@PARTICIPANT_ID", Event_incident.participant_id);
+                                            cmd2.Parameters.Add("@PARTICIPANT_NAME", Event_incident.participant_name);
+                                            cmd2.Parameters.Add("@SUBPARTICIPANT_ID", Event_incident.subparticipant_id);
+                                            cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", Event_incident.subparticipant_name == "" ? (Event_incident.info != "" && Event_incident.incident_id == "413" ? Event_incident.info + "*" : "") : Event_incident.subparticipant_name);
+                                            cmd2.Parameters.Add("@IMPORTANT_FOR_TRADER", true);// incidentJson.data.incident.important_for_trader == "yes" ? true : false);
+                                            cmd2.Parameters.Add("@EVENT_TIME", Event_incident.event_time);
+                                            cmd2.Parameters.Add("@EVENT_STATUS_ID", Event_incident.event_status_id);
+                                            cmd2.Parameters.Add("@EVENT_STATUS_NAME", Event_incident.event_status_name);
+                                            cmd2.Parameters.Add("@UT", Event_incident.ut);
+                                            cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                            cmd2.Parameters.Add("@TEAMTYPE",
+                                            (Event_incident.participant_id == null || Event_incident.participant_id == "" ? "" : Event_incident.participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : Event_incident.participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "H"));
+                                            int sID = Convert.ToInt32(cmd2.ExecuteScalar());
+                                            Files.WriteLog((sID > -1 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
+                                        } 
+
+                                }
+                                Files.WriteLog(" Update INCIDENTS " + "[" + sevent.id + "]," + strName + ".xml");
+
+                                    */
+                                        #endregion
                                     }
                                 }
                             }
                         }
+                        ////foreach (DOSEvents2.apiDataCompetitionSeason season in seasons)
+                        ////{
+                        ////    DOSEvents2.apiDataCompetitionSeasonStage[] stages = season.stages;
+                        ////    if (stages == null) continue;
+
+                        ////    foreach (DOSEvents2.apiDataCompetitionSeasonStage stage in stages)
+                        ////    {
+                        ////        DOSEvents2.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
+                        ////        if (groups == null) continue;
+
+                        ////        foreach (DOSEvents2.apiDataCompetitionSeasonStageGroup group in groups)
+                        ////        {
+                        ////            DOSEvents2.apiDataCompetitionSeasonStageGroupEvent[] events = group.events;
+                        ////            if (events == null) continue;
+
+                        ////            foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEvent sevent in events)
+                        ////            {
+                        ////                if (sevent == null) continue;
+
+                        ////                #region  cancel update goalinfo at xml  
+                        ////                /*
+                        ////                string iClockTime = "0";
+                        ////                iClockTime = sevent.clock_time == null || sevent.clock_time == "" ? "0" : Convert.ToInt32(sevent.clock_time) < 60 ? "1" : Math.Round(Convert.ToInt32(sevent.clock_time) / 60.0).ToString();
+                        ////                using (FbCommand cmd2 = new FbCommand())
+                        ////                {
+                        ////                    //  cmd2.CommandText = "PR_XML_event"; 
+                        ////                    cmd2.CommandText = "PR_XML_EVENTCLOCK";   //20191129 update clocktime on xml
+                        ////                    cmd2.CommandType = CommandType.StoredProcedure;
+                        ////                    cmd2.Connection = connection;
+                        ////                    cmd2.Parameters.Add("@ID", sevent.id);
+                        ////                    cmd2.Parameters.Add("@HOME_ID", sevent.participants.Count() > 0 ? sevent.participants[0].id : "-1");
+                        ////                    cmd2.Parameters.Add("@GUEST_ID", sevent.participants.Count() > 0 ? sevent.participants[1].id : "-1");
+                        ////                    cmd2.Parameters.Add("@CLOCKTIME", sevent.clock_time);
+                        ////                    cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                        ////                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        ////                    Files.WriteLog((id > 0 ? " [Success] Update event " : " [Failure] Update event ") + "[" + sevent.id + "] " + sevent.participants[0].name + "-" + sevent.participants[1].name + " " + sevent.participants[0].id + "/" + sevent.participants[1].id);
+                        ////                }
+                        ////                if (iClockTime == "0")
+                        ////                {
+                        ////                    string sName = "";
+                        ////                    string sPlayers = "";
+
+                        ////                    using (FbCommand cmd2 = new FbCommand("SELECT  r.EMATCHID , r.HKJCDAYCODE, r.HKJCMATCHNO,r.CMATCHDATETIME FROM EMATCHES r where r.EMATCHID='" + sevent.id + "'", connection))
+                        ////                    {
+                        ////                        FbDataReader reader = cmd2.ExecuteReader();
+                        ////                        while (reader.Read())
+                        ////                        {
+                        ////                            var data = (IDataRecord)reader;
+                        ////                            sName = data[1] + "-" + data[2] + "-" + Convert.ToDateTime(data[3]).ToString("yyyyMMdd") + "-" + data[0];
+                        ////                        }
+                        ////                        reader.Close();
+                        ////                    }
+                        ////                    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant participant in sevent.participants)
+                        ////                    {
+                        ////                        if (participant == null) continue;
+
+                        ////                        sPlayers += (participant.lineups == null || participant.lineups.Count() == 0) ? "" : "\r\n" + (participant.counter == "1" ? "Host\r\n" : "Guest\r\n");
+
+                        ////                        foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup lineup in participant.lineups)
+                        ////                        {
+                        ////                            if (lineup == null) continue;
+
+                        ////                            sPlayers += (lineup.shirt_nr == "" ? "-1" : lineup.shirt_nr) + "  " + lineup.participant_name + "  " + (lineup.bench.ToLower() == "yes" ? "/Bench" : "     ") + "  " + (lineup.type.ToLower() == "coach" ? "/Coach" : "") + "\r\n";
+
+                        ////                            using (FbCommand cmd2 = new FbCommand())
+                        ////                            {
+                        ////                                cmd2.CommandText = "ADD_Player2";
+                        ////                                cmd2.CommandType = CommandType.StoredProcedure;
+                        ////                                cmd2.Connection = connection;
+                        ////                                cmd2.Parameters.Add("@ID", lineup.participant_id == "" ? "-1" : lineup.participant_id);
+                        ////                                cmd2.Parameters.Add("@NAME", lineup.participant_name);
+                        ////                                cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
+                        ////                                cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
+                        ////                                cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
+                        ////                                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "-2" : (lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                        ////                                cmd2.Parameters.Add("@TEAM_ID", participant.id);
+                        ////                                cmd2.Parameters.Add("@SEASON_ID", season.id);
+                        ////                                cmd2.Parameters.Add("@EVENT_ID", sevent.id);
+                        ////                                cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                        ////                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        ////                                Files.WriteLog(id > 0 ? " [Success] Insert players [" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name : "[" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name + " player exist.");
+                        ////                            }
+                        ////                        }
+                        ////                    }
+
+                        ////                    // if(sName!="" && Convert.ToBoolean(arr[2])&& sPlayers!=""&&DateTime.Now<Convert.ToDateTime(sevent.start_date))  Files.WriteLog(sName, true, sPlayers);
+                        ////                    if (sName != "" && Convert.ToBoolean(arr[2]) && sPlayers != "")
+                        ////                    {
+                        ////                        // if (DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1))
+                        ////                        if (sevent.status_id == "1" || sevent.status_id == "6" || DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1) || sevent.status_id == "33")
+                        ////                        {
+                        ////                            Files.WriteLog(sName, true, sevent.start_date + "\r\n" + sPlayers);
+                        ////                        }
+                        ////                        else
+                        ////                        {
+                        ////                            Files.WriteLog(sName + "_old", true, sevent.start_date + "\r\n" + sPlayers);
+                        ////                        }
+                        ////                    }
+                        ////                }
+
+                        ////                string sH_YELLOW = "", sH_RED = "", sG_YELLOW = "", sG_RED = "", sH_GOAL = "", sG_GOAL = "", sSTATUS = "";
+                        ////                //merge one PR to store goalinfo data / matchtime  20191129
+                        ////                if (sevent.participants.Length == 2 && sevent.participants[0].stats.Length > 0)// && sevent.participants[0].results.Length > 0)
+                        ////                {
+
+                        ////                    sH_YELLOW = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value;
+                        ////                    sH_RED = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value;
+                        ////                    sG_YELLOW = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value;
+                        ////                    sG_RED = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value;
+                        ////                }
+
+                        ////                if (sevent.participants.Length == 2 && sevent.participants[0].results.Length > 0)//&& sevent.participants[0].stats.Length > 0)
+                        ////                {
+                        ////                    sSTATUS = sevent.status_id;
+                        ////                    sH_GOAL = sevent.participants[0].counter == "1" ? sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value;
+                        ////                    sG_GOAL = sevent.participants[1].counter == "2" ? sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value;
+                        ////                }
+                        ////                if (sevent.status_id != "1")
+                        ////                {
+                        ////                    using (FbCommand cmd2 = new FbCommand())
+                        ////                    {
+                        ////                        cmd2.CommandText = "PR_Xml_StatsResult_GoalInfo";
+                        ////                        cmd2.CommandType = CommandType.StoredProcedure;
+                        ////                        cmd2.Connection = connection;
+                        ////                        cmd2.Parameters.Add("@EMATCHID", sevent.id);
+                        ////                        cmd2.Parameters.Add("@STATUS", sSTATUS);
+                        ////                        cmd2.Parameters.Add("@H_YELLOW", sH_YELLOW);
+                        ////                        cmd2.Parameters.Add("@H_RED", sH_RED);
+                        ////                        cmd2.Parameters.Add("@G_YELLOW", sG_YELLOW);
+                        ////                        cmd2.Parameters.Add("@G_RED", sG_RED);
+                        ////                        cmd2.Parameters.Add("@H_GOAL", sH_GOAL);
+                        ////                        cmd2.Parameters.Add("@G_GOAL", sG_GOAL);
+                        ////                        cmd2.Parameters.Add("@CLOCK_TIME", iClockTime);
+                        ////                        cmd2.Parameters.Add("@LASTTIME", DateTime.Now);
+                        ////                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        ////                        Files.WriteLog((id > 0 ? " [Success] Update GoalInfo Goal " : " [Failure]  Update GoalInfo Goal") + "[" + sevent.id + "] " + sevent.participants[0].id + "/" + sevent.participants[1].id + "..");
+                        ////                    }
+                        ////                }
+                        ////                */
+                        ////                #endregion
+                        ////                bool bDone = false;
+                        ////                try
+                        ////                {
+                        ////                    DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident[] events_incidents = sevent.events_incidents;
+                        ////                    if (events_incidents == null || events_incidents.Count() == 0) continue;
+                        ////                    statusid =Convert.ToInt32( sevent.status_id);
+                        ////                    using (FbCommand cmd2 = new FbCommand())
+                        ////                    {
+                        ////                        cmd2.CommandText = "DELETE_INCIDENTS_ByEventID";
+                        ////                        cmd2.CommandType = CommandType.StoredProcedure;
+                        ////                        cmd2.Connection = connection;
+                        ////                        cmd2.Parameters.Add("@ID", sevent.id);
+                        ////                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        ////                    }
+                        ////                    Files.WriteLog(true, " Delete INCIDENTS [" + sevent.id + "]");
+
+                        ////                    queryString = "select first 1 i.* from INCIDENTS i ";
+                        ////                    using (FbCommand cmd = new FbCommand(queryString, connection))
+                        ////                    {
+                        ////                        using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                        ////                        {
+                        ////                            using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
+                        ////                            {
+                        ////                                using (DataSet data = new DataSet())
+                        ////                                {
+                        ////                                    data.Tables.Add(new DataTable("INCIDENTS"));
+                        ////                                    fda.Fill(data.Tables["INCIDENTS"]);
+                        ////                                    //  if (data.Tables["INCIDENTS"].Rows.Count > 0) data.Tables["INCIDENTS"].Rows.Remove(data.Tables["INCIDENTS"].Rows[0]);
+                        ////                                    DataRow dr;
+                        ////                                    DateTime dateTime = DateTime.Now;
+                        ////                                    for (int j = 0; j < sevent.events_incidents.Length; j++)
+                        ////                                    {
+                        ////                                        dr = data.Tables["INCIDENTS"].NewRow();
+                        ////                                        dr["ID"] = events_incidents[j].id;
+                        ////                                        dr["EVENTID"] = sevent.id;
+                        ////                                        dr["CACTION"] = "update";
+                        ////                                        dr["INCIDENT_ID"] = events_incidents[j].incident_id;
+                        ////                                        dr["INCIDENT_NAME"] = events_incidents[j].incident_name;
+                        ////                                        dr["PARTICIPANT_ID"] = events_incidents[j].participant_id;
+                        ////                                        dr["PARTICIPANT_NAME"] = events_incidents[j].participant_name;
+                        ////                                        dr["SUBPARTICIPANT_ID"] = events_incidents[j].subparticipant_id;
+                        ////                                        dr["SUBPARTICIPANT_NAME"] = events_incidents[j].subparticipant_name == "" ? (events_incidents[j].info != "" && events_incidents[j].incident_id == "413" ? events_incidents[j].info + "*" : "") : events_incidents[j].subparticipant_name;// events_incidents[j].subparticipant_name;
+                        ////                                        dr["IMPORTANT_FOR_TRADER"] = true;
+                        ////                                        dr["EVENT_TIME"] = events_incidents[j].event_time;
+                        ////                                        dr["EVENT_STATUS_ID"] = events_incidents[j].event_status_id;
+                        ////                                        dr["EVENT_STATUS_NAME"] = events_incidents[j].event_status_name;
+                        ////                                        dr["UT"] = events_incidents[j].ut;
+                        ////                                        dr["CTIMESTAMP"] = dateTime.AddMilliseconds(1);
+                        ////                                        dateTime = dateTime.AddMilliseconds(1);
+                        ////                                        dr["TEAMTYPE"] = events_incidents[j].participant_id != null && events_incidents[j].participant_id != "" ? (events_incidents[j].participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : events_incidents[j].participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "") : "";
+                        ////                                        data.Tables["INCIDENTS"].Rows.Add(dr);
+                        ////                                    }
+                        ////                                    int k = fda.Update(data.Tables["INCIDENTS"]);
+                        ////                                    Files.WriteLog(true, (k > 0 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + k);// + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
+                        ////                                    if (k > 0) bDone = true;
+                        ////                                }
+                        ////                            }
+                        ////                        }
+                        ////                    }
+                        ////                    if (bDone) SendAlertMsg("31", "X2", sevent.id);
+                        ////                }
+                        ////                catch (Exception exp)
+                        ////                {
+                        ////                    Files.WriteError("events.showJson " + strName + " INCIDENTS Error:" + exp);
+                        ////                }
+                        ////                //do stats
+                        ////                if (amqpMessages.Count < AppFlag.SuspendCount)
+                        ////                {
+                        ////                    try
+                        ////                    {
+                        ////                        if (sevent.details != null && sevent.details.Count() > 0)
+                        ////                        {
+                        ////                            using (FbCommand cmd2 = new FbCommand())
+                        ////                            {
+                        ////                                cmd2.CommandText = "PR_event_details";
+                        ////                                cmd2.CommandType = CommandType.StoredProcedure;
+                        ////                                cmd2.Connection = connection;
+                        ////                                cmd2.Parameters.Add("@EVENTID", sevent.id);
+                        ////                                cmd2.Parameters.Add("@WC_8", sevent.details.FirstOrDefault(c => c.id == "8").value);
+                        ////                                cmd2.Parameters.Add("@PC_36", sevent.details.FirstOrDefault(c => c.id == "36").value);
+                        ////                                cmd2.Parameters.Add("@PL_16", sevent.details.FirstOrDefault(c => c.id == "16").value);
+                        ////                                cmd2.Parameters.Add("@EPL_50", sevent.details.FirstOrDefault(c => c.id == "50").value);
+                        ////                                cmd2.Parameters.Add("@NOP_17", sevent.details.FirstOrDefault(c => c.id == "17").value);
+                        ////                                cmd2.Parameters.Add("@EPTC_58", sevent.details.FirstOrDefault(c => c.id == "58").value);
+                        ////                                cmd2.Parameters.Add("@IT_151", sevent.details.FirstOrDefault(c => c.id == "151").value);
+                        ////                                cmd2.Parameters.Add("@ATT_141", sevent.details.FirstOrDefault(c => c.id == "141").value);
+                        ////                                cmd2.Parameters.Add("@FHSD_19", sevent.details.FirstOrDefault(c => c.id == "19").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "19").value));
+                        ////                                cmd2.Parameters.Add("@SHSD_20", sevent.details.FirstOrDefault(c => c.id == "20").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "20").value));
+                        ////                                cmd2.Parameters.Add("@FEHSD_44", sevent.details.FirstOrDefault(c => c.id == "44").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "44").value));
+                        ////                                cmd2.Parameters.Add("@SEHSD_45", sevent.details.FirstOrDefault(c => c.id == "45").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "45").value));
+                        ////                                cmd2.Parameters.Add("@PSSD_150", sevent.details.FirstOrDefault(c => c.id == "150").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "150").value));
+                        ////                                cmd2.Parameters.Add("@FHIT_201", sevent.details.FirstOrDefault(c => c.id == "201").value);
+                        ////                                cmd2.Parameters.Add("@SHIT_202", sevent.details.FirstOrDefault(c => c.id == "202").value);
+                        ////                                cmd2.Parameters.Add("@FEHIT_203", sevent.details.FirstOrDefault(c => c.id == "203").value);
+                        ////                                cmd2.Parameters.Add("@SEHIT_204", sevent.details.FirstOrDefault(c => c.id == "204").value);
+                        ////                                cmd2.Parameters.Add("@HL_205", sevent.details.FirstOrDefault(c => c.id == "205").value);
+                        ////                                cmd2.Parameters.Add("@TD_124", sevent.details.FirstOrDefault(c => c.id == "124").value);
+                        ////                                cmd2.Parameters.Add("@BM_160", sevent.details.FirstOrDefault(c => c.id == "160").value);
+                        ////                                cmd2.Parameters.Add("@HF_178", sevent.details.FirstOrDefault(c => c.id == "178").value);
+                        ////                                cmd2.Parameters.Add("@UT", sevent.ut);
+                        ////                                cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                        ////                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        ////                                Files.WriteLog(true, (id > 0 ? " [Success] Insert event_details " : id == 0 ? " Old details " : " [Failure] Insert event_details ") + "[" + sevent.id + "]");
+                        ////                            }
+                        ////                        }
+
+                        ////                        foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant p in sevent.participants)
+                        ////                        {
+                        ////                            if (p == null || p.stats == null || p.stats.Count() == 0) continue;
+                        ////                            using (FbCommand cmd2 = new FbCommand())
+                        ////                            {
+                        ////                                cmd2.CommandText = "PR_participant_stats";
+                        ////                                cmd2.CommandType = CommandType.StoredProcedure;
+                        ////                                cmd2.Connection = connection;
+                        ////                                cmd2.Parameters.Add("@EVENTID", sevent.id);
+                        ////                                cmd2.Parameters.Add("@PARTICIPANTID", p.id);
+                        ////                                cmd2.Parameters.Add("@SOT_20", p.stats.FirstOrDefault(c => c.id == "20") == null ? null : p.stats.FirstOrDefault(c => c.id == "20").value);
+                        ////                                cmd2.Parameters.Add("@SOT_21", p.stats.FirstOrDefault(c => c.id == "21") == null ? null : p.stats.FirstOrDefault(c => c.id == "21").value);
+                        ////                                cmd2.Parameters.Add("@ATTACKS_10", p.stats.FirstOrDefault(c => c.id == "10") == null ? null : p.stats.FirstOrDefault(c => c.id == "10").value);
+                        ////                                cmd2.Parameters.Add("@DA_11", p.stats.FirstOrDefault(c => c.id == "11") == null ? null : p.stats.FirstOrDefault(c => c.id == "11").value);
+                        ////                                cmd2.Parameters.Add("@CORNERS_13", p.stats.FirstOrDefault(c => c.id == "13") == null ? null : p.stats.FirstOrDefault(c => c.id == "13").value);
+                        ////                                cmd2.Parameters.Add("@YELLOW_CARDS_8", p.stats.FirstOrDefault(c => c.id == "8") == null ? null : p.stats.FirstOrDefault(c => c.id == "8").value);
+                        ////                                cmd2.Parameters.Add("@RED_CARDS_9", p.stats.FirstOrDefault(c => c.id == "9") == null ? null : p.stats.FirstOrDefault(c => c.id == "9").value);
+                        ////                                cmd2.Parameters.Add("@TOTAL_SHOTS_19", p.stats.FirstOrDefault(c => c.id == "19") == null ? null : p.stats.FirstOrDefault(c => c.id == "19").value);
+                        ////                                cmd2.Parameters.Add("@FOULS_22", p.stats.FirstOrDefault(c => c.id == "22") == null ? null : p.stats.FirstOrDefault(c => c.id == "22").value);
+                        ////                                cmd2.Parameters.Add("@OFFSIDES_24", p.stats.FirstOrDefault(c => c.id == "24") == null ? null : p.stats.FirstOrDefault(c => c.id == "24").value);
+                        ////                                cmd2.Parameters.Add("@PS_14", p.stats.FirstOrDefault(c => c.id == "14") == null ? null : p.stats.FirstOrDefault(c => c.id == "14").value);
+                        ////                                cmd2.Parameters.Add("@PM_15", p.stats.FirstOrDefault(c => c.id == "15") == null ? null : p.stats.FirstOrDefault(c => c.id == "15").value);
+                        ////                                cmd2.Parameters.Add("@PG_16", p.stats.FirstOrDefault(c => c.id == "16") == null ? null : p.stats.FirstOrDefault(c => c.id == "16").value);
+                        ////                                cmd2.Parameters.Add("@FK_25", p.stats.FirstOrDefault(c => c.id == "25") == null ? null : p.stats.FirstOrDefault(c => c.id == "25").value);
+                        ////                                cmd2.Parameters.Add("@DFK_26", p.stats.FirstOrDefault(c => c.id == "26") == null ? null : p.stats.FirstOrDefault(c => c.id == "26").value);
+                        ////                                cmd2.Parameters.Add("@FKG_18", p.stats.FirstOrDefault(c => c.id == "18") == null ? null : p.stats.FirstOrDefault(c => c.id == "18").value);
+                        ////                                cmd2.Parameters.Add("@SW_27", p.stats.FirstOrDefault(c => c.id == "27") == null ? null : p.stats.FirstOrDefault(c => c.id == "27").value);
+                        ////                                cmd2.Parameters.Add("@SB_28", p.stats.FirstOrDefault(c => c.id == "28") == null ? null : p.stats.FirstOrDefault(c => c.id == "28").value);
+                        ////                                cmd2.Parameters.Add("@GS_29", p.stats.FirstOrDefault(c => c.id == "29") == null ? null : p.stats.FirstOrDefault(c => c.id == "29").value);
+                        ////                                cmd2.Parameters.Add("@GK_30", p.stats.FirstOrDefault(c => c.id == "30") == null ? null : p.stats.FirstOrDefault(c => c.id == "30").value);
+                        ////                                cmd2.Parameters.Add("@TI_32", p.stats.FirstOrDefault(c => c.id == "32") == null ? null : p.stats.FirstOrDefault(c => c.id == "32").value);
+                        ////                                cmd2.Parameters.Add("@SUBSTITUTIONS_31", p.stats.FirstOrDefault(c => c.id == "31") == null ? null : p.stats.FirstOrDefault(c => c.id == "31").value);
+                        ////                                cmd2.Parameters.Add("@GOALS_40", p.stats.FirstOrDefault(c => c.id == "40") == null ? null : p.stats.FirstOrDefault(c => c.id == "40").value);
+                        ////                                cmd2.Parameters.Add("@MP_34", p.stats.FirstOrDefault(c => c.id == "34") == null ? null : p.stats.FirstOrDefault(c => c.id == "34").value);
+                        ////                                cmd2.Parameters.Add("@OWN_GOALS_17", p.stats.FirstOrDefault(c => c.id == "17") == null ? null : p.stats.FirstOrDefault(c => c.id == "17").value);
+                        ////                                cmd2.Parameters.Add("@ADW_33", p.stats.FirstOrDefault(c => c.id == "33") == null ? null : p.stats.FirstOrDefault(c => c.id == "33").value);
+                        ////                                cmd2.Parameters.Add("@FORM_716", p.stats.FirstOrDefault(c => c.id == "716") == null ? null : p.stats.FirstOrDefault(c => c.id == "716").value);
+                        ////                                cmd2.Parameters.Add("@SKIN_718", p.stats.FirstOrDefault(c => c.id == "718") == null ? null : p.stats.FirstOrDefault(c => c.id == "718").value);
+                        ////                                cmd2.Parameters.Add("@PS_639", p.stats.FirstOrDefault(c => c.id == "639") == null ? null : p.stats.FirstOrDefault(c => c.id == "639").value);
+                        ////                                cmd2.Parameters.Add("@PU_697", p.stats.FirstOrDefault(c => c.id == "697") == null ? null : p.stats.FirstOrDefault(c => c.id == "697").value);
+                        ////                                cmd2.Parameters.Add("@GOALS115_772", p.stats.FirstOrDefault(c => c.id == "772") == null ? null : p.stats.FirstOrDefault(c => c.id == "772").value);
+                        ////                                cmd2.Parameters.Add("@GOALS1630_773", p.stats.FirstOrDefault(c => c.id == "773") == null ? null : p.stats.FirstOrDefault(c => c.id == "773").value);
+                        ////                                cmd2.Parameters.Add("@GOALS3145_774", p.stats.FirstOrDefault(c => c.id == "774") == null ? null : p.stats.FirstOrDefault(c => c.id == "774").value);
+                        ////                                cmd2.Parameters.Add("@GOALS4660_775", p.stats.FirstOrDefault(c => c.id == "775") == null ? null : p.stats.FirstOrDefault(c => c.id == "775").value);
+                        ////                                cmd2.Parameters.Add("@GOALS6175_776", p.stats.FirstOrDefault(c => c.id == "776") == null ? null : p.stats.FirstOrDefault(c => c.id == "776").value);
+                        ////                                cmd2.Parameters.Add("@GOALS7690_777", p.stats.FirstOrDefault(c => c.id == "777") == null ? null : p.stats.FirstOrDefault(c => c.id == "777").value);
+                        ////                                cmd2.Parameters.Add("@MPG_778", p.stats.FirstOrDefault(c => c.id == "778") == null ? null : p.stats.FirstOrDefault(c => c.id == "778").value);
+                        ////                                cmd2.Parameters.Add("@MPS_779", p.stats.FirstOrDefault(c => c.id == "779") == null ? null : p.stats.FirstOrDefault(c => c.id == "779").value);
+                        ////                                cmd2.Parameters.Add("@BP_770", p.stats.FirstOrDefault(c => c.id == "770") == null ? null : p.stats.FirstOrDefault(c => c.id == "770").value);
+                        ////                                cmd2.Parameters.Add("@BPP_771", p.stats.FirstOrDefault(c => c.id == "771") == null ? null : p.stats.FirstOrDefault(c => c.id == "771").value);
+                        ////                                cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                        ////                                cmd2.Parameters.Add("@CACTION", "update");
+                        ////                                cmd2.Parameters.Add("@TEAMTYPE", p.counter == "2" ? "G" : "H");
+                        ////                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                        ////                                Files.WriteLog(true, (id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_stats") + "[" + sevent.id + "/" + p.id + "]." + p.stats.FirstOrDefault(c => c.id == "771").value);
+                        ////                                if (id > 0) bDone = true;
+                        ////                            }
+                        ////                        }
+                        ////                        if (bDone) SendAlertMsg("62", "X", sevent.id);
+                        ////                    }
+                        ////                    catch (Exception exp)
+                        ////                    {
+                        ////                        Files.WriteError("events.showJson " + strName + " details/stats Error:" + exp);
+                        ////                    }
+                        ////                }
+
+                        ////                #region cancel insert one by one
+                        ////                /*
+                        ////            foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident Event_incident in sevent.events_incidents)
+                        ////            {
+                        ////                if (Event_incident == null) continue;
+
+                        ////                using (FbCommand cmd2 = new FbCommand())
+                        ////                {
+                        ////                    cmd2.CommandText = "PR_INCIDENTS";
+                        ////                    cmd2.CommandType = CommandType.StoredProcedure;
+                        ////                    cmd2.Connection = connection;
+                        ////                    cmd2.Parameters.Add("@ID", Event_incident.id);
+                        ////                    cmd2.Parameters.Add("@EVENTID", sevent.id);
+                        ////                    cmd2.Parameters.Add("@CACTION", "update");
+                        ////                    cmd2.Parameters.Add("@INCIDENT_ID", Event_incident.incident_id);
+                        ////                    cmd2.Parameters.Add("@INCIDENT_NAME", Event_incident.incident_name);
+                        ////                    cmd2.Parameters.Add("@PARTICIPANT_ID", Event_incident.participant_id);
+                        ////                    cmd2.Parameters.Add("@PARTICIPANT_NAME", Event_incident.participant_name);
+                        ////                    cmd2.Parameters.Add("@SUBPARTICIPANT_ID", Event_incident.subparticipant_id);
+                        ////                    cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", Event_incident.subparticipant_name == "" ? (Event_incident.info != "" && Event_incident.incident_id == "413" ? Event_incident.info + "*" : "") : Event_incident.subparticipant_name);
+                        ////                    cmd2.Parameters.Add("@IMPORTANT_FOR_TRADER", true);// incidentJson.data.incident.important_for_trader == "yes" ? true : false);
+                        ////                    cmd2.Parameters.Add("@EVENT_TIME", Event_incident.event_time);
+                        ////                    cmd2.Parameters.Add("@EVENT_STATUS_ID", Event_incident.event_status_id);
+                        ////                    cmd2.Parameters.Add("@EVENT_STATUS_NAME", Event_incident.event_status_name);
+                        ////                    cmd2.Parameters.Add("@UT", Event_incident.ut);
+                        ////                    cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                        ////                    cmd2.Parameters.Add("@TEAMTYPE",
+                        ////                    (Event_incident.participant_id == null || Event_incident.participant_id == "" ? "" : Event_incident.participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : Event_incident.participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "H"));
+                        ////                    int sID = Convert.ToInt32(cmd2.ExecuteScalar());
+                        ////                    Files.WriteLog((sID > -1 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
+                        ////                } 
+
+                        ////        }
+                        ////        Files.WriteLog(" Update INCIDENTS " + "[" + sevent.id + "]," + strName + ".xml");
+
+                        ////            */
+                        ////                #endregion
+                        ////            }
+                        ////        }
+                        ////    }
+                        ////}
+                         }
                         connection.Close();
                     }
                   
@@ -2553,12 +2979,13 @@ namespace DataOfScouts
                     try
                     {
                         int count = ampqXEids.Count;
-                        int p = ampqXEids.Dequeue();
+                        //  int p = ampqXEids.Dequeue();
+                        AmqpMessage p = ampqXEids.Dequeue();
 
                         if (AppFlag.TestMode) Files.WriteTestLog("Queue", "Received5:   " + "No= " + p + "  --" + amqpSMessages.Count + "/" + amqpMessages.Count + "/" + count);
-                        InsertData("events.showJson", true, p.ToString(), true);
-                        SendAlertMsg("31", "X", p.ToString());
-                        SendAlertMsg("30", "X", p.ToString());  //FOR CONNER
+                        InsertData("events.showJson",p.No,p.Msg);
+                        SendAlertMsg("31", "X", p.No.ToString());
+                        SendAlertMsg("30", "X", p.No.ToString());  //FOR CONNER
                     }
                     catch (Exception exp)
                     {
@@ -2629,6 +3056,7 @@ namespace DataOfScouts
                             bool done = false;
                             int eventid = -1;
                             int statusid = -1;
+                            int id = -1;
                             ////using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                             ////{
                             ////    connection.Open();
@@ -2641,7 +3069,7 @@ namespace DataOfScouts
                                 if ((api != null && api.type == "event" && count > AppFlag.SuspendCount && m_lstMatchid.Contains(api.data.@event.id)) || (api != null && api.type == "event" && count <= AppFlag.SuspendCount))
                                 {
                                     iCount++;
-                                    int id = -1;
+                                   
                                     strName = api.data.@event.id + "_" + (api.data.@event.status_id) + "_" + DateTime.Now.ToString("HHmmssfff");
                                     Files.WriteJson(strName, message);
                                     if (api.data.@event.action != "delete")
@@ -2679,7 +3107,7 @@ namespace DataOfScouts
                                                     if (id > -1)
                                                     {
                                                         Files.WriteLog(" [Success] Update GoalInfo " + "[" + api.data.@event.id + "] " + api.data.@event.participants[0].id + "/" + api.data.@event.participants[1].id + " " + id + ". " + strName + ".json "
-                                                            + api.data.@event.status_id +" "+ m_H_YELLOW + "/" + m_H_RED + "/" + m_G_YELLOW + "/" + m_G_RED + "/" + m_H_GOAL + "/" + m_G_GOAL);
+                                                            + api.data.@event.status_id + " " + m_H_YELLOW + "/" + m_H_RED + "/" + m_G_YELLOW + "/" + m_G_RED + "/" + m_H_GOAL + "/" + m_G_GOAL);
                                                         if (id > 0) done = true;
                                                     }
                                                     else
@@ -3105,19 +3533,24 @@ namespace DataOfScouts
                             {
                                 if (m_lstMatchid.Contains(eventid))
                                 {
+                                    AmqpMessage xp = new AmqpMessage { Msg = id.ToString(), No = eventid, ReceivedTime = DateTime.Now };
+
+
                                     if (statusid == 6 || statusid == 9 || statusid == 11)
                                     {
                                         if (eventid > 0)
                                         {
-                                            //     InsertData("events.show3", true, eventid.ToString(), true);
-                                            ampqXEids.Enqueue(eventid);
+                                            // InsertData("events.show3", true, eventid.ToString(), true); 
+                                            // ampqXEids.Enqueue(eventid); 
+                                            ampqXEids.Enqueue(xp);
                                             Files.WriteLog(true, "Housekeep [" + eventid.ToString() + "]." + statusid + " " + strName + ".json");
                                         }
                                     }
                                     else
                                     {
-                                        ampqXEids.Enqueue(eventid);
-                                        //   InsertData("events.show3", true, eventid.ToString(), true);
+                                        // InsertData("events.show3", true, eventid.ToString(), true);
+                                        // ampqXEids.Enqueue(eventid);
+                                        ampqXEids.Enqueue(xp);
                                         Files.WriteLog(true, "Get event [" + eventid.ToString() + "]." + statusid + " " + strName + ".json");
                                     }
 
@@ -4301,7 +4734,7 @@ namespace DataOfScouts
                         lParam = Convert.ToInt32(Id);
                         Files.WriteLog("provider", " [Success] Send " + status + "-" + Type + "-" + Id.ToString());
                     }
-                    if (Type == "31" || Type == "30" || Type == "62")
+                    if (Type == "31" || Type == "30" || Type == "62" || Type == "12")
                     {
                         //xml goaldetails
                         wParam = Convert.ToInt32(Type);
@@ -8535,379 +8968,459 @@ namespace DataOfScouts
                                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                                 {
                                     connection.Open();
-                                    for (int i = 1; i < 2 && Convert.ToBoolean(arr[0]) == true && arr[1].ToString() != ""; i++)
+                                    //// for (int i = 1; i < 2 && Convert.ToBoolean(arr[0]) == true && arr[1].ToString() != ""; i++)
+                                    ////for (int i = 1; i < 2; i++)
+                                    ////{
+                                    var responseValue = clientTest.GetAccessData(strToken, "events.show", arr[0]);
+                                    var strResponseValue = responseValue.Result;
+
+                                    if (strResponseValue == "Unauthorized")
                                     {
-                                        var responseValue = clientTest.GetAccessData(strToken, "events.show", arr[1]);
-                                        var strResponseValue = responseValue.Result;
+                                        // MessageBox.Show("Unauthorized!"); break;
+                                        ClientAuthorize();
+                                        Files.WriteLog("events.showJson - Client Authorie!");
+                                    }
+                                    strName = arr[0] + "_" + type + "-" + arr[1] + "_" + DateTime.Now.ToString("HHmmss");
 
-                                        if (strResponseValue == "Unauthorized") { MessageBox.Show("Unauthorized!"); break; }
-                                          strName = arr[1].ToString() + "_" + type + "-" + i + "_" + DateTime.Now.ToString("HHmmss");
+                                    DOSEvents2.api apis = XmlUtil.Deserialize(typeof(DOSEvents2.api), strResponseValue) as DOSEvents2.api;
+                                    if (apis == null) break;
 
-                                        DOSEvents2.api apis = XmlUtil.Deserialize(typeof(DOSEvents2.api), strResponseValue) as DOSEvents2.api;
-                                        if (apis == null) break;
+                                    Files.WriteXml(strName, strResponseValue);
+                                    Files.WriteLog(true, " Get " + strName + ".xml.");
 
-                                        Files.WriteXml(strName, strResponseValue);
-                                        Files.WriteLog(true, " Get " + strName + ".xml.");
+                                    DOSEvents2.apiDataCompetition competition = (apis.data == null || apis.data.Length == 0) ? null : apis.data[0];
+                                    if (competition == null) break;
 
-                                        DOSEvents2.apiDataCompetition competition = (apis.data == null || apis.data.Length == 0) ? null : apis.data[0];
-                                        if (competition == null) break;
+                                    string strCompetition_id = competition.id;
+                                    string strArea_id = competition.area_id;
 
-                                        string strCompetition_id = competition.id;
-                                        string strArea_id = competition.area_id;
+                                    DOSEvents2.apiDataCompetitionSeason[] seasons = competition.seasons;
+                                    if (seasons == null) break;
+                                    foreach (DOSEvents2.apiDataCompetitionSeason season in seasons)
+                                    {
+                                        DOSEvents2.apiDataCompetitionSeasonStage[] stages = season.stages;
+                                        if (stages == null) continue;
 
-                                        DOSEvents2.apiDataCompetitionSeason[] seasons = competition.seasons;
-                                        if (seasons == null) continue;
-                                        foreach (DOSEvents2.apiDataCompetitionSeason season in seasons)
+                                        foreach (DOSEvents2.apiDataCompetitionSeasonStage stage in stages)
                                         {
-                                            DOSEvents2.apiDataCompetitionSeasonStage[] stages = season.stages;
-                                            if (stages == null) continue;
+                                            DOSEvents2.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
+                                            if (groups == null) continue;
 
-                                            foreach (DOSEvents2.apiDataCompetitionSeasonStage stage in stages)
+                                            foreach (DOSEvents2.apiDataCompetitionSeasonStageGroup group in groups)
                                             {
-                                                DOSEvents2.apiDataCompetitionSeasonStageGroup[] groups = stage.groups;
-                                                if (groups == null) continue;
+                                                DOSEvents2.apiDataCompetitionSeasonStageGroupEvent[] events = group.events;
+                                                if (events == null) continue;
 
-                                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroup group in groups)
+                                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEvent sevent in events)
                                                 {
-                                                    DOSEvents2.apiDataCompetitionSeasonStageGroupEvent[] events = group.events;
-                                                    if (events == null) continue;
+                                                    if (sevent == null) continue;
 
-                                                    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEvent sevent in events)
+                                                    #region 20191229  INCIDENTS  
+                                                    try
                                                     {
-                                                        if (sevent == null) continue;
+                                                        DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident[] events_incidents = sevent.events_incidents;
+                                                        if (events_incidents == null || events_incidents.Count() == 0) continue;
 
-                                                        #region  cancel update goalinfo at xml  
-                                                        /*
+                                                        using (FbCommand cmd2 = new FbCommand())
+                                                        {
+                                                            cmd2.CommandText = "DELETE_INCIDENTS_ByEventID";
+                                                            cmd2.CommandType = CommandType.StoredProcedure;
+                                                            cmd2.Connection = connection;
+                                                            cmd2.Parameters.Add("@ID", sevent.id);
+                                                            int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                        }
+                                                        Files.WriteLog(true, " Delete INCIDENTS [" + sevent.id + "]");
+
+                                                        queryString = "select first 1 i.* from INCIDENTS i ";
+                                                        using (FbCommand cmd = new FbCommand(queryString, connection))
+                                                        {
+                                                            using (FbDataAdapter fda = new FbDataAdapter(cmd))
+                                                            {
+                                                                using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
+                                                                {
+                                                                    using (DataSet data = new DataSet())
+                                                                    {
+                                                                        data.Tables.Add(new DataTable("INCIDENTS"));
+                                                                        fda.Fill(data.Tables["INCIDENTS"]);
+                                                                        //  if (data.Tables["INCIDENTS"].Rows.Count > 0) data.Tables["INCIDENTS"].Rows.Remove(data.Tables["INCIDENTS"].Rows[0]);
+                                                                        DataRow dr;
+                                                                        DateTime dateTime = DateTime.Now;
+                                                                        for (int j = 0; j < sevent.events_incidents.Length; j++)
+                                                                        {
+                                                                            dr = data.Tables["INCIDENTS"].NewRow();
+                                                                            dr["ID"] = events_incidents[j].id;
+                                                                            dr["EVENTID"] = sevent.id;
+                                                                            dr["CACTION"] = "update";
+                                                                            dr["INCIDENT_ID"] = events_incidents[j].incident_id;
+                                                                            dr["INCIDENT_NAME"] = events_incidents[j].incident_name;
+                                                                            dr["PARTICIPANT_ID"] = events_incidents[j].participant_id;
+                                                                            dr["PARTICIPANT_NAME"] = events_incidents[j].participant_name;
+                                                                            dr["SUBPARTICIPANT_ID"] = events_incidents[j].subparticipant_id;
+                                                                            dr["SUBPARTICIPANT_NAME"] = events_incidents[j].subparticipant_name == "" ? (events_incidents[j].info != "" && events_incidents[j].incident_id == "413" ? events_incidents[j].info + "*" : "") : events_incidents[j].subparticipant_name;// events_incidents[j].subparticipant_name;
+                                                                            dr["IMPORTANT_FOR_TRADER"] = true;
+                                                                            dr["EVENT_TIME"] = events_incidents[j].event_time;
+                                                                            dr["EVENT_STATUS_ID"] = events_incidents[j].event_status_id;
+                                                                            dr["EVENT_STATUS_NAME"] = events_incidents[j].event_status_name;
+                                                                            dr["UT"] = events_incidents[j].ut;
+                                                                            dr["CTIMESTAMP"] = dateTime.AddMilliseconds(1);
+                                                                            dateTime = dateTime.AddMilliseconds(1);
+                                                                            dr["TEAMTYPE"] = events_incidents[j].participant_id != null && events_incidents[j].participant_id != "" ? (events_incidents[j].participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : events_incidents[j].participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "") : "";
+                                                                            data.Tables["INCIDENTS"].Rows.Add(dr);
+                                                                        }
+                                                                        int k = fda.Update(data.Tables["INCIDENTS"]);
+                                                                        Files.WriteLog(true, (k > 0 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + k);// + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    catch (Exception exp)
+                                                    {
+                                                        Files.WriteError("events.showJson " + strName + " INCIDENTS Error:" + exp);
+                                                    }
+                                                    #endregion
+
+                                                    #region 20191229 update clocktime and status on xml  
+                                                    bool bDone = false;
+                                                    if (arr[1].ToString() == "1" || arr[1].ToString() == "2")
+                                                    {
                                                         string iClockTime = "0";
                                                         iClockTime = sevent.clock_time == null || sevent.clock_time == "" ? "0" : Convert.ToInt32(sevent.clock_time) < 60 ? "1" : Math.Round(Convert.ToInt32(sevent.clock_time) / 60.0).ToString();
+
                                                         using (FbCommand cmd2 = new FbCommand())
                                                         {
                                                             //  cmd2.CommandText = "PR_XML_event"; 
-                                                            cmd2.CommandText = "PR_XML_EVENTCLOCK";   //20191129 update clocktime on xml
+                                                            cmd2.CommandText = "PR_JSONXML_EVENT";
                                                             cmd2.CommandType = CommandType.StoredProcedure;
                                                             cmd2.Connection = connection;
                                                             cmd2.Parameters.Add("@ID", sevent.id);
                                                             cmd2.Parameters.Add("@HOME_ID", sevent.participants.Count() > 0 ? sevent.participants[0].id : "-1");
                                                             cmd2.Parameters.Add("@GUEST_ID", sevent.participants.Count() > 0 ? sevent.participants[1].id : "-1");
+                                                            cmd2.Parameters.Add("@STATUS_ID", sevent.status_id);
+                                                            cmd2.Parameters.Add("@STATUS_NAME", sevent.status_name);
                                                             cmd2.Parameters.Add("@CLOCKTIME", sevent.clock_time);
                                                             cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
                                                             int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog((id > 0 ? " [Success] Update event " : " [Failure] Update event ") + "[" + sevent.id + "] " + sevent.participants[0].name + "-" + sevent.participants[1].name + " " + sevent.participants[0].id + "/" + sevent.participants[1].id);
+                                                            Files.WriteLog(true, (id > 0 ? " [Success] Update event " : " [Failure] Update event ") + "[" + sevent.id + "] " + sevent.participants[0].name + "-" + sevent.participants[1].name + " " + sevent.participants[0].id + "/" + sevent.participants[1].id + " " + sevent.status_id + "/" + sevent.status_name);
                                                         }
-                                                        if (iClockTime == "0")
+                                                       
+                                                        foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant participant in sevent.participants)
                                                         {
-                                                            string sName = "";
-                                                            string sPlayers = "";
-
-                                                            using (FbCommand cmd2 = new FbCommand("SELECT  r.EMATCHID , r.HKJCDAYCODE, r.HKJCMATCHNO,r.CMATCHDATETIME FROM EMATCHES r where r.EMATCHID='" + sevent.id + "'", connection))
+                                                            if (participant == null || participant.lineups.Count() == 0) continue;
+                                                            try
                                                             {
-                                                                FbDataReader reader = cmd2.ExecuteReader();
-                                                                while (reader.Read())
+                                                                DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup[] participantLineups = participant.lineups;
+                                                                using (FbCommand cmd2 = new FbCommand())
                                                                 {
-                                                                    var data = (IDataRecord)reader;
-                                                                    sName = data[1] + "-" + data[2] + "-" + Convert.ToDateTime(data[3]).ToString("yyyyMMdd") + "-" + data[0];
+                                                                    cmd2.CommandText = "DELETE_PLAYERS_BYID";
+                                                                    cmd2.CommandType = CommandType.StoredProcedure;
+                                                                    cmd2.Connection = connection;
+                                                                    cmd2.Parameters.Add("@TEAM_ID", participant.id);
+                                                                    cmd2.Parameters.Add("@EVENT_ID", sevent.id);
+                                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
                                                                 }
-                                                                reader.Close();
-                                                            }
-                                                            foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant participant in sevent.participants)
-                                                            {
-                                                                if (participant == null) continue;
+                                                                Files.WriteLog(true, " Delete PLAYERS [" + sevent.id + "] "+ participant.id);
 
-                                                                sPlayers += (participant.lineups == null || participant.lineups.Count() == 0) ? "" : "\r\n" + (participant.counter == "1" ? "Host\r\n" : "Guest\r\n");
-
-                                                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup lineup in participant.lineups)
+                                                                queryString = "select first 1 i.* from PLAYERS i ";
+                                                                using (FbCommand cmd = new FbCommand(queryString, connection))
                                                                 {
-                                                                    if (lineup == null) continue;
-
-                                                                    sPlayers += (lineup.shirt_nr == "" ? "-1" : lineup.shirt_nr) + "  " + lineup.participant_name + "  " + (lineup.bench.ToLower() == "yes" ? "/Bench" : "     ") + "  " + (lineup.type.ToLower() == "coach" ? "/Coach" : "") + "\r\n";
-
-                                                                    using (FbCommand cmd2 = new FbCommand())
+                                                                    using (FbDataAdapter fda = new FbDataAdapter(cmd))
                                                                     {
-                                                                        cmd2.CommandText = "ADD_Player2";
-                                                                        cmd2.CommandType = CommandType.StoredProcedure;
-                                                                        cmd2.Connection = connection;
-                                                                        cmd2.Parameters.Add("@ID", lineup.participant_id == "" ? "-1" : lineup.participant_id);
-                                                                        cmd2.Parameters.Add("@NAME", lineup.participant_name);
-                                                                        cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
-                                                                        cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
-                                                                        cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
-                                                                        cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "-2" : (lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
-                                                                        cmd2.Parameters.Add("@TEAM_ID", participant.id);
-                                                                        cmd2.Parameters.Add("@SEASON_ID", season.id);
-                                                                        cmd2.Parameters.Add("@EVENT_ID", sevent.id);
-                                                                        cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
-                                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                        Files.WriteLog(id > 0 ? " [Success] Insert players [" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name : "[" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name + " player exist.");
-                                                                    }
-                                                                }
-                                                            }
-
-                                                            // if(sName!="" && Convert.ToBoolean(arr[2])&& sPlayers!=""&&DateTime.Now<Convert.ToDateTime(sevent.start_date))  Files.WriteLog(sName, true, sPlayers);
-                                                            if (sName != "" && Convert.ToBoolean(arr[2]) && sPlayers != "")
-                                                            {
-                                                                // if (DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1))
-                                                                if (sevent.status_id == "1" || sevent.status_id == "6" || DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1) || sevent.status_id == "33")
-                                                                {
-                                                                    Files.WriteLog(sName, true, sevent.start_date + "\r\n" + sPlayers);
-                                                                }
-                                                                else
-                                                                {
-                                                                    Files.WriteLog(sName + "_old", true, sevent.start_date + "\r\n" + sPlayers);
-                                                                }
-                                                            }
-                                                        }
-
-                                                        string sH_YELLOW = "", sH_RED = "", sG_YELLOW = "", sG_RED = "", sH_GOAL = "", sG_GOAL = "", sSTATUS = "";
-                                                        //merge one PR to store goalinfo data / matchtime  20191129
-                                                        if (sevent.participants.Length == 2 && sevent.participants[0].stats.Length > 0)// && sevent.participants[0].results.Length > 0)
-                                                        {
-
-                                                            sH_YELLOW = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value;
-                                                            sH_RED = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value;
-                                                            sG_YELLOW = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value;
-                                                            sG_RED = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value;
-                                                        }
-
-                                                        if (sevent.participants.Length == 2 && sevent.participants[0].results.Length > 0)//&& sevent.participants[0].stats.Length > 0)
-                                                        {
-                                                            sSTATUS = sevent.status_id;
-                                                            sH_GOAL = sevent.participants[0].counter == "1" ? sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value;
-                                                            sG_GOAL = sevent.participants[1].counter == "2" ? sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value;
-                                                        }
-                                                        if (sevent.status_id != "1")
-                                                        {
-                                                            using (FbCommand cmd2 = new FbCommand())
-                                                            {
-                                                                cmd2.CommandText = "PR_Xml_StatsResult_GoalInfo";
-                                                                cmd2.CommandType = CommandType.StoredProcedure;
-                                                                cmd2.Connection = connection;
-                                                                cmd2.Parameters.Add("@EMATCHID", sevent.id);
-                                                                cmd2.Parameters.Add("@STATUS", sSTATUS);
-                                                                cmd2.Parameters.Add("@H_YELLOW", sH_YELLOW);
-                                                                cmd2.Parameters.Add("@H_RED", sH_RED);
-                                                                cmd2.Parameters.Add("@G_YELLOW", sG_YELLOW);
-                                                                cmd2.Parameters.Add("@G_RED", sG_RED);
-                                                                cmd2.Parameters.Add("@H_GOAL", sH_GOAL);
-                                                                cmd2.Parameters.Add("@G_GOAL", sG_GOAL);
-                                                                cmd2.Parameters.Add("@CLOCK_TIME", iClockTime);
-                                                                cmd2.Parameters.Add("@LASTTIME", DateTime.Now);
-                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                Files.WriteLog((id > 0 ? " [Success] Update GoalInfo Goal " : " [Failure]  Update GoalInfo Goal") + "[" + sevent.id + "] " + sevent.participants[0].id + "/" + sevent.participants[1].id + "..");
-                                                            }
-                                                        }
-                                                        */
-                                                        #endregion
-                                                        try
-                                                        {
-                                                            DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident[] events_incidents = sevent.events_incidents;
-                                                            if (events_incidents == null || events_incidents.Count() == 0) continue;
-
-                                                            using (FbCommand cmd2 = new FbCommand())
-                                                            {
-                                                                cmd2.CommandText = "DELETE_INCIDENTS_ByEventID";
-                                                                cmd2.CommandType = CommandType.StoredProcedure;
-                                                                cmd2.Connection = connection;
-                                                                cmd2.Parameters.Add("@ID", sevent.id);
-                                                                int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            }
-                                                            Files.WriteLog(true, " Delete INCIDENTS [" + sevent.id + "]");
-
-                                                            queryString = "select first 1 i.* from INCIDENTS i ";
-                                                            using (FbCommand cmd = new FbCommand(queryString, connection))
-                                                            {
-                                                                using (FbDataAdapter fda = new FbDataAdapter(cmd))
-                                                                {
-                                                                    using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
-                                                                    {
-                                                                        using (DataSet data = new DataSet())
+                                                                        using (FbCommandBuilder fcb = new FbCommandBuilder(fda))
                                                                         {
-                                                                            data.Tables.Add(new DataTable("INCIDENTS"));
-                                                                            fda.Fill(data.Tables["INCIDENTS"]);
-                                                                            //  if (data.Tables["INCIDENTS"].Rows.Count > 0) data.Tables["INCIDENTS"].Rows.Remove(data.Tables["INCIDENTS"].Rows[0]);
-                                                                            DataRow dr;
-                                                                            DateTime dateTime = DateTime.Now;
-                                                                            for (int j = 0; j < sevent.events_incidents.Length; j++)
+                                                                            using (DataSet data = new DataSet())
                                                                             {
-                                                                                dr = data.Tables["INCIDENTS"].NewRow();
-                                                                                dr["ID"] = events_incidents[j].id;
-                                                                                dr["EVENTID"] = sevent.id;
-                                                                                dr["CACTION"] = "update";
-                                                                                dr["INCIDENT_ID"] = events_incidents[j].incident_id;
-                                                                                dr["INCIDENT_NAME"] = events_incidents[j].incident_name;
-                                                                                dr["PARTICIPANT_ID"] = events_incidents[j].participant_id;
-                                                                                dr["PARTICIPANT_NAME"] = events_incidents[j].participant_name;
-                                                                                dr["SUBPARTICIPANT_ID"] = events_incidents[j].subparticipant_id;
-                                                                                dr["SUBPARTICIPANT_NAME"] = events_incidents[j].subparticipant_name == "" ? (events_incidents[j].info != "" && events_incidents[j].incident_id == "413" ? events_incidents[j].info + "*" : "") : events_incidents[j].subparticipant_name;// events_incidents[j].subparticipant_name;
-                                                                                dr["IMPORTANT_FOR_TRADER"] = true;
-                                                                                dr["EVENT_TIME"] = events_incidents[j].event_time;
-                                                                                dr["EVENT_STATUS_ID"] = events_incidents[j].event_status_id;
-                                                                                dr["EVENT_STATUS_NAME"] = events_incidents[j].event_status_name;
-                                                                                dr["UT"] = events_incidents[j].ut;
-                                                                                dr["CTIMESTAMP"] = dateTime.AddMilliseconds(1);
-                                                                                dateTime = dateTime.AddMilliseconds(1);
-                                                                                dr["TEAMTYPE"] = events_incidents[j].participant_id != null && events_incidents[j].participant_id != "" ? (events_incidents[j].participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : events_incidents[j].participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "") : "";
-                                                                                data.Tables["INCIDENTS"].Rows.Add(dr);
+                                                                                data.Tables.Add(new DataTable("PLAYERS"));
+                                                                                fda.Fill(data.Tables["PLAYERS"]);
+                                                                                DataRow dr;
+                                                                                DateTime dateTime = DateTime.Now;
+                                                                                for (int j = 0; j < participant.lineups.Length; j++)
+                                                                                {
+                                                                                    dr = data.Tables["PLAYERS"].NewRow();
+                                                                                    dr["ID"] = participant.lineups[j].participant_id == "" ? "-1" : participant.lineups[j].participant_id;
+                                                                                    dr["NAME"] = participant.lineups[j].participant_name;
+                                                                                    dr["AREA_ID"] = participant.lineups[j].participant_area_id == "" ? "-1" : participant.lineups[j].participant_area_id;
+                                                                                    dr["SLUG"] = participant.lineups[j].participant_slug;
+                                                                                    dr["BENCH"] = participant.lineups[j].bench.ToLower() == "yes" ? true : false;
+                                                                                    dr["SHIRT_NR"] = participant.lineups[j].type == "coach" ? "-2" : (participant.lineups[j].shirt_nr == "" || participant.lineups[j].shirt_nr == "-") ? "-1" : participant.lineups[j].shirt_nr.Replace("-", "");
+                                                                                    dr["TEAM_ID"] = participant.id;
+                                                                                    dr["SEASON_ID"] = season.id;
+                                                                                    dr["EVENT_ID"] = sevent.id;
+                                                                                    dr["CTIMESTAMP"] = dateTime.AddMilliseconds(1);
+                                                                                    dateTime = dateTime.AddMilliseconds(1);
+                                                                                    data.Tables["PLAYERS"].Rows.Add(dr);
+                                                                                }
+                                                                                int k = fda.Update(data.Tables["PLAYERS"]);
+                                                                                Files.WriteLog(true, (k > 0 ? " [Success] Update PLAYERS " : " [Failure] Update PLAYERS ") + "[" + sevent.id + "] " + participant.id + " " + k);// + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
+                                                                                if (k > 0) bDone = true;
                                                                             }
-                                                                            int k = fda.Update(data.Tables["INCIDENTS"]);
-                                                                            Files.WriteLog(true, (k > 0 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + k);// + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
                                                                         }
                                                                     }
                                                                 }
                                                             }
+                                                            catch (Exception exp)
+                                                            {
+                                                                Files.WriteError("events.showJson " + strName + " PLAYERS Error:" + exp);
+                                                            }
+                                                        }
+                                                        #region
+
+                                                        if (bDone) SendAlertMsg("12", "X", sevent.id);
+
+                                                        //if (iClockTime == "0")
+                                                        //{
+                                                        //    string sName = "";
+                                                        //    string sPlayers = "";
+
+                                                        //    using (FbCommand cmd2 = new FbCommand("SELECT  r.EMATCHID , r.HKJCDAYCODE, r.HKJCMATCHNO,r.CMATCHDATETIME FROM EMATCHES r where r.EMATCHID='" + sevent.id + "'", connection))
+                                                        //    {
+                                                        //        FbDataReader reader = cmd2.ExecuteReader();
+                                                        //        while (reader.Read())
+                                                        //        {
+                                                        //            var data = (IDataRecord)reader;
+                                                        //            sName = data[1] + "-" + data[2] + "-" + Convert.ToDateTime(data[3]).ToString("yyyyMMdd") + "-" + data[0];
+                                                        //        }
+                                                        //        reader.Close();
+                                                        //    }
+                                                        //    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant participant in sevent.participants)
+                                                        //    {
+                                                        //        if (participant == null) continue;
+
+                                                        //        sPlayers += (participant.lineups == null || participant.lineups.Count() == 0) ? "" : "\r\n" + (participant.counter == "1" ? "Host\r\n" : "Guest\r\n");
+
+                                                        //        foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipantLineup lineup in participant.lineups)
+                                                        //        {
+                                                        //            if (lineup == null) continue;
+
+                                                        //            sPlayers += (lineup.shirt_nr == "" ? "-1" : lineup.shirt_nr) + "  " + lineup.participant_name + "  " + (lineup.bench.ToLower() == "yes" ? "/Bench" : "     ") + "  " + (lineup.type.ToLower() == "coach" ? "/Coach" : "") + "\r\n";
+
+                                                        //            using (FbCommand cmd2 = new FbCommand())
+                                                        //            {
+                                                        //                cmd2.CommandText = "ADD_Player2";
+                                                        //                cmd2.CommandType = CommandType.StoredProcedure;
+                                                        //                cmd2.Connection = connection;
+                                                        //                cmd2.Parameters.Add("@ID", lineup.participant_id == "" ? "-1" : lineup.participant_id);
+                                                        //                cmd2.Parameters.Add("@NAME", lineup.participant_name);
+                                                        //                cmd2.Parameters.Add("@AREA_ID", lineup.participant_area_id == "" ? "-1" : lineup.participant_area_id);
+                                                        //                cmd2.Parameters.Add("@SLUG", lineup.participant_slug);
+                                                        //                cmd2.Parameters.Add("@BENCH", lineup.bench.ToLower() == "yes" ? true : false);
+                                                        //                cmd2.Parameters.Add("@SHIRT_NR", lineup.type == "coach" ? "-2" : (lineup.shirt_nr == "" || lineup.shirt_nr == "-") ? "-1" : lineup.shirt_nr.Replace("-", ""));
+                                                        //                cmd2.Parameters.Add("@TEAM_ID", participant.id);
+                                                        //                cmd2.Parameters.Add("@SEASON_ID", season.id);
+                                                        //                cmd2.Parameters.Add("@EVENT_ID", sevent.id);
+                                                        //                cmd2.Parameters.Add("@CTIMESTAMP", cTimestamp);
+                                                        //                int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                        //                Files.WriteLog(id > 0 ? " [Success] Insert players [" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name : "[" + participant.id + "] " + lineup.participant_id + "/" + lineup.participant_name + " player exist.");
+                                                        //            }
+                                                        //        }
+                                                        //    }
+
+                                                        //    // if(sName!="" && Convert.ToBoolean(arr[2])&& sPlayers!=""&&DateTime.Now<Convert.ToDateTime(sevent.start_date))  Files.WriteLog(sName, true, sPlayers);
+                                                        //    if (sName != "" && Convert.ToBoolean(arr[2]) && sPlayers != "")
+                                                        //    {
+                                                        //        // if (DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1))
+                                                        //        if (sevent.status_id == "1" || sevent.status_id == "6" || DateTime.Now < Convert.ToDateTime(sevent.start_date).AddHours(1) || sevent.status_id == "33")
+                                                        //        {
+                                                        //            Files.WriteLog(sName, true, sevent.start_date + "\r\n" + sPlayers);
+                                                        //        }
+                                                        //        else
+                                                        //        {
+                                                        //            Files.WriteLog(sName + "_old", true, sevent.start_date + "\r\n" + sPlayers);
+                                                        //        }
+                                                        //    }
+                                                        //}
+
+                                                        //string sH_YELLOW = "", sH_RED = "", sG_YELLOW = "", sG_RED = "", sH_GOAL = "", sG_GOAL = "", sSTATUS = "";
+                                                        ////merge one PR to store goalinfo data / matchtime  20191129
+                                                        //if (sevent.participants.Length == 2 && sevent.participants[0].stats.Length > 0)// && sevent.participants[0].results.Length > 0)
+                                                        //{ 
+                                                        //    sH_YELLOW = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value;
+                                                        //    sH_RED = sevent.participants[0].counter == "1" ? sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value;
+                                                        //    sG_YELLOW = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "8").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "8").value;
+                                                        //    sG_RED = sevent.participants[1].counter == "2" ? sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "9").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "9").value;
+                                                        //}
+
+                                                        //if (sevent.participants.Length == 2 && sevent.participants[0].results.Length > 0)//&& sevent.participants[0].stats.Length > 0)
+                                                        //{
+                                                        //    sSTATUS = sevent.status_id;
+                                                        //    sH_GOAL = sevent.participants[0].counter == "1" ? sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].stats.FirstOrDefault(c => c.id == "2").value;
+                                                        //    sG_GOAL = sevent.participants[1].counter == "2" ? sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[1].results.FirstOrDefault(c => c.id == "2").value : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value == "" ? null : sevent.participants[0].stats.FirstOrDefault(c => c.id == "2").value;
+                                                        //}
+                                                        //if (sevent.status_id != "1")
+                                                        //{
+                                                        //    using (FbCommand cmd2 = new FbCommand())
+                                                        //    {
+                                                        //        cmd2.CommandText = "PR_Xml_StatsResult_GoalInfo";
+                                                        //        cmd2.CommandType = CommandType.StoredProcedure;
+                                                        //        cmd2.Connection = connection;
+                                                        //        cmd2.Parameters.Add("@EMATCHID", sevent.id);
+                                                        //        cmd2.Parameters.Add("@STATUS", sSTATUS);
+                                                        //        cmd2.Parameters.Add("@H_YELLOW", sH_YELLOW);
+                                                        //        cmd2.Parameters.Add("@H_RED", sH_RED);
+                                                        //        cmd2.Parameters.Add("@G_YELLOW", sG_YELLOW);
+                                                        //        cmd2.Parameters.Add("@G_RED", sG_RED);
+                                                        //        cmd2.Parameters.Add("@H_GOAL", sH_GOAL);
+                                                        //        cmd2.Parameters.Add("@G_GOAL", sG_GOAL);
+                                                        //        cmd2.Parameters.Add("@CLOCK_TIME", iClockTime);
+                                                        //        cmd2.Parameters.Add("@LASTTIME", DateTime.Now);
+                                                        //        int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                        //        Files.WriteLog((id > 0 ? " [Success] Update GoalInfo Goal " : " [Failure]  Update GoalInfo Goal") + "[" + sevent.id + "] " + sevent.participants[0].id + "/" + sevent.participants[1].id + "..");
+                                                        //    }
+                                                        //}
+                                                        #endregion cancel
+                                                    }
+                                                    #endregion
+
+                                                    //do stats
+                                                    if (amqpMessages.Count < AppFlag.SuspendCount)
+                                                    {
+                                                        try
+                                                        {
+                                                            if (sevent.details != null && sevent.details.Count() > 0)
+                                                            {
+                                                                using (FbCommand cmd2 = new FbCommand())
+                                                                {
+                                                                    cmd2.CommandText = "PR_event_details";
+                                                                    cmd2.CommandType = CommandType.StoredProcedure;
+                                                                    cmd2.Connection = connection;
+                                                                    cmd2.Parameters.Add("@EVENTID", sevent.id);
+                                                                    cmd2.Parameters.Add("@WC_8", sevent.details.FirstOrDefault(c => c.id == "8").value);
+                                                                    cmd2.Parameters.Add("@PC_36", sevent.details.FirstOrDefault(c => c.id == "36").value);
+                                                                    cmd2.Parameters.Add("@PL_16", sevent.details.FirstOrDefault(c => c.id == "16").value);
+                                                                    cmd2.Parameters.Add("@EPL_50", sevent.details.FirstOrDefault(c => c.id == "50").value);
+                                                                    cmd2.Parameters.Add("@NOP_17", sevent.details.FirstOrDefault(c => c.id == "17").value);
+                                                                    cmd2.Parameters.Add("@EPTC_58", sevent.details.FirstOrDefault(c => c.id == "58").value);
+                                                                    cmd2.Parameters.Add("@IT_151", sevent.details.FirstOrDefault(c => c.id == "151").value);
+                                                                    cmd2.Parameters.Add("@ATT_141", sevent.details.FirstOrDefault(c => c.id == "141").value);
+                                                                    cmd2.Parameters.Add("@FHSD_19", sevent.details.FirstOrDefault(c => c.id == "19").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "19").value));
+                                                                    cmd2.Parameters.Add("@SHSD_20", sevent.details.FirstOrDefault(c => c.id == "20").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "20").value));
+                                                                    cmd2.Parameters.Add("@FEHSD_44", sevent.details.FirstOrDefault(c => c.id == "44").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "44").value));
+                                                                    cmd2.Parameters.Add("@SEHSD_45", sevent.details.FirstOrDefault(c => c.id == "45").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "45").value));
+                                                                    cmd2.Parameters.Add("@PSSD_150", sevent.details.FirstOrDefault(c => c.id == "150").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "150").value));
+                                                                    cmd2.Parameters.Add("@FHIT_201", sevent.details.FirstOrDefault(c => c.id == "201").value);
+                                                                    cmd2.Parameters.Add("@SHIT_202", sevent.details.FirstOrDefault(c => c.id == "202").value);
+                                                                    cmd2.Parameters.Add("@FEHIT_203", sevent.details.FirstOrDefault(c => c.id == "203").value);
+                                                                    cmd2.Parameters.Add("@SEHIT_204", sevent.details.FirstOrDefault(c => c.id == "204").value);
+                                                                    cmd2.Parameters.Add("@HL_205", sevent.details.FirstOrDefault(c => c.id == "205").value);
+                                                                    cmd2.Parameters.Add("@TD_124", sevent.details.FirstOrDefault(c => c.id == "124").value);
+                                                                    cmd2.Parameters.Add("@BM_160", sevent.details.FirstOrDefault(c => c.id == "160").value);
+                                                                    cmd2.Parameters.Add("@HF_178", sevent.details.FirstOrDefault(c => c.id == "178").value);
+                                                                    cmd2.Parameters.Add("@UT", sevent.ut);
+                                                                    cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                    Files.WriteLog(true, (id > 0 ? " [Success] Insert event_details " : id == 0 ? " Old details " : " [Failure] Insert event_details ") + "[" + sevent.id + "]");
+                                                                }
+                                                            }
+
+                                                            bDone = false;
+                                                            foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant p in sevent.participants)
+                                                            {
+                                                                if (p == null || p.stats == null || p.stats.Count() == 0) continue;
+                                                                using (FbCommand cmd2 = new FbCommand())
+                                                                {
+                                                                    cmd2.CommandText = "PR_participant_stats";
+                                                                    cmd2.CommandType = CommandType.StoredProcedure;
+                                                                    cmd2.Connection = connection;
+                                                                    cmd2.Parameters.Add("@EVENTID", sevent.id);
+                                                                    cmd2.Parameters.Add("@PARTICIPANTID", p.id);
+                                                                    cmd2.Parameters.Add("@SOT_20", p.stats.FirstOrDefault(c => c.id == "20") == null ? null : p.stats.FirstOrDefault(c => c.id == "20").value);
+                                                                    cmd2.Parameters.Add("@SOT_21", p.stats.FirstOrDefault(c => c.id == "21") == null ? null : p.stats.FirstOrDefault(c => c.id == "21").value);
+                                                                    cmd2.Parameters.Add("@ATTACKS_10", p.stats.FirstOrDefault(c => c.id == "10") == null ? null : p.stats.FirstOrDefault(c => c.id == "10").value);
+                                                                    cmd2.Parameters.Add("@DA_11", p.stats.FirstOrDefault(c => c.id == "11") == null ? null : p.stats.FirstOrDefault(c => c.id == "11").value);
+                                                                    cmd2.Parameters.Add("@CORNERS_13", p.stats.FirstOrDefault(c => c.id == "13") == null ? null : p.stats.FirstOrDefault(c => c.id == "13").value);
+                                                                    cmd2.Parameters.Add("@YELLOW_CARDS_8", p.stats.FirstOrDefault(c => c.id == "8") == null ? null : p.stats.FirstOrDefault(c => c.id == "8").value);
+                                                                    cmd2.Parameters.Add("@RED_CARDS_9", p.stats.FirstOrDefault(c => c.id == "9") == null ? null : p.stats.FirstOrDefault(c => c.id == "9").value);
+                                                                    cmd2.Parameters.Add("@TOTAL_SHOTS_19", p.stats.FirstOrDefault(c => c.id == "19") == null ? null : p.stats.FirstOrDefault(c => c.id == "19").value);
+                                                                    cmd2.Parameters.Add("@FOULS_22", p.stats.FirstOrDefault(c => c.id == "22") == null ? null : p.stats.FirstOrDefault(c => c.id == "22").value);
+                                                                    cmd2.Parameters.Add("@OFFSIDES_24", p.stats.FirstOrDefault(c => c.id == "24") == null ? null : p.stats.FirstOrDefault(c => c.id == "24").value);
+                                                                    cmd2.Parameters.Add("@PS_14", p.stats.FirstOrDefault(c => c.id == "14") == null ? null : p.stats.FirstOrDefault(c => c.id == "14").value);
+                                                                    cmd2.Parameters.Add("@PM_15", p.stats.FirstOrDefault(c => c.id == "15") == null ? null : p.stats.FirstOrDefault(c => c.id == "15").value);
+                                                                    cmd2.Parameters.Add("@PG_16", p.stats.FirstOrDefault(c => c.id == "16") == null ? null : p.stats.FirstOrDefault(c => c.id == "16").value);
+                                                                    cmd2.Parameters.Add("@FK_25", p.stats.FirstOrDefault(c => c.id == "25") == null ? null : p.stats.FirstOrDefault(c => c.id == "25").value);
+                                                                    cmd2.Parameters.Add("@DFK_26", p.stats.FirstOrDefault(c => c.id == "26") == null ? null : p.stats.FirstOrDefault(c => c.id == "26").value);
+                                                                    cmd2.Parameters.Add("@FKG_18", p.stats.FirstOrDefault(c => c.id == "18") == null ? null : p.stats.FirstOrDefault(c => c.id == "18").value);
+                                                                    cmd2.Parameters.Add("@SW_27", p.stats.FirstOrDefault(c => c.id == "27") == null ? null : p.stats.FirstOrDefault(c => c.id == "27").value);
+                                                                    cmd2.Parameters.Add("@SB_28", p.stats.FirstOrDefault(c => c.id == "28") == null ? null : p.stats.FirstOrDefault(c => c.id == "28").value);
+                                                                    cmd2.Parameters.Add("@GS_29", p.stats.FirstOrDefault(c => c.id == "29") == null ? null : p.stats.FirstOrDefault(c => c.id == "29").value);
+                                                                    cmd2.Parameters.Add("@GK_30", p.stats.FirstOrDefault(c => c.id == "30") == null ? null : p.stats.FirstOrDefault(c => c.id == "30").value);
+                                                                    cmd2.Parameters.Add("@TI_32", p.stats.FirstOrDefault(c => c.id == "32") == null ? null : p.stats.FirstOrDefault(c => c.id == "32").value);
+                                                                    cmd2.Parameters.Add("@SUBSTITUTIONS_31", p.stats.FirstOrDefault(c => c.id == "31") == null ? null : p.stats.FirstOrDefault(c => c.id == "31").value);
+                                                                    cmd2.Parameters.Add("@GOALS_40", p.stats.FirstOrDefault(c => c.id == "40") == null ? null : p.stats.FirstOrDefault(c => c.id == "40").value);
+                                                                    cmd2.Parameters.Add("@MP_34", p.stats.FirstOrDefault(c => c.id == "34") == null ? null : p.stats.FirstOrDefault(c => c.id == "34").value);
+                                                                    cmd2.Parameters.Add("@OWN_GOALS_17", p.stats.FirstOrDefault(c => c.id == "17") == null ? null : p.stats.FirstOrDefault(c => c.id == "17").value);
+                                                                    cmd2.Parameters.Add("@ADW_33", p.stats.FirstOrDefault(c => c.id == "33") == null ? null : p.stats.FirstOrDefault(c => c.id == "33").value);
+                                                                    cmd2.Parameters.Add("@FORM_716", p.stats.FirstOrDefault(c => c.id == "716") == null ? null : p.stats.FirstOrDefault(c => c.id == "716").value);
+                                                                    cmd2.Parameters.Add("@SKIN_718", p.stats.FirstOrDefault(c => c.id == "718") == null ? null : p.stats.FirstOrDefault(c => c.id == "718").value);
+                                                                    cmd2.Parameters.Add("@PS_639", p.stats.FirstOrDefault(c => c.id == "639") == null ? null : p.stats.FirstOrDefault(c => c.id == "639").value);
+                                                                    cmd2.Parameters.Add("@PU_697", p.stats.FirstOrDefault(c => c.id == "697") == null ? null : p.stats.FirstOrDefault(c => c.id == "697").value);
+                                                                    cmd2.Parameters.Add("@GOALS115_772", p.stats.FirstOrDefault(c => c.id == "772") == null ? null : p.stats.FirstOrDefault(c => c.id == "772").value);
+                                                                    cmd2.Parameters.Add("@GOALS1630_773", p.stats.FirstOrDefault(c => c.id == "773") == null ? null : p.stats.FirstOrDefault(c => c.id == "773").value);
+                                                                    cmd2.Parameters.Add("@GOALS3145_774", p.stats.FirstOrDefault(c => c.id == "774") == null ? null : p.stats.FirstOrDefault(c => c.id == "774").value);
+                                                                    cmd2.Parameters.Add("@GOALS4660_775", p.stats.FirstOrDefault(c => c.id == "775") == null ? null : p.stats.FirstOrDefault(c => c.id == "775").value);
+                                                                    cmd2.Parameters.Add("@GOALS6175_776", p.stats.FirstOrDefault(c => c.id == "776") == null ? null : p.stats.FirstOrDefault(c => c.id == "776").value);
+                                                                    cmd2.Parameters.Add("@GOALS7690_777", p.stats.FirstOrDefault(c => c.id == "777") == null ? null : p.stats.FirstOrDefault(c => c.id == "777").value);
+                                                                    cmd2.Parameters.Add("@MPG_778", p.stats.FirstOrDefault(c => c.id == "778") == null ? null : p.stats.FirstOrDefault(c => c.id == "778").value);
+                                                                    cmd2.Parameters.Add("@MPS_779", p.stats.FirstOrDefault(c => c.id == "779") == null ? null : p.stats.FirstOrDefault(c => c.id == "779").value);
+                                                                    cmd2.Parameters.Add("@BP_770", p.stats.FirstOrDefault(c => c.id == "770") == null ? null : p.stats.FirstOrDefault(c => c.id == "770").value);
+                                                                    cmd2.Parameters.Add("@BPP_771", p.stats.FirstOrDefault(c => c.id == "771") == null ? null : p.stats.FirstOrDefault(c => c.id == "771").value);
+                                                                    cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                                    cmd2.Parameters.Add("@CACTION", "update");
+                                                                    cmd2.Parameters.Add("@TEAMTYPE", p.counter == "2" ? "G" : "H");
+                                                                    int id = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                                    Files.WriteLog(true, (id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_stats") + "[" + sevent.id + "/" + p.id + "]." + p.stats.FirstOrDefault(c => c.id == "771").value);
+                                                                    if (id > 0) bDone = true;
+                                                                }
+                                                            }
+                                                            if (bDone) SendAlertMsg("62", "X", sevent.id);
                                                         }
                                                         catch (Exception exp)
                                                         {
-                                                            Files.WriteError("events.showJson " + strName + " INCIDENTS Error:" + exp);
+                                                            Files.WriteError("events.showJson " + strName + " details/stats Error:" + exp);
                                                         }
-                                                        //do stats
-                                                        if (amqpMessages.Count < AppFlag.SuspendCount)
-                                                        {
-                                                            try
-                                                            {
-                                                                if (sevent.details != null && sevent.details.Count() > 0)
-                                                                {
-                                                                    using (FbCommand cmd2 = new FbCommand())
-                                                                    {
-                                                                        cmd2.CommandText = "PR_event_details";
-                                                                        cmd2.CommandType = CommandType.StoredProcedure;
-                                                                        cmd2.Connection = connection;
-                                                                        cmd2.Parameters.Add("@EVENTID", sevent.id);
-                                                                        cmd2.Parameters.Add("@WC_8", sevent.details.FirstOrDefault(c => c.id == "8").value);
-                                                                        cmd2.Parameters.Add("@PC_36", sevent.details.FirstOrDefault(c => c.id == "36").value);
-                                                                        cmd2.Parameters.Add("@PL_16", sevent.details.FirstOrDefault(c => c.id == "16").value);
-                                                                        cmd2.Parameters.Add("@EPL_50", sevent.details.FirstOrDefault(c => c.id == "50").value);
-                                                                        cmd2.Parameters.Add("@NOP_17", sevent.details.FirstOrDefault(c => c.id == "17").value);
-                                                                        cmd2.Parameters.Add("@EPTC_58", sevent.details.FirstOrDefault(c => c.id == "58").value);
-                                                                        cmd2.Parameters.Add("@IT_151", sevent.details.FirstOrDefault(c => c.id == "151").value);
-                                                                        cmd2.Parameters.Add("@ATT_141", sevent.details.FirstOrDefault(c => c.id == "141").value);
-                                                                        cmd2.Parameters.Add("@FHSD_19", sevent.details.FirstOrDefault(c => c.id == "19").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "19").value));
-                                                                        cmd2.Parameters.Add("@SHSD_20", sevent.details.FirstOrDefault(c => c.id == "20").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "20").value));
-                                                                        cmd2.Parameters.Add("@FEHSD_44", sevent.details.FirstOrDefault(c => c.id == "44").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "44").value));
-                                                                        cmd2.Parameters.Add("@SEHSD_45", sevent.details.FirstOrDefault(c => c.id == "45").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "45").value));
-                                                                        cmd2.Parameters.Add("@PSSD_150", sevent.details.FirstOrDefault(c => c.id == "150").value == "" ? DateTime.MinValue : Convert.ToDateTime(sevent.details.FirstOrDefault(c => c.id == "150").value));
-                                                                        cmd2.Parameters.Add("@FHIT_201", sevent.details.FirstOrDefault(c => c.id == "201").value);
-                                                                        cmd2.Parameters.Add("@SHIT_202", sevent.details.FirstOrDefault(c => c.id == "202").value);
-                                                                        cmd2.Parameters.Add("@FEHIT_203", sevent.details.FirstOrDefault(c => c.id == "203").value);
-                                                                        cmd2.Parameters.Add("@SEHIT_204", sevent.details.FirstOrDefault(c => c.id == "204").value);
-                                                                        cmd2.Parameters.Add("@HL_205", sevent.details.FirstOrDefault(c => c.id == "205").value);
-                                                                        cmd2.Parameters.Add("@TD_124", sevent.details.FirstOrDefault(c => c.id == "124").value);
-                                                                        cmd2.Parameters.Add("@BM_160", sevent.details.FirstOrDefault(c => c.id == "160").value);
-                                                                        cmd2.Parameters.Add("@HF_178", sevent.details.FirstOrDefault(c => c.id == "178").value);
-                                                                        cmd2.Parameters.Add("@UT", sevent.ut);
-                                                                        cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                        Files.WriteLog(true, (id > 0 ? " [Success] Insert event_details " : id == 0 ? " Old details " : " [Failure] Insert event_details ") + "[" + sevent.id + "]");
-                                                                    }
-                                                                }
-                                                                bool bDone = false;
-                                                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventParticipant p in sevent.participants)
-                                                                {
-                                                                    if (p == null || p.stats == null || p.stats.Count() == 0) continue;
-                                                                    using (FbCommand cmd2 = new FbCommand())
-                                                                    {
-                                                                        cmd2.CommandText = "PR_participant_stats";
-                                                                        cmd2.CommandType = CommandType.StoredProcedure;
-                                                                        cmd2.Connection = connection;
-                                                                        cmd2.Parameters.Add("@EVENTID", sevent.id);
-                                                                        cmd2.Parameters.Add("@PARTICIPANTID", p.id);
-                                                                        cmd2.Parameters.Add("@SOT_20", p.stats.FirstOrDefault(c => c.id == "20") == null ? null : p.stats.FirstOrDefault(c => c.id == "20").value);
-                                                                        cmd2.Parameters.Add("@SOT_21", p.stats.FirstOrDefault(c => c.id == "21") == null ? null : p.stats.FirstOrDefault(c => c.id == "21").value);
-                                                                        cmd2.Parameters.Add("@ATTACKS_10", p.stats.FirstOrDefault(c => c.id == "10") == null ? null : p.stats.FirstOrDefault(c => c.id == "10").value);
-                                                                        cmd2.Parameters.Add("@DA_11", p.stats.FirstOrDefault(c => c.id == "11") == null ? null : p.stats.FirstOrDefault(c => c.id == "11").value);
-                                                                        cmd2.Parameters.Add("@CORNERS_13", p.stats.FirstOrDefault(c => c.id == "13") == null ? null : p.stats.FirstOrDefault(c => c.id == "13").value);
-                                                                        cmd2.Parameters.Add("@YELLOW_CARDS_8", p.stats.FirstOrDefault(c => c.id == "8") == null ? null : p.stats.FirstOrDefault(c => c.id == "8").value);
-                                                                        cmd2.Parameters.Add("@RED_CARDS_9", p.stats.FirstOrDefault(c => c.id == "9") == null ? null : p.stats.FirstOrDefault(c => c.id == "9").value);
-                                                                        cmd2.Parameters.Add("@TOTAL_SHOTS_19", p.stats.FirstOrDefault(c => c.id == "19") == null ? null : p.stats.FirstOrDefault(c => c.id == "19").value);
-                                                                        cmd2.Parameters.Add("@FOULS_22", p.stats.FirstOrDefault(c => c.id == "22") == null ? null : p.stats.FirstOrDefault(c => c.id == "22").value);
-                                                                        cmd2.Parameters.Add("@OFFSIDES_24", p.stats.FirstOrDefault(c => c.id == "24") == null ? null : p.stats.FirstOrDefault(c => c.id == "24").value);
-                                                                        cmd2.Parameters.Add("@PS_14", p.stats.FirstOrDefault(c => c.id == "14") == null ? null : p.stats.FirstOrDefault(c => c.id == "14").value);
-                                                                        cmd2.Parameters.Add("@PM_15", p.stats.FirstOrDefault(c => c.id == "15") == null ? null : p.stats.FirstOrDefault(c => c.id == "15").value);
-                                                                        cmd2.Parameters.Add("@PG_16", p.stats.FirstOrDefault(c => c.id == "16") == null ? null : p.stats.FirstOrDefault(c => c.id == "16").value);
-                                                                        cmd2.Parameters.Add("@FK_25", p.stats.FirstOrDefault(c => c.id == "25") == null ? null : p.stats.FirstOrDefault(c => c.id == "25").value);
-                                                                        cmd2.Parameters.Add("@DFK_26", p.stats.FirstOrDefault(c => c.id == "26") == null ? null : p.stats.FirstOrDefault(c => c.id == "26").value);
-                                                                        cmd2.Parameters.Add("@FKG_18", p.stats.FirstOrDefault(c => c.id == "18") == null ? null : p.stats.FirstOrDefault(c => c.id == "18").value);
-                                                                        cmd2.Parameters.Add("@SW_27", p.stats.FirstOrDefault(c => c.id == "27") == null ? null : p.stats.FirstOrDefault(c => c.id == "27").value);
-                                                                        cmd2.Parameters.Add("@SB_28", p.stats.FirstOrDefault(c => c.id == "28") == null ? null : p.stats.FirstOrDefault(c => c.id == "28").value);
-                                                                        cmd2.Parameters.Add("@GS_29", p.stats.FirstOrDefault(c => c.id == "29") == null ? null : p.stats.FirstOrDefault(c => c.id == "29").value);
-                                                                        cmd2.Parameters.Add("@GK_30", p.stats.FirstOrDefault(c => c.id == "30") == null ? null : p.stats.FirstOrDefault(c => c.id == "30").value);
-                                                                        cmd2.Parameters.Add("@TI_32", p.stats.FirstOrDefault(c => c.id == "32") == null ? null : p.stats.FirstOrDefault(c => c.id == "32").value);
-                                                                        cmd2.Parameters.Add("@SUBSTITUTIONS_31", p.stats.FirstOrDefault(c => c.id == "31") == null ? null : p.stats.FirstOrDefault(c => c.id == "31").value);
-                                                                        cmd2.Parameters.Add("@GOALS_40", p.stats.FirstOrDefault(c => c.id == "40") == null ? null : p.stats.FirstOrDefault(c => c.id == "40").value);
-                                                                        cmd2.Parameters.Add("@MP_34", p.stats.FirstOrDefault(c => c.id == "34") == null ? null : p.stats.FirstOrDefault(c => c.id == "34").value);
-                                                                        cmd2.Parameters.Add("@OWN_GOALS_17", p.stats.FirstOrDefault(c => c.id == "17") == null ? null : p.stats.FirstOrDefault(c => c.id == "17").value);
-                                                                        cmd2.Parameters.Add("@ADW_33", p.stats.FirstOrDefault(c => c.id == "33") == null ? null : p.stats.FirstOrDefault(c => c.id == "33").value);
-                                                                        cmd2.Parameters.Add("@FORM_716", p.stats.FirstOrDefault(c => c.id == "716") == null ? null : p.stats.FirstOrDefault(c => c.id == "716").value);
-                                                                        cmd2.Parameters.Add("@SKIN_718", p.stats.FirstOrDefault(c => c.id == "718") == null ? null : p.stats.FirstOrDefault(c => c.id == "718").value);
-                                                                        cmd2.Parameters.Add("@PS_639", p.stats.FirstOrDefault(c => c.id == "639") == null ? null : p.stats.FirstOrDefault(c => c.id == "639").value);
-                                                                        cmd2.Parameters.Add("@PU_697", p.stats.FirstOrDefault(c => c.id == "697") == null ? null : p.stats.FirstOrDefault(c => c.id == "697").value);
-                                                                        cmd2.Parameters.Add("@GOALS115_772", p.stats.FirstOrDefault(c => c.id == "772") == null ? null : p.stats.FirstOrDefault(c => c.id == "772").value);
-                                                                        cmd2.Parameters.Add("@GOALS1630_773", p.stats.FirstOrDefault(c => c.id == "773") == null ? null : p.stats.FirstOrDefault(c => c.id == "773").value);
-                                                                        cmd2.Parameters.Add("@GOALS3145_774", p.stats.FirstOrDefault(c => c.id == "774") == null ? null : p.stats.FirstOrDefault(c => c.id == "774").value);
-                                                                        cmd2.Parameters.Add("@GOALS4660_775", p.stats.FirstOrDefault(c => c.id == "775") == null ? null : p.stats.FirstOrDefault(c => c.id == "775").value);
-                                                                        cmd2.Parameters.Add("@GOALS6175_776", p.stats.FirstOrDefault(c => c.id == "776") == null ? null : p.stats.FirstOrDefault(c => c.id == "776").value);
-                                                                        cmd2.Parameters.Add("@GOALS7690_777", p.stats.FirstOrDefault(c => c.id == "777") == null ? null : p.stats.FirstOrDefault(c => c.id == "777").value);
-                                                                        cmd2.Parameters.Add("@MPG_778", p.stats.FirstOrDefault(c => c.id == "778") == null ? null : p.stats.FirstOrDefault(c => c.id == "778").value);
-                                                                        cmd2.Parameters.Add("@MPS_779", p.stats.FirstOrDefault(c => c.id == "779") == null ? null : p.stats.FirstOrDefault(c => c.id == "779").value);
-                                                                        cmd2.Parameters.Add("@BP_770", p.stats.FirstOrDefault(c => c.id == "770") == null ? null : p.stats.FirstOrDefault(c => c.id == "770").value);
-                                                                        cmd2.Parameters.Add("@BPP_771", p.stats.FirstOrDefault(c => c.id == "771") == null ? null : p.stats.FirstOrDefault(c => c.id == "771").value);
-                                                                        cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                                                                        cmd2.Parameters.Add("@CACTION", "update");
-                                                                        cmd2.Parameters.Add("@TEAMTYPE", p.counter == "2" ? "G" : "H");
-                                                                        int id = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                                        Files.WriteLog(true, (id > 0 ? " [Success] Insert participant_stats" : " [Failure] Insert participant_stats") + "[" + sevent.id + "/" + p.id + "]." + p.stats.FirstOrDefault(c => c.id == "771").value);
-                                                                        if (id > 0) bDone = true;
-                                                                    }
-                                                                }
-                                                                if (bDone) SendAlertMsg("62", "X", sevent.id);
-                                                            }
-                                                            catch (Exception exp)
-                                                            {
-                                                                Files.WriteError("events.showJson " + strName + " details/stats Error:" + exp);
-                                                            }
-                                                        }
-
-                                                        #region cancel insert one by one
-                                                        /*
-                                                    foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident Event_incident in sevent.events_incidents)
-                                                    {
-                                                        if (Event_incident == null) continue;
-
-                                                        using (FbCommand cmd2 = new FbCommand())
-                                                        {
-                                                            cmd2.CommandText = "PR_INCIDENTS";
-                                                            cmd2.CommandType = CommandType.StoredProcedure;
-                                                            cmd2.Connection = connection;
-                                                            cmd2.Parameters.Add("@ID", Event_incident.id);
-                                                            cmd2.Parameters.Add("@EVENTID", sevent.id);
-                                                            cmd2.Parameters.Add("@CACTION", "update");
-                                                            cmd2.Parameters.Add("@INCIDENT_ID", Event_incident.incident_id);
-                                                            cmd2.Parameters.Add("@INCIDENT_NAME", Event_incident.incident_name);
-                                                            cmd2.Parameters.Add("@PARTICIPANT_ID", Event_incident.participant_id);
-                                                            cmd2.Parameters.Add("@PARTICIPANT_NAME", Event_incident.participant_name);
-                                                            cmd2.Parameters.Add("@SUBPARTICIPANT_ID", Event_incident.subparticipant_id);
-                                                            cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", Event_incident.subparticipant_name == "" ? (Event_incident.info != "" && Event_incident.incident_id == "413" ? Event_incident.info + "*" : "") : Event_incident.subparticipant_name);
-                                                            cmd2.Parameters.Add("@IMPORTANT_FOR_TRADER", true);// incidentJson.data.incident.important_for_trader == "yes" ? true : false);
-                                                            cmd2.Parameters.Add("@EVENT_TIME", Event_incident.event_time);
-                                                            cmd2.Parameters.Add("@EVENT_STATUS_ID", Event_incident.event_status_id);
-                                                            cmd2.Parameters.Add("@EVENT_STATUS_NAME", Event_incident.event_status_name);
-                                                            cmd2.Parameters.Add("@UT", Event_incident.ut);
-                                                            cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
-                                                            cmd2.Parameters.Add("@TEAMTYPE",
-                                                            (Event_incident.participant_id == null || Event_incident.participant_id == "" ? "" : Event_incident.participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : Event_incident.participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "H"));
-                                                            int sID = Convert.ToInt32(cmd2.ExecuteScalar());
-                                                            Files.WriteLog((sID > -1 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
-                                                        } 
-
-                                                }
-                                                Files.WriteLog(" Update INCIDENTS " + "[" + sevent.id + "]," + strName + ".xml");
-
-                                                    */
-                                                        #endregion
                                                     }
+
+                                                    #region cancel insert one by one
+                                                    /*
+                                                foreach (DOSEvents2.apiDataCompetitionSeasonStageGroupEventEvent_incident Event_incident in sevent.events_incidents)
+                                                {
+                                                    if (Event_incident == null) continue;
+
+                                                    using (FbCommand cmd2 = new FbCommand())
+                                                    {
+                                                        cmd2.CommandText = "PR_INCIDENTS";
+                                                        cmd2.CommandType = CommandType.StoredProcedure;
+                                                        cmd2.Connection = connection;
+                                                        cmd2.Parameters.Add("@ID", Event_incident.id);
+                                                        cmd2.Parameters.Add("@EVENTID", sevent.id);
+                                                        cmd2.Parameters.Add("@CACTION", "update");
+                                                        cmd2.Parameters.Add("@INCIDENT_ID", Event_incident.incident_id);
+                                                        cmd2.Parameters.Add("@INCIDENT_NAME", Event_incident.incident_name);
+                                                        cmd2.Parameters.Add("@PARTICIPANT_ID", Event_incident.participant_id);
+                                                        cmd2.Parameters.Add("@PARTICIPANT_NAME", Event_incident.participant_name);
+                                                        cmd2.Parameters.Add("@SUBPARTICIPANT_ID", Event_incident.subparticipant_id);
+                                                        cmd2.Parameters.Add("@SUBPARTICIPANT_NAME", Event_incident.subparticipant_name == "" ? (Event_incident.info != "" && Event_incident.incident_id == "413" ? Event_incident.info + "*" : "") : Event_incident.subparticipant_name);
+                                                        cmd2.Parameters.Add("@IMPORTANT_FOR_TRADER", true);// incidentJson.data.incident.important_for_trader == "yes" ? true : false);
+                                                        cmd2.Parameters.Add("@EVENT_TIME", Event_incident.event_time);
+                                                        cmd2.Parameters.Add("@EVENT_STATUS_ID", Event_incident.event_status_id);
+                                                        cmd2.Parameters.Add("@EVENT_STATUS_NAME", Event_incident.event_status_name);
+                                                        cmd2.Parameters.Add("@UT", Event_incident.ut);
+                                                        cmd2.Parameters.Add("@CTIMESTAMP", DateTime.Now);
+                                                        cmd2.Parameters.Add("@TEAMTYPE",
+                                                        (Event_incident.participant_id == null || Event_incident.participant_id == "" ? "" : Event_incident.participant_id.ToString() == sevent.participants[0].id.ToString() ? "H" : Event_incident.participant_id.ToString() == sevent.participants[1].id.ToString() ? "G" : "H"));
+                                                        int sID = Convert.ToInt32(cmd2.ExecuteScalar());
+                                                        Files.WriteLog((sID > -1 ? " [Success] Update INCIDENTS " : " [Failure] Update INCIDENTS ") + "[" + sevent.id + "] " + Event_incident.id + " " + Event_incident.incident_id + " " + Event_incident.incident_name);
+                                                    } 
+
+                                            }
+                                            Files.WriteLog(" Update INCIDENTS " + "[" + sevent.id + "]," + strName + ".xml");
+
+                                                */
+                                                    #endregion
                                                 }
                                             }
                                         }
                                     }
+                                    //// }
                                     connection.Close();
                                 }
                             }
@@ -9857,8 +10370,8 @@ namespace DataOfScouts
                                 using (FbConnection connection = new FbConnection(AppFlag.ScoutsDBConn))
                                 {
                                     // Files.WriteLog("GetEventCompare4 " + arr[1]); 
-                                    string m_HOME_ID = "", m_GUEST_ID = "";
-                                    queryString = "SELECT e.HOME_ID, e.GUEST_ID from events e where e.id=" + arr[1];
+                                    string m_HOME_ID = "", m_GUEST_ID = "", m_Start_Date = ""; ;
+                                    queryString = "SELECT e.HOME_ID, e.GUEST_ID,e.Start_date from events e where e.id=" + arr[1];
                                     connection.Open();
                                     using (FbCommand cmd = new FbCommand(queryString, connection))
                                     {
@@ -9868,6 +10381,7 @@ namespace DataOfScouts
                                             {
                                                 m_HOME_ID = dataReader.GetInt32(0).ToString();
                                                 m_GUEST_ID = dataReader.GetInt32(1).ToString();
+                                                m_Start_Date = Convert.ToDateTime( dataReader.GetString(2)).ToString("yyyy-MM-dd HH:mm:ss");
                                             }
                                             dataReader.Close();
                                         }
@@ -10055,17 +10569,17 @@ namespace DataOfScouts
 
                                     queryString = "select * From (select first 1  a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP ,c.SHORT_NAME,c.alias " +
                                         "from events a inner join COMPETITIONS c on c.id =a.COMPETITION_ID left join EMATCHES e on e.EMATCHID = a.id left join GOALINFO g on g.EMATCHID = a.id " +
-                                        "WHERE(A.HOME_ID = " + m_HOME_ID + "  OR A.GUEST_ID =" + m_HOME_ID + ") and a.START_DATE > current_timestamp AND A.ID!=" + arr[1] + "   ORDER BY A.START_DATE asc  ) " +
+                                        "WHERE(A.HOME_ID = " + m_HOME_ID + "  OR A.GUEST_ID =" + m_HOME_ID + ") and a.START_DATE > cast('" + m_Start_Date + "' as timestamp) AND A.ID!=" + arr[1] + "   ORDER BY A.START_DATE asc  ) " +
                                         "union all select* From(select first 1 a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP ,c.SHORT_NAME,c.alias  " +
                                         "from events a inner join COMPETITIONS c on c.id =a.COMPETITION_ID  left join EMATCHES e on e.EMATCHID = a.id left join GOALINFO g on g.EMATCHID = a.id " +
-                                        "WHERE(A.HOME_ID = " + m_GUEST_ID + " OR A.GUEST_ID = " + m_GUEST_ID + ") and a.START_DATE > current_timestamp AND A.ID!=" + arr[1] + " ORDER BY A.START_DATE asc    )" +
+                                        "WHERE(A.HOME_ID = " + m_GUEST_ID + " OR A.GUEST_ID = " + m_GUEST_ID + ") and a.START_DATE >  cast('" + m_Start_Date + "' as timestamp) AND A.ID!=" + arr[1] + " ORDER BY A.START_DATE asc    )" +
                                         "union all select* From(select first 5  a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP ,c.SHORT_NAME,c.alias " +
                                         " from events a inner join COMPETITIONS c on c.id =a.COMPETITION_ID  left join EMATCHES e on e.EMATCHID = a.id left join GOALINFO g on g.EMATCHID = a.id " +
-                                        " WHERE(A.HOME_ID = " + m_HOME_ID + "  OR A.GUEST_ID = " + m_HOME_ID + ") and a.START_DATE < current_timestamp  AND A.ID!=" + arr[1] + "  ORDER BY A.START_DATE DESC)" +
+                                        " WHERE(A.HOME_ID = " + m_HOME_ID + "  OR A.GUEST_ID = " + m_HOME_ID + ") and a.START_DATE <  cast('" + m_Start_Date + "' as timestamp)  AND A.ID!=" + arr[1] + "  ORDER BY A.START_DATE DESC)" +
                                         " union all select* From(select first 5  a.id, a.HOME_ID,a.GUEST_ID,a.START_DATE,e.CLEAGUEALIAS_OUTPUT_NAME, e.CLEAGUE_HKJC_NAME, e.HKJCHOSTNAME_CN,e.HKJCGUESTNAME_CN,''IMATCHSTATUS, g.H_GOAL,g.G_GOAL,a.CTIMESTAMP ,c.SHORT_NAME,c.alias " +
                                         " from events a  inner join COMPETITIONS c on c.id =a.COMPETITION_ID left join EMATCHES e on e.EMATCHID = a.id left join GOALINFO g on g.EMATCHID = a.id " +
-                                        " WHERE(A.HOME_ID = " + m_GUEST_ID + " OR A.GUEST_ID = " + m_GUEST_ID + ") and a.START_DATE < current_timestamp AND A.ID!=" + arr[1] + " ORDER BY A.START_DATE DESC)";
-                                    Files.WriteLog(queryString);
+                                        " WHERE(A.HOME_ID = " + m_GUEST_ID + " OR A.GUEST_ID = " + m_GUEST_ID + ") and a.START_DATE <  cast('" + m_Start_Date + "' as timestamp) AND A.ID!=" + arr[1] + " ORDER BY A.START_DATE DESC)";
+                                    Files.WriteLog("SqlRecent:"+queryString);
 
                                     using (FbCommand cmd = new FbCommand(queryString, connection))
                                     {
