@@ -52,6 +52,7 @@ namespace ScoutDBProvider
         private static System.Threading.Timer InitTimer2;
 
         private static System.Timers.Timer aTimer;
+        private static FbConnection connInitMatch; 
 
         public ScoutDBProvider()
         {
@@ -90,14 +91,15 @@ namespace ScoutDBProvider
                 aTimer.Elapsed += OnTimedEvent;
                 aTimer.AutoReset = true;
                 aTimer.Enabled = true;
+
+                connInitMatch= new FbConnection(AppFlag.MangoDBConn);
             }
             catch (Exception exp)
             {
                 Files.WriteError("ScoutDBProvider(),error: " + exp.Message);
             }
         }
-
-        FbConnection connInitMatch = new FbConnection(AppFlag.MangoDBConn);
+         
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             try
@@ -118,6 +120,8 @@ namespace ScoutDBProvider
             catch (Exception exp)
             {
                 Files.WriteError(DateTime.Now.ToString("HH:mm:ss ") + "OnTimedEvent,error: " + exp);
+                connInitMatch.Dispose();
+                connInitMatch = new FbConnection(AppFlag.MangoDBConn);
             }
         }
 
@@ -272,7 +276,7 @@ namespace ScoutDBProvider
                                 else if (i == 2)
                                 {
                                     //ANALYSIS_RECENT_INFO
-                                    queryString = "select  e.EMATCHID eid,   'CLEAGUE='''||  e.CLEAGUE_HKJC_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_HKJC_NAME CLEAGUE,  e.CLEAGUEALIAS_OUTPUT_NAME , e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 )  ORDER BY  a.IMATCH_CNT ,a.irec asc";
+                                    queryString = "select  e.EMATCHID eid,   'CLEAGUE='''||  e.CLEAGUE_HKJC_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_HKJC_NAME CLEAGUE,  e.CLEAGUEALIAS_OUTPUT_NAME , e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + Day[Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d"))].ToString() + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 ) AND (A.IHOSTSCORE IS NOT NULL AND A.IGUESTSCORE IS NOT NULL ) AND (A.IHOSTSCORE IS NOT NULL AND A.IGUESTSCORE IS NOT NULL ) ORDER BY  a.IMATCH_CNT ,a.irec asc";
                                     //queryString = "select  e.EMATCHID eid,   'CLEAGUE='''||  e.CLEAGUE_HKJC_NAME||''' AND CHOST=''' || e.HKJCHOSTNAME_CN||''' AND CGUEST='''|| e.HKJCGUESTNAME_CN||''' ' ABC, e.CLEAGUE_HKJC_NAME CLEAGUE,  e.CLEAGUEALIAS_OUTPUT_NAME , e.HKJCHOSTNAME_CN CHOST, e.HKJCGUESTNAME_CN CGUEST, e.CMATCHDATETIME,  a.* from ANALYSIS_RECENT_INFO a inner join EMATCHES e on e.EMATCHID = a.IMATCH_CNT   where a.IMATCH_CNT in  ( select X.EMATCHID from EMATCHES X WHERE X.HKJCDAYCODE = '" + "WED" + "' and cast(cast(X.CMATCHDATETIME as date) as varchar(10))>= cast(cast( current_timestamp as date) - 1 as varchar(10))   AND X.EMATCHID IS NOT NULL  AND X.EMATCHID > 0 )  ORDER BY  a.IMATCH_CNT ,a.irec asc";
                                 }
 
@@ -987,7 +991,7 @@ namespace ScoutDBProvider
                                         {
                                             int count = Convert.ToInt32(cmd.ExecuteScalar());
                                             // if (count > 0) strs = strs + " and e.id in (select  c.EMATCHID FROM EMATCHES c where c.CTIMESTAMP >= '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND C.EMATCHID IS NOT NULL   AND C.EMATCHID > 0 ORDER BY C.CTIMESTAMP ASC)";
-                                            if (count > 0) strs = strs + " where e.id in ( select  c.id  FROM events c inner join  COMPETITIONS r on r.id =c.COMPETITION_ID  where  c.start_date >= current_timestamp and (r.ALIAS = '意甲' OR r.ALIAS = '英超' OR r.ALIAS = '法甲' OR r.ALIAS = '德甲' OR r.ALIAS = '蘇超' OR r.ALIAS = '西甲'OR r.ALIAS = '荷甲' OR r.ALIAS = '日聯' OR r.ALIAS = '澳A' OR r.ALIAS = '歐冠')  ORDER BY C.start_date ASC)";
+                                            if (count > 0) strs = strs + " where e.id in ( select  c.id  FROM events c inner join  COMPETITIONS r on r.id =c.COMPETITION_ID  where  c.start_date >= current_timestamp -1 and (r.ALIAS = '意甲' OR r.ALIAS = '英超' OR r.ALIAS = '法甲' OR r.ALIAS = '德甲' OR r.ALIAS = '蘇超' OR r.ALIAS = '西甲'OR r.ALIAS = '荷甲' OR r.ALIAS = '日聯' OR r.ALIAS = '澳A' OR r.ALIAS = '歐冠')  ORDER BY C.start_date ASC)";
                                         }
 
                                         queryString = "select e.id eid, e.COMPETITION_ID,c.ALIAS,l.LEAGUE_CHI_NAME, (select  hkjc_name_cn from teams where id= e.HOME_ID and hkjc_name_cn is not null ) HOME_ID,(select hkjc_name_cn from teams where id= e.GUEST_ID and hkjc_name_cn is not null) GUEST_ID,e.START_DATE, G.H_GOAL||':'||G.G_GOAL RESULT ,G.HH_GOAL||':'||G.GH_GOAL RESULT2 from events e " +
@@ -2103,9 +2107,16 @@ namespace ScoutDBProvider
                                 //GOALDETAILS 
                                 Files.WriteLog("Update GOALDETAILS " + ml.ToString());
                                 queryString = " SELECT distinct  (select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id=s.HOME_ID) H,(select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id=s.GUEST_ID) G, E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
-                                            " 'F' CCURRENTSTATUS, '' CPK, 'U' CACTION, '' CALERT, R.CTYPE CRECORDTYPE, R.HG CRECORDBELONG,  r.STATUS CMATCHSTATUS, r.ELAPSED , (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='H'AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and (x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half'))  CSCOREHOST, (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='G' AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and (x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half'))  CSCOREGUEST, '-1' CSCORENUM,   '0' CSCOREOWNGOAL, r.PLAYERCHI CSCORER,r.PLAYER CSCORER2 , current_timestamp TIMEFLAG, '0' IDEST " +
-                                            "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID   INNER JOIN  events s ON s.id = r.EMATCHID   INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString() + " AND (R.CTYPE='goal'  or r.CTYPE='rcard') AND (R.STATUS!='Penalty shootout' AND R.ELAPSED!=105) and ( r.STATUS!='Extratime 1st half' and r.STATUS!='Extratime 2nd half') AND   E.CMATCHDATETIME > dateadd (-" + AppFlag.LivePeriod + " day to current_timestamp)  order by r.ELAPSED asc";
-                                Files.WriteLog("Sql: " + queryString);
+                                            " 'F' CCURRENTSTATUS, '' CPK, 'U' CACTION, '' CALERT, R.CTYPE CRECORDTYPE, R.HG CRECORDBELONG,  r.STATUS CMATCHSTATUS, r.ELAPSED , (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='H' " +
+                                          //  "AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and (x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half')" +
+                                            ")  CSCOREHOST, (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='G' " +
+                                            //  "AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and (x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half')" +
+                                            ")  CSCOREGUEST, '-1' CSCORENUM,   '0' CSCOREOWNGOAL, r.PLAYERCHI CSCORER,r.PLAYER CSCORER2 , r.LASTTIME TIMEFLAG, '0' IDEST " +
+                                            "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID   INNER JOIN  events s ON s.id = r.EMATCHID   INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString() + " AND (R.CTYPE='goal'  or r.CTYPE='rcard')" +
+                                            //  " AND (R.STATUS!='Penalty shootout' AND R.ELAPSED!=105) and ( r.STATUS!='Extratime 1st half' and r.STATUS!='Extratime 2nd half')" +
+                                            //  " AND   E.CMATCHDATETIME > dateadd (-" + AppFlag.LivePeriod + " day to current_timestamp)" +
+                                            "  order by r.LASTTIME asc";
+                                Files.WriteLog("Sql GOALDETAILS2: " + queryString);
 
                                 using (FbCommand cmd = new FbCommand(queryString, connection))
                                 {
@@ -3503,8 +3514,14 @@ namespace ScoutDBProvider
 
                                     Files.WriteLog("Update GOALDETAILS " + ml.ToString());//distinct
                                     queryString = " SELECT G.TOLIVE,  (select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id= s.HOME_ID) H,(select  FIRST 1  t.HKJC_NAME_CN from teams t  where t.id=s.GUEST_ID) G, E.CLEAGUEALIAS_OUTPUT_NAME,E.CLEAGUE_HKJC_NAME,E.HKJCHOSTNAME_CN, E.HKJCGUESTNAME_CN," +
-                                                " 'F' CCURRENTSTATUS, '' CPK, 'U' CACTION, '' CALERT, R.CTYPE CRECORDTYPE, R.HG CRECORDBELONG,  r.STATUS CMATCHSTATUS, r.ELAPSED , (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='H'AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105) and ( x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half'))  CSCOREHOST, (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='G' AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and ( x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half'))  CSCOREGUEST, '-1' CSCORENUM,   '0' CSCOREOWNGOAL, r.PLAYERCHI CSCORER,r.PLAYER CSCORER2 , current_timestamp TIMEFLAG, '0' IDEST " +
-                                                "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID   INNER JOIN  events s ON s.id = r.EMATCHID  INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString() + " AND (R.CTYPE='goal'  or r.CTYPE='rcard') AND (R.STATUS!='Penalty shootout' AND R.ELAPSED!=105)  and ( r.STATUS!='Extratime 1st half' and r.STATUS!='Extratime 2nd half') order by r.ELAPSED asc";
+                                                " 'F' CCURRENTSTATUS, '' CPK, 'U' CACTION, '' CALERT, R.CTYPE CRECORDTYPE, R.HG CRECORDBELONG,  r.STATUS CMATCHSTATUS, r.ELAPSED , (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='H' " +
+                                            //    " AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105) and ( x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half')" +
+                                                ")  CSCOREHOST, (select count(*) from MATCHDETAILS x where x.EMATCHID=g.EMATCHID and cast( x.ELAPSED as integer)<=cast( r.ELAPSED as integer) and x.CTYPE='goal' and x.HG='G' " +
+                                                //    " AND (x.STATUS!='Penalty shootout' AND x.ELAPSED!=105)  and ( x.STATUS!='Extratime 1st half' and x.STATUS!='Extratime 2nd half')" +
+                                                ")  CSCOREGUEST, '-1' CSCORENUM,   '0' CSCOREOWNGOAL, r.PLAYERCHI CSCORER,r.PLAYER CSCORER2 , r.LASTTIME TIMEFLAG, '0' IDEST " +
+                                                "FROM MATCHDETAILS r   INNER JOIN  EMATCHES E ON E.EMATCHID = r.EMATCHID   INNER JOIN  events s ON s.id = r.EMATCHID  INNER JOIN GOALINFO G ON G.EMATCHID= E.EMATCHID where r.EMATCHID =" + ml.ToString() + " AND (R.CTYPE='goal'  or r.CTYPE='rcard') " +
+                                            //    " AND (R.STATUS!='Penalty shootout' AND R.ELAPSED!=105)  and ( r.STATUS!='Extratime 1st half' and r.STATUS!='Extratime 2nd half')" +
+                                                " order by r.LASTTIME asc";
                                     Files.WriteLog("Sql GOALDETAILS: " + queryString);
 
                                     using (FbCommand cmd = new FbCommand(queryString, connection))
@@ -3575,7 +3592,10 @@ namespace ScoutDBProvider
                                                         int id = Convert.ToInt32(cmd2.ExecuteScalar());
                                                         if (id > -1)
                                                         {
-                                                            Files.WriteLog(" [Success] Insert/Update GOALDETAILS " + " " + drH["CLEAGUEALIAS_OUTPUT_NAME"] + " " + drH["HKJCHOSTNAME_CN"] + "/" + drH["HKJCGUESTNAME_CN"]);
+                                                            Files.WriteLog(" [Success] Insert/Update GOALDETAILS " + " " + drH["CLEAGUEALIAS_OUTPUT_NAME"] + " " + drH["HKJCHOSTNAME_CN"] + "/" + drH["HKJCGUESTNAME_CN"] 
+                                                                +" "+ drH["CMATCHSTATUS"] +" "+ drH["ELAPSED"] + " " + drH["CRECORDBELONG"] + " " + drH["CRECORDTYPE"] + " " + drH["CSCOREHOST"] + " " + drH["CSCOREGUEST"] + " " + drH["CSCOREOWNGOAL"]
+                                                                + " " + (drH["CSCORER"] is DBNull ? drH["CSCORER2"].ToString() : drH["CSCORER"].ToString()) + " " + Convert.ToDateTime(drH["TIMEFLAG"]).ToString("yyyy-MM-dd HH:mm:ss.fff")
+                                                                );
                                                         }
                                                     }
                                                 }

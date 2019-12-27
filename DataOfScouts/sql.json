@@ -529,6 +529,25 @@ BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
+CREATE PROCEDURE PR_GOALINFO (
+    EMATCHID Integer,
+    START_DATE Timestamp,
+    STATUSID Integer,
+    H_YELLOW Integer,
+    H_RED Integer,
+    G_YELLOW Integer,
+    G_RED Integer,
+    H_GOAL Integer,
+    G_GOAL Integer,
+    CLOCK_TIME Integer,
+    LASTTIME Timestamp )
+RETURNS (
+    RESULT Integer )
+AS
+BEGIN SUSPEND; END^
+SET TERM ; ^
+
+SET TERM ^ ;
 CREATE PROCEDURE PR_INCIDENTS (
     ID Varchar(12),
     EVENTID Integer,
@@ -788,44 +807,42 @@ BEGIN SUSPEND; END^
 SET TERM ; ^
 
 SET TERM ^ ;
-CREATE PROCEDURE PR_STATS_RESULT_GOALINFO_BAK (
-    EMATCHID Integer,
-    H_YELLOW Integer,
-    H_RED Integer,
-    G_YELLOW Integer,
-    G_RED Integer,
-    H_GOAL Integer,
-    G_GOAL Integer,
-    LASTTIME Timestamp )
-RETURNS (
-    RESULT Integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE PR_STATS_RESULT_GOALINFO_BAK2 (
-    EMATCHID Integer,
-    H_YELLOW Integer,
-    H_RED Integer,
-    G_YELLOW Integer,
-    G_RED Integer,
-    H_GOAL Integer,
-    G_GOAL Integer,
-    STATUSID Integer,
-    LASTTIME Timestamp )
-RETURNS (
-    RESULT Integer )
-AS
-BEGIN SUSPEND; END^
-SET TERM ; ^
-
-SET TERM ^ ;
 CREATE PROCEDURE PR_XML_EVENT (
     ID Integer,
     HOME_ID Integer,
     GUEST_ID Integer,
     CTIMESTAMP Timestamp )
+RETURNS (
+    RESULT Integer )
+AS
+BEGIN SUSPEND; END^
+SET TERM ; ^
+
+SET TERM ^ ;
+CREATE PROCEDURE PR_XML_EVENTCLOCK (
+    ID Integer,
+    HOME_ID Integer,
+    GUEST_ID Integer,
+    CLOCK_TIME Varchar(18),
+    CTIMESTAMP Timestamp )
+RETURNS (
+    RESULT Integer )
+AS
+BEGIN SUSPEND; END^
+SET TERM ; ^
+
+SET TERM ^ ;
+CREATE PROCEDURE PR_XML_STATSRESULT_GOALINFO (
+    EMATCHID Integer,
+    STATUS Integer,
+    H_YELLOW Integer,
+    H_RED Integer,
+    G_YELLOW Integer,
+    G_RED Integer,
+    H_GOAL Integer,
+    G_GOAL Integer,
+    CLOCK_TIME Integer,
+    LASTTIME Timestamp )
 RETURNS (
     RESULT Integer )
 AS
@@ -1449,7 +1466,7 @@ CREATE TABLE GOALINFO
   H_RED Integer,
   G_YELLOW Integer,
   G_RED Integer,
-  RECTIME Timestamp,
+  STARTDATE Timestamp,
   LASTTIME Timestamp,
   GAMESTATUS Varchar(30),
   TOLIVE Integer,
@@ -1782,7 +1799,7 @@ CREATE TABLE TEAMS
 /******************** TRIGGERS ********************/
 
 SET TERM ^ ;
-CREATE TRIGGER TR_EMATCHES_GOAL_INFO FOR EMATCHES ACTIVE
+CREATE TRIGGER TR_EMATCHES_GOAL_INFO FOR EMATCHES INACTIVE
 AFTER INSERT OR UPDATE POSITION 0
 AS     
 DECLARE VARIABLE iHgoal integer; 
@@ -1828,7 +1845,7 @@ ELSE
  END^
 SET TERM ; ^
 SET TERM ^ ;
-CREATE TRIGGER TR_EVENTS_EMATCHES FOR EVENTS ACTIVE
+CREATE TRIGGER TR_EVENTS_EMATCHES FOR EVENTS INACTIVE
 AFTER INSERT OR UPDATE POSITION 0
 AS   
 DECLARE VARIABLE MatchStatus varchar(30); 
@@ -1914,7 +1931,7 @@ begin
 --IF(new.STATUS_NAME='Not started') then
 IF(new.STATUS_ID=1) then
 BEGIN 
-sGameStatus=new.STATUS_NAME;
+sGameStatus='notstarted';
 END
 else IF(new.STATUS_ID=2) then
 BEGIN
@@ -1944,12 +1961,12 @@ END
 --IF(new.STATUS_NAME='Finished') then
 ELSE IF(new.STATUS_ID=11) then
 BEGIN 
-sGameStatus='secondhalfended';
+sGameStatus='gameended';--'secondhalfended';
 END
 --else IF(new.STATUS_NAME='Extratime') then
 else IF(new.STATUS_ID=15) then
 BEGIN 
-sGameStatus='secondhalfended';
+sGameStatus='extratimestarted';--'secondhalfended';
 END
 --else IF(new.STATUS_NAME='1st half') then
 else IF(new.STATUS_ID=33) then
@@ -2002,28 +2019,25 @@ END
 else IF(new.STATUS_ID=12) then
 BEGIN
  sGameStatus='finishedawardedwin';
-END
---else IF(new.STATUS_TYPE='finished') then
---BEGIN
--- sGameStatus='gameended';
---END 
+END 
 else
 BEGIN
  sGameStatus=new.STATUS_NAME;
 END  
  
  --update  GOALINFO.GAMESTATUS
- UPDATE OR INSERT INTO  GoalInfo (EMATCHID,GAMESTATUS,LASTTIME) VALUES (new.ID, :sGameStatus,new.CTIMESTAMP) MATCHING  (EMATCHID) ;
+ UPDATE OR INSERT INTO  GoalInfo (EMATCHID,STARTDATE,HRUNSCOREID, GAMESTATUS,LASTTIME) VALUES (new.ID,new.START_DATE, new.STATUS_ID, :sGameStatus,current_timestamp) MATCHING  (EMATCHID) ;
   -- for hhgoal and ghgoal
   if( NEW.STATUS_ID=33 OR (NEW.STATUS_ID=9  and OLD.STATUS_ID=33)) then 
     begin
-    -- select first 1 g.H_GOAL,g.G_GOAL  from  GOALINFO g WHERE g.EMATCHID=NEW.ID ORDER BY  G.LASTTIME desc INTO :iH_GOAL,:iG_GOAL; 
-     --update GoalInfo set HH_GOAL=:iH_GOAL,GH_GOAL=:iG_GOAL where  EMATCHID=NEW.ID ;
-     update GoalInfo set HH_GOAL=H_GOAL,GH_GOAL=G_GOAL where  EMATCHID=NEW.ID ;
+      update GoalInfo set HH_GOAL=H_GOAL,GH_GOAL=G_GOAL where  EMATCHID=NEW.ID ;
    end 
-
+    
+    -- ??? 20191205 update GameStatus in ematches 20191203 newly only goalinfo json   STATUS_NAME
+    --UPDATE  EMATCHES e  set e.STATUS =new.STATUS_ID  where e.EMATCHID=new.ID and e.CMATCHDATETIME >  new.START_DATE  - 1    and  e.CMATCHDATETIME <   new.START_DATE   + 1  ;
+  
  --log
- INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type )VALUES  (new.ID,new.CTIMESTAMP,:sGameStatus,NEW.STATUS_ID,'EGoalInfo') ;
+ --INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type )VALUES  (new.ID,new.CTIMESTAMP,:sGameStatus,NEW.STATUS_ID,'EGoalInfo') ;
 end
  END^
 SET TERM ; ^
@@ -3703,6 +3717,195 @@ SET TERM ; ^
 
 
 SET TERM ^ ;
+ALTER PROCEDURE PR_GOALINFO (
+    EMATCHID Integer,
+    START_DATE Timestamp,
+    STATUSID Integer,
+    H_YELLOW Integer,
+    H_RED Integer,
+    G_YELLOW Integer,
+    G_RED Integer,
+    H_GOAL Integer,
+    G_GOAL Integer,
+    CLOCK_TIME Integer,
+    LASTTIME Timestamp )
+RETURNS (
+    RESULT Integer )
+AS
+DECLARE VARIABLE sGameStatus varchar(30);
+
+--DECLARE VARIABLE iELAPSED   integer;
+--DECLARE VARIABLE oldGameStatus   varchar(30);
+
+DECLARE VARIABLE STATUSID1   integer;
+DECLARE VARIABLE H_RED1   integer;
+DECLARE VARIABLE G_RED1   integer;
+DECLARE VARIABLE H_YELLOW1   integer;
+DECLARE VARIABLE G_YELLOW1   integer;
+DECLARE VARIABLE H_GOAL1   integer;
+DECLARE VARIABLE G_GOAL1   integer;
+DECLARE VARIABLE GID   integer;
+
+DECLARE VARIABLE HH_GOAL  integer;
+DECLARE VARIABLE GH_GOAL  integer;
+DECLARE VARIABLE HH_GOAL1  integer;
+DECLARE VARIABLE GH_GOAL1  integer;
+
+declare variable STARTDATE timestamp;
+
+BEGIN
+    Result= -1; 
+    GID=-1;
+    -- when match start do something 
+    SELECT  first 1 G.EMATCHID,  G.HRUNSCOREID,H_YELLOW, H_RED,G_YELLOW,G_RED,H_GOAL,G_GOAL ,STARTDATE,HH_GOAL,GH_GOAL FROM GOALINFO G  WHERE G.EMATCHID=:EMATCHID and g.STARTDATE=:START_DATE into
+                  :GID,:STATUSID1,:H_YELLOW1, :H_RED1,:G_YELLOW1,:G_RED1,:H_GOAL1,:G_GOAL1 ,:STARTDATE,:HH_GOAL1,:GH_GOAL1;
+    
+    if (:GID =-1) THEN begin Result=0; end  --have no data in goalinfo test1-test2(maybe api testing)
+    
+    else if(:STATUSID!=:STATUSID1  or:STATUSID1 is null ) then     begin    :HH_GOAL=:HH_GOAL1; :GH_GOAL=:GH_GOAL1;    Result=2;    end  --status changed other to other 
+    
+    else if((:STATUSID1=33 OR :STATUSID1 =34) and (:STATUSID!=:STATUSID1)) then    
+     BEGIN     :HH_GOAL=:HH_GOAL1; :GH_GOAL=:GH_GOAL1;   Result=3;    END   -- 1st/2st goto half or finished or others 
+   
+   -- else if (:STATUSID1=33 OR :STATUSID1 =34  OR :STATUSID1 =11) then    begin  --when matching   
+    else if (:STATUSID=33 OR :STATUSID=34  OR :STATUSID=11) then    ---- when matching, if * changed  
+    begin      
+      if( (:H_RED!=:H_RED1 or :H_RED1 is null )  OR (:G_RED!=:G_RED1 or :G_RED1 is null ) OR (:H_YELLOW!=:H_YELLOW1 or :H_YELLOW1 is null ) and (:G_YELLOW!=:G_YELLOW1 or :G_YELLOW1 is null ) OR (:H_GOAL!=:H_GOAL1 or :H_GOAL1 is null ) OR  (:G_GOAL!=:G_GOAL1 or :G_GOAL1 is null )) then
+      begin   :HH_GOAL=:HH_GOAL1; :GH_GOAL=:GH_GOAL1; Result=4;    end else begin Result=-2; end    
+    end   
+  
+    else if (:STATUSID=9) then     begin    :HH_GOAL=:H_GOAL; :GH_GOAL=:G_GOAL;    Result=5;    end   --half to others 
+   -- else if (:STATUSID=9) then     begin    :HH_GOAL=:HH_GOAL1; :GH_GOAL=:GH_GOAL1;    Result=1;    end   --half to others  
+   -- else if ((:STATUSID1=9 ) and :STATUSID!=:STATUSID1 ) then     begin    :HH_GOAL=:HH_GOAL1; :GH_GOAL=:GH_GOAL1;    Result=1;    end   --half to others  
+   -- else if(:STATUSID!=:STATUSID1  or:STATUSID1 is null ) then     begin    :HH_GOAL=:HH_GOAL1; :GH_GOAL=:GH_GOAL1;    Result=1;    end  --other to other 
+      
+    if(Result>0) then 
+    begin
+    --update goalinfo
+    --if(:STATUSID=33) then    begin     sGameStatus='gamestarted';    end 
+    --else IF(:STATUSID=9) then    BEGIN     sGameStatus='firsthalfended'; CLOCK_TIME=-1;   END
+    --else if(:STATUSID=34) then   begin     sGameStatus='secondhalfstarted';    end 
+    --else if(:STATUSID=11) then   begin       sGameStatus='secondhalfended'; CLOCK_TIME=-1; end --sGameStatus='gameended'; 
+    --else     begin    sGameStatus=null;    end  
+    
+    IF(:STATUSID=1) then
+BEGIN 
+sGameStatus='notstarted';
+END
+else IF(:STATUSID=2) then
+BEGIN
+ sGameStatus='interrupted';
+END 
+else IF(:STATUSID=3) then
+BEGIN
+ sGameStatus='cancelled';
+END 
+else IF( :STATUSID=5) then
+BEGIN
+ sGameStatus='postponed';
+END 
+else IF(:STATUSID=6) then
+BEGIN
+ sGameStatus='delayed';
+END 
+else IF( :STATUSID=7) then
+BEGIN
+ sGameStatus='abandoned';
+END 
+--IF(new.STATUS_NAME='Halftime') then
+ELSE IF(:STATUSID=9) then
+BEGIN 
+sGameStatus='firsthalfended';
+CLOCK_TIME=-1; 
+:HH_GOAL=:H_GOAL;
+:GH_GOAL=:G_GOAL;
+END
+--IF(new.STATUS_NAME='Finished') then
+ELSE IF(:STATUSID=11) then
+BEGIN 
+--sGameStatus='secondhalfended';
+sGameStatus='gameended';
+CLOCK_TIME=-1; 
+END
+--else IF(new.STATUS_NAME='Extratime') then
+else IF(:STATUSID=15) then
+BEGIN 
+sGameStatus='extratimestarted';--'secondhalfended';
+END
+--else IF(new.STATUS_NAME='1st half') then
+else IF(:STATUSID=33) then
+BEGIN
+ sGameStatus='gamestarted';
+:HH_GOAL=:H_GOAL;
+:GH_GOAL=:G_GOAL;
+END 
+--else IF(new.STATUS_NAME='2nd half') then
+else IF(:STATUSID=34) then
+BEGIN
+ sGameStatus='secondhalfstarted';
+END 
+--else IF(new.STATUS_NAME='Extratime 1st half'  ) then
+else IF(:STATUSID=35) then
+BEGIN
+ sGameStatus='extratimestarted';
+END 
+--else IF(new.STATUS_NAME='Extratime 2nd half'  ) then
+else IF(:STATUSID=36) then
+BEGIN
+ sGameStatus='extratimesecondhalfstarted';
+END 
+--else IF(new.STATUS_NAME='Extratime halftime'  ) then
+else IF(:STATUSID=37) then
+BEGIN
+ sGameStatus='extratimefirsthalfended';
+END  
+--else IF(new.STATUS_NAME='Waiting for extratime'  ) then
+else IF(:STATUSID=48) then
+BEGIN
+ sGameStatus= 'secondhalfended';
+END  
+--else IF(new.STATUS_NAME='Penalty shootout'  ) then
+else IF(:STATUSID=141) then
+BEGIN
+sGameStatus='penaltyshootout';
+END  
+--else IF(new.STATUS_NAME='Waiting for penalty'  ) then
+else IF(:STATUSID=142) then
+BEGIN
+ sGameStatus='waitingforpenalty';
+END 
+else IF(:STATUSID=13) then
+BEGIN
+ sGameStatus='finishedafterpenalties';
+ CLOCK_TIME=-1;
+END   
+else IF(:STATUSID=14) then
+BEGIN
+ sGameStatus='finishedafterextratime';
+ CLOCK_TIME=-1; 
+END  
+else IF(:STATUSID=12) then
+BEGIN
+ sGameStatus='finishedawardedwin';
+ CLOCK_TIME=-1; 
+END 
+else
+BEGIN
+ --sGameStatus=new.STATUS_NAME;
+END  
+      
+    --update GameStatus in ematches
+    UPDATE  EMATCHES e  set e.STATUS =:STATUSID where e.EMATCHID=:EMATCHID  and e.CMATCHDATETIME >  :STARTDATE - 1    and  e.CMATCHDATETIME <   :STARTDATE   + 1  ;
+     
+    UPDATE  GOALINFO set  GameStatus =:sGameStatus , HRUNSCOREID=:STATUSID, ELAPSED=:CLOCK_TIME, H_RED=:H_RED, G_RED=:G_RED,H_YELLOW=:H_YELLOW,G_YELLOW=:G_YELLOW,H_GOAL=:H_GOAL, G_GOAL=:G_GOAL,HH_GOAL=:HH_GOAL, GH_GOAL=:GH_GOAL , LASTTIME=:LASTTIME  
+    WHERE EMATCHID  = :EMATCHID and STARTDATE=:START_DATE;-- RETURNING EMATCHID INTO :Result;
+    
+    end
+END^
+SET TERM ; ^
+
+
+SET TERM ^ ;
 ALTER PROCEDURE PR_INCIDENTS (
     ID Varchar(12),
     EVENTID Integer,
@@ -4514,10 +4717,14 @@ BEGIN
     sGameStatus=null;
     end 
     
+    
     SELECT  first 1  GameStatus FROM GOALINFO  INNER JOIN EVENTS E ON E.ID=EMATCHID
     WHERE EMATCHID=:EMATCHID   into :oldGameStatus;
     :iELAPSED=-1;
-        
+    
+    if((:STATUSID=33 and (:oldGameStatus='firsthalfended' or :oldGameStatus='secondhalfstarted' or :oldGameStatus='secondhalfended' or :oldGameStatus ='gameended' ))
+     or  (:STATUSID=34 and (:oldGameStatus='secondhalfended' or :oldGameStatus='gameended'  )       ) ) then       begin      Result=0; end
+else       begin    
     SELECT  first 1 EMATCHID  FROM GOALINFO  INNER JOIN EVENTS E ON E.ID=EMATCHID  
     --inner join PARTICIPANT_STATS p on p.EVENTID =EMATCHID
     WHERE EMATCHID=:EMATCHID and  (H_RED=:H_RED or :H_RED is null )  and (G_RED=:G_RED or :G_RED is null ) and (H_YELLOW=:H_YELLOW or :H_YELLOW is null )
@@ -4550,12 +4757,13 @@ begin
       end
       else
       begin
-      :iELAPSED=-1;
+      --:iELAPSED=-1;
+       if( :iELAPSED>0) then begin end else begin  :iELAPSED=-1; end    --20191129 add clocktime
       end
    
    UPDATE  GOALINFO set GameStatus =:sGameStatus ,ELAPSED=:iELAPSED,  LASTTIME=:LASTTIME WHERE EMATCHID  = :EMATCHID;
    --LOG
-   INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type,aid )VALUES  (:EMATCHID,:LASTTIME ,  :sGameStatus,:STATUSID ,:iELAPSED||'/'||'PGoalInfo',:oldGameStatus) ;
+  -- INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type,aid )VALUES  (:EMATCHID,:LASTTIME ,  :sGameStatus,:STATUSID ,:iELAPSED||'/'||'PGoalInfo',:oldGameStatus) ;
    end 
    
    SELECT  first 1 EMATCHID FROM EMATCHES WHERE EMATCHID=:EMATCHID into :Result;
@@ -4572,147 +4780,7 @@ else
 begin 
    Result=-1;
 end  
-   --20190511
-  -- if(:sGameStatus is not null) then
-  -- begin
-  -- UPDATE  GOALINFO set GameStatus =:sGameStatus   ,  LASTTIME=:LASTTIME WHERE EMATCHID  = :EMATCHID;
-  -- end
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_STATS_RESULT_GOALINFO_BAK (
-    EMATCHID Integer,
-    H_YELLOW Integer,
-    H_RED Integer,
-    G_YELLOW Integer,
-    G_RED Integer,
-    H_GOAL Integer,
-    G_GOAL Integer,
-    LASTTIME Timestamp )
-RETURNS (
-    RESULT Integer )
-AS
-BEGIN
-    Result= null; 
-    SELECT  first 1 EMATCHID FROM GOALINFO 
-    WHERE EMATCHID=:EMATCHID and  (H_RED=:H_RED or :H_RED is null )  and (G_RED=:G_RED or :G_RED is null ) and (H_YELLOW=:H_YELLOW or :H_YELLOW is null )
-    and (G_YELLOW=:G_YELLOW or :G_YELLOW is null ) and (H_GOAL=:H_GOAL or :H_GOAL is null ) and  (G_GOAL=:G_GOAL or :G_GOAL is null )
-    into :Result;
-   if(Result is null) then
-   begin  
-   UPDATE  GOALINFO set  H_RED=:H_RED, G_RED=:G_RED,H_YELLOW=:H_YELLOW,G_YELLOW=:G_YELLOW,H_GOAL=:H_GOAL, G_GOAL=:G_GOAL ,  LASTTIME=:LASTTIME  
-   WHERE EMATCHID  = :EMATCHID;-- RETURNING EMATCHID INTO :Result; 
-   
-   SELECT  first 1 EMATCHID FROM EMATCHES WHERE EMATCHID=:EMATCHID into :Result;
-   IF (Result is NULL) then  
-    begin
-    Result=0;
-    end
-    else 
-    begin
-    Result=1; 
-    end    
-    
-   end 
-   else
-   begin 
-   Result=-1;
-   end  
-END^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE PR_STATS_RESULT_GOALINFO_BAK2 (
-    EMATCHID Integer,
-    H_YELLOW Integer,
-    H_RED Integer,
-    G_YELLOW Integer,
-    G_RED Integer,
-    H_GOAL Integer,
-    G_GOAL Integer,
-    STATUSID Integer,
-    LASTTIME Timestamp )
-RETURNS (
-    RESULT Integer )
-AS
-DECLARE VARIABLE sGameStatus varchar(30);
-DECLARE VARIABLE iELAPSED   integer;
-DECLARE VARIABLE oldGameStatus   varchar(30);
-BEGIN
-    Result= null; 
-   -- iELAPSED=-1;
-    if(:STATUSID=33) then
-    begin 
-    sGameStatus='gamestarted';
-    end 
-    else IF(:STATUSID=9) then
-    BEGIN        
-    sGameStatus='firsthalfended';
-    END
-    else if(:STATUSID=34) then
-    begin 
-    sGameStatus='secondhalfstarted';
-    end 
-    else if(:STATUSID=11) then
-    begin 
-   --sGameStatus='gameended';
-    sGameStatus='secondhalfended';
-    end 
-    else 
-    begin
-    sGameStatus=null;
-    end 
-    
-    SELECT  first 1  GameStatus FROM GOALINFO  INNER JOIN EVENTS E ON E.ID=EMATCHID
-    WHERE EMATCHID=:EMATCHID   into :oldGameStatus;
-    :iELAPSED=-1;
-    
-    SELECT  first 1 EMATCHID  FROM GOALINFO  INNER JOIN EVENTS E ON E.ID=EMATCHID
-    WHERE EMATCHID=:EMATCHID and  (H_RED=:H_RED or :H_RED is null )  and (G_RED=:G_RED or :G_RED is null ) and (H_YELLOW=:H_YELLOW or :H_YELLOW is null )
-    and (G_YELLOW=:G_YELLOW or :G_YELLOW is null ) and (H_GOAL=:H_GOAL or :H_GOAL is null ) and  (G_GOAL=:G_GOAL or :G_GOAL is null ) AND (E.STATUS_ID=:STATUSID)
-    into :Result;--,:iELAPSED,:oldGameStatus;
-   if(Result is null) then
-   begin  
-   UPDATE  GOALINFO set  H_RED=:H_RED, G_RED=:G_RED,H_YELLOW=:H_YELLOW,G_YELLOW=:G_YELLOW,H_GOAL=:H_GOAL, G_GOAL=:G_GOAL ,  LASTTIME=:LASTTIME  
-   WHERE EMATCHID  = :EMATCHID;-- RETURNING EMATCHID INTO :Result; 
-   
-   if(:sGameStatus is not null) then
-  begin
-   --20190516
-   --if( (:STATUSID=33 and (oldGameStatus='not_started'or oldGameStatus='Not started'))   or (:STATUSID=33 and :iELAPSED is null ) )then 
-   --if( ((:STATUSID=33 and :oldGameStatus!='gamestarted')   or (:STATUSID=33 and :iELAPSED is null )) or (:STATUSID=34 and  (:oldGameStatus!='firsthalfended'or :oldGameStatus!='secondhalfstarted')) )then 
-   if( ((:STATUSID=33 and :oldGameStatus!='gamestarted')   or (:STATUSID=33 and :iELAPSED is null )) or (:STATUSID=34 and :oldGameStatus!='secondhalfstarted') )then 
-   begin
-    :iELAPSED=0;
-   end
-   else
-   begin
-   :iELAPSED=-1;
-   end
-   
-  UPDATE  GOALINFO set GameStatus =:sGameStatus ,ELAPSED=:iELAPSED,  LASTTIME=:LASTTIME WHERE EMATCHID  = :EMATCHID;
-  --LOG
-  INSERT INTO GOALINFO_LOG ( EMATCHID,LASTTIME,GAMESTATUS,ELAPSED,log_type,aid )VALUES  (:EMATCHID,:LASTTIME ,  :sGameStatus,:STATUSID ,:iELAPSED||'/'||'PGoalInfo',:oldGameStatus) ;
-  end
-  
-   SELECT  first 1 EMATCHID FROM EMATCHES WHERE EMATCHID=:EMATCHID into :Result;
-   IF (Result is NULL) then  
-    begin
-    Result=0;
-    end
-    else 
-    begin
-    Result=1; 
-    end    
-    
-   end 
-   else
-   begin 
-   Result=-1;
-   end  
+end
    --20190511
   -- if(:sGameStatus is not null) then
   -- begin
@@ -4736,6 +4804,52 @@ BEGIN
 RESULT=0;
 UPDATE events  e set e.HOME_ID=:HOME_ID ,e.GUEST_ID=:GUEST_ID, e.CTIMESTAMP =:CTIMESTAMP where e.id =:ID RETURNING ID INTO :RESULT; 
    
+END^
+SET TERM ; ^
+
+
+SET TERM ^ ;
+ALTER PROCEDURE PR_XML_EVENTCLOCK (
+    ID Integer,
+    HOME_ID Integer,
+    GUEST_ID Integer,
+    CLOCK_TIME Varchar(18),
+    CTIMESTAMP Timestamp )
+RETURNS (
+    RESULT Integer )
+AS
+BEGIN  
+
+RESULT=0;
+UPDATE events  e set e.HOME_ID=:HOME_ID ,e.GUEST_ID=:GUEST_ID,e.CLOCK_TIME=:CLOCK_TIME, e.CTIMESTAMP =:CTIMESTAMP where e.id =:ID RETURNING ID INTO :RESULT; 
+   
+END^
+SET TERM ; ^
+
+
+SET TERM ^ ;
+ALTER PROCEDURE PR_XML_STATSRESULT_GOALINFO (
+    EMATCHID Integer,
+    STATUS Integer,
+    H_YELLOW Integer,
+    H_RED Integer,
+    G_YELLOW Integer,
+    G_RED Integer,
+    H_GOAL Integer,
+    G_GOAL Integer,
+    CLOCK_TIME Integer,
+    LASTTIME Timestamp )
+RETURNS (
+    RESULT Integer )
+AS
+DECLARE VARIABLE iStatus integer; 
+BEGIN
+    Result= null;  
+    if(:STATUS=9 OR  :STATUS=11) then CLOCK_TIME=-1;
+    --20190731 update event status when manual upate MatchDetails.aspx TEMP RUN cancel 20191129 when parser xml ,but timeout json handle
+    --update  events e set e.STATUS_ID=:STATUS,e.STATUS_NAME =(select s.NAME from STATUSES s where s.ID= :STATUS) where e.id =:EMATCHID;
+    UPDATE OR INSERT INTO  GOALINFO  (EMATCHID,H_YELLOW,H_RED,G_YELLOW,G_RED, H_GOAL ,G_GOAL ,ELAPSED,LASTTIME)VALUES (:EMATCHID,:H_YELLOW,:H_RED,:G_YELLOW,:G_RED,:H_GOAL,:G_GOAL,:CLOCK_TIME,:LASTTIME) MATCHING  (EMATCHID) RETURNING EMATCHID INTO :Result; 
+      
 END^
 SET TERM ; ^
 
@@ -6469,6 +6583,9 @@ GRANT EXECUTE
  ON PROCEDURE PR_EVENT_DETAILS_BAK TO  SYSDBA WITH GRANT OPTION;
 
 GRANT EXECUTE
+ ON PROCEDURE PR_GOALINFO TO  SYSDBA WITH GRANT OPTION;
+
+GRANT EXECUTE
  ON PROCEDURE PR_INCIDENTS TO  SYSDBA WITH GRANT OPTION;
 
 GRANT EXECUTE
@@ -6499,13 +6616,13 @@ GRANT EXECUTE
  ON PROCEDURE PR_STATS_RESULT_GOALINFO TO  SYSDBA WITH GRANT OPTION;
 
 GRANT EXECUTE
- ON PROCEDURE PR_STATS_RESULT_GOALINFO_BAK TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
- ON PROCEDURE PR_STATS_RESULT_GOALINFO_BAK2 TO  SYSDBA WITH GRANT OPTION;
-
-GRANT EXECUTE
  ON PROCEDURE PR_XML_EVENT TO  SYSDBA WITH GRANT OPTION;
+
+GRANT EXECUTE
+ ON PROCEDURE PR_XML_EVENTCLOCK TO  SYSDBA WITH GRANT OPTION;
+
+GRANT EXECUTE
+ ON PROCEDURE PR_XML_STATSRESULT_GOALINFO TO  SYSDBA WITH GRANT OPTION;
 
 GRANT EXECUTE
  ON PROCEDURE SET_BOOKEDEVENT TO  SYSDBA WITH GRANT OPTION;

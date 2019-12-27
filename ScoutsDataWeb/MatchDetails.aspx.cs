@@ -299,6 +299,11 @@ namespace JC_SoccerWeb
                     sGameStatus = "11";
                 }
                 ((System.Web.UI.WebControls.DropDownList)e.Item.FindControl("dplLeagues")).SelectedValue = sGameStatus;
+
+                if(sGameStatus=="1" || sGameStatus=="3")
+                {
+
+                }
             }
         }
 

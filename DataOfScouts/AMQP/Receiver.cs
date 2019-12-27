@@ -90,8 +90,8 @@ namespace Ecostar.MQConsumer.Core
                     {
                         //   new Thread(() =>
                         //{
-                        resultB = _context.ReceiveChannel.QueueDeclarePassive("telecom-digital-data-limited");
-                        countA = resultB != null ? resultB.MessageCount : 0;
+                        ////resultB = _context.ReceiveChannel.QueueDeclarePassive("telecom-digital-data-limited");
+                        ////countA = resultB != null ? resultB.MessageCount : 0;
 
                         count++;
                         // if (AppFlag.TestMode) Files.WriteTestLog("Queue", countA + "/" + count.ToString() + "  Start.");
@@ -105,7 +105,17 @@ namespace Ecostar.MQConsumer.Core
                         ////    if (AppFlag.TestMode) Files.WriteTestLog("Queue", countA + "/" + count.ToString() + " " + (message.Length > 63 ? message.Substring(0, 63) + "     " : message + "      soprtsid =5       ---") + e.DeliveryTag + "  soprtsid =5");
                         ////    result = _processFunction(message);
                         ////} 
-                        if (AppFlag.TestMode) Files.WriteTestLog("Queue", "Received1: " + countA + "/" + count.ToString() + " " + (message.Length > 17 ? message.Substring(0, 17) + "   " : message) + e.DeliveryTag);
+                        if (count % AppFlag.SuspendCount == 0)
+                        {
+                            resultB = _context.ReceiveChannel.QueueDeclarePassive("telecom-digital-data-limited");
+                            countA = resultB != null ? resultB.MessageCount : 0;
+                            if (AppFlag.TestMode) Files.WriteTestLog("Queue", "Received1: " + countA + "/" + count.ToString() + " " + (message.Length > 17 ? message.Substring(0, 17) + "   " : message) + e.DeliveryTag);
+                        }
+                        else
+                        {
+                            if (AppFlag.TestMode) Files.WriteTestLog("Queue", "Received1: " + "x" + "/" + count.ToString() + " " + (message.Length > 17 ? message.Substring(0, 17) + "   " : message) + e.DeliveryTag);
+                        }
+
                         result = _processFunction(message);
                         //else
                         //{
@@ -116,18 +126,26 @@ namespace Ecostar.MQConsumer.Core
                         {
                             if (!result)
                             {
-                                Thread.Sleep(10);
-                                if (AppFlag.TestMode) Files.WriteTestLog("amqplog", "message=" + message + "\r\n");
+                                Thread.Sleep(1);
+                                if (AppFlag.TestMode) Files.WriteTestLog("amqp", "message=" + message + "\r\n");
                                 // 未能?理完成的?，?消息重新放入?列?
-                                //// _context.ReceiveChannel.BasicReject(e.DeliveryTag, true);
+                                 _context.ReceiveChannel.BasicReject(e.DeliveryTag, false);
                                 ////  _mqActionLogFunc("Message rejet to queues!");
                             }
                             else if (!_context.ReceiveChannel.IsClosed)
                             {
+                              //  Thread.Sleep(1);
+                              //  if (AppFlag.TestMode) Files.WriteTestLog("amqp", "message2=" + message + "\r\n");
                                 // ?理成功并且通道未???ack回去，?除?列中的消息
                                 _context.ReceiveChannel.BasicAck(e.DeliveryTag, false);
                                 // if (AppFlag.TestMode) _processFunction("Sent Ack!          ---"+ e.DeliveryTag);
                                 ///  if (AppFlag.TestMode) Files.WriteTestLog("Queue", countA + "/" + count.ToString() + " " + "Sent Ack          ---" + e.DeliveryTag);
+                            }
+                            else
+                            {
+                                Thread.Sleep(1);
+                                if (AppFlag.TestMode) Files.WriteTestLog("amqp", "message3=" + message + "\r\n");
+                                _context.ReceiveChannel.BasicAck(e.DeliveryTag, false);
                             }
                         }
                         //})
@@ -135,10 +153,10 @@ namespace Ecostar.MQConsumer.Core
                     }
                     catch (Exception ex)
                     {
-                        Thread.Sleep(10);
+                        Thread.Sleep(1);
                         if (!isAutoAck)
                         {
-                            if (AppFlag.TestMode) Files.WriteTestLog("amqplog", "e.Body=" + e.Body + "\r\n");
+                            if (AppFlag.TestMode) Files.WriteTestLog("amqp", "count=" + countA + "\r\n");
                             //// ?消息重新放入?列?
                             //// _context.ReceiveChannel.BasicReject(e.DeliveryTag, true);
                             ////_mqActionLogFunc("Message rejet to queues!");
